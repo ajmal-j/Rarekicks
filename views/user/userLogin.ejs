@@ -1,0 +1,31 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/userRegister.css">
+
+</head>
+<body>
+<div class="containerfluid d-flex mainContainer"> 
+    <div class="sideForm">
+        <form action="/user/login" method="POST" class="pt-1 mainForm" style="height: 350px;">
+            <div class="text-center mb-3 mt-3 welcome" style="font-size: 30px;">Welcome Back !</div>
+            <div class="form-group mb-3">
+                <input type="email" class="form-control" placeholder="email" name="email" required>
+            </div> 
+            <div class="form-group mb-3">
+                <input type="password" class="form-control" placeholder="password" name="password" required>
+            </div> 
+            <button type="submit" class="btn rounded-pill btn-dark mt-2">Sign-In</button>
+            <div class="text-center mt-5" style="font-size: 15px;">Don’t you have account? <span style="color: rgb(238, 0, 255);"> Sign-Up</span>
+            </div> 
+        </form> 
+    </div>
+    <div class="alertKey">
+        <% if(locals.message){%>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;">
+                <strong><%=message%></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+        <%}%>
+    </div>
+</div>
+
+<%- include('../layout/footerHTML')-%>

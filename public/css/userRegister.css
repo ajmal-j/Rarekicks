@@ -1,0 +1,61 @@
+/* font-family: 'Michroma', sans-serif;
+font-family: 'Plus Jakarta Sans', sans-serif; */
+.welcome{
+    font-family: "Plus Jakarta Sans";
+}
+
+body{
+    background-image: url('../../public/images/13.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.mainContainer{
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+}
+.sideForm{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+}
+.mainForm{
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.791);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 30px;
+    padding: 20px;
+    min-width: 500px;
+    height: 450px;
+}
+
+.mainForm input{
+    border: 1px solid black;
+    border-radius: 50px;
+    padding-right: 20px;
+    padding-left: 20px;
+    width: 400px;
+}
+.mainForm button{
+    width: 100px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.alertKey{
+    text-wrap: nowrap;
+    position: fixed;
+    bottom: 20px;
+    right: 10px;
+}
