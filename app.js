@@ -7,8 +7,8 @@ const PORT=process.env.PORT||5000
 const userRoutes=require('./routes/userRoutes')
 const adminRoutes=require('./routes/adminRoutes')
 connect()
+app.use(bodyparser.urlencoded({extended:true}))
 app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({extended:false}))
 
 app.set('view engine','ejs');
 app.use('/public',express.static("public"));

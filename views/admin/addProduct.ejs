@@ -1,0 +1,66 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/addProduct.css">
+
+</head>
+<body>
+    <div class="backButton">
+        <a href="/admin/home">
+            <button class="btn btn-dark">Back</button>
+        </a>
+    </div>
+    <div class="container mainCont">
+        <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Add Product</h3>
+        <form action="/admin/addProduct" method="POST" enctype="multipart/form-data">
+            
+            <div class="form-group">
+                <label for="images">Images:</label> <br>
+                <input class="inputFieldImage" type="file" class="form-control-file" id="images" name="images" accept="image/*" multiple required>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Product Name:</label> <br>
+                <input class="inputField" type="text" class="form-control" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price:</label> <br>
+                <input class="inputField" type="number" class="form-control" id="price" name="price" required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="quantity">Quantity:</label> <br>
+                <input class="inputField" type="number" class="form-control" id="quantity" name="quantity" required>
+            </div>
+
+            <div class="form-group">
+                <label for="brand">Brand:</label> <br>
+                <select class="form-control" id="brand" name="brand" required>
+                    <option value="all">All</option>
+                    <option value="adidas">Adidas</option>
+                    <option value="puma">Puma</option>
+                    <option value="reebok">Reebok</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category:</label> <br>
+                <select class="form-control" id="category" name="category" required>
+                    <option value="all">All</option>
+                    <option value="clothing">Sneakers</option>
+                    <option value="shoes">Spots Shoes</option>
+                    <option value="accessories">Casual Shoes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label> <br>
+                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+            </div>
+            <div class="submitButton">
+            <button type="submit" class="btn btn-dark rounded-pill">Add Product</button></div>
+        </form>
+    </div>
+
+    
+<%- include('../layout/footerHTML')-%>

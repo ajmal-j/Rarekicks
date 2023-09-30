@@ -1,0 +1,76 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/adminHome.css">
+
+</head>
+<body>
+    <%- include('../layout/header')-%>
+
+        <div class="container" style="margin-top: 150px; margin-bottom: 200px;"> 
+            <h2 class="" style=" font-family: 'Michroma', sans-serif;">Hi Admin!</h2>
+<div class="container-fluid adminContainer">
+            <div class="row g-5"> 
+                <div class="adminProfile col-12 col-xxl-2 col-xl-2 col-md-12 col-lg-2 col-sm-12">
+                    <i class="bi bi-person-circle" style="font-size: 60px;"></i>
+                    <button class="btn btn-dark rounded-pill ms-2 me-2 mt-2">Sales</button>
+                    <button class="btn btn-dark rounded-pill ms-2 me-2 mt-2">View Users</button>
+                    <button class="btn btn-dark rounded-pill ms-2 me-2 mt-2">Products</button>
+                </div>
+                <div class="adminCenter col-12 col-xxl-2 col-xl-2 col-md-12 col-lg-2 col-sm-12">
+                    <button class="btn btn-dark rounded">Total Item : <%=products.length%></button>
+                    <button class="btn btn-dark rounded mt-2">Total Quantity : <%= products.reduce((total, product) => total + product.quantity, 0) %></button>
+                </div>
+                <div class="adminRight col-12 col-xxl-2 col-xl-2 col-md-12 col-lg-2 col-sm-12">
+                    <a href="/admin/addProduct" style="min-width: 180px;">
+                        <button class="btn btn-dark rounded">Add Item</button>
+                    </a>
+                    <a href="" style="min-width: 180px;">
+                        <button class="btn btn-dark rounded mt-2">All Items</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+      <div class="container mt-5 border rounded p-4">
+            <h2>Products</h2>
+            <div class="row row-cols-1 row-cols-xl-3 row-cols-md-2 g-4  d-flex" style="justify-content: center;">
+              <% if (products=='') { %>
+                <h2 class="text-center">No Such Products</h2>
+              <% } %>
+              
+              <% if (products) { %>
+     
+              <% products.forEach(product=>{%>
+   
+                <div class="col">
+                  <div class="card h-100">
+                    <img src="../../public/productImages/<%= product.images[0]%>" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Name : </span><%= product.name%></span>
+                      <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Quantity : </span><%= product.quantity%></span>
+                      <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Category : </span><%= product.category%></span>
+                      <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">price : </span><%= product.price%></span>
+                      <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Brand : </span><%= product.brand%></span>
+                      <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Description : </span></span>
+                      <p class="card-text"><%= product.description%></p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="/admin/editProduct?id=<%=product._id%>" class="btn btn-dark">Edit</a>
+                        <a href="/admin/deleteProduct?id=<%=product._id%>" class="btn btn-danger ms-3">Delete</a>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  
+                  
+                  <%})%>
+              <% } else { %>
+                <h2 class="text-center">No Such Products</h2>
+              <% } %>
+
+              </div> 
+
+
+        </div>
+</div>
+
+    <!-- <%- include('../layout/footer')-%> -->
+<%- include('../layout/footerHTML')-%>

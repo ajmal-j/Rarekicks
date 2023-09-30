@@ -1,0 +1,78 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/addProduct.css">
+
+</head>
+<body>
+    <div class="backButton">
+        <a href="/admin/home">
+            <button class="btn btn-dark">Back</button>
+        </a>
+    </div>
+
+<% if(product){%>
+    <div class="container mainCont">
+        <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Edit Product</h3>
+        <form action="/admin/editProduct?id=<%=product._id%>" method="POST" enctype="multipart/form-data">
+            
+            <div class="form-group">
+                <div class="d-grid" style="grid-template-columns: repeat(2, 1fr); column-gap: 10px;">
+                    <% product.images.forEach(image => { %>
+                        <div class="rounded" style="overflow: hidden; height: 140px; align-items: center; position: relative;">
+                            <img src="../../public/productImages/<%= image %>" class="rounded img-thumbnail" style="width: 200px; height: 140px; object-fit: cover;" alt="...">
+                            <input type="checkbox" class="form-check-input bg-success-subtle" name="selectedImages" value="<%= image %>" style="position: absolute; top: 5px; left: 5px; width: 25px; height: 25px;">
+                        </div>
+                    <% }) %>
+                </div>
+                <label for="images">Images:</label> <br>
+                <input class="inputFieldImage" type="file" class="form-control-file" id="images" name="images" accept="image/*" multiple >
+            </div>
+            
+
+            <div class="form-group">
+                <label for="name">Product Name:</label> <br>
+                <input class="inputField" type="text" class="form-control" id="name" name="name" value="<%=product.name%>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price:</label> <br>
+                <input class="inputField" type="number" class="form-control" id="price" name="price" value="<%=product.price%>"  required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="quantity">Quantity:</label> <br>
+                <input class="inputField" type="number" class="form-control" id="quantity" name="quantity" value="<%=product.quantity%>"  required>
+            </div>
+
+            <div class="form-group">
+                <label for="brand">Brand:</label> <br>
+                <select class="form-control" id="brand" name="brand" required>
+                    <option value="<%=product.brand%>"><%=product.brand%></option>
+                    <option value="all">All</option>
+                    <option value="adidas">Adidas</option>
+                    <option value="puma">Puma</option>
+                    <option value="reebok">Reebok</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category:</label> <br>
+                <select class="form-control" id="category" name="category" required>
+                    <option value="<%=product.category%>"><%=product.category%></option>
+                    <option value="all">All</option>
+                    <option value="clothing">Sneakers</option>
+                    <option value="shoes">Spots Shoes</option>
+                    <option value="accessories">Casual Shoes</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="description">Description:</label> <br>
+                <textarea class="form-control" id="description" name="description" rows="4" required><%=product.description%></textarea>
+            </div>
+            <div class="submitButton">
+            <button type="submit" class="btn btn-dark rounded-pill">Update Product</button></div>
+        </form>
+    </div>
+<%}%>
+    
+<%- include('../layout/footerHTML')-%>
