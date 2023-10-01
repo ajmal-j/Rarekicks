@@ -8,13 +8,13 @@ const fs = require('fs');
 function deleteImage(filename) {
     const v=__dirname
       const parentDir = path.dirname(v);
-  const imagePath = path.join(parentDir,'public','productImages', filename);
-  if (fs.existsSync(imagePath)) {
-    fs.unlinkSync(imagePath);
-    console.log(`Image ${filename} deleted successfully.`);
-  } else {
-    console.log(`Image ${filename} not found.`);
-  }
+    const imagePath = path.join(parentDir,'public','productImages', filename);
+    if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+        console.log(`Image ${filename} deleted successfully.`);
+    } else {
+        console.log(`Image ${filename} not found.`);
+    }
 }
 
 function deleteImages(deleteImg) {
@@ -30,6 +30,7 @@ const storage = multer.diskStorage({
       cb(null, './public/productImages');
     },
     filename: function (req, file, cb) {
+        console.log(file)
       cb(null, Date.now() + path.extname(file.originalname));
     },
   });
@@ -91,10 +92,12 @@ const editProduct=async (req,res)=>{
     const imageD=await req.body.selectedImages
     const images =await req.files.map(file => file.filename);
 
-    // if((imageD===undefined)&&((images.length)>=1)){
-    //     deleteImages(imagesFull)
-    //     console.log("done")
-    // }
+    console.log(imagesFull);
+
+    if((imageD===undefined)&&((images.length)>=1)){
+        const deleteImg=imagesFull.filter(value => !images.includes(value));
+        deleteImages(deleteImg)
+    }
     let combinedArray;
     // console.log(images)
             try {
@@ -131,9 +134,10 @@ const editProduct=async (req,res)=>{
                 }
             }
                 
-                catch(err){
-                    res.send("error")
-                }
+            catch(err){
+                res.send("error")
+            }
+
 }
 
 
