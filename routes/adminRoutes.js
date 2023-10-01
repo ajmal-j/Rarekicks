@@ -24,5 +24,7 @@ adminRouter.post('/editUser',userController.editUser)
 adminRouter.get('/blockUser',userController.blockUser)
 adminRouter.get('/createUser',userController.createUserByAdminShow)
 adminRouter.post('/createUser',userController.createUserByAdmin)
+adminRouter.get('/searchUser',userController.searchUser)
+adminRouter.get('/searchProduct',productController.searchProduct)
 
 module.exports=adminRouter

@@ -157,6 +157,17 @@ const deleteProduct=async (req,res)=>{
 }
 
 
+const searchProduct=async (req,res)=>{
+    const search=await req.query.search||"";
+    try{
+      const products=await productModel.find({name:new RegExp(search,"i")}).exec();
+      products?res.render("adminHome",{products:products,search}):res.redirect("admin/home");
+      }
+      catch(err){
+      res.send("Error occurred")
+      }
+  }
+
 module.exports=
     {addProduct,
     insertProduct,
@@ -164,5 +175,6 @@ module.exports=
     getProduct,
     editProductShow,
     editProduct,
-    deleteProduct
+    deleteProduct,
+    searchProduct
 }  

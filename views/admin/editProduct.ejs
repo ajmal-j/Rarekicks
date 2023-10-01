@@ -24,6 +24,7 @@
                     <% }) %>
                 </div>
                 <label for="images">Images:</label> <br>
+                <small>Max 4 Images!</small> <br>
                 <input class="inputFieldImage" type="file" class="form-control-file" id="images" name="images" accept="image/*" multiple >
             </div>
             
@@ -47,7 +48,7 @@
             <div class="form-group">
                 <label for="brand">Brand:</label> <br>
                 <select class="form-control" id="brand" name="brand" required>
-                    <option value="<%=product.brand%>"><%=product.brand%></option>
+                    <option value="<%=product.brand%>"><%= product.brand.charAt(0).toUpperCase() + product.brand.slice(1) %></option>
                     <option value="all">All</option>
                     <option value="adidas">Adidas</option>
                     <option value="puma">Puma</option>
@@ -58,7 +59,7 @@
             <div class="form-group">
                 <label for="category">Category:</label> <br>
                 <select class="form-control" id="category" name="category" required>
-                    <option value="<%=product.category%>"><%=product.category%></option>
+                    <option value="<%=product.category%>"><%= product.category.charAt(0).toUpperCase() + product.category.slice(1) %></option>
                     <option value="all">All</option>
                     <option value="clothing">Sneakers</option>
                     <option value="shoes">Spots Shoes</option>

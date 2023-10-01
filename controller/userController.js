@@ -1,6 +1,7 @@
 const userModel=require("../models/userModel")
 const bcrypt = require('bcrypt');
-const generateToken=require("../middlewares/jwtToken")
+const generateToken=require("../middlewares/jwtToken");
+const productModel = require("../models/productModel");
 
 const register= async(req,res)=>{
     try {
@@ -71,7 +72,7 @@ catch(err){
 const allUsers=async (req,res)=>{
   try{
     const users= await userModel.find();
-    res.render("adminUserManagement",{users})
+    res.render("adminUserManagement",{users,search:false})
   }catch(err){
     res.end("oooooooops"+err)
   }
@@ -146,8 +147,6 @@ const createUserByAdmin=async (req,res)=>{
       }
 }
 
-
-
 const blockUser=async (req,res)=>{
     const id=await req.query.id;
     const {isBlocked}=await userModel.findOne({_id:id});
@@ -159,6 +158,18 @@ const blockUser=async (req,res)=>{
       // res.redirect("/admin/viewUsers")
     }
 }
+
+const searchUser=async(req,res)=>{
+  const search=await req.query.search||"";
+  try{
+    const users=await userModel.find({name:new RegExp(search,"i")}).exec();
+    users?res.render("adminUserManagement",{users,search}):res.redirect("admin/viewUsers");
+    }
+    catch(err){
+    res.send("Error occurred")
+    }
+}
+
 
 
 module.exports={
@@ -173,5 +184,6 @@ module.exports={
   createUserByAdminShow,
   createUserByAdmin,
   blockUser,
+  searchUser,
 
 }

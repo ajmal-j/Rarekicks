@@ -6,7 +6,7 @@ const getProduct=require("../models/productModel")
 const home= async(req,res)=>{
     try {
       const products=await req.products;
-        res.render("adminHome",{products:products});
+        res.render("adminHome",{products:products,search:false});
       } catch (error) {
         console.log(error.message);
       }
