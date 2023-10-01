@@ -5,10 +5,10 @@ const userController= require("../controller/userController")
 userRouter.set("view engine","ejs")
 userRouter.set("views","./views/user")
 
-userRouter.get("/register",userController.register);
 userRouter.get("/login",userController.login);
-userRouter.post("/register",userController.createUser);
 userRouter.post("/login",userController.loginValidation);
+userRouter.get("/register",userController.register);
+userRouter.post("/register",userController.createUser);
 
 
 

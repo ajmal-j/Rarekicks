@@ -1,0 +1,26 @@
+.mainCont{
+    display: flex;
+    flex-direction: row;
+    width: 550px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 200px;
+    border: 1px solid black;
+    padding: 20px;
+    border-radius: 20px;
+}
+.mainCont button{
+    width: 200px;
+}
+.save{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

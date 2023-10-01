@@ -2,24 +2,28 @@
 <link rel="stylesheet" type="text/css" href="../../public/css/userRegister.css">
 
 </head>
-<body>
+<body style="background-image: url('../../public/images/2101.i121.030.P.m005.c33.isometric\ shoes\ manufacturing\ set.jpg');">
 <div class="containerfluid d-flex mainContainer"> 
-    
-<div class="mainCont">
-    <form class="row g-3 needs-validation" action="/user/register" method="post" novalidate enctype="application/form-data">
-        <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Welcome !</h3>
+    <div class="backButton">
+        <a href="/admin/viewUsers">
+            <button class="btn btn-dark" style="padding: 10px 20px;">Back</button>
+        </a>
+    </div>
+<div class="mainCont" style="background-color: rgba(0, 0, 0, 0.634); color: white;">
+    <form class="row g-3 needs-validation" action="/admin/createUser" method="post" novalidate enctype="application/form-data">
+        <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Create User</h3>
         <div class="col-md-12">
           <label for="validationCustom01" class="form-label">Name</label>
           <input type="text" class="form-control" id="validationCustom01" name="name" required>
           <div class="valid-feedback">
-            Looks good!
+            Cool !
           </div>
         </div>
         <div class="col-md-12">
           <label for="validationCustom02" class="form-label">Contact</label>
           <input type="number" class="form-control" id="validationCustom02" name="contact"  required>
           <div class="valid-feedback">
-            Looks good!
+            Cool !
           </div>
         </div>
         <div class="col-md-12">
@@ -38,16 +42,16 @@
             <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-key"></i></span>
             <input type="password" class="form-control" id="validationPassword" aria-describedby="inputGroupPrepend" name="password"  required>
             <div class="invalid-feedback">
-              Enter A Valid Email !
+              Enter A Password !
             </div>
           </div>
         </div>
         <div class="save">
             <div class="d-inline">
-            <button class="btn btn-dark rounded-pill mt-2" type="submit">Save</button>
+            <button class="btn btn-success rounded-pill mt-2" type="submit">Save</button>
             </div>
         </div>
-        <div class="text-center mt-5" style="font-size: 15px;">Do you have an account ?<a href="/user/login/" style="color: rgb(238, 0, 255);"> Sign-In</a></div>
+        <!-- <div class="text-center mt-5" style="font-size: 15px;">Do you have an account ?<a href="/user/login/" style="color: rgb(238, 0, 255);"> Sign-In</a></div> -->
       </form>
 
       <script>
@@ -67,6 +71,7 @@
                         event.preventDefault();
                         event.stopPropagation();
                         alert('Contact number must be at least 10 digits.');
+                        return
                     }
                     if (passwordValue.length < 8) {
                         event.preventDefault();

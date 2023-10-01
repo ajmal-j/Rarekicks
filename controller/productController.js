@@ -149,7 +149,7 @@ const deleteProduct=async (req,res)=>{
     const images=product.images;
     deleteImages(images);
     await productModel.findByIdAndDelete(id);
-    res.redirect("/admin/home")
+    // res.redirect("/admin/home")
     }
     catch(err){
         res.end(err)

@@ -11,9 +11,11 @@
             <div class="row g-5"> 
                 <div class="adminProfile col-12 col-xxl-2 col-xl-2 col-md-12 col-lg-2 col-sm-12">
                     <i class="bi bi-person-circle" style="font-size: 60px;"></i>
-                    <button class="btn btn-dark rounded-pill ms-2 me-2 mt-2">Sales</button>
-                    <button class="btn btn-dark rounded-pill ms-2 me-2 mt-2">View Users</button>
-                    <button class="btn btn-dark rounded-pill ms-2 me-2 mt-2">Products</button>
+                    <a href="/admin/home" style="width: 100%; display: flex; align-items: center; justify-content: center; text-decoration: none;"><button class="btn btn-success rounded-pill me-2 mt-2">Products</button></a>
+
+                    <a href="/admin/viewUsers" style="width: 100%; display: flex; align-items: center; justify-content: center; text-decoration: none;"><button class="btn btn-dark rounded-pill me-2 mt-2">View Users</button></a>
+
+                    <a href="" style="width: 100%; display: flex; align-items: center; justify-content: center; text-decoration: none;"><button class="btn btn-dark rounded-pill me-2 mt-2">Sales</button></a>
                 </div>
                 <div class="adminCenter col-12 col-xxl-2 col-xl-2 col-md-12 col-lg-2 col-sm-12">
                     <button class="btn btn-dark rounded">Total Item : <%=products.length%></button>
@@ -49,12 +51,12 @@
                       <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Category : </span><%= product.category%></span>
                       <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">price : </span><%= product.price%></span>
                       <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Brand : </span><%= product.brand%></span>
-                      <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Description : </span></span>
-                      <p class="card-text"><%= product.description%></p>
+                      <span class="card-title d-block text-center mt-2"><span style="font-size: 17px; font-weight: 700;"><u>Description</u></span></span>
+                      <p class="card-text ps-2 pe-2 pb-2"><%= product.description%></p>
                     </div>
                     <div class="card-footer">
                         <a href="/admin/editProduct?id=<%=product._id%>" class="btn btn-dark">Edit</a>
-                        <a href="/admin/deleteProduct?id=<%=product._id%>" class="btn btn-danger ms-3">Delete</a>
+                        <a href="/admin/deleteProduct?id=<%=product._id%>" class="btn btn-danger ms-3"  id="button" onclick="handleButtonClick()" >Delete</a>
                       </div>
                     </div>
                   </div>
@@ -71,6 +73,5 @@
 
         </div>
 </div>
-
-    <!-- <%- include('../layout/footer')-%> -->
+<%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>
