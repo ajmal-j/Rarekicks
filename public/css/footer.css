@@ -1,37 +1,55 @@
-.footer{
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    justify-content: space-evenly;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-image: url('../../public/images/13.jpg');
-    background-size: cover;
-    background-repeat: no-repeat; 
-    background-attachment: scroll;
-    border-top: 2px solid black;
-}
-.footer2{
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    left: 0;
-    bottom: 0;
-    justify-content: space-evenly;
-    right: 0;
-    
-}
-
-.footerTxt{
-    padding: 40px;
-    text-align: center;
+.footer {
     display: flex;
     flex-direction: column;
+    position: relative;
     justify-content: center;
     align-items: center;
-    max-width: 30vw;
+
+    background: linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+
+    background: -moz-linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+
+    background: -webkit-linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#EBF4F5", endColorstr="#B5C6E0", GradientType=1 );
+    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.641);
+    border-top: 0.7px solid black;
 }
-.footerTxt h3{
+
+.footerBlur {
+    width: 100%;
+}
+
+.footer2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.footerTxt {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+    max-width: 400px;
+}
+
+.footerTxt h3 {
     font-family: 'Michroma', sans-serif;
+}
+
+/* Media Queries for Responsive Design */
+@media only screen and (max-width: 768px) {
+    .footer2 {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footerTxt {
+        max-width: 100%;
+    }
+}
+
+ul {
+    margin-left: -30px;
+    list-style-type: none;
 }

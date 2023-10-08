@@ -23,6 +23,14 @@ const userSchema = mongoose.Schema(
       isBlocked :{
         type : Boolean,
         default : false
+      },
+      validated:{
+        type : Boolean,
+        default : false
+      },
+      otp:{
+        type : String,
+        default : ''
       }
     },
     {

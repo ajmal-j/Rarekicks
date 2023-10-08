@@ -13,8 +13,11 @@ const productSchema = new mongoose.Schema({
     },
     brand:{
         type: String,
-        required: true
-        
+        required: true 
+     },
+    sizes:{
+        type: [String],
+        required: true 
      },
     price : {
         type: Number,
@@ -35,7 +38,12 @@ const productSchema = new mongoose.Schema({
     deleted:{
         type: Boolean,
         default: false
-    }
+    },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'category',
+        required: true
+    },
 },{timestamps:true})
 
 

@@ -4,7 +4,6 @@
 </head>
 <body>
 <div class="containerfluid d-flex mainContainer"> 
-    
 <div class="mainCont">
     <form class="row g-3 needs-validation" action="/user/register" method="post" novalidate enctype="application/form-data">
         <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Welcome !</h3>
@@ -37,54 +36,21 @@
           <div class="input-group has-validation">
             <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-key"></i></span>
             <input type="password" class="form-control" id="validationPassword" aria-describedby="inputGroupPrepend" name="password"  required>
+            <span class="btn rounded-pill" onclick="togglePassword()" id="passKey" style="font-size: 20px;"><i class="bi bi-eye-slash-fill"></i></span>
+            <span class="error-span">&nbsp;</span>
             <div class="invalid-feedback">
-              Enter A Valid Email !
+              Enter A Valid Password !
             </div>
           </div>
         </div>
         <div class="save">
             <div class="d-inline">
-            <button class="btn btn-dark rounded-pill mt-2" type="submit">Save</button>
+            <button class="btn btn-dark rounded-pill mt-2" id="startCountdownButton" type="submit">Get Otp</button>
             </div>
         </div>
         <div class="text-center mt-5" style="font-size: 15px;">Do you have an account ?<a href="/user/login/" style="color: rgb(238, 0, 255);"> Sign-In</a></div>
       </form>
-
-      <script>
-        (() => {
-            'use strict';
-            const forms = document.querySelectorAll('.needs-validation');
-        
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    const contactInput = form.querySelector('[name="contact"]');
-                    const contactValue = contactInput.value;
-
-                    const passwordInput = form.querySelector('[name="password"]');
-                    const passwordValue = passwordInput.value;
-        
-                    if (contactValue.length < 10) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        alert('Contact number must be at least 10 digits.');
-                    }
-                    if (passwordValue.length < 8) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        alert('Password must be at least 8 characters.');
-                    }
-        
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-        
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        })();
-        </script>
-
+    <script src="../../public/jsFiles/userForm.js"></script>
 </div>
     <div class="alertKey">
         <% if(locals.message){%>
@@ -96,5 +62,20 @@
     </div>
 </div>
 
-<%- include('../layout/footerHTML')-%>
+<script>
+   function togglePassword() {
+    let passwordField = document.getElementById("validationPassword");
+    let toggleSpan =document.getElementById("passKey");
+  
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        toggleSpan.innerHTML = '<i class="bi bi-eye-fill"></i>';
+    } else {
+        passwordField.type = "password";
+        toggleSpan.innerHTML = '<i class="bi bi-eye-slash-fill"></i>';
+    }
+  }
+</script>
 
+<script type="module" src="../../public/jsFiles/first.js"></script>
+<%- include('../layout/footerHTML')-%>

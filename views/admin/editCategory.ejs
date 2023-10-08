@@ -1,0 +1,112 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/addProduct.css">
+
+</head>
+<body>
+    <div class="backButton" style="text-decoration: none;">
+        <a href="/admin/createCategory">
+            <button class="btn btn-dark">Back</button>
+        </a>
+    </div>
+    <main class="container w-50">
+        <header class="main-header navbar">
+           
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+   
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Categories </h2>
+                    <p>Edit category</p>
+                </div>
+           
+            </div>
+            <div class="container" style="display: flex; justify-content: center;">
+            <div class="card w-50">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <form action="/admin/editCategory?id=<%=categories._id%>" class="needs-validation" method="post">
+                                <a href="/admin/deleteCategoryCompletly?id=<%=categories._id%>" class="btn btn-danger mb-3"  id="button" >Delete</a>
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Name</label>
+                                    <input name="name" type="text" placeholder="Type here" class="form-control" value="<%=categories.name%>" id="product_name" /><span class="error-span text-danger">&nbsp;</span>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <input name="description" type="text" placeholder="Type here" class="form-control"  value="<%=categories.description%>" ></input>
+                                </div>
+                                <div class="d-grid">
+                                    <button class="btn btn-success">Save</button>
+                                    
+                                </div>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div></div>
+        </section>
+    </main>
+    
+    <div class="alertKey">
+        <% if(locals.message) { %>
+          <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+            data-bs-autohide="true" data-bs-delay="2000"> 
+            <strong><%= message %></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        <% } %>      
+      </div>
+
+
+<script>
+   document.addEventListener("DOMContentLoaded", function () {
+    'use strict';
+
+    const form = document.querySelector(".needs-validation");
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const categoryNameInput = document.getElementById("product_name");
+        const categoryName = categoryNameInput.value;
+        const category = categoryName.trim();
+
+        // Your form validation conditions
+        if (/^\s*$/.test(categoryName)) {
+            document.querySelector(".error-span").textContent = 'Category name cannot be just spaces.';
+            categoryNameInput.focus();
+            return;
+        }
+
+        // Add additional form validation conditions as needed
+
+        fetch('/admin/checkCategory?id=' + category)
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    document.querySelector(".error-span").textContent = "Category name already exists";
+                    categoryNameInput.focus();
+                } else {
+                    document.querySelector(".error-span").textContent = "";
+                    // If the category does not exist and form is valid, submit the form to the backend
+                    if (form.checkValidity()) {
+                        event.target.submit();
+                    }
+                }
+            })
+            .catch(error => {
+                console.error("Error checking category:", error);
+            });
+    });
+});
+
+</script>
+
+<%- include('../layout/footerHTML')-%>

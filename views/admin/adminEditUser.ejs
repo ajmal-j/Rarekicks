@@ -42,22 +42,18 @@
       <script>
         (() => {
             'use strict';
-        
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
             const forms = document.querySelectorAll('.needs-validation');
-        
-            // Loop over them and prevent submission
             Array.from(forms).forEach(form => {
                 form.addEventListener('submit', event => {
-                    // Additional validation for contact number
                     const contactInput = form.querySelector('[name="contact"]');
                     const contactValue = contactInput.value;
         
                     if (contactValue.length < 10) {
-                        // If contact number is less than 10 digits, prevent submission
                         event.preventDefault();
                         event.stopPropagation();
-                        alert('Contact number must be at least 10 digits.');
+                        const alertMessage='Contact number must be at least 10 digits.';
+                        showAlert(alertMessage);
+                        return;
                     }
         
                     if (!form.checkValidity()) {
@@ -69,27 +65,12 @@
                 }, false);
             });
         })();
+        form.addEventListener('keydown', event => {
+            if (event.key === 'Enter') {
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
         </script>
-
-      <!-- <script>
-        (() => {
-                'use strict'
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                const forms = document.querySelectorAll('.needs-validation')
-
-                // Loop over them and prevent submission
-                Array.from(forms).forEach(form => {
-                    form.addEventListener('submit', event => {
-                    if (!form.checkValidity()) {
-                        event.preventDefault()
-                        event.stopPropagation()
-                    }
-
-                    form.classList.add('was-validated')
-                    }, false)
-                })
-                })()
-      </script> -->
 </div>
 </div>
 

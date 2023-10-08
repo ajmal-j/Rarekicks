@@ -5,10 +5,10 @@
 <body>
 <div class="containerfluid d-flex mainContainer"> 
     <div class="sideForm">
-        <form action="/admin/adminLogin" method="POST" class="pt-1 mainForm" style="height: 350px;">
+        <form action="/admin/adminLogin" method="POST" class="pt-1 mainForm needs-validation" style="height: 350px;">
             <div class="text-center mb-3 mt-3 welcome" style="font-size: 30px;">Welcome Admin !</div>
             <div class="form-group mb-3">
-                <input type="email" class="form-control" placeholder="email" name="email" required>
+                <input type="email" class="form-control" placeholder="email" name="email" value="<%= locals?.email?email:''%>"  required>
             </div> 
             <div class="form-group mb-3">
                 <input type="password" class="form-control" placeholder="password" name="password" required>
@@ -25,5 +25,57 @@
         <%}%>
     </div>
 </div>
+<script>
+    (() => {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                const passwordInput = form.querySelector('[name="password"]');
+                const passwordValue = passwordInput.value;
+                const emailInput = form.querySelector('[name="email"]');
+                const emailValue = emailInput.value;
 
+                // Check if the password contains only spaces
+                if (/^\s*$/.test(passwordValue)) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const alertMessage='Password cannot be just spaces.';
+                    showAlert(alertMessage);
+                    return;
+                }
+                // Check if the password contains only spaces
+                if (/^\s*$/.test(emailValue)) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const alertMessage='Email cannot be just spaces.';
+                    showAlert(alertMessage);
+                    return;
+                }
+
+                // Check the length of the password
+                if (passwordValue.length < 8) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const alertMessage='Password must be at least 8 characters.';
+                    showAlert(alertMessage);
+                    return;
+                }
+
+
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+    form.addEventListener('keydown', event => {
+        if (event.key === 'Enter') {
+            form.dispatchEvent(new Event('submit'));
+        }
+    });
+</script>
 <%- include('../layout/footerHTML')-%>

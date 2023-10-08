@@ -1,14 +1,46 @@
 <%- include('./headerHTML')-%>
+<style>
+
+.loading-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    z-index: 9999999999999999;
+}
+
+.loader {
+    border: 3px solid #ff0000;
+    box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.185);
+    border-radius: 20%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+</style>
 <link rel="stylesheet" type="text/css" href="../../public/css/header.css">
 </head>
 <body>
-
-<div class="header ">
+    <div class="loading-screen">
+        <div class="loader"></div>
+    </div>
+<div class="header">
     <div class="header2">
         <div class="topHeader">
-            <div class="left"><i class="bi bi-box-arrow-left ms-5"></i></div>
-            <div class="center">
-                RARE KICKS
+            <a class="left text-danger" href="/user/logout/" title="logout"><i class="bi bi-box-arrow-left ms-5"></i></a>
+            <div class="center text-center">
+                RARE  KICK'S
             </div>
             <div class="right">
                 <i class="bi bi-heart me-2"></i>
@@ -16,19 +48,72 @@
                 <i class="bi bi-person-lines-fill me-5"></i>
             </div>
         </div>
-        <div class="bottomHeader">
-            <span class="categories ms-5">HOME</span>
-            <span class="categories">ALL PRODUCTS</span>
-            <span class="categories">ADDIDAS</span>
-            <span class="categories">PUMA</span>
-            <span class="categories me-5"><input type="text" placeholder="search.."></span>
+        <div class="bottomHeader container mb-3">
+            <a class="" href="/user/home/"><h3 class="text-danger"><u>Home</u></h3></a>
+            
+
+            <div class="btn-group dropdown">
+                <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    PRODUCTS
+                </button>
+                <ul class="dropdown-menu bg-dark text-center p-4 ">
+                  <li class="text-center  pb-4 ps-3 pe-3"><a class="" href="/user/allProducts/">ALL PRODUCTS</a></li>
+                  <li class="text-center  pb-4 ps-3 pe-3"><a class="" href="/user/brandBased/">All Brands</a></li>
+                  <li class="text-center pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=adidas">ADIDAS</a></li>
+                  <li class="text-center pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=reebok">REEBOK</a></li>
+                  <li class="text-center pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=jordan">JORDAN</a></li>
+                  <li class="text-center pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=asics">ASICS</a></li>
+                  <li class="text-center pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=crocs">CROCS</a></li>
+                  <li class="text-center ps-3 pe-3"><a class=" " href="/user/brand?brand=converse">CONVERSE</a></li>
+                </ul>
+              </div>
+
+                  <form action="/user/searchProduct/" method="get" class="needs-validation" enctype="application/form-data">
+                     <div class="d-flex align-items-center">
+                        <% if (locals?.search) { %>
+                            <% var value = search?search:''; %>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="search" placeholder="Search Product" style="min-width: 100px;" id="searchInput">
+                                <button type="reset" class="btn border-dark-subtle" id="clearSearch" onclick="clearA()" style="background-color: white;">
+                                    <i class="bi bi-x-lg"></i></button></div>
+                                    <% } else { %>
+                            <div class="input-group">
+                            <input type="text" class="form-control border-dark" name="search" placeholder="Search Product" style="min-width: 100px;" id="searchInput">
+                            <button type="reset" class="btn border-dark-subtle" id="clearSearch" onclick="clearA()">
+                                <i class="bi bi-x-lg"></i></button></div>
+                        <% } %>
+                        <button class="btn btn-dark text-center rounded-pill" type="submit" style="width: 100px; margin-left: 10px;">Search</button>
+                    </div>
+                </form>
+               </div>
+            </div>
+         </nav>
+         
         </div>
     </div>
 </div>
+<div class="container coverdiv"></div>
 
 
+<script>
+    // Simulate content loading
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelector(".loading-screen").style.display = "none";
+    });
+       document.addEventListener("DOMContentLoaded", function () {
+           const clearSearch = document.getElementById("searchInput");
+           
+           // Pre-fill search input if 'search' exists
+            clearSearch.value = '<%=value%>';
+    });
 
+    function clearA() {
+        const form = document.querySelector(".needs-validation");
+        form.reset();
+        clearSearch.value = '';
+    }
+</script>
 
-
+<script src="../../public/jsFiles/searchVal.js"></script>
 
 <%- include('./footerHTML')-%>
