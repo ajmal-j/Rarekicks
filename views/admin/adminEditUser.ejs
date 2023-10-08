@@ -1,0 +1,83 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/adminEditUser.css">
+
+</head>
+<body>
+<%- include('../layout/adminHeader')-%>
+<div class="container-fluid" style="display: flex; align-items: center; justify-content: center;">
+<div class="mainCont">
+    <form class="row g-3 needs-validation" action="/admin/editUser?id=<%=user._id%>" method="post" novalidate enctype="application/form-data">
+        <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Edit User</h3>
+        <div class="col-md-12">
+          <label for="validationCustom01" class="form-label">Name</label>
+          <input type="text" class="form-control" id="validationCustom01" name="name" value="<%=user.name%>" required>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+        </div>
+        <div class="col-md-12">
+          <label for="validationCustom02" class="form-label">Contact</label>
+          <input type="number" class="form-control" id="validationCustom02" name="contact" value="<%=user.contact%>" required>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+        </div>
+        <div class="col-md-12">
+          <label for="validationCustomUsername" class="form-label">Email</label>
+          <div class="input-group has-validation">
+            <span class="input-group-text" id="inputGroupPrepend">@</span>
+            <input type="email" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email" value="<%=user.email%>" required>
+            <div class="invalid-feedback">
+              Enter A Valid Email !
+            </div>
+          </div>
+        </div>
+        <div class="save">
+            <div class="d-inline">
+            <button class="btn btn-dark rounded-pill mt-2" type="submit">Save</button>
+            </div>
+        </div>
+      </form>
+
+      <script>
+        (() => {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    const contactInput = form.querySelector('[name="contact"]');
+                    const contactValue = contactInput.value;
+        
+                    if (contactValue.length < 10) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        const alertMessage='Contact number must be at least 10 digits.';
+                        showAlert(alertMessage);
+                        return;
+                    }
+        
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+        
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+        form.addEventListener('keydown', event => {
+            if (event.key === 'Enter') {
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+        </script>
+</div>
+</div>
+
+
+
+
+
+
+
+<%- include('../layout/footerHTML')-%>

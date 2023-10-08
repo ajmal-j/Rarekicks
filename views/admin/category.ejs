@@ -1,0 +1,137 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/addProduct.css">
+
+</head>
+<body>
+    <div class="backButton" style="text-decoration: none;">
+        <a href="/admin/home">
+            <button class="btn btn-dark">Back</button>
+        </a>
+    </div>
+    <main class="container w-50">
+        <header class="main-header navbar">
+           
+            <div class="col-nav">
+                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
+                <ul class="nav">
+   
+                </ul>
+            </div>
+        </header>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Categories </h2>
+                    <p>Add, edit or delete a category</p>
+                </div>
+                <form >
+                    <!-- <div class="input-group">
+                        <input list="search_terms" type="text" class="form-control" placeholder="Search term" name="search">
+                        <input class="btn btn-primary" type="submit" value="search"> 
+                    </div> -->
+                   
+                </form>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="/admin/createCategory" class="needs-validation" method="post">
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Name</label>
+                                    <input name="name" type="text" placeholder="Type here" class="form-control" id="product_name" required/>
+                                </div>
+                               
+                                <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea name="description" type="text" placeholder="Type here" class="form-control"></textarea>
+                                </div>
+                                <div class="d-grid">
+                                    <button class="btn btn-dark" id="button" onclick="handleButtonClick()">Create category</button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <div class="container w-50">
+    <div class="row row-cols-1 row-cols-xl-3 row-cols-md-2 g-4 mt-5 d-flex" style="justify-content: center;">
+        <% if (categories=='') { %>
+          <h2 class="text-center">No Such categories</h2>
+        <% } %>
+        
+        <% if (categories) { %>
+
+        <% categories.forEach(category=>{%>
+
+          <div class="col">
+            <div class="card h-100">
+              <div class="card-body">
+                <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Name : </span><%= category.name%></span>
+                <span class="card-title d-block text-center mt-2"><span style="font-size: 17px; font-weight: 700;"><u>Description</u></span></span>
+                <p class="card-text ps-2 pe-2 pb-2"><%= category.description%></p>
+              </div>
+              <div class="card-footer">
+                  <a href="/admin/editCategory?id=<%=category._id%>" class="btn btn-dark">Edit</a>
+                  <a href="/admin/deleteCategory?id=<%=category._id%>" class="btn btn-danger" id="button" onclick="handleButtonClick()" ><%=category.deleted?"Show":"Hide"; %></a>
+                </div>
+              </div>
+            </div>
+            
+            
+            
+            <%})%>
+        <% } else { %>
+          <h2 class="text-center">No Such Categories</h2>
+        <% } %>
+
+        </div> 
+        
+        <div class="alertKey">
+            <% if(locals.message) { %>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+                data-bs-autohide="true" data-bs-delay="2000"> 
+                <strong><%= message %></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            <% } %>      
+          </div>
+
+</div>
+
+<script>
+    (() => {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                const nameInput = form.querySelector('[name="name"]');
+                const nameValue = nameInput.value;
+
+                if (/^\s*$/.test(nameValue)) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    alert('Name cannot be just spaces.');
+                    return;
+                }
+                
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+    form.addEventListener('keydown', event => {
+            if (event.key === 'Enter') {
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+</script>
+
+    <%- include('../layout/footerHTML')-%>

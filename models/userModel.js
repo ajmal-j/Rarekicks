@@ -20,6 +20,18 @@ const userSchema = mongoose.Schema(
         required: true,
         unique: true
       },
+      isBlocked :{
+        type : Boolean,
+        default : false
+      },
+      validated:{
+        type : Boolean,
+        default : false
+      },
+      otp:{
+        type : String,
+        default : ''
+      }
     },
     {
       timestamps: true,

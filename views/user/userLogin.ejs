@@ -1,30 +1,88 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/userRegister.css">
-
+<!-- <link rel="stylesheet" type="text/css" href="../../public/css/adminEditUser.css"> -->
 </head>
 <body>
 <div class="containerfluid d-flex mainContainer"> 
-    <div class="sideForm">
-        <form action="/user/login" method="POST" class="pt-1 mainForm" style="height: 350px;">
-            <div class="text-center mb-3 mt-3 welcome" style="font-size: 30px;">Welcome Back !</div>
-            <div class="form-group mb-3">
-                <input type="email" class="form-control" placeholder="email" name="email" required>
-            </div> 
-            <div class="form-group mb-3">
-                <input type="password" class="form-control" placeholder="password" name="password" required>
-            </div> 
-            <button type="submit" class="btn rounded-pill btn-dark mt-2">Sign-In</button>
-            <div class="text-center mt-5" style="font-size: 15px;">Don’t you have account? <span style="color: rgb(238, 0, 255);"> Sign-Up</span>
-            </div> 
-        </form> 
-    </div>
+<div class="mainCont">
+    <form class="row g-3 needs-validation" action="/user/login" method="post" novalidate enctype="application/form-data">
+        <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Welcome Back !</h3>
+        <div class="col-md-12">
+          <label for="validationCustomUsername" class="form-label">Email</label>
+          <div class="input-group has-validation">
+            <span class="input-group-text" id="inputGroupPrepend">@</span>
+            <input type="email" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email" value="<%= locals?.email?email:''%>" required>
+            <div class="invalid-feedback">
+              Enter A Valid Email !
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <label for="validationPassword" class="form-label">Password</label>
+          <div class="input-group has-validation">
+            <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-key"></i></span>
+            <input type="password" class="form-control" id="validationPassword" aria-describedby="inputGroupPrepend" name="password"  required>
+            <div class="invalid-feedback">
+              Enter A Valid Password !
+            </div>
+          </div>
+        </div>
+        <div class="save">
+            <div class="d-inline">
+            <button class="btn btn-dark rounded-pill mt-2" type="submit">Login</button>
+            </div>
+        </div>
+        <div class="text-center mt-5 d-flex mx-auto" style="font-size: 15px; flex-direction: column;">
+          Don’t you have an account? 
+          <a href="/user/register/" style="color: rgb(238, 0, 255);"> Sign-Up</a>
+          <div> <a href="/user/loginWithOtp" class="btn text-center btn-dark mt-2 mb-2 rounded-pill" style="width: 100px;">Otp Login</a></div>
+      </div>
+      </form>
+    <script>
+       (() => {
+            'use strict';
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    const passwordInput = form.querySelector('[name="password"]');
+                    const passwordValue = passwordInput.value;
+                    if (/^\s*$/.test(passwordValue)) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        passwordInput.value='';
+                        const alertMessage='Password cannot be just spaces.';
+                        showAlert(alertMessage);
+                    }
+                    if (passwordValue.length < 8) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        const alertMessage='Password must be at least 8 characters.';
+                        showAlert(alertMessage);
+                    }
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+        form.addEventListener('keydown', event => {
+            if (event.key === 'Enter') {
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+
+</div>
     <div class="alertKey">
-        <% if(locals.message){%>
-            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;">
-                <strong><%=message%></strong>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-        <%}%>
+      <% if(locals.message) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+          data-bs-autohide="true" data-bs-delay="2000"> 
+          <strong><%= message %></strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>      
     </div>
 </div>
 

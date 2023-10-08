@@ -1,0 +1,109 @@
+.header{
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    top: 0;
+    /* background-color: white; */
+    background: hsla(186, 33%, 94%, 1);
+
+    background: linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+
+    background: -moz-linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+
+    background: -webkit-linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#EBF4F5", endColorstr="#B5C6E0", GradientType=1 );
+    width: 100vw;
+    height: 140px;
+    box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.691);
+    border-bottom: 0.7px solid black;
+    z-index: 10;
+}
+.header2{
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 140px;
+}
+.topHeader{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100px;
+    width: 100%;
+}
+
+.topHeader .bi{
+    font-size: 30px;
+}
+.center{
+    word-spacing: 15px;
+    font-family: 'Michroma', sans-serif;
+    font-size: 30px;
+    margin-left: 50px;
+}
+
+.bottomHeader{
+    display: flex;
+    font-size: 17px;
+    text-wrap: nowrap;
+    column-gap: 30px;
+    row-gap: 15px;
+    flex-direction: row;
+    font-family: 'Michroma', sans-serif;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.bottomHeader a{
+    text-decoration: none;
+}
+@media(max-width:991px){
+    .bottomHeader{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .header{
+        height: 220px;
+    }
+    .header2{
+        height: 220px;
+    }
+    .coverdiv{
+        height: 30px;
+    }
+    .bottomCover{
+        height: 100px;
+    }
+  }
+@media(max-width:563px){
+    .bottomHeader{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .header,.header2{
+        height: 255px;
+    }
+    .coverdiv{
+        height: 20px;
+    }
+    .bottomCover{
+        height: 130px;
+    }
+  }
+
+
+
+ .dropdown-menu li a:hover{
+    color: red;
+    font-weight: bolder;
+  }
+ .dropdown-menu li a{
+    color: white;
+    transition: 0.25s;
+  }

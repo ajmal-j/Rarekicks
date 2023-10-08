@@ -1,0 +1,119 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/addProduct.css">
+
+</head>
+<body>
+    <div class="backButton">
+        <a href="/admin/home">
+            <button class="btn btn-dark">Back</button>
+        </a>
+    </div>
+    <div class="container mainCont">
+        <h3 class="mt-3 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Add Product</h3>
+        <form action="/admin/addProduct" class="needs-validation" method="POST" enctype="multipart/form-data">
+            
+            <div class="form-group">
+                <label for="images">Images:</label> <br>
+                <small>Max 4 Images!</small> <br>
+                <input class="inputFieldImage" type="file" class="form-control-file" id="images" name="images" accept="image/*" multiple required>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Product Name:</label> <br>
+                <input class="inputField" type="text" class="form-control" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price:</label> <br>
+                <input class="inputField" type="number" class="form-control" id="price" name="price" required>
+            </div>
+
+
+            <div class="form-group">
+                <label for="quantity">Quantity:</label> <br>
+                <input class="inputField" type="number" class="form-control" id="quantity" name="quantity" required>
+            </div>
+
+            <div class="form-group">
+                <label for="brand">Brand:</label> <br>
+                <select class="form-control" id="brand" name="brand" required>
+                    <option value="nike">Nike</option>
+                    <option value="reebok">Reebok</option>
+                    <option value="converse">Converse</option>
+                    <option value="jordan">Jordan</option>
+                    <option value="asics">Asics</option>
+                    <option value="crocs">Crocs</option>
+                    <option value="adidas">Adidas</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category:</label> <br>
+                <select class="form-control" id="category" name="category" required>
+                    <% categories.forEach (category=>{%>
+                        <option value="<%= category._id%>"><%= category.name%></option>
+                    <%}) %>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label> <br>
+                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+            </div>
+            
+
+            <div class="form-group" >
+                <label for="sizes">Available Sizes:</label> <br>
+                <div class="d-flex" style="justify-content: center;">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" style="height: 20px; width: 20px;" id="sizeSmall" name="sizes[]" value="6">
+                    <label class="form-check-label" for="sizeSmall">6</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" style="height: 20px; width: 20px;" id="sizeMedium" name="sizes[]" value="7">
+                    <label class="form-check-label" for="sizeMedium">7</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" style="height: 20px; width: 20px;" id="sizeLarge" name="sizes[]" value="8">
+                    <label class="form-check-label" for="sizeLarge">8</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" style="height: 20px; width: 20px;" id="sizeLarge" name="sizes[]" value="9">
+                    <label class="form-check-label" for="sizeLarge">9</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" style="height: 20px; width: 20px;" id="sizeLarge" name="sizes[]" value="10">
+                    <label class="form-check-label" for="sizeLarge">10</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" style="height: 20px; width: 20px;" id="sizeLarge" name="sizes[]" value="11">
+                    <label class="form-check-label" for="sizeLarge">11</label>
+                </div>
+                </div>
+            </div>
+
+            <div class="submitButton">
+            <button type="submit" class="btn btn-success rounded-pill">Add Product</button></div>
+        </form>
+    </div>
+
+<div class="alertKey">
+  <% if(locals.message) { %>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+      data-bs-autohide="true" data-bs-delay="2000"> 
+      <strong><%= message %></strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>      
+</div>
+<div class="alertKey">
+  <% if(locals.messageS) { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+      data-bs-autohide="true" data-bs-delay="2000"> 
+      <strong><%= messageS %></strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% } %>      
+</div>
+
+<%- include('../layout/footerHTML')-%>

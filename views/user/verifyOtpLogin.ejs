@@ -1,0 +1,111 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/userRegister.css">
+
+</head>
+<body>
+    
+<div class="containerfluid d-flex mainContainer"> 
+<div class="mainCont">
+  <form class="row g-3 needs-validation" action="/user/verifyOtp/" method="post" enctype="application/form-data">
+    <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Verify !</h3>
+    <div class="col-md-12">
+        <label class="form-label">Email</label>
+        <div class="input-group has-validation">
+            <span class="input-group-text" id="inputGroupPrepend"><%= email ? email : ' ' %></span>
+            <input type="hidden" name="email" value="<%= email ? email : ' ' %>">
+        </div>
+    </div>
+    <div class="col-md-12">
+        <label class="form-label">Otp</label>
+        <div class="text d-flex" style="font-family: 'Michroma', sans-serif; align-items: center; justify-content: center;">
+          <h6 class="text ">Expires In : </h6>
+          <div id="timer" class="display-8 text-danger mb-1" style="width: 30px;">0</div>
+        </div>
+        <a href="/user/sendOtpAgain?email=<%= email ? email : ' ' %>" class="btn btn-dark mb-2 rounded-pill" id="startCountdownButton2">Resent Otp</a>
+        <div class="input-group">
+            <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-key"></i></span>
+            <input type="password" class="form-control" name="otp" required>
+            <input type="hidden" name="counter" id="counterInput">
+        </div>
+    </div>
+    <div class="save">
+        <div class="d-inline">
+            <button class="btn btn-dark rounded-pill mt-2" id="submit" type="submit">Verify</button>
+        </div>
+    </div>
+</form>
+
+</div>
+    <div class="alertKey">
+      <% if(locals.message) { %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"> 
+          <strong><%= message %></strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% } %>      
+    </div>
+</div>
+
+
+<script>
+    const OtpButton=document.querySelector('#startCountdownButton2');
+    OtpButton.addEventListener('click', function () {
+        const alertMessage='Otp Sended!';
+        showAlert(alertMessage);
+    });
+    
+    document.getElementById('submit').addEventListener('click', function() {
+       document.getElementById('counterInput').value = localStorage.getItem('countdownTime2');
+     });
+    
+
+   (() => {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+
+
+                const passwordInput = form.querySelector('[name="otp"]');
+                const passwordValue = passwordInput.value;
+
+
+                if (passwordValue.length < 6) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    const alertMessage='Enter a Valid Otp';
+                    showAlert(alertMessage);
+                    return;
+                }
+                if (/^\s*$/.test(passwordValue)) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        const alertMessage='Otp cannot be just spaces.';
+                        showAlert(alertMessage);
+                        return;
+                    }
+               
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+                }, false)
+            })
+            })()
+
+
+            form.addEventListener('keydown', event => {
+            if (event.key === 'Enter') {
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+
+</script>
+
+<script type="module" src="../../public/jsFiles/third.js"></script>
+<!-- <script type="module" src="../../public/jsFiles/first.js"></script> -->
+
+
+<%- include('../layout/footerHTML')-%>
