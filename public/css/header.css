@@ -1,8 +1,5 @@
 .header{
-    display: flex;
-    flex-direction: row;
-    position: fixed;
-    top: 0;
+    position: sticky;
     /* background-color: white; */
     background: hsla(186, 33%, 94%, 1);
 
@@ -13,36 +10,34 @@
     background: -webkit-linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
 
     filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#EBF4F5", endColorstr="#B5C6E0", GradientType=1 );
-    width: 100vw;
     height: 140px;
     box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.691);
     border-bottom: 0.7px solid black;
     z-index: 10;
 }
-.header2{
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0;
-    width: 100vw;
-    height: 140px;
+.header a:hover{
+        color: red;
+        transition: 0.25s;
 }
-.topHeader{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 100px;
-    width: 100%;
+h3 {
+    overflow-wrap: break-word;
+}
+h5 {
+    overflow-wrap: break-word;
+}
+
+ .header2{
+    position: sticky;
 }
 
 .topHeader .bi{
     font-size: 30px;
-}
+} 
 .center{
-    word-spacing: 15px;
+    word-spacing: 20px;
     font-family: 'Michroma', sans-serif;
-    font-size: 30px;
-    margin-left: 50px;
+    font-size: 35px;
+    letter-spacing: 5px;
 }
 
 .bottomHeader{
@@ -68,10 +63,10 @@
         align-items: center;
     }
     .header{
-        height: 220px;
+        height: 250px;
     }
     .header2{
-        height: 220px;
+        height: 250px;
     }
     .coverdiv{
         height: 30px;
@@ -80,14 +75,14 @@
         height: 100px;
     }
   }
-@media(max-width:563px){
+@media(max-width:403px){
     .bottomHeader{
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
     .header,.header2{
-        height: 255px;
+        height: 400px !important;
     }
     .coverdiv{
         height: 20px;
@@ -97,8 +92,9 @@
     }
   }
 
-
-
+.RAREADMIN{
+    padding-right: 40px;
+}
  .dropdown-menu li a:hover{
     color: red;
     font-weight: bolder;
@@ -107,3 +103,154 @@
     color: white;
     transition: 0.25s;
   }
+
+  .right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    column-gap: 20px;
+  }
+
+
+  .topHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fa00; /* Add your desired background color */
+    padding: 10px;
+}
+
+.topHeader a {
+    text-decoration: none;
+    color: #000; /* Add your desired text color */
+    margin-right: 10px;
+}
+
+.left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 100px;
+}
+
+.center {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.RARE{
+    padding-left: 100px;
+}
+
+.right {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    margin-right: 60px;
+}
+
+@media (max-width: 928px) {
+    /* Adjust styles for smaller screens */
+    .topHeader {
+        flex-direction: column;
+        text-align: center;
+    }
+    .RARE {
+        padding-left: 30px;
+    }
+    .header,.header2{
+        height: 350px;
+    }
+    .left, .right {
+        padding-left: 0px;
+        margin-left: 0px;
+        margin-right: 0px;
+        width: 100%;
+    }
+    .RAREADMIN{
+        padding-right: 20px;
+    }
+    .Manga{
+        margin-left: 50px;
+    }
+    .Thenga{
+        padding-right: 40px;
+    }
+}
+
+
+/* Spinner */
+
+.loading-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff;
+    z-index: 9999999999999999;
+}
+
+.loader {
+    margin-left: 18px;
+  padding: 20px;
+  width: 48px;
+  height: 48px;
+  border: 3px dotted #000000;
+  border-style: solid solid dotted dotted;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  animation: rotation 2s linear infinite;
+}
+.loader::after {
+  content: '';  
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  border: 3px dotted #FF3D00;
+  border-style: solid solid dotted;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  animation: rotationBack 1s linear infinite;
+  transform-origin: center center;
+}
+    
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
+@keyframes rotationBack {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+} 
+
+.productCounter{
+    position: relative;
+}
+.productCounter span{
+    border-radius: 50%;
+    padding: 0px 7px;
+    background-color: rgb(255, 67, 67);
+    color: rgb(0, 0, 0);
+    position: absolute;
+    top: -3px;
+    right: -3px;
+}

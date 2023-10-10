@@ -31,12 +31,55 @@ const userSchema = mongoose.Schema(
       otp:{
         type : String,
         default : ''
-      }
+      },
+      wishlist:
+      [{ type: mongoose.Schema.Types.ObjectId,
+         ref: 'product' }],
+      cart: {
+        items: [{
+            product: {
+                type: mongoose.Types.ObjectId,
+                ref: 'product',
+                required: true
+            },
+            quantity: {
+                type: Number,
+                required: true
+            },
+            price:{
+                type:Number
+            },
+            size:{
+                type:Number
+            },
+
+        }],
+        totalPrice: {
+            type: Number,
+            default: 0
+        }
+    },
     },
     {
       timestamps: true,
     }
   );
+
+
+  userSchema.pre('save', function(next) {
+    let cart = this.cart;
+    cart.totalPrice = 0;
+
+    cart.items.forEach(item => {
+        cart.totalPrice += item.quantity * item.price;
+    });
+
+    next();
+});
+
+
+
+
 
 const userModel=mongoose.model("user",userSchema)
 module.exports=userModel

@@ -2,6 +2,7 @@ const userModel=require("../models/userModel")
 const bcrypt = require('bcrypt');
 const jwt=require("jsonwebtoken");
 const productModel = require("../models/productModel");
+const addressModel = require("../models/addressModel");
 const mail=require('../public/jsFiles/mail');
 const storage=require("../public/jsFiles/storage")
 
@@ -46,6 +47,7 @@ const loginWithOtp=async(req,res)=>{
 const logout=async (req,res)=>{
   try {
     req.session.user=false;
+    req.session._id=false;
     res.clearCookie("userToken");
     res.render("userLogin",{email:"",message:"Successfully logged out"});
   } catch (error) {
@@ -109,8 +111,9 @@ const loginValidation=async (req,res)=>{
       if(user.isBlocked){
         res.render("userLogin",{message:"You Are Blocked By The Admin!",email:req.body.email.trim()||" "})
       }else{
-        const token = jwt.sign({ name: user.name }, process.env.JWT_SECRET, { expiresIn: "1d" });
+        const token = jwt.sign({ name: user.name }, process.env.JWT_SECRET, { expiresIn: "730d" });
         req.session.user=user.email;
+        req.session._id=user._id;
         res.cookie("userToken",token,{
           httpOnly: true,
           expires: new Date(Date.now() + 10 * 60 * 60 * 1000), 
@@ -330,7 +333,6 @@ const verifyEmail=async (req,res)=>{
 
 const homePage=async (req,res)=>{
   try{
-    // console.log(req.user)
     const products=await productModel.find({deleted:false}).limit(9);
     const products2=await productModel.find({deleted:false}).skip(17);
     res.render('homePage',{products,products2})
@@ -338,6 +340,7 @@ const homePage=async (req,res)=>{
     res.end(err)
   }
 }
+
 
 
 const allProducts=async (req,res)=>{
@@ -351,26 +354,274 @@ const allProducts=async (req,res)=>{
 }
 
 
-const productDetailed=async (req,res)=>{
-  try{
-    const id=req.query.id.trim();
+const productDetailed = async (req, res) => {
+  try {
+    const id = req.query.id.trim();
+    const userId=req.session._id;
+    const user = await userModel.findOne({ _id:userId });
+    const wish = user?.wishlist.includes(id);
+    console.log(wish);
     const product = await productModel.findOne({
       $and: [
         { _id: id },
         { deleted: false }
       ]
-    }).populate("category")
-    // const product=await productModel.findOne({_id:id})
-    if(product){
-      res.render("detailedProduct",{products:req.products,product})
-    }else{
-      const product=await productModel.findOne({deleted:false}).populate("category");
-      res.render("detailedProduct",{products:req.products,product})
+    }).populate("category");
+
+    if (product) {
+      res.render("detailedProduct", { products: req.products, product, wishlist: wish });
+    } else {
+      res.render("detailedProduct", { products: req.products, product: null, wishlist: wish });
     }
-  }catch(err){
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+
+const profile=async(req,res)=>{
+  try {
+    const id=req.session._id
+    const addresses=await addressModel.find({userId:id})
+    const user=await userModel.findOne({_id:id})
+    res.render('profile',{user,addresses})
+  } catch (error) {
     
   }
 }
+
+const redirect=async(req,res)=>{
+  res.redirect("/user/profile")
+}
+
+const editProfileShow=async(req,res)=>{
+  try {
+    const id=req.session._id
+    const user=await userModel.findOne({_id:id})
+    res.render('editProfile',{user})
+  } catch (error) {
+    
+  }
+}
+const editProfile=async (req,res,next)=>{
+  try {
+    const body=await req.body;
+    const id=await req.session._id;
+    const details={
+      name:body.name,
+      contact:body.contact,
+      email:body.email
+    }
+    await userModel.findByIdAndUpdate(id,details)
+    res.redirect('/user/profile')
+  } catch (error) {
+    console.log(error);
+  }
+      
+}
+
+
+const checkPassword = async (req, res) => {
+  try {
+      const passwordNew = req.query.password;
+      const contactNew = req.query.contact;
+      const emailNew = req.query.email;
+
+      const { email, contact, password } = await userModel.findOne({ _id: req.session._id });
+
+      const anyUserByEmail = await userModel.findOne({ email: emailNew });
+      const anyUserByContact = await userModel.findOne({ contact: contactNew });
+
+      if (anyUserByEmail && anyUserByEmail.email !== email) {
+          return res.json({ valid: "email" });
+      }
+
+      if (anyUserByContact && anyUserByContact.contact !== contact) {
+          return res.json({ valid: "contact" });
+      }
+
+      const passwordMatch = await bcrypt.compare(passwordNew, password);
+
+      if (!passwordMatch) {
+          return res.json({ valid: "not" });
+      }
+
+      return res.json({ valid: false });
+
+  } catch (error) {
+      console.error(error);
+      return res.status(500).json({ valid: "error", error: "Internal Server Error" });
+  }
+};
+
+
+const changePasswordShow=async(req,res)=>{
+  try {
+    res.render("changePassword")
+  } catch (error) {
+    
+  }
+}
+const checkPasswordNewPassword=async(req,res)=>{
+  try {
+    const currentPassword=await req.query.currentPassword
+    const id=req.session._id;
+    const {password}=await userModel.findOne({_id:id})
+    const passwordMatch = await bcrypt.compare(currentPassword, password);
+    if(!passwordMatch){
+      return res.json({valid:"not"})
+    }
+    const newPassword=await req.query.newPassword
+    const confirmPassword=await req.query.confirmPassword
+    if(newPassword===confirmPassword&&passwordMatch){
+          const  salt= await bcrypt.genSalt(3)
+          passwordBcrypt=await bcrypt.hash(newPassword,salt)
+          await userModel.findByIdAndUpdate(id,{password:passwordBcrypt})
+          return res.json({valid:false})
+    }else{
+        return res.json({valid:"new"})
+    }
+  } catch (error) {
+    
+  }
+}
+
+const addAddressShow=async(req,res)=>{
+  try {
+    res.render('addAddress');
+  } catch (error) {
+    
+  }
+}
+
+
+const addAddress = async (req, res) => {
+  try {
+    const contactNew = req.query.contact;
+    const id = req.session._id;
+    const user = await userModel.findOne({ _id: id });
+    const anyUserByContact = await userModel.findOne({ contact: contactNew });
+    
+    if (anyUserByContact && anyUserByContact.contact !== user.contact) {
+        return res.json({ added: "contact" });
+    }
+
+    const userDetails = {
+      userId: req.session._id,
+      country: req.query.country,
+      state: req.query.state,
+      name: req.query.name,
+      contact: req.query.contact,
+      pinCode: req.query.pinCode,
+      address: req.query.address,
+      landmark: req.query.landmark,
+      city: req.query.city,
+    };
+    await addressModel.create(userDetails);
+    const address=await addressModel.find({userId:id})
+    if(address.length===1){
+      const addId=address[0]._id;
+      await addressModel.findByIdAndUpdate(addId,{default:true})
+    }
+    return res.json({ added: "added" });
+  } catch (error) {
+    console.error(error);
+    return res.json({ added: "not" });
+  }
+};
+
+
+const updateDefaultAddress=async (req,res)=>{
+  try {
+    const id=req.query.id;
+    const  userId=await req.session._id;
+    await addressModel.updateMany({ userId }, { $set: { default: false } });
+    await addressModel.updateOne({ _id: id }, { $set: { default: true } });
+    return res.json({success:true})
+  } catch (error) {
+    console.log(error);
+    return res.json({success:false})
+  }
+}
+const editAddressShow = async (req, res) => {
+  try {
+    const id = req.query.id; 
+    const countryToStates = {
+      'india': ['Kerala', 'Andhra Pradesh', 'Telangana', 'Maharashtra', 'Tamil Nadu'],
+      'usa': ['New York', 'California', 'Texas', 'Florida', 'Illinois'],
+      'canada': ['Ontario', 'Quebec', 'British Columbia', 'Alberta', 'Manitoba'],
+      'uk': ['England', 'Scotland', 'Wales', 'Northern Ireland'],
+      'australia': ['New South Wales', 'Victoria', 'Queensland', 'Western Australia', 'South Australia']
+  };
+    const address = await addressModel.findOne({ _id: id });
+    res.render('editAddress', { address ,countryToStates});
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
+const editAddress = async (req, res) => {
+  try {
+    const contactNew = req.query.contact;
+    const addressNew = req.query.address;
+    const addressId = req.query.addressId;
+    console.log(req.query.country);
+    const id = req.session._id;
+    const user = await userModel.findOne({ _id: id });
+    const anyUserByContact = await userModel.findOne({ contact: contactNew });
+    const anyUserByAddress = await addressModel.findOne({ address: addressNew });
+    const currentAddress = await addressModel.findOne({ _id : addressId });
+    
+    if (anyUserByContact && anyUserByContact.contact !== user.contact) {
+        return res.json({ added: "contact" });
+    }
+    if (anyUserByAddress && anyUserByAddress.address !== currentAddress.address) {
+        return res.json({ added: "address" });
+    }
+
+    const userDetails = {
+      country: req.query.country,
+      state: req.query.state,
+      name: req.query.name,
+      contact: req.query.contact,
+      pinCode: req.query.pinCode,
+      address: req.query.address,
+      landmark: req.query.landmark,
+      city: req.query.city,
+    };
+
+    await addressModel.findByIdAndUpdate(addressId,userDetails);
+
+    return res.json({ added: "added" });
+  } catch (error) {
+    console.error(error);
+    return res.json({ added: "not" });
+  }
+};
+
+
+const deleteAddress=async (req,res)=>{
+  try {
+    const id=req.query.id;
+    const userId=req.session._id;
+    await addressModel.findByIdAndDelete(id);
+    const address=await addressModel.find({userId:userId})
+    if(address.length===1){
+      const addId=address[0]._id;
+      await addressModel.findByIdAndUpdate(addId,{default:true})
+    }
+    res.redirect('/user/redirect');
+  } catch (error) {
+    console.log(error);
+    res.send("Error While Deleting Address!")
+  }
+}
+
+
+
 
 module.exports={
   createUser,
@@ -397,5 +648,18 @@ module.exports={
   loginWithOtp,
   loginValidationOtp,
   sendOtpForLogIn,
-  sendOtpAgain
+  sendOtpAgain,
+  profile,
+  editProfile,
+  editProfileShow,
+  checkPassword,
+  changePasswordShow,
+  checkPasswordNewPassword,
+  redirect,
+  addAddressShow,
+  addAddress,
+  updateDefaultAddress,
+  editAddressShow,
+  editAddress,
+  deleteAddress
 }

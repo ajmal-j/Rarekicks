@@ -1,57 +1,32 @@
 <%- include('./headerHTML')-%>
-<style>
-
-.loading-screen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    z-index: 9999999999999999;
-}
-
-.loader {
-    border: 3px solid #ff0000;
-    box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.185);
-    border-radius: 20%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-</style>
 <link rel="stylesheet" type="text/css" href="../../public/css/header.css">
 </head>
 <body>
     <div class="loading-screen">
-        <div class="loader"></div>
+        <span class="loader"></span>
     </div>
 <div class="header">
     <div class="header2">
         <div class="topHeader">
-            <a class="left text-danger" href="/user/logout/" title="logout"><i class="bi bi-box-arrow-left ms-5"></i></a>
-            <div class="center text-center">
-                RARE  KICK'S
+            <div><a class="left text-danger" href="/user/logout/" title="logout" style="display:flex; justify-content: center;"><i class="bi bi-box-arrow-left"></i></a></div>
+            <div class="center text-center RARE">
+                <a href="/user/home/">RARE KICK'S</a>
             </div>
             <div class="right">
-                <i class="bi bi-heart me-2"></i>
-                <i class="bi bi-bag me-2"></i>
-                <i class="bi bi-person-lines-fill me-5"></i>
+                <div class="productCounter">
+                <a href="/user/wishlist/" class=""><i class="bi bi-heart-fill"></i></i</a>
+                <span class="wishlistCount"></span></div>
+                <div class="productCounter">
+                <a href="/user/cart/" class=""><i class="bi bi-bag-fill"></i></i></i</a>
+                <span class="cartCount"></span></div>
+                <a class="text-dark" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop"><i class="bi bi-person-circle"></i></i</a>
+               
             </div>
         </div>
         <div class="bottomHeader container mb-3">
             <a class="" href="/user/home/"><h3 class="text-danger"><u>Home</u></h3></a>
             
-
+            <div class="d-flex" style="column-gap: 10px;">
             <div class="btn-group dropdown">
                 <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     PRODUCTS
@@ -68,6 +43,57 @@
                 </ul>
               </div>
 
+
+
+
+
+
+              
+
+              <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel" style="overflow: visible;">
+                <div class="offcanvas-header">
+                  <i class="bi bi-person-circle" style="font-size: 60px;"></i>
+                  <h5 class="offcanvas-title" id="staticBackdropLabel">Hello User!</h5>
+                  <button type="button" class="btn-close" id="closeButton" data-bs-dismiss="offcanvas" aria-label="Close" style="font-size: 30px; margin: 10px;"></button>
+                </div>
+                <div class="offcanvas-body">
+                  <div class="d-flex" style="flex-direction: column; justify-content: center; row-gap: 10px;">
+                  <div>
+                    <a type="button" href="/user/profile" class="btn btn-dark d-flex justify-content-center" style=" text-decoration: none;">PROFILE MANAGEMENT</a>
+                  </div>
+                  <div>
+                    <a type="button" href="/admin/viewUsers" class="btn btn-dark d-flex justify-content-center" style=" text-decoration: none;">ORDERS</a>
+                  </div>
+                    <div class="btn-group dropdown">
+                <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    BRANDS
+                </button>
+                
+              </div>
+                  </div>
+                </div>
+              </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                   <form action="/user/searchProduct/" method="get" class="needs-validation" enctype="application/form-data">
                      <div class="d-flex align-items-center">
                         <% if (locals?.search) { %>
@@ -82,7 +108,7 @@
                             <button type="reset" class="btn border-dark-subtle" id="clearSearch" onclick="clearA()">
                                 <i class="bi bi-x-lg"></i></button></div>
                         <% } %>
-                        <button class="btn btn-dark text-center rounded-pill" type="submit" style="width: 100px; margin-left: 10px;">Search</button>
+                        <button class="btn btn-dark text-center rounded" type="submit" style="width: 100px; margin-left: 10px;">Search</button>
                     </div>
                 </form>
                </div>
@@ -92,7 +118,6 @@
         </div>
     </div>
 </div>
-<div class="container coverdiv"></div>
 
 
 <script>
@@ -100,6 +125,39 @@
     document.addEventListener("DOMContentLoaded", function() {
         document.querySelector(".loading-screen").style.display = "none";
     });
+    document.addEventListener("DOMContentLoaded", function() {
+        const wishCount = document.querySelector(".wishlistCount");
+        const cartCount = document.querySelector(".cartCount");
+
+    // Wrap the fetch operation in a function
+            const fetchData = async () => {
+                try {
+                    const response = await fetch('/user/getCount');
+
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    // Update the UI with the fetched data
+                    wishCount.textContent = data.wishCount;
+                    cartCount.textContent = data.cartCount;
+                } catch (error) {
+                    console.error('Error during fetch operation:', error);
+                }
+            };
+
+            // Call the function
+            fetchData();
+    
+    });
+   
+   
+
+
+
+
        document.addEventListener("DOMContentLoaded", function () {
            const clearSearch = document.getElementById("searchInput");
            

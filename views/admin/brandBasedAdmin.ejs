@@ -9,17 +9,9 @@
             <h2 class="" style=" font-family: 'Michroma', sans-serif;">Hi Admin!</h2>
 <div class="container-fluid adminContainer">
             <div class="row g-5"> 
-                <div class="adminProfile col-12 col-xxl-2 col-xl-2 col-md-12 col-lg-2 col-sm-12">
-                    <i class="bi bi-person-circle" style="font-size: 60px;"></i>
-                    <a href="/admin/home" style="width: 100%; display: flex; align-items: center; justify-content: center; text-decoration: none;"><button class="btn btn-success rounded-pill me-2 mt-2">Products</button></a>
-
-                    <a href="/admin/viewUsers" style="width: 100%; display: flex; align-items: center; justify-content: center; text-decoration: none;"><button class="btn btn-dark rounded-pill me-2 mt-2">View Users</button></a>
-
-                    <a href="" style="width: 100%; display: flex; align-items: center; justify-content: center; text-decoration: none;"><button class="btn btn-dark rounded-pill me-2 mt-2">Sales</button></a>
-                </div>
                 <div class="adminCenter col-12 col-xxl-2 col-xl-2 col-md-12 col-lg-2 col-sm-12">
-                    <button class="btn btn-dark rounded">Total Item : <%=brandsData?.products?.length%></button>
-                    <button class="btn btn-dark rounded mt-2">Total Quantity : <%= brandsData?.products?.reduce((total, product) => total + product.quantity, 0) %></button>
+                    <button class="btn btn-dark rounded">Total Brands : <%=brandsData?.length%></button>
+                    <button class="btn btn-dark rounded mt-2">All Brands</button>
                 </div>
                 <div class="adminRight col-12 col-xxl-2 col-xl-2 col-md-12 col-lg-2 col-sm-12">
                     <a href="/admin/addProduct" style="min-width: 180px;">

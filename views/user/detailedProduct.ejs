@@ -4,7 +4,7 @@
 </head>
 <body>
     <%- include('../layout/header')-%>
-    <div class="container" style="margin-top: 200px;">
+    <div class="container" style="margin-top: 20px;">
         <div class="row" style="border: 1px solid black; border-radius: 20px; ">
             <div class="col-12 col-lg-7 p-2 d-flex align-items-center">
                 <div class="row g-2">
@@ -28,9 +28,15 @@
             <div class="col-12 col-lg-5 pt-3 pb-2 ps-4 pe-2 " style="background-color: #D9D9D9; border-radius: 20px;" >
                 <h3 class="card-title mb-2 mt-2 text-center" style=" font-family: 'Michroma', sans-serif;"><u><%= product?.name%></u></h3>
                 <div class="d-flex align-item-center mt-5">
-                <a href="" class="btn btn-dark rounded-pill text-center text-danger ps-4 pe-4" style="font-size: 30px;">&#x20B9 <%= product?.price%>
+                <a class="btn btn-dark rounded-pill text-center text-danger ps-4 pe-4" style="font-size: 30px; letter-spacing: 2px;">&#x20B9 <%= product?.price%>.00
                 </a>
-                <i class="bi bi-heart ms-2" style="font-size: 40px;"></i>
+                <a id="addToWishlist" style="color: rgb(0, 0, 0); text-decoration: none;">
+                    <% if (wishlist) { %>
+                        <i class="bi bi-heart-fill ms-2" style="font-size: 40px;"></i>
+                    <% } else { %>
+                        <i class="bi bi-heart ms-2" style="font-size: 40px;"></i>
+                    <% } %>
+                </a>
             </div>
             <div class="container mt-4 ">
                 <div class="sizeChart d-flex justify-content-end align-items-baseline">
@@ -41,14 +47,22 @@
                 <div class="btn-group d-flex" style="justify-content: space-around;" role="group" aria-label="Sizes">
                     <% if (product?.sizes && product?.sizes.length > 0) { %>
                         <% product.sizes.forEach((size) => { %>
-                            <div class="btn btn-dark size-button rounded" data-size="<%= size %>"><%= size %></div>
+                            <div class="btn btn-dark size-button rounded" data-size="<%= size %>" data-product-id="<%= product._id %>"><%= size %></div>
                         <% }) %>
+                        <button class="btn btn-dark rounded clearSizesButton" data-product-id="<%= product._id %>">Clear</button>
                     <% } else { %>
-                        <p class="text-danger btn rounded btn-dark pb-2" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-4">Out Of Stock!! </span></p>
+                        <p class="text-danger btn rounded btn-dark pb-2" style="font-family: 'Michroma', sans-serif; font-size: 20px;">
+                            <span class="fs-4">Out Of Stock!! </span>
+                        </p>
                     <% } %>
                     
                 </div>
-                <a href="" class="btn btn-dark d-flex justify-content-center mt-3 pt-2 pb-2" ><h2 style=" font-family: 'Michroma', sans-serif;">Add To Cart</h2></a>
+                
+                <% if(product?.sizes.length>0){%>
+                    <a href="" id="<%=product?._id%>" class="addToCart btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Add To Cart</h3></a>
+
+                <%} %>
+
 
                 <h3 class="mt-4" style="font-family: 'Michroma', sans-serif; "><u>About Product</u></h3>
                 <p class="" style="font-family: 'Michroma', sans-serif; font-size: 16px;" ><%=product?.description%></p>
@@ -56,25 +70,29 @@
                 <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-4">Brand : </span><%=product?.brand%></p>
             </div>
             <script>
-                const sizeButtons = document.querySelectorAll('.size-button');
-                const selectedSizesDiv = document.getElementById('selectedSizes');
-                const selectedSizes = [];
-                sizeButtons.forEach(button => {
-                    button.addEventListener('click', () => {
-                        button.classList.toggle('selected-size');
-                        const sizeValue = button.getAttribute('data-size');
-                        if (button.classList.contains('selected-size')) {
-                            selectedSizes.push(sizeValue);
-                        } else {
-                            const index = selectedSizes.indexOf(sizeValue);
-                            if (index !== -1) {
-                                selectedSizes.splice(index, 1);
-                            }
-                        }
-                        selectedSizesDiv.textContent = `Selected Sizes: ${selectedSizes.join(', ')}`;
-                    });
-                });
+                        const addToWishlist = document.getElementById('addToWishlist');
+
+                        addToWishlist.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            productId="<%=product?._id%>"
+                            const encodedProductId = encodeURIComponent(productId);
+                            fetch('/user/addToWishlist?id='+encodedProductId)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.added) {
+                                        showSuccess("Added To Wishlist");
+                                        addToWishlist.innerHTML='<i class="bi bi-heart-fill ms-2" style="font-size:40px;"></i>';
+                                    } else {
+                                        addToWishlist.innerHTML='<i class="bi bi-heart ms-2" style="font-size:40px;"></i>';
+                                        showAlert("Removed from Wishlist");
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error("Error checking category:", error);
+                                });
+                        });
             </script>
+            
         </div>
     </div>
     </div>
@@ -98,7 +116,7 @@
     <h2 style="  font-family: 'Michroma', sans-serif;">You May Also Like </h2>
 </div>
 <div class="container productCont mt-3 mb-5">
-        <div class="row row-cols-1 row-cols-md-3 g-4 d-flex mt-2 ms-3 me-3 mb-4 " style="justify-content: center;">
+        <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-4 d-flex mt-2 ms-3 me-3 mb-4 " style="justify-content: center;">
             <% products?.forEach(productA=>{%>
                 <div class="col">
                     <div class="card h-100">
@@ -113,5 +131,6 @@
     <%})%>
 </div>
 </div>
+<script src="../../public/jsFiles/cart.js"></script>
 <%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>

@@ -6,7 +6,11 @@ const category=require("../models/categoryModel");
 const mongoose=require("mongoose");
 const { log } = require("console");
 const productModel = require("../models/productModel");
+const product = require("../models/productModel");
 const categoryModel = require("../models/categoryModel");
+const userModel = require("../models/userModel");
+const { json } = require("express");
+const { type } = require("os");
 
 
 function deleteImage(filename) {
@@ -204,19 +208,46 @@ const deleteProduct=async (req,res)=>{
         res.send(err)
     }
 }
-const deleteProductCompletely=async (req,res)=>{
-    try{
-    const id=req.query.id;
-    const product=await Product.findOne({_id:id});
-    const images=product.images;
-    deleteImages(images);
-    await Product.findByIdAndDelete(id);
-    res.redirect("/admin/home/")
+
+const deleteProductCompletely = async (req, res) => {
+    try {
+        const productId = req.query.id;
+
+        // Find the product
+        const product = await Product.findOne({ _id: productId });
+
+        // Check if the product exists
+        if (!product) {
+            return res.status(404).send("Product not found");
+        }
+
+        // Find users with the product in their cart or wishlist
+        const users = await userModel.find({
+            $or: [
+                { 'cart.items.product': productId },
+                { wishlist: productId },
+            ],
+        });
+
+        // Remove the product from each user's cart and wishlist
+        await Promise.all(users.map(async (user) => {
+            user.cart.items = user.cart.items.filter(item => !item.product.equals(productId));
+            user.wishlist = user.wishlist.filter(wishlistProductId => !wishlistProductId.equals(productId));
+            await user.save();
+        }));
+
+        // Delete the product
+        const images = product.images;
+        deleteImages(images);
+        await Product.findByIdAndDelete(productId);
+
+        // Redirect to admin home
+        res.redirect("/admin/home/");
+    } catch (err) {
+        res.status(500).send(err.message || "Internal Server Error");
     }
-    catch(err){
-        res.send(err)
-    }
-}
+};
+
 
 
 const searchProduct=async (req,res)=>{
@@ -280,12 +311,6 @@ const checkCategory=async (req,res)=>{
         return res.json({exists:false})
     }
 }
-
-
-
-
-
-
 
 
 
@@ -445,6 +470,229 @@ const brandBasedAdmin=async (req,res)=>{
     }
 }
 
+
+const wishlist=async(req,res)=>{
+    try {
+        const userId=await req.session._id;
+        const productId=req.query.id;
+        console.log(productId);
+        const user=await userModel.findById(userId);
+        const userWishlist=user.wishlist
+        if(user){
+            const product=userWishlist.includes(productId)
+            if(product){
+                await userModel.findByIdAndUpdate(userId, {
+                    $pull: { wishlist: productId }
+                });
+                return res.json({added:false})
+            }else{
+                await userModel.findByIdAndUpdate(userId, {
+                    $push: { wishlist: productId }
+                });
+                return res.json({added:true})
+            }
+        }else{
+            return res.json({added:false,message:true})
+        }
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+const wishlistShow=async(req,res)=>{
+    try {
+        const id=await req.session._id;
+        const user=await userModel.findOne({_id:id}).populate({
+                        path: 'wishlist',
+                        populate: {
+                            path: 'category',
+                            model: 'category'
+                        }
+                    });
+        if(user){
+            const products=user.wishlist;
+            res.render("wishlist",{products})
+        }else{
+            res.render("wishlist",{products:false,message:"Error while Loading wishlist!"})
+        }
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+
+
+const cartShow=async(req,res)=>{
+    try {
+        const id = await req.session._id;
+            const user = await userModel
+                .findOne({ _id: id })
+                .populate({
+                    path: 'cart.items.product',
+                    model: 'product',
+                    populate: {
+                        path: 'category', // Assuming 'category' is the ref field in the 'product' model
+                        model: 'category', // The model name for the 'category' collection
+                    },
+                });
+        // console.log(user.cart.items);
+        res.render("cart",{products:user.cart.items,total:user.cart.totalPrice})
+    } catch (error) {
+        res.send(error)
+    }
+}
+const removeFromCart=async(req,res)=>{
+    try {
+        const userId = await req.session._id;
+        const productId=await req.query.id;
+        let updatedUser = await userModel.findOneAndUpdate(
+            { _id: userId },
+            {
+                $pull: {
+                    'cart.items': {
+                        _id: productId
+                    }
+                }
+            },
+            { new: true } // Return the modified document
+        );
+        
+        // Call save to trigger pre save middleware
+        updatedUser = await updatedUser.save();
+
+        console.log(updatedUser)
+        return res.json({removed:false,total:updatedUser.cart.totalPrice})
+        // res.render("cart",{products:updatedUser.cart.items})
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+const decreaseQuantity=async (req,res)=>{
+    try {
+        const userId = await req.session._id;
+        const productId=await req.query.id;
+        const user=await userModel.findOne({_id:userId})
+        const updatedQuantity = user.cart.items.find(item => item._id.equals(productId)).quantity;
+        if(updatedQuantity===1){
+            return res.json({updated:"minimum"})
+        }
+        const updatedUser = await userModel.findOneAndUpdate(
+            { _id: userId, 'cart.items._id': productId },
+            {
+                $inc: {
+                    'cart.items.$.quantity': -1 
+                }
+            },
+            { new: true } 
+        );
+        await updatedUser.save(); // Save the changes
+        const product = updatedUser.cart.items.find(item => item._id.toString() === productId);
+        return res.json({updated:false,price:product.price,total:updatedUser.cart.totalPrice})
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+const increaseQuantity=async (req,res)=>{
+    try {
+        const userId = await req.session._id;
+        const productId=await req.query.id;
+        const updatedUser = await userModel.findOneAndUpdate(
+            { _id: userId, 'cart.items._id': productId },
+            {
+                $inc: {
+                    'cart.items.$.quantity': 1 
+                }
+            },
+            { new: true }
+        );
+        await updatedUser.save(); // Save the changes
+        const product = updatedUser.cart.items.find(item => item._id.toString() === productId);
+        return res.json({updated:false,price:product.price,total:updatedUser.cart.totalPrice})
+    } catch (error) {
+        res.send(error)
+    }
+}
+
+const cart = async (req, res) => {
+    try {
+        const userId = await req.session._id;
+        const productId = req.query.id;
+        const newSize = req.query.size;
+        const addSize = Number(newSize);
+
+        if (isNaN(addSize)) {
+            return res.json({ added: 'size' });
+        } else {
+            const user = await userModel.findById(userId);
+
+            if (user) {
+                const isProductInCart = user.cart.items.some(item => 
+                    item.product.toString() === productId && item.size === addSize
+                );
+                if (isProductInCart) {
+                    // const updatedUser = await userModel.findOneAndUpdate(
+                    //     { _id: userId },
+                    //     {
+                    //         $pull: {
+                    //             'cart.items': {
+                    //                 product: productId
+                    //             }
+                    //         }
+                    //     },
+                    //     { new: true } // Return the modified document
+                    // );
+                    return res.json({ added:"already" });
+                } else {
+                    // Add a new item to the cart
+                    const product = await productModel.findById(productId);
+
+                    if (!product) {
+                        return res.status(404).json({ added: false, message: 'Product not found' });
+                    }
+
+                    const { price } = product;
+
+                    const updatedUser = await userModel.findByIdAndUpdate(
+                        userId,
+                        {
+                            $push: {
+                                'cart.items': {
+                                    product: productId,
+                                    size: newSize,
+                                    quantity: 1,
+                                    price: price
+                                }
+                            }
+                        },
+                        { new: true } // Return the modified document
+                    );
+                    await updatedUser.save();
+                    return res.json({ added: true,total:updatedUser.cart.totalPrice });
+                }
+            } else {
+                return res.json({ added: false, message });
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.message);
+    }
+};
+
+const getCount=async(req,res)=>{
+    try {
+      const user=await userModel.findOne({_id:req.session._id})
+      const wishCount=user.wishlist.length
+      const cartCount=user.cart.items.length
+      return res.json({wishCount,cartCount})
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
 module.exports=
     {addProduct,
     insertProduct,
@@ -467,4 +715,12 @@ module.exports=
     deleteProductCompletely,
     getProductAdmin,
     checkCategory,
+    wishlist,
+    wishlistShow,
+    cartShow,
+    cart,
+    removeFromCart,
+    decreaseQuantity,
+    increaseQuantity,
+    getCount
 }  

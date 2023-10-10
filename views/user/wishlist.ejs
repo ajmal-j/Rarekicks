@@ -1,0 +1,122 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
+
+</head>
+<body>
+    <%- include('../layout/header')-%>
+
+    <div class="container d-flex" style="justify-content: space-between; align-items: center;">
+        <h2 class="text mb-4" style="margin-top: 20px;  font-family: 'Michroma', sans-serif;"><u>Wishlist!</u></h2>
+        <a href="/user/cart/" class="btn btn-dark rounded"><h4 style="margin-top: 5px;  font-family: 'Michroma', sans-serif;">Go To Cart</h4></a>
+    </div>
+    <div class="container productCont" style="margin-top: 10px; background-color: white;">
+                <% if (locals?.products) { %>
+                    <% products?.forEach(product => { %>
+                        <div class="container" style="margin-top: 10px; margin-bottom: 10px; border: 1px solid black; border-radius: 20px;">
+                            <div class="row" style=" border-radius: 20px; row-gap: 10px;">
+                                <div class="col-12 col-lg-4 p-2 d-flex align-items-center" >
+                                    <div class="row">
+                                        <% if (product?.images) { %>
+                                           <a href="/user/productDetailed?id=<%=product._id%>">
+                                            <div class="col-lg-12 col-12">
+                                                <div class="card rounded w-75 mx-auto">
+                                                    <img src="../../public/productImages/<%= product.images[0] %>" class="card-img-top" alt="...">
+                                                </div>
+                                            </div>
+                                           </a>
+                                        <% }%>
+                                    </div>
+                                 </div>
+                                <div class="col-12 col-lg-8 pt-1 pb-1 ps-4 pe-2 " style="background-color: #ffffff; border-radius: 20px; " >
+                                    <a href="/user/productDetailed?id=<%=product._id%>" style="text-decoration: none; color: black;">
+                                        <h4 class="card-title mb-1 mt-1 text-center" style="font-family: 'Michroma', sans-serif;"><u><%= product?.name %></u></h4></a>
+                                    <div class="d-flex align-item-center mt-4 ms-3">
+                                    <a href="" class="btn btn-dark rounded-pill text-center text-danger ps-4 pe-4" style="font-size: 30px; letter-spacing: 2px;">&#x20B9 <%= product?.price%>.00
+                                    </a>
+                                    <a class="addToWishlist" id="<%=product._id%>" style="text-decoration: none; color: black;">
+                                    <i class="bi bi-heart-fill ms-2" style="font-size: 40px;"></i></a>
+                                </div>
+                                <div class="container">
+                                    <div class="sizeChart d-flex justify-content-end align-items-baseline">
+                                        <div id="selectedSizes" class="me-auto" style="font-family: 'Michroma', sans-serif;"></div>
+                                        <span class="me-2" style="font-size: 20px;"><u>Size Chart</u></span>
+                                        <i class="bi bi-bar-chart-line" style="font-size: 30px;"></i>
+                                    </div>
+                                    <div class="btn-group d-flex mb-2" style="justify-content: space-around;" role="group" aria-label="Sizes">
+                                        <% if (product?.sizes && product?.sizes.length > 0) { %>
+                                            <% product.sizes.forEach((size) => { %>
+                                                <div class="btn btn-dark size-button rounded" data-size="<%= size %>" data-product-id="<%= product._id %>"><%= size %></div>
+                                            <% }) %>
+                                            <button class="btn btn-dark rounded clearSizesButton" data-product-id="<%= product._id %>">Clear</button>
+                                        <% } else { %>
+                                            <p class="text-danger btn rounded btn-dark pb-2" style="font-family: 'Michroma', sans-serif; font-size: 20px;">
+                                                <span class="fs-4">Out Of Stock!! </span>
+                                            </p>
+                                        <% } %>
+                                    </div>
+                                    <div class="d-flex mt-3;" style="flex-wrap: wrap; column-gap:30px;">
+                                        <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-5"><b>Category :</b> </span><%=product?.category?.name%></p>
+                                        <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-5"><b>Brand :</b> </span><%=product?.brand%></p>
+                                    </div>
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    <% if (product?.deleted===false && product?.sizes.length>0) { %>
+                                        <a  id="<%=product._id%>" class="addToCart btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Add To Cart</h3></a>
+                                    <% } else { %>
+                                        <a class="text-danger btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Not Available!</h3></a>
+                                    <% } %>
+
+
+
+                                </div>
+           
+                            </div>
+                        </div>
+                        </div>
+                    <% })} %>
+                    <% if(locals.products.length===0) { %>
+                        <div class="col">
+                            <p class="text-center text-danger pt-5 pb-5" style="font-size: 25px; font-family: 'Michroma', sans-serif;"><u>Your wishlist is empty!</u></p>
+                        </div>
+                    <% } %> 
+            </div>
+            
+            
+
+<div class="container Cont mt-5">
+    <div class="responsive-container">
+        <div class="info-box border border-dark ">
+          <h2>Free Delivery</h2>
+          <p>Enjoy the ultimate convenience with our FREE delivery service!</p>
+        </div>
+        <div class="info-box border border-dark " style="margin-top: 5px; margin-bottom: 5px;">
+          <h2>24/7 Support</h2>
+          <p>Our dedicated team is here for you 24/7, ready to assist with any questions or concerns.</p>
+        </div>
+        <div class="info-box border border-dark ">
+          <h2>Return Policy</h2>
+          <p>Your satisfaction is our top priority!policy is designed for you.</p>
+        </div>
+    </div>
+</div>
+<div class="alertKey">
+    <% if(locals.message) { %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+        data-bs-autohide="true" data-bs-delay="2000"> 
+        <strong><%= message %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>      
+  </div>
+        
+
+<script src="../../public/jsFiles/cart.js"></script>
+
+<!-- ... Rest of your HTML code ... -->
+
+        
+<%- include('../layout/footer')-%>
+<%- include('../layout/footerHTML')-%>

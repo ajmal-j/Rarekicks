@@ -1,0 +1,275 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
+<link rel="stylesheet" type="text/css" href="../../public/css/profile.css">
+
+</head>
+<body>
+    <%- include('../layout/header') %>
+
+    <div class="container mt-5 mb-5" style="display: flex; justify-content: center;">
+        <div class="mainCont" style="max-width: 700px; border: 1px solid black; border-radius: 20px; padding: 20px;">
+            <form class="row g-3 needs-validation" action="/user/redirect/" method="get" novalidate enctype="application/form-data" onsubmit="return validateForm()">
+               
+                
+                <div class="form-group col-md-12">
+                    <label for="countrySelect">Select Country:</label>
+                    <select class="form-control" id="countrySelect" required onchange="updateStates()">
+                        <option value="" disabled>Select a country</option>
+                        <option value="india" <%=address.country === 'india' ? 'selected' : '' %>>India</option>
+                        <option value="usa" <%=address.country === 'usa' ? 'selected' : '' %>>United States</option>
+                        <option value="canada" <%=address.country === 'canada' ? 'selected' : '' %>>Canada</option>
+                        <option value="uk" <%=address.country === 'uk' ? 'selected' : '' %>>United Kingdom</option>
+                        <option value="australia" <%=address.country === 'australia' ? 'selected' : '' %>>Australia</option>
+                    </select>
+                </div>
+                
+                
+                <div class="form-group" id="stateFormGroup">
+                    <label for="stateSelect">Select State:</label>
+                    <select class="form-control" id="stateSelect" required>
+                        <option value="" disabled>Select a state</option>
+                        <% countryToStates[address.country.toLowerCase()].forEach(function (state) { %>
+                            <option value="<%= state.toLowerCase() %>" <%= address.state.toLowerCase() === state.toLowerCase() ? 'selected' : '' %>>
+                                <%= state %>
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+                
+
+    
+                <div class="col-md-12">
+                    <label for="validationCustom01" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="validationCustom01" name="name" pattern="[A-Za-z\s]+" required value="<%= address.name%>">
+                    <%var addressId=address._id%>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+    
+                <div class="col-md-12">
+                    <label for="validationCustom02" class="form-label">Contact</label>
+                    <input type="tel" class="form-control" id="validationCustom02" name="contact" pattern="[0-9]{10}" required value="<%= address.contact %>">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+    
+                <div class="col-md-12">
+                    <label for="validationCustom02" class="form-label">Pin code</label>
+                    <input type="text" class="form-control" id="validationCustom02" name="pinCode" pattern="[0-9]{5,10}" title="Please enter a valid pin code (5-10 digits)" required value="<%= address.pinCode %>">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+    
+                <div class="col-md-12">
+                    <label for="validationCustomUsername" class="form-label">Address</label>
+                    <div class="input-group has-validation">
+                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="address" required value="<%= address.address %>">
+                        <div class="invalid-feedback">
+                            Enter A Valid Address!
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col-md-12">
+                    <label for="validationCustomUsername" class="form-label">Landmark</label>
+                    <div class="input-group has-validation">
+                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="landmark" required value="<%= address.landmark %>">
+                        <div class="invalid-feedback">
+                            Enter A Valid Address!
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="validationCustomUsername" class="form-label">Town/City</label>
+                    <div class="input-group has-validation">
+                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="city" required value="<%= address.city %>">
+                        <div class="invalid-feedback">
+                            Enter A Valid Address!
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="save">
+                    <div class="d-flex" style="justify-content: center;">
+                        <button class="btn btn-dark rounded-pill mt-2" id="startCountdownButton" type="submit">Save</button>
+                    </div>
+                </div>
+            </form>
+    
+        </div>
+        <div class="alertKey">
+            <% if(locals.message){ %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;">
+                    <strong><%= message %></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <% } %>
+        </div>
+    </div>
+    
+
+        <script>
+            function updateStates() {
+            var countrySelect = document.getElementById('countrySelect');
+            var stateSelect = document.getElementById('stateSelect');
+            var stateFormGroup = document.getElementById('stateFormGroup');
+
+            // Clear existing options
+            stateSelect.innerHTML = '<option value="" selected disabled>Select a state</option>';
+
+            // Define a simple mapping of countries to states (replace this with your data)
+            var countryToStates = {
+                'india': ['Kerala', 'Andhra Pradesh', 'Telangana', 'Maharashtra', 'Tamil Nadu'],
+                'usa': ['New York', 'California', 'Texas', 'Florida', 'Illinois'],
+                'canada': ['Ontario', 'Quebec', 'British Columbia', 'Alberta', 'Manitoba'],
+                'uk': ['England', 'Scotland', 'Wales', 'Northern Ireland'],
+                'australia': ['New South Wales', 'Victoria', 'Queensland', 'Western Australia', 'South Australia']
+            };
+
+            var selectedCountry = countrySelect.value.toLowerCase();
+
+            if (selectedCountry in countryToStates) {
+                // Populate states for the selected country
+                countryToStates[selectedCountry].forEach(function (state) {
+                    var option = document.createElement('option');
+                    option.value = state.toLowerCase();
+                    option.textContent = state;
+                    stateSelect.appendChild(option);
+                });
+
+                // Show the state dropdown
+                stateFormGroup.style.display = 'block';
+            } else {
+                // Hide the state dropdown if the country has no associated states
+                stateFormGroup.style.display = 'none';
+            }
+        }
+
+
+
+            (() => {
+                'use strict';
+            
+                const forms = document.querySelectorAll('.needs-validation');
+            
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', async event => {
+                        event.preventDefault();
+            
+                        const contactInput = form.querySelector('[name="contact"]');
+                        const contactValue = contactInput.value.trim();
+            
+                        const nameInput = form.querySelector('[name="name"]');
+                        const nameValue = nameInput.value.trim();
+            
+                        const pinCodeInput = form.querySelector('[name="pinCode"]');
+                        const pinCodeValue = pinCodeInput.value.trim();
+            
+                        const addressInput = form.querySelector('[name="address"]');
+                        const addressValue = addressInput.value.trim();
+            
+                        const landmarkInput = form.querySelector('[name="landmark"]');
+                        const landmarkValue = landmarkInput.value.trim();
+            
+                        const cityInput = form.querySelector('[name="city"]');
+                        const cityValue = cityInput.value.trim();
+                        const addressId="<%=addressId%>"
+                        var countrySelect = document.getElementById('countrySelect');
+                        const countryValue=countrySelect.value
+
+                        if (countrySelect.value === '') {
+                            showAlert('Please select a country.');
+                            return false;
+                        }
+
+                        // Validate state selection
+                        var stateSelect = document.getElementById('stateSelect');
+                        const stateValue=stateSelect.value;
+                        if (stateSelect.value === '') {
+                            showAlert('Please select a state.');
+                            return false;
+                        }
+
+                        if (nameValue === '') {
+                            showAlert('Please enter a name.');
+                            return;
+                        }
+                        if (/\d/.test(nameValue)) {
+                        showAlert('Name cannot contain numbers.');
+                        return;
+                        }
+
+                        if (contactValue === '' || isNaN(contactValue)) {
+                            showAlert('Please enter a valid contact number.');
+                            return;
+                        }
+
+
+                        if (pinCodeValue === '' || pinCodeValue.length < 5 || pinCodeValue.length > 10) {
+                            showAlert('Please enter a valid pin code.');
+                            return;
+                        }
+
+                        if (addressValue === '') {
+                            showAlert('Please enter an address.');
+                            return;
+                        }
+
+                        if (/^\d+$/.test(addressValue)) {
+                            showAlert('Address cannot contain only numbers.');
+                            return;
+                        }
+
+                        if (landmarkValue === '') {
+                            showAlert('Please enter a landmark.');
+                            return;
+                        }
+                        if (/^\d+$/.test(landmarkValue)) {
+                        showAlert('Landmark cannot contain only numbers.');
+                        return;
+                        }
+                        if (cityValue === '') {
+                            showAlert('Please enter a city.');
+                            return;
+                        }
+                        if (/^\d+$/.test(cityValue)) {
+                        showAlert('City cannot contain only numbers.');
+                        return;
+                        }
+                        if (!form.checkValidity()) {
+                            return;
+                        }
+            
+                        try {
+                            const response = await fetch(`/user/editAddress?country=${countryValue}&state=${stateValue}&name=${nameValue}&contact=${contactValue}&pinCode=${pinCodeValue}&address=${addressValue}&landmark=${landmarkValue}&city=${cityValue}&addressId=${addressId}`);
+                            const data = await response.json();
+                            console.log(data)
+                            if (data.added === "added") {
+                                showAlert('Updating!');
+                                form.submit();
+                            }else if (data.added==="contact"){
+                                showAlert('Contact In Use!');
+                            }
+                            else if (data.added==="address"){
+                                showAlert('Address In Use!');
+                            }
+                            else if(data.added==="not") {
+                                showAlert('Not Valid');
+                            }
+                        } catch (error) {
+                            console.error("Error checking category:", error);
+                        }
+                    });
+            
+                    form.classList.add('was-validated');
+                    console.log('sdfgvsgfsgfdg');
+                }, false);
+            })();
+            
+            </script>
+            
+<%- include('../layout/footer')-%>
+<%- include('../layout/footerHTML')-%>

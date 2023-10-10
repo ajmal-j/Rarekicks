@@ -6,10 +6,10 @@
     <%- include('../layout/header') %>
 
 
-    <div class="container productCont" style="margin-top: 170px;">
-        <% datas.forEach(brand => { %>
+    <div class="container productCont" style="margin-top: 20px;">
+        <% datas?.forEach(brand => { %>
             <h2 class="text mt-2" style="font-family: 'Michroma', sans-serif;"><%= brand._id %> : </h2>
-            <div class="row row-cols-1 row-cols-md-3 g-4 d-flex mb-5" style="justify-content: center;">
+            <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-4 d-flex mb-5" style="justify-content: center;">
                 <% if (brand.products && brand.products.length > 0) { %>
                     <% brand.products.forEach(product => { %>
                         <div class="col">

@@ -1,0 +1,135 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
+<link rel="stylesheet" type="text/css" href="../../public/css/profile.css">
+
+</head>
+<body>
+    <%- include('../layout/header') %>
+    <div class="container mt-5"><h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Hello <%=user.name%>!</h3></div>
+    <div class="container mt-2 mb-5" style="font-family: 'Michroma', sans-serif; border: 1px solid black; border-radius: 20px; padding: 10px;">
+
+        <div class="row mt-4">
+            <div class="col-12 col-sm-3 d-flex justify-content-center align-items-center">
+                <div style="border: 1px solid black; padding: 30px; border-radius: 20px;">
+                    <i class="bi bi-person-circle display-1"></i>
+                </div>
+            </div>
+            <div class="col-12 col-sm-9 d-flex" style="flex-direction: column; row-gap: 20px; font-family: 'Michroma', sans-serif;">
+                <div class="d-flex" style="align-items: center; flex-wrap: wrap;">
+                    <span class="btn btn-dark rounded" style="flex: 0 0 60px; min-width: 180px;"><h6>NAME </h6></span>
+                    <span style="flex: 1; text-align: start; margin-left: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%=user.name%></span>
+                </div>
+                <div class="d-flex" style="align-items: center; flex-wrap: wrap;">
+                    <span class="btn btn-dark rounded" style="flex: 0 0 60px; min-width: 180px;"><h6>EMAIL </h6></span>
+                    <span style="flex: 1; text-align: start; margin-left: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%=user.email%></span>
+                </div>
+                <div class="d-flex" style="align-items: center; flex-wrap: wrap;">
+                    <span class="btn btn-dark rounded" style="flex: 0 0 60px; min-width: 180px;"><h6>CONTACT</h6></span>
+                    <span style="flex: 1; text-align: start; margin-left: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%=user.contact%></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-flex" style="justify-content: end;">
+        <a href="/user/editProfile" style="text-decoration: none; color: white;"><button class="btn btn-dark pt-2 pb-2 ps-1 pe-1 mt-3 me-3">Edit</button></a>
+        <a href="/user/changePassword" style="text-decoration: none; color: white;"><button class="btn btn-dark pt-2 pb-2 ps-1 pe-1 mt-3">Change Password</button></div></a>
+    </div>
+
+    <div class="container mt-2 d-flex" style="align-items: center;">
+        <h3 class="mb-4 mt-2 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;">Address !</h3>
+        <a href="/user/addAddress/" style="text-decoration: none; color: black;">
+        <h3 class="ms-3 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;">+</h3></a></div>
+
+        <div class="container containerForm mb-5 d-flex" style="justify-content: center; align-items: center; flex-wrap: wrap; row-gap: 10px; column-gap: 10px;">
+            <%var length=addresses?.length%>
+            <% if(length===0){%>
+                <div class="container mt-5" style="border: 1px solid black; border-radius: 20px;"><h4 class="mb-4 text-center mt-4" style="font-family: 'Michroma', sans-serif;">No addresses have been added yet. Please add an address.</h4></div>
+            <%} %>
+            <% addresses?.forEach((address, index) => { %>
+            <%var _id=address?._id%>
+              <form class="addressForm">
+                  <div class="form-check form-switch">
+                      <% if (length>1){%>
+                        <input class="form-check-input currentSwitch" type="checkbox" role="switch" id="<%=_id%>" <%= address.default ? 'checked' : '' %>>
+                        <%}%>
+                        <label class="form-check-label" for="flexSwitchCheck<%= index %>">Current</label>
+                </div>
+                <fieldset>
+                  <label class="addressLabel" for="fname">First name:</label><br>
+                  <input class="inputAddress" type="text" id="fname" name="fname" value="<%= address.name %>" readonly><br>
+                  <label class="addressLabel" for="contact">Contact:</label><br>
+                  <input class="inputAddress" type="text" id="contact" name="contact" value="<%= address.contact %>" readonly><br>
+                  <label class="addressLabel" for="pinCode">Pin Code:</label><br>
+                  <input class="inputAddress" type="text" id="pinCode" name="pinCode" value="<%= address.pinCode %>" readonly><br>
+                  <label class="addressLabel" for="address">Address:</label><br>
+                  <input class="inputAddress" type="text" id="address" name="address" value="<%= address.address %>" readonly><br>
+                  <label class="addressLabel" for="landmark">Landmark:</label><br>
+                  <input class="inputAddress" type="text" id="landmark" name="landmark" value="<%= address.landmark %>" readonly><br>
+                  <label class="addressLabel" for="city">City:</label><br>
+                  <input class="inputAddress" type="text" id="city" name="city" value="<%= address.city %>" readonly><br>
+                </fieldset> 
+                <a href="/user/editAddressShow?id=<%=_id%>" class="btn p-2 btn-dark rounded mt-4 ms-2">Edit</a>
+                <a href="/user/deleteAddress?id=<%=_id%>" class="btn p-2 btn-danger rounded mt-4 ms-3">Remove</a>
+              </form>
+            <% }) %>
+          </div>
+          
+          
+          
+          
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const addressButtons = document.querySelectorAll('.currentSwitch');
+        
+                addressButtons.forEach(button => {
+                    button.addEventListener('change', async () => {
+                        const addressId = button.id;
+                        const success = await updateDefaultAddress(addressId);
+        
+                        if (success) {
+                            // If the update is successful, lock the selected switch
+                            button.disabled = true;
+        
+                            // Update the UI
+                            addressButtons.forEach(otherButton => {
+                                if (otherButton !== button) {
+                                    otherButton.checked = false;
+                                    otherButton.disabled = false; // Enable other switches
+                                }
+                            });
+                        }
+                    });
+                });
+        
+                async function updateDefaultAddress(addressId) {
+                    try {
+                        const response = await fetch(`/user/updateDefaultAddress?id=${addressId}`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        });
+        
+                        if (response.ok) {
+                            showSuccess("Address Changed!")
+                            return true;
+                        } else {
+                            showAlert("Not Changed!")
+                            return false;
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        return false;
+                    }
+                }
+        
+            });
+        </script>
+        
+
+
+
+
+<%- include('../layout/footer')-%>
+<%- include('../layout/footerHTML')-%>

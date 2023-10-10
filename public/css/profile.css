@@ -1,0 +1,49 @@
+.custom-form {
+    width: 500px;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.invalid-feedback {
+    display: block;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+.containerForm {
+  overflow: hidden;
+}
+
+.addressForm {
+  max-width: 700px;
+  min-width: 400px;
+  margin: 0 auto;
+  padding: 30px;
+  border-radius: 20px;
+  border: 1px solid black;
+}
+
+fieldset {
+  border: none;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.addressLabel {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
+.inputAddress {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0px 0px 5px #888888;
+}

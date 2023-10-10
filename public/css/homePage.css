@@ -46,8 +46,7 @@
 }
 
 .margineTop,.productContAll{
-  margin-top: 200px;
-
+  margin-top: 20px;
 }
 
 @media (max-width: 991.98px) {
@@ -58,7 +57,7 @@
         text-align: left;
     }
     .margineTop,.productContAll{
-      margin-top: 270px;
+      margin-top: 20px;
     }
 }
 
@@ -156,7 +155,7 @@
 
 .productCont{
   border: 1px solid black;
-  background-color:#C0C0C0;
+  background-color:#dfdfdf;
   padding: 10px;
   border-radius: 20px;
 }
