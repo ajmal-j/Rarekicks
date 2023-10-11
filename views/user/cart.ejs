@@ -4,9 +4,9 @@
 </head>
 <body>
     <%- include('../layout/header')-%>
-    <div class="container d-flex" style="justify-content: space-between; align-items: center;">
-        <h2 class="text mb-4" style="margin-top: 20px;  font-family: 'Michroma', sans-serif;"><u>Cart!</u></h2>
-        <a href="/user/wishlist/" class="btn btn-dark rounded"><h4 style="margin-top: 5px;  font-family: 'Michroma', sans-serif;">Add From Wishlist</h4></a>
+    <div class="container d-flex mb-4" style="justify-content: space-between; align-items: center;">
+        <h2 class="text" style="margin-top: 20px;  font-family: 'Michroma', sans-serif;"><u>Cart!</u></h2>
+        <a href="/user/wishlist/" class="btn btn-dark rounded"><h4 style="margin-top: 5px;  font-family: 'Michroma', sans-serif;">Wishlist</h4></a>
     </div>
     <div class="container productCont" style="margin-top: 10px; border: none; background-color: #ffffff; ">
         <% if (locals?.products) { %>
@@ -48,7 +48,7 @@
                                     <p class=" btn rounded-pill btn-dark pb-2 " style="font-family: 'Michroma', sans-serif; font-size: 20px;">
                                         <span class="fs-4">Size :</span><span class="sizeOfTheProduct"><%=size%></span>
                                     </p>
-                                    <% if (product?.deleted===false) { %>
+                                    <% if (product?.deleted===false && product?.quantity>0) { %>
                                         <p class=" btn rounded-pill btn-dark pb-2" id="<%=_id%>" style="font-family: 'Michroma', sans-serif; font-size: 20px;">
                                             <button id="<%=_id%>" class="decreaseQuantity btn rounded btn-light me-2 pb-2">-</button> 
                                             <span class="fs-4">Quantity :</span>
@@ -70,7 +70,7 @@
                                     </p>
                                 </div>
 
-                                    <% if (product?.deleted===false) { %>
+                                    <% if (product?.deleted===false && product?.quantity>0) { %>
                                         <a class="subTotal btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h4 style=" font-family: 'Michroma', sans-serif;"><span>Sub Total : </span><span class="">&#x20B9</span><span class="" id="<%=_id%>subTotal"> <%=product.price*quantity%></span><span>.00</span></h3></a> 
                                     <% } else { %>
                                         <a class="text-danger btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Not Available!</h3></a>
@@ -89,9 +89,9 @@
                     </p>
                 </div>
             <% } %>
-            <% if(locals.products.length!==0) { %>
+            <% if(locals.products.length!==0 ) { %>
                 <div class="container d-flex justify-content-center">
-                    <a class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4" style="width: fit-content;">
+                    <a href="/user/checkOut/" class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4" style="width: fit-content;">
                         <h3 style="font-family: 'Michroma', sans-serif; margin-bottom: 5px;">Total : <span class="text-danger"> &#x20B9 </span><span  class="totalPrice" style="color: red; letter-spacing: 2px;"><%=locals?.total%></span><span style="color: red; letter-spacing: 2px;">.00</span></h3>
                         <h4 style="font-family: 'Michroma', sans-serif; margin: 0; border-top: 4px dashed rgb(205, 205, 205);">Check Out Now</h4>
                     </a>

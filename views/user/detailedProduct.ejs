@@ -45,7 +45,7 @@
                     <i class="bi bi-bar-chart-line" style="font-size: 30px;"></i>
                 </div>
                 <div class="btn-group d-flex" style="justify-content: space-around;" role="group" aria-label="Sizes">
-                    <% if (product?.sizes && product?.sizes.length > 0) { %>
+                    <% if (product?.sizes && product?.sizes.length > 0 && product?.quantity>0) { %>
                         <% product.sizes.forEach((size) => { %>
                             <div class="btn btn-dark size-button rounded" data-size="<%= size %>" data-product-id="<%= product._id %>"><%= size %></div>
                         <% }) %>
@@ -58,7 +58,7 @@
                     
                 </div>
                 
-                <% if(product?.sizes.length>0){%>
+                <% if(product?.sizes.length>0 && product?.quantity>0){%>
                     <a href="" id="<%=product?._id%>" class="addToCart btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Add To Cart</h3></a>
 
                 <%} %>

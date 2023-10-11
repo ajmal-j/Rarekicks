@@ -105,7 +105,24 @@
     </div>
 </div>
 
-
+<div class="alertKey">
+    <% if(locals.message) { %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+        data-bs-autohide="true" data-bs-delay="2000"> 
+        <strong><%= message %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>      
+  </div>
+  <div class="alertKey">
+    <% if(locals.messageS) { %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+        data-bs-autohide="true" data-bs-delay="2000"> 
+        <strong><%= messageS %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>      
+  </div>
 
 <%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>

@@ -2,6 +2,7 @@ const express=require("express");
 const userRouter=express();
 const userController= require("../controller/userController")
 const productController= require("../controller/productController")
+const orderController= require("../controller/orderController")
 const JWT=require("../middlewares/jwtToken")
 
 userRouter.set("view engine","ejs")
@@ -49,10 +50,47 @@ userRouter.get('/checkPassword',JWT.checkJwt,userController.checkPassword)
 userRouter.get('/changePassword',JWT.checkJwt,userController.changePasswordShow)
 userRouter.get('/checkPasswordNewPassword',JWT.checkJwt,userController.checkPasswordNewPassword)
 userRouter.post('/editProfile',JWT.checkJwt,userController.editProfile)
+
+
 userRouter.get('/addAddress',JWT.checkJwt,userController.addAddressShow)
 userRouter.get('/editAddressShow',JWT.checkJwt,userController.editAddressShow)
 userRouter.get('/editAddress',JWT.checkJwt,userController.editAddress)
 userRouter.get('/deleteAddress',JWT.checkJwt,userController.deleteAddress)
 userRouter.get('/insertAddress',JWT.checkJwt,userController.addAddress)
 userRouter.get('/updateDefaultAddress',JWT.checkJwt,userController.updateDefaultAddress)
+
+
+userRouter.get('/checkOut',JWT.checkJwt,userController.checkOutShow)
+userRouter.get('/placeOrderCOD',JWT.checkJwt,orderController.placeOrderCOD)
+userRouter.get('/placeOrder',orderController.testData)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports=userRouter

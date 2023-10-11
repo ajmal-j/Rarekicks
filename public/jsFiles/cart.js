@@ -164,8 +164,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.updated==="maximum") {
-                        showAlert("Maximum");
-                    } else {
+                        showAlert("Maximum 5 Products");
+                    }else if(data.updated==="stock"){
+                        let currentQuantity = parseInt(quantityDisplay.textContent);
+                        showAlert("Only " +currentQuantity + " left")
+                    } 
+                    else {
                         if (quantityDisplay) {
                             let currentQuantity = parseInt(quantityDisplay.textContent);
                             currentQuantity++;
@@ -191,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(response => response.json())
                 .then(data => {
                     if (data.updated==="minimum") {
-                        showAlert("Minimum 1")
+                        showAlert("Minimum 1 Product")
                     } else {
                         if (quantityDisplay) {
                             let currentQuantity = parseInt(quantityDisplay.textContent);

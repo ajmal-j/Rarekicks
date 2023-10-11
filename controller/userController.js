@@ -335,7 +335,12 @@ const homePage=async (req,res)=>{
   try{
     const products=await productModel.find({deleted:false}).limit(9);
     const products2=await productModel.find({deleted:false}).skip(17);
-    res.render('homePage',{products,products2})
+    const message=req.query.message;
+    if(message){
+      res.render('homePage',{products,products2,messageS:message})
+    }else{
+      res.render('homePage',{products,products2})
+    }
   }catch(err){
     res.end(err)
   }
@@ -356,7 +361,7 @@ const allProducts=async (req,res)=>{
 
 const productDetailed = async (req, res) => {
   try {
-    const id = req.query.id.trim();
+    const id = req.query.id;
     const userId=req.session._id;
     const user = await userModel.findOne({ _id:userId });
     const wish = user?.wishlist.includes(id);
@@ -392,6 +397,10 @@ const profile=async(req,res)=>{
 }
 
 const redirect=async(req,res)=>{
+  const message=req.query.message;
+  if(message){
+  res.redirect(`/user/home`)
+  }
   res.redirect("/user/profile")
 }
 
@@ -621,7 +630,37 @@ const deleteAddress=async (req,res)=>{
 }
 
 
+const checkOutShow=async(req,res)=>{
+  try {
+    const id=req.session._id;
+    const address=await addressModel.findOne({userId:id,default:true})
+    const user = await userModel
+                .findOne({ _id: id })
+                .populate({
+                    path: 'cart.items.product',
+                    model: 'product',
+                });
+    const total=user.cart.totalPrice;
+    let grandTotal;
 
+    if (total >= 20000) {
+      grandTotal = total * 0.8; 
+    } else if (total >= 15000) {
+      grandTotal = total * 0.85; 
+    } else {
+      grandTotal = total;
+    }
+    const grand=grandTotal.toFixed(2);
+    const message=req.query.message;
+    if(message){
+      res.render("checkOut",{address,products:user.cart.items,total:total,grandTotal:grand,message})
+    }else{
+      res.render("checkOut",{address,products:user.cart.items,total:total,grandTotal:grand})
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports={
   createUser,
@@ -661,5 +700,6 @@ module.exports={
   updateDefaultAddress,
   editAddressShow,
   editAddress,
-  deleteAddress
+  deleteAddress,
+  checkOutShow
 }

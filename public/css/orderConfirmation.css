@@ -1,0 +1,69 @@
+body {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 100px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+.confirmation-message {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.order-details {
+    margin-top: 30px;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.product-info {
+    flex-grow: 1;
+}
+
+.product-image {
+    max-width: 80px;
+    max-height: 80px;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+
+.order-total {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.thank-you-message {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 1.2em;
+    color: #ff0000;
+}
+
+.success-logo {
+    max-width: 150px;
+    margin-top: 20px;
+}
+
+.footer {
+    margin-top: 30px;
+    text-align: center;
+}

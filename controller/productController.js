@@ -511,6 +511,7 @@ const wishlistShow=async(req,res)=>{
                     });
         if(user){
             const products=user.wishlist;
+            console.log(products);
             res.render("wishlist",{products})
         }else{
             res.render("wishlist",{products:false,message:"Error while Loading wishlist!"})
@@ -522,25 +523,56 @@ const wishlistShow=async(req,res)=>{
 
 
 
-const cartShow=async(req,res)=>{
+const cartShow = async (req, res) => {
     try {
         const id = await req.session._id;
-            const user = await userModel
-                .findOne({ _id: id })
-                .populate({
-                    path: 'cart.items.product',
-                    model: 'product',
-                    populate: {
-                        path: 'category', // Assuming 'category' is the ref field in the 'product' model
-                        model: 'category', // The model name for the 'category' collection
+        const user = await userModel
+            .findOne({ _id: id })
+            .populate({
+                path: 'cart.items.product',
+                model: 'product',
+                populate: {
+                    path: 'category',
+                    model: 'category',
+                },
+            });
+
+        // Use map with Promise.all to handle asynchronous operations
+        const updatePromises = user.cart.items.map(async (item) => {
+            if (item.product.quantity === 0) {
+                await userModel.findByIdAndUpdate(id, {
+                    $pull: {
+                        'cart.items': { product: item.product._id },
                     },
-                });
-        // console.log(user.cart.items);
-        res.render("cart",{products:user.cart.items,total:user.cart.totalPrice})
+                }, { new: true });
+            }
+        });
+
+        // Wait for all promises to complete
+        await Promise.all(updatePromises);
+
+        // Fetch the user again to get the updated cart
+        const updatedUser = await userModel
+            .findOne({ _id: id })
+            .populate({
+                path: 'cart.items.product',
+                model: 'product',
+                populate: {
+                    path: 'category',
+                    model: 'category',
+                },
+            });
+
+            await updatedUser.save();
+
+        res.render("cart", { products: updatedUser.cart.items, total: updatedUser.cart.totalPrice });
     } catch (error) {
-        res.send(error)
+        console.error(error);
+        res.send(error);
     }
-}
+};
+
+
 const removeFromCart=async(req,res)=>{
     try {
         const userId = await req.session._id;
@@ -598,6 +630,15 @@ const increaseQuantity=async (req,res)=>{
     try {
         const userId = await req.session._id;
         const productId=await req.query.id;
+        const user=await userModel.findOne({_id:userId})
+        const updatedQuantity = user.cart.items.find(item => item._id.equals(productId));
+        const {quantity}= await productModel.findById(updatedQuantity.product)
+        if(quantity===updatedQuantity.quantity||quantity>=updatedQuantity.quantity){
+            return res.json({updated:"stock"})
+        }
+        if(updatedQuantity.quantity===5){
+            return res.json({updated:"maximum"})
+        }
         const updatedUser = await userModel.findOneAndUpdate(
             { _id: userId, 'cart.items._id': productId },
             {

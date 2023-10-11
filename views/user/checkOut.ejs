@@ -1,0 +1,231 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
+<link rel="stylesheet" type="text/css" href="../../public/css/checkOut.css">
+
+</head>
+<body>
+    <%- include('../layout/header') %>
+    <div class="container">
+        <div class="d-flex" style="justify-content: space-between; align-items: center;">
+            <h2 class="text mb-4" style="margin-top: 20px;  font-family: 'Michroma', sans-serif;"><u>Check Out</u></h2>
+        <a href="/user/cart/" class="btn btn-dark rounded"><h4 style="  font-family: 'Michroma', sans-serif;">Go To Cart</h4></a>
+        </div>
+        <% if (total > 20000) { %>
+            <div class="alert alert-success" role="alert">
+                Enjoy a whopping 20% discount on your total purchase. Limited time offer!
+            </div>
+        <% } else if (total > 15000) { %>
+            <div class="alert alert-success" role="alert">
+                Hurry! Get 15% off on your total purchase. Discount applied at checkout.
+            </div>
+        <% } else if (total >= 10000) { %>
+            <div class="alert alert-danger" role="alert">
+                Add &#x20B9  <%= 15000 - total %> more to get 10% off on your total purchase.
+            </div>
+        <% } else if (total > 0) { %>
+            <div class="alert alert-danger" role="alert">
+                Add &#x20B9 <%= 15000 - total %> more to get 10% off or &#x20B9 <%= 20000 - total %> more to get 20% off on your total purchase.
+            </div>
+        <% } %>
+    </div>
+    <div class="container mb-2" style="font-family: 'Michroma', sans-serif;">
+        <div class="row d-flex" style="justify-content: center;">
+            <div class="p-3 col-lg-6 col-12 rounded" style="border: 1px solid black;">
+                <div class="row">
+                    <h5 class="text-center pt-1 pb-3"><u>Current Address</u></h3>
+                    <div class="col-12 col-md-3 mt-3 d-flex" style="justify-content: baseline; text-align: center; row-gap: 10px; column-gap: 10px; flex-direction: column; align-items: center;">
+                        <a href="/user/profile/" style="text-decoration: none; color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Change Address</span></a>
+                        <a href="/user/addAddress/" style="text-decoration: none; color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Add New Address</span></a>
+                    </div>
+                    <% if(!address){%>
+                        <div class="container mt-5" style="border: 1px solid black; border-radius: 20px;"><h4 class="mb-4 text-center mt-4" style="font-family: 'Michroma', sans-serif;">No addresses have been added yet. Please add an address.</h4></div>
+                    <%} else {%>
+                    <div class="col-12 col-md-9 mt-3">
+                        <table>
+                            <tr>
+                                <td class="ps-2">
+                                    <b class="capitalize"><%= address.name %><br></b>
+                                    <%= address.address %><br>
+                                    <%= address.landmark %><br>
+                                    <%= address.city %>, <%= address.state %>, <%= address.pinCode %><br>
+                                    <%= address.country %><br>
+                                    Contact: <b><%= address.contact %></b>
+                                </td>
+                            </tr>
+                        </table>
+                        
+                        <div class="d-flex" style="justify-content: end;">
+                        <a href="/user/editAddressShow?id=<%=address._id%>" class="btn p-2 btn-dark rounded mt-4 ms-2">Edit</a>
+                        </div>
+                    </div>
+                    <%}%>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="container productCont" style="margin-top: 10px; border: none; background-color: #ffffff; ">
+        <div class="row row-cols-1 row-cols-lg-3  g-4 d-flex" style="justify-content: center;">
+        <% if (locals?.products) { %>
+            <% products?.forEach(item => { %>
+                <%var size=item.size%>
+                <%var _id=item._id%>
+                <%var quantity=item.quantity%>
+                <% const product = item.product; %>
+                    <div class="col">
+                      <div class="card h-100">
+                        <% if (product?.images) { %>
+                            <a href="/user/productDetailed?id=<%=product?._id%>">
+                        <img src="../../public/productImages/<%= product?.images[0] %>" class="card-img-top" alt="..."></a>
+                        <% } %>
+                        <div class="card-body d-flex" style="flex-direction: column; row-gap: 10px;">
+                            <div class="d-flex" style="justify-content: space-between;">
+                                <p class="" style="font-family: 'Michroma', sans-serif; font-size: 15px;">
+                                    <span class="fs-5"><b>Brand :</b></span><%= product?.brand %>
+                                </p>
+                                <!-- <a href="" id="<%=_id%>" class="removeFromCart btn btn-dark rounded">
+                                    <h5 class="text-danger" style="font-family: 'Michroma', sans-serif;">remove</h5>
+                                </a> -->
+                            </div>
+                            
+                                                            <a class="btn btn-dark rounded text-center text-danger" style=" letter-spacing: 2px; font-size: 30px;">&#x20B9 <%= product?.price %>.00</a>
+                                                           
+                                                            
+                            
+                                                                <p class="btn btn-dark " style="font-family: 'Michroma', sans-serif; ">
+                                                                    <span class="">Size :</span><span class=" btn-dark sizeOfTheProduct"><%=size%></span>
+                                                                </p>
+                                                                <% if (product?.deleted===false) { %>
+                                                                    <p class=" btn rounded
+                                                                     btn-dark" id="<%=_id%>" style="font-family: 'Michroma', sans-serif;">
+                                                                        <!-- <button id="<%=_id%>" class="decreaseQuantity btn rounded btn-light ">-</button>  -->
+                                                                        <span class="">Quantity :</span>
+                                                                        <span id="<%=_id%>"><%=quantity%></span> 
+                                                                        <!-- <button class=" increaseQuantity btn rounded btn-light" id="<%=_id%>">+</button> -->
+                                                                    </p>
+                                                                <% } else { %>
+                                                                   
+                                                                <% } %>
+                            <a href="/user/productDetailed?id=<%=product?._id%>" style="text-decoration: none; color: black;">
+                                <h4 class="card-title mb-1 mt-1 text-center" style="font-family: 'Michroma', sans-serif;"><u><%= product?.name %></u></h4></a>
+                            </div>
+                            <div class="card-footer d-flex justify-content-center align-items-center">
+                                <% if (product?.deleted===false) { %>
+                                    <a class="subTotal btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h4 style=" font-family: 'Michroma', sans-serif;"><span class="">&#x20B9</span><span class="" id="<%=_id%>subTotal"> <%=product.price*quantity%></span><span>.00</span></h3></a> 
+                                        <% } else { %>
+                                <a class="text-danger btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Not Available!</h3></a>
+                            <% } %>
+                            
+                        </div>
+                        
+                      </div>
+                    </div>
+                    <% })} %>
+                </div>
+
+                
+    <div class="container mt-5 mb-5">
+        <div class="row" style="display: flex; justify-content: center;">
+            <div class="col-12 col-lg-8">
+                <div class="expected-delivery">
+                    <div class="delivery-title">Expected Delivery</div>
+                    <div class="delivery-date" id="deliveryDate"></div>
+                </div>
+                
+        </div>
+    </div>
+
+
+
+    <div class="container">
+        <div class="row" style="display: flex; justify-content: center;">
+            <div class="col-6" style="border: 1px solid black; border-radius: 20px;  min-width: 300px;">
+        <table  class="table table-striped table-hover" style="margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th scope="col"><b>Item</b></th>
+                    <th scope="col"><b>Amount</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Price (<%= products?.length %> items)</td>
+                    <td>₹ <%= total %></td>
+                </tr>
+            
+                <% if (total >= 20000) { %>
+                    <tr>
+                        <td style="font-weight: bold;">Discount</td>
+                        <td class="ps-2">-₹ <%= (total * 20 / 100).toFixed(2) %></td>
+                    </tr>
+                <% } else if (total >= 15000) { %>
+                    <tr>
+                        <td style="font-weight: bold;">Discount</td>
+                        <td class="ps-2">-₹ <%= (total * 10 / 100).toFixed(2) %></td>
+                    </tr>
+                <% } %>
+            
+                <tr>
+                    <td>Delivery Charges</td>
+                    <td>(Free)</td>
+                </tr>
+            
+                <tr class="table-success" style="padding-top: 30px; font-size: 1.5em;">
+                    <th>Total Amount</th>
+                    <th>₹ <%=grandTotal%></th>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+    
+            <% if(locals.products.length!==0) { %>
+                <div class="container d-flex flex-wrap justify-content-center mt-5 mb-5" style="gap: 10px;">
+                    <a href="/user/checkOut/" class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4" style="width: fit-content;">
+                        <h3 style="font-family: 'Michroma', sans-serif; margin-bottom: 5px;">Total : <span class="text-danger"> &#x20B9 </span><span  class="totalPrice" style="color: red; letter-spacing: 2px;"><%=locals?.grandTotal%></span><span style="color: red; letter-spacing: 2px;">.00</span></h3>
+                        <h4 style="font-family: 'Michroma', sans-serif; margin: 0; border-top: 4px dashed rgb(205, 205, 205);">Pay Now</h4>
+                    </a>
+                    <a href="/user/placeOrderCOD/" class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4" style="width: fit-content;">
+                        <h3 style="font-family: 'Michroma', sans-serif; margin-bottom: 5px;">Cash On Delivery</h3>
+                        <h4 style="font-family: 'Michroma', sans-serif; margin: 0; border-top: 4px dashed rgb(205, 205, 205);">Place Order</h4>
+                    </a>
+                </div>
+                
+            <% } %>
+            
+        </div>
+
+</div>
+
+</div>
+
+<script>
+    // Calculate expected delivery date
+    const today = new Date();
+    const deliveryDate = new Date(today);
+    deliveryDate.setDate(today.getDate() + 6); // 5 days from the day after
+
+    // Display the date in a readable format
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = deliveryDate.toLocaleDateString('en-US', options);
+
+    // Update the delivery date in the HTML
+    document.getElementById('deliveryDate').textContent = formattedDate;
+</script>
+<div class="alertKey">
+    <% if(locals.message) { %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+        data-bs-autohide="true" data-bs-delay="2000"> 
+        <strong><%= message %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% } %>      
+  </div>
+<%- include('../layout/footer')-%>
+<%- include('../layout/footerHTML')-%>
