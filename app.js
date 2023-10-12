@@ -58,8 +58,12 @@ app.get("/admin",(req,res)=>{
 })
 
 app.get("*",(req,res)=>{
-    res.status(404).send(`404\t${req.url}:Not Found!!`)
+    res.status(404).render('user/404',{url:req.url})
 })
 
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('500\tSomething went wrong!');
+});
 
 app.listen(PORT,()=>{console.log(`Server running :http://localhost:${PORT}`)})

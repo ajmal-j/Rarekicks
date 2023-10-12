@@ -9,8 +9,8 @@
     <div class="header2">
         <div class="topHeader">
             <div><a class="left text-danger" href="/user/logout/" title="logout" style="display:flex; justify-content: center;"><i class="bi bi-box-arrow-left"></i></a></div>
-            <div class="center text-center RARE">
-                <a href="/user/home/">RARE KICK'S</a>
+            <div class="center text-center RARE" style=" text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.573);">
+                <a href="/user/home/" >RARE KICK'S</a>
             </div>
             <div class="right">
                 <div class="productCounter">
@@ -19,7 +19,8 @@
                 <div class="productCounter">
                 <a href="/user/cart/" class=""><i class="bi bi-bag-fill"></i></i></i</a>
                 <span class="cartCount"></span></div>
-                <a class="text-dark" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop"><i class="bi bi-person-circle"></i></i</a>
+                <span class="profileMan">
+                <a class="text-dark " data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop"><i class="bi bi-person-circle " style="color: black; text-shadow: 1px 1px rgba(255, 255, 255, 0.321); font-size: 50px; cursor: pointer;"></i></i</a></span>
                
             </div>
         </div>
@@ -32,14 +33,14 @@
                     PRODUCTS
                 </button>
                 <ul class="dropdown-menu bg-dark text-center p-4 ">
-                  <li class="text-center  pb-4 ps-3 pe-3"><a class="" href="/user/allProducts/">ALL PRODUCTS</a></li>
-                  <li class="text-center  pb-4 ps-3 pe-3"><a class="" href="/user/brandBased/">All Brands</a></li>
-                  <li class="text-center pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=adidas">ADIDAS</a></li>
-                  <li class="text-center pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=reebok">REEBOK</a></li>
-                  <li class="text-center pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=jordan">JORDAN</a></li>
-                  <li class="text-center pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=asics">ASICS</a></li>
-                  <li class="text-center pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=crocs">CROCS</a></li>
-                  <li class="text-center ps-3 pe-3"><a class=" " href="/user/brand?brand=converse">CONVERSE</a></li>
+                  <li class="text-center hover  pb-4 ps-3 pe-3"><a class="" href="/user/allProducts/">ALL PRODUCTS</a></li>
+                  <li class="text-center hover  pb-4 ps-3 pe-3"><a class="" href="/user/brandBased/">All Brands</a></li>
+                  <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=adidas">ADIDAS</a></li>
+                  <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=reebok">REEBOK</a></li>
+                  <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=jordan">JORDAN</a></li>
+                  <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=asics">ASICS</a></li>
+                  <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=crocs">CROCS</a></li>
+                  <li class="text-center hover ps-3 pe-3"><a class=" " href="/user/brand?brand=converse">CONVERSE</a></li>
                 </ul>
               </div>
 
@@ -53,7 +54,7 @@
               <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel" style="overflow: visible;">
                 <div class="offcanvas-header">
                   <i class="bi bi-person-circle" style="font-size: 60px;"></i>
-                  <h5 class="offcanvas-title" id="staticBackdropLabel">Hello User!</h5>
+                  <h5 class="offcanvas-title" id="staticBackdropLabel">Hello <span class="userName capitalizeFirst"></span>!</h5>
                   <button type="button" class="btn-close" id="closeButton" data-bs-dismiss="offcanvas" aria-label="Close" style="font-size: 30px; margin: 10px;"></button>
                 </div>
                 <div class="offcanvas-body">
@@ -62,7 +63,7 @@
                     <a type="button" href="/user/profile" class="btn btn-dark d-flex justify-content-center" style=" text-decoration: none;">PROFILE MANAGEMENT</a>
                   </div>
                   <div>
-                    <a type="button" href="/admin/viewUsers" class="btn btn-dark d-flex justify-content-center" style=" text-decoration: none;">ORDERS</a>
+                    <a type="button" href="/user/orders" class="btn btn-dark d-flex justify-content-center" style=" text-decoration: none;">ORDERS</a>
                   </div>
                     <div class="btn-group dropdown">
                 <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -79,33 +80,18 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                   <form action="/user/searchProduct/" method="get" class="needs-validation" enctype="application/form-data">
                      <div class="d-flex align-items-center">
                         <% if (locals?.search) { %>
                             <% var value = search?search:''; %>
                             <div class="input-group">
                                 <input type="text" class="form-control" name="search" placeholder="Search Product" style="min-width: 100px;" id="searchInput">
-                                <button type="reset" class="btn border-dark-subtle" id="clearSearch" onclick="clearA()" style="background-color: white;">
+                                <button type="reset" class="btn border-dark-subtle" id="clearSearch" onclick="clearA()" style="background: white;">
                                     <i class="bi bi-x-lg"></i></button></div>
                                     <% } else { %>
                             <div class="input-group">
                             <input type="text" class="form-control border-dark" name="search" placeholder="Search Product" style="min-width: 100px;" id="searchInput">
-                            <button type="reset" class="btn border-dark-subtle" id="clearSearch" onclick="clearA()">
+                            <button type="reset" class="btn border-dark-subtle" id="clearSearch" onclick="clearA()" style="background: white;">
                                 <i class="bi bi-x-lg"></i></button></div>
                         <% } %>
                         <button class="btn btn-dark text-center rounded" type="submit" style="width: 100px; margin-left: 10px;">Search</button>
@@ -128,6 +114,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         const wishCount = document.querySelector(".wishlistCount");
         const cartCount = document.querySelector(".cartCount");
+        const userName = document.querySelector(".userName");
 
     // Wrap the fetch operation in a function
             const fetchData = async () => {
@@ -143,6 +130,7 @@
                     // Update the UI with the fetched data
                     wishCount.textContent = data.wishCount;
                     cartCount.textContent = data.cartCount;
+                    userName.textContent = data.userName;
                 } catch (error) {
                     console.error('Error during fetch operation:', error);
                 }

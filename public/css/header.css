@@ -1,23 +1,22 @@
 .header{
     position: sticky;
-    /* background-color: white; */
-    background: hsla(186, 33%, 94%, 1);
+    
+    background: linear-gradient(#2b2e2f,#414345) ;
 
-    background: linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
-
-    background: -moz-linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
-
-    background: -webkit-linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
-
-    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#EBF4F5", endColorstr="#B5C6E0", GradientType=1 );
-    height: 140px;
+    height: 160px;
+    padding-bottom: 70px;
     box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.691);
     border-bottom: 0.7px solid black;
     z-index: 10;
 }
-.header a:hover{
+.RARE :hover{
         color: red;
         transition: 0.25s;
+}
+
+.header i:hover{
+    color: white;
+    transition: 0.25s;
 }
 h3 {
     overflow-wrap: break-word;
@@ -52,7 +51,9 @@ h5 {
     justify-content: center;
 
 }
-
+.capitalizeFirst{
+    text-transform: uppercase;
+}
 .bottomHeader a{
     text-decoration: none;
 }
@@ -63,10 +64,11 @@ h5 {
         align-items: center;
     }
     .header{
-        height: 250px;
+        height: 300px;
+        padding-bottom: 410px;
     }
     .header2{
-        height: 250px;
+        height: 300px;
     }
     .coverdiv{
         height: 30px;

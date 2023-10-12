@@ -50,7 +50,11 @@
               <form class="addressForm">
                   <div class="form-check form-switch">
                       <% if (length>1){%>
-                        <input class="form-check-input currentSwitch" type="checkbox" role="switch" id="<%=_id%>" <%= address.default ? 'checked' : '' %>>
+                        <%if(address.default){%>
+                            <input class="form-check-input currentSwitch" type="checkbox" role="switch" id="<%=_id%>" checked disabled>
+                            <%}else {%>
+                                <input class="form-check-input currentSwitch" type="checkbox" role="switch" id="<%=_id%>" >
+                                <%}%>
                         <%}%>
                         <label class="form-check-label" for="flexSwitchCheck<%= index %>">Current</label>
                 </div>
@@ -81,7 +85,7 @@
           <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const addressButtons = document.querySelectorAll('.currentSwitch');
-        
+                
                 addressButtons.forEach(button => {
                     button.addEventListener('change', async () => {
                         const addressId = button.id;

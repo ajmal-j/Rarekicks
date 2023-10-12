@@ -1,8 +1,9 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/orderConfirmation.css">
-</head>
+</head>#231c1c
 <body>
-    <div class="container" style="font-family: 'Michroma', sans-serif;">
+    <div class="containerMa" style="font-family: 'Michroma', sans-serif;">
+        <h2 class="text-center mb-4" style="  font-family: 'Michroma', sans-serif;"><u>RARE KICK'S</u></h2>
         <img src="../../public/images/icons8-flower-delivery-64.png" alt="Success Logo" class="success-logo">
         <h2>Order Confirmation</h2>
 
@@ -28,16 +29,33 @@
         <div class="order-total">
             <p>Total Amount: <%= total %></p>
         </div>
-
+        <div class="row" style="display: flex; justify-content: center;">
+            <div class="col-12 col-lg-8">
+                <div class="expected-delivery">
+                    <div class="delivery-title">Expected Delivery</div>
+                    <div class="delivery-date" id="deliveryDate"></div>
+                </div>
+                
+        </div>
+    </div>
         <div class="thank-you-message">
             <p>Thank you for shopping with us! Your order will be shipped soon.</p>
         </div>
         <a href="/user/home" class="mt-3 mb-5" style="display: flex; justify-content: center; text-decoration: none;"><span class="btn btn-dark rounded">Continue Shopping</span></a>
     </div>
 
-    <div class="footer">
-        <p>&copy; 2023 Your Store. All rights reserved.</p>
-        <h2 class="text-center mb-4" style="  font-family: 'Michroma', sans-serif;"><u>RARE KICK'S</u></h2>
-    </div>
+</div>
+<script>
+    // Calculate expected delivery date
+    const today = new Date();
+    const deliveryDate = new Date(today);
+    deliveryDate.setDate(today.getDate() + 6); // 5 days from the day after
 
+    // Display the date in a readable format
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const formattedDate = deliveryDate.toLocaleDateString('en-US', options);
+
+    // Update the delivery date in the HTML
+    document.getElementById('deliveryDate').textContent = formattedDate;
+</script>
 <%- include('../layout/footerHTML')-%>

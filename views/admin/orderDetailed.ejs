@@ -1,0 +1,234 @@
+
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/orderConfirmation.css">
+
+</head>
+<body>
+    <%- include('../layout/adminHeader')-%>
+    
+
+
+<div class="container">
+        <%let i=1%>
+    <div class="card-header mt-4 mb-3">
+        <h4 class="text-center text-dark" style="font-family: 'Michroma', sans-serif;">Products</h4>
+    </div>
+    <div class="d-flex" style="justify-content: space-around; flex-wrap: wrap;">
+        <% order.products.items.forEach(item => { %>
+    <div class="card mb-3" style="max-width: 540px; border: 1px solid black ; border-radius: 10px;">
+    <div class="row g-0">
+      <div class="col-md-4" style=" border-radius: 10px; display: flex; justify-content: center; align-items: center; background-color: rgb(246, 246, 246);">
+        <img src="../../public/productImages/<%=item.product.images[0]%>" class="img-fluid rounded-start" alt="..." style="border-radius: 20px;">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title" style="font-family: 'Michroma', sans-serif;"><%= item.product.name %></h5>
+          <p class="card-text"><strong>Size:</strong> <%= item.size %></p>
+          <p class="card-text"><strong>Price:</strong>&#x20B9 <%= item.price %></p>
+          <p class="card-text"><strong>Quantity:</strong> <%= item.quantity %></p>
+        </div>
+      </div>
+    </div>
+    </div>
+    <% }); %>
+    </div>
+    
+
+    <div class="d-flex mt-3" style="justify-content: center;">
+        <% if (order.status === 'Processing') { %>
+            <p > <span class="btn py-2 px-3 btn-warning rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+        <% } else if (order.status === 'Shipped') { %>
+            <p > <span class="btn py-2 px-3 btn-outline-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+        <% } else if (order.status === 'Out of Delivery') { %>
+            <p > <span class="btn py-2 px-3 btn-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+        <% } else { %>
+            <p><span  class="btn py-2 px-3 btn-danger rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+        <% } %></div>
+
+
+    <div class="container mb-3 mt-2" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 370px;">
+        <table class="table table-hover table-dark">
+            <h4 class="text-center text-light" style="font-family: 'Michroma', sans-serif;">Order Details</h4>
+            <thead>
+              <tr>
+                <th scope="col" style="width: 20%; text-align: center;"></th>
+                <th scope="col" style="padding-left: 20px; text-align: center;"  ></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif; ">Purchaser :</h6></th>
+                <td style="text-transform: capitalize;"><%= user.name %></td>
+              </tr>
+              <tr>
+              <tr>
+                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Order ID:</h6></th>
+                <td><%= order._id %></td>
+              </tr>
+              <tr>
+                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">User ID:</h6></th>
+                <td><%= order.userId%></td>
+              </tr>
+              <tr>
+                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Payment Method:</h6></th>
+                <td><%= order.payment.method %></td>
+              </tr>
+              <tr>
+                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Offer Applied:</h6></th>
+                <td><%= order.offer %></td>
+              </tr>
+              <tr>
+                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Order Date:</h6></th>
+                <td><%= order.createdAt %></td>
+              </tr>
+              <%if(order.isCancelled){%>
+                <tr>
+                  <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
+                  <td>Order Cancelled</td>
+                </tr>
+                <%}else {%>
+                  <tr>
+                    <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
+                    <td><%= new Date(order.createdAt.getTime() + 5*24*60*60*1000) %></td>
+                  </tr>
+                  <%}%>
+              <%var offer=parseInt(order.offer)%>
+              <%if(offer){%>
+                <%var discount=(order.payment.amount*offer/100)%>
+                <tr>
+                  <th scope="row"><h6  style="font-family: 'Michroma', sans-serif;">Total:</h5></th>
+                    <td class="text-danger">&#x20B9  <%= (order.payment.amount+discount).toFixed(2) %></td>
+                  </tr>
+                <tr>
+                <th scope="row"><h6  style="font-family: 'Michroma', sans-serif;">Discount:</h5></th>
+                  <td class="text-danger">&#x20B9  -<%= discount.toFixed(2) %></td>
+                </tr>
+                <%}%>
+              <tr>
+                <th scope="row"><h5  style="font-family: 'Michroma', sans-serif;">Total Paid:</h5></th>
+                <td class="text-danger"><h2>&#x20B9  <%= order.payment.amount.toFixed(2) %></h2></td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+
+    <div class="container mb-3" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 400px;">
+        <table class="table table-dark">
+            <h4 class="text-center text-light" style="font-family: 'Michroma', sans-serif;">Delivery Address</h4>
+            <thead>
+              <tr>
+                <th scope="col" style="padding-left: 20px; text-align: center; width: 150px;"  ></th>
+                <th scope="col" style="padding-left: 20px; text-align: center;"  ></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row"> <h6 style="font-family: 'Michroma', sans-serif;">Address : </h6></th>
+                <td><b class="capitalize"><%= order.address.name %></b><br>
+                    <%= order.address.address %><br>
+                    <%= order.address.landmark %><br>
+                    <%= order.address.city %>, 
+                    <%= order.address.state %>,
+                     <%= order.address.pinCode %><br>
+                    <%= order.address.country %><br>
+                    </td>
+              </tr>
+              <tr>
+                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Contact : </h6></th>
+                <td><b><%= order.address.contact %></b></td>
+              </tr>
+              <tr>
+                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Email : </h6></th>
+                <td><b><%= order.address.email %></b></td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+
+    <div class="container mb-1" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 400px;">
+      <table class="table table-dark">
+          <h4 class="text-center text-light" style="font-family: 'Michroma', sans-serif;">Purchaser Details</h4>
+          <thead>
+            <tr>
+              <th scope="col" style="padding-left: 20px; text-align: center; width: 150px;"  ></th>
+              <th scope="col" style="padding-left: 20px; text-align: center;"  ></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row"> <h6 style="font-family: 'Michroma', sans-serif;">Total Orders </h6></th>
+              <td><%=total%></td>
+            </tr>
+            <tr>
+              <th scope="row"> <h6 style="font-family: 'Michroma', sans-serif;">Name : </h6></th>
+              <td><%=user.name%></td>
+            </tr>
+            <tr>
+              <th scope="row"> <h6 style="font-family: 'Michroma', sans-serif;">Email : </h6></th>
+              <td><%=user.email%></td>
+            </tr>
+            <tr>
+              <th scope="row"> <h6 style="font-family: 'Michroma', sans-serif;">Contact : </h6></th>
+              <td><%=user.contact%></td>
+            </tr>
+            <tr>
+              <th scope="row"> <h6 style="font-family: 'Michroma', sans-serif;">Blocked : </h6></th>
+              <td><%=user?.isBlocked?'Yes':'No';%></td>
+            </tr>
+            <tr>
+              <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Wishlist : </h6></th>
+              <td><b><%= user?.wishlist.length %> Items</b></td>
+            </tr>
+            <tr>
+              <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Cart : </h6></th>
+              <td><b><%= user?.cart?.items?.length %> Items</b></td>
+            </tr>
+          </tbody>
+        </table>
+  </div>
+</div>
+
+<div class="container">
+  <%if(order.isCancelled){%>
+    <div class="d-flex mb-5" style="justify-content: end;">
+      <button class="btn btn-danger py-2 px-3" disabled>Order Cancelled</button>
+  </div>
+    <%}else {%>
+      <div class="d-flex mb-5" style="justify-content: end;">
+        <a id="<%=order._id%>"  class="btn btn-danger py-2 px-3 cancelButton">Cancel Order</a>
+    </div>
+      <%}%>
+    
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded',()=>{
+    const cancelButton=document.querySelector('.cancelButton');
+    const orderId=cancelButton.id;
+    cancelButton.addEventListener('click',()=>{
+      fetch('/user/cancelOrder?id='+orderId).then(response=>response.json()).then(
+        data=>{
+          if(data.cancelled==='shipped'){
+            showAlert("Product Is Already Shipped")
+          }else if(data.cancelled==='already'){
+            showAlert("Already Cancelled!")
+          }else if (data.cancelled===true){
+            cancelButton.textContent="Order Cancelled"
+            showSuccess("Order Cancelled")
+          }else{
+            showAlert("Not Cancelled Error Ocurred")
+          }
+        }
+      ).catch(err=>{
+        console.log("Order cancellation error"+err);
+      })
+    })
+  })
+
+
+</script>
+
+
+
+<%- include('../layout/footer')-%>
+    <%- include('../layout/footerHTML')-%>

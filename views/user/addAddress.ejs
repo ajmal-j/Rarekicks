@@ -230,13 +230,17 @@
                             const data = await response.json();
                             console.log(data)
                             if (data.added === "added") {
-                                showAlert('Updating!');
+                                showSuccess('Updating!');
                                 form.submit();
                             }else if (data.added==="contact"){
                                 showAlert('Contact In Use!');
                             }
                             else if(data.added==="not") {
                                 showAlert('Not Valid');
+                            }
+                            else if(data.added==="checkOut") {
+                                showSuccess('Updating');
+                                window.location.href = '/user/checkOut';
                             }
                         } catch (error) {
                             console.error("Error checking category:", error);

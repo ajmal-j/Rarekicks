@@ -42,6 +42,7 @@ const testData = async (req, res) => {
 const placeOrderCOD=async (req,res)=>{
     try {
         const userId=req.session._id;
+        req.session.checkOut=false;
         const {cart,email}=await userModel.findById(userId);
         const total=cart.totalPrice;
         if(cart.totalPrice===0){
@@ -110,6 +111,7 @@ const placeOrderCOD=async (req,res)=>{
                 });
 
                 await userModel.findByIdAndUpdate(userId, { $unset: { cart: 1 } });
+                req.session.orderConfirmed=true;
                 res.render('orderConfirmation',{products:order.products.items,total:grandTotal.toFixed(2)})
             })
             .catch(error => {
@@ -123,8 +125,101 @@ const placeOrderCOD=async (req,res)=>{
 }
 
 
+const orderShow = async (req, res) => {
+    try {
+        const id = req.session._id;
+        const orders = await orderModel.find({ userId: id });
+
+        // Use Promise.all to wait for all the promises to resolve
+        const populatedOrders = await Promise.all(
+            orders.map(async (order) => {
+                const populatedOrder = await orderModel.findById(order._id).populate({
+                    path: 'products.items.product',
+                });
+                return populatedOrder;
+            })
+        );
+        const allOrders=populatedOrders.reverse()
+        res.render("orders", { orders: allOrders });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const orderDetailed = async (req, res) => {
+    try {
+        const id = req.session._id;
+        const orderId=req.query.id;
+        const order=await orderModel.findById(orderId).populate({
+            path: 'products.items.product',
+        });
+        res.render("orderDetailed", { order });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const allOrders = async (req, res) => {
+    try {
+        const allOrders = await orderModel.find();
+        const orders = await Promise.all(
+            allOrders.map(async (item) => {
+                return await orderModel.findById(item._id).populate({
+                    path: 'products.items.product',
+                });
+            })
+        );
+
+        console.log(orders.length);
+        // res.json({ orders });
+        const completeOrders=orders.reverse();
+        res.render("allOrders",{allOrders:completeOrders})
+    } catch (error) {
+        res.json({ error });
+        console.log(error);
+    }
+};
+
+const orderDetailedAdmin = async (req, res) => {
+    try {
+        const orderId=req.query.id;
+        const order=await orderModel.findById(orderId).populate({
+            path: 'products.items.product',
+        });
+        const user=await userModel.findById(order.userId)
+        const total=await orderModel.find({userId:user._id})
+        res.render("orderDetailed", { order,user,total:total.length });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+
+const cancelOrder=async (req,res)=>{
+    try {
+        const orderId=await req.query.id;
+        const {isCancelled,status}=await orderModel.findById({_id:orderId});
+        if(status==="shipped"){
+           return res.json({cancelled:"shipped"})
+        }else if(isCancelled===true){
+            return res.json({cancelled:"already"})
+        }else{
+            await orderModel.findByIdAndUpdate({_id:orderId},{isCancelled:true,status:"cancelled"});
+            return res.json({cancelled:true})
+        }
+    } catch (error) {
+        console.log(error);
+        return res.json({cancelled:false})
+    }
+}
+
 
 module.exports={
     placeOrderCOD,
-    testData
+    testData,
+    orderShow,
+    orderDetailed,
+    allOrders,
+    orderDetailedAdmin,
+    cancelOrder
 }

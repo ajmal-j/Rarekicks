@@ -501,6 +501,7 @@ const wishlist=async(req,res)=>{
 
 const wishlistShow=async(req,res)=>{
     try {
+        req.session.orderConfirmed=false;
         const id=await req.session._id;
         const user=await userModel.findOne({_id:id}).populate({
                         path: 'wishlist',
@@ -526,6 +527,7 @@ const wishlistShow=async(req,res)=>{
 const cartShow = async (req, res) => {
     try {
         const id = await req.session._id;
+        req.session.orderConfirmed=false;
         const user = await userModel
             .findOne({ _id: id })
             .populate({
@@ -633,7 +635,7 @@ const increaseQuantity=async (req,res)=>{
         const user=await userModel.findOne({_id:userId})
         const updatedQuantity = user.cart.items.find(item => item._id.equals(productId));
         const {quantity}= await productModel.findById(updatedQuantity.product)
-        if(quantity===updatedQuantity.quantity||quantity>=updatedQuantity.quantity){
+        if(quantity===updatedQuantity.quantity){
             return res.json({updated:"stock"})
         }
         if(updatedQuantity.quantity===5){
@@ -725,9 +727,10 @@ const cart = async (req, res) => {
 const getCount=async(req,res)=>{
     try {
       const user=await userModel.findOne({_id:req.session._id})
+      const userName=user.name;
       const wishCount=user.wishlist.length
       const cartCount=user.cart.items.length
-      return res.json({wishCount,cartCount})
+      return res.json({wishCount,cartCount,userName})
     } catch (error) {
       console.log(error);
     }

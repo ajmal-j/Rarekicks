@@ -7,7 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const increaseButton = document.querySelectorAll('.increaseQuantity');
     const decreaseButton = document.querySelectorAll('.decreaseQuantity');
     const totalButton = document.querySelector('.totalPrice');
-   
+    const wishCount = document.querySelector(".wishlistCount");
+    const cartCount = document.querySelector(".cartCount");
+
     const selectedSizes = {};
 
     sizeButtons.forEach(button => {
@@ -118,8 +120,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     else if (data.added) {
                         showSuccess("Added To Cart");
                         button.firstElementChild.textContent = 'Added To Cart';
+                        const cartCountValue=parseInt(cartCount.textContent);
+                        console.log(cartCountValue);
+                        // cartCountValue++;
+                        // cartCount.textContent=cartCountValue;
                     } else {
                         button.firstElementChild.textContent = 'Removed from Cart';
+                        const cartCountValue=parseInt(cartCount.textContent);
+                        console.log(cartCountValue);
+                        // cartCountValue--;
+                        // cartCount.textContent=cartCountValue;
                         showAlert("Removed from Cart");
                     }
                 })

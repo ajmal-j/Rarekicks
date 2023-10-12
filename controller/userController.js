@@ -333,6 +333,8 @@ const verifyEmail=async (req,res)=>{
 
 const homePage=async (req,res)=>{
   try{
+    req.session.checkOut=false;
+    req.session.orderConfirmed=false;
     const products=await productModel.find({deleted:false}).limit(9);
     const products2=await productModel.find({deleted:false}).skip(17);
     const message=req.query.message;
@@ -387,6 +389,7 @@ const productDetailed = async (req, res) => {
 
 const profile=async(req,res)=>{
   try {
+    req.session.checkOut=false;
     const id=req.session._id
     const addresses=await addressModel.find({userId:id})
     const user=await userModel.findOne({_id:id})
@@ -397,6 +400,7 @@ const profile=async(req,res)=>{
 }
 
 const redirect=async(req,res)=>{
+  req.session.checkOut=false;
   const message=req.query.message;
   if(message){
   res.redirect(`/user/home`)
@@ -533,7 +537,17 @@ const addAddress = async (req, res) => {
       const addId=address[0]._id;
       await addressModel.findByIdAndUpdate(addId,{default:true})
     }
-    return res.json({ added: "added" });
+    const checkOut=req.session.checkOut;
+    if(checkOut){
+      const addressCheck = await addressModel.find({ userId: id })
+      const length=addressCheck.length;
+      const addId=addressCheck[length-1]._id;
+      await addressModel.updateMany({ userId:id }, { $set: { default: false } });
+      await addressModel.updateOne({_id:addId}, { $set: { default: true } })
+      return res.json({ added: "checkOut" });
+    }else{
+      return res.json({ added: "added" });
+    }
   } catch (error) {
     console.error(error);
     return res.json({ added: "not" });
@@ -553,6 +567,7 @@ const updateDefaultAddress=async (req,res)=>{
     return res.json({success:false})
   }
 }
+
 const editAddressShow = async (req, res) => {
   try {
     const id = req.query.id; 
@@ -603,8 +618,13 @@ const editAddress = async (req, res) => {
     };
 
     await addressModel.findByIdAndUpdate(addressId,userDetails);
-
-    return res.json({ added: "added" });
+    const checkOut=req.session.checkOut;
+    if(checkOut){
+      return res.json({ added: "checkOut" });
+    }else{
+      return res.json({ added: "added" });
+    }
+    
   } catch (error) {
     console.error(error);
     return res.json({ added: "not" });
@@ -632,7 +652,11 @@ const deleteAddress=async (req,res)=>{
 
 const checkOutShow=async(req,res)=>{
   try {
+    if(req.session.orderConfirmed){
+      return res.redirect('/user/cart/')
+    }
     const id=req.session._id;
+    req.session.checkOut=id;
     const address=await addressModel.findOne({userId:id,default:true})
     const user = await userModel
                 .findOne({ _id: id })

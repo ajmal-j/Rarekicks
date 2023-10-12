@@ -1,0 +1,80 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/orderConfirmation.css">
+
+</head>
+<body>
+    <%- include('../layout/adminHeader')-%>
+    <%if(allOrders.length>0){%>
+      
+        <div class="text-center text-dark mt-4" style=" font-family: 'Michroma', sans-serif;">
+            <h3>All Orders</h3>
+            <span style="font-size: 17px;" class="btn btn-dark py-2 px-3">Total Orders : <%= allOrders.length%></h3>
+        </div>
+    <div class="container mt-2" style="border: 1px solid black ; padding: 10px; background-color: #212529; border-radius: 20px; min-width: 600px;">
+        
+        <table class="table table-dark table-striped" style=" font-family: 'Michroma', sans-serif;">
+            <thead class="" style="height: 60px;text-align: center; align-items: center;">
+              <tr>
+                <th scope="col">No :</th>
+                <th scope="col" style="width: 150px;">Items</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Order ID</th>
+                <th scope="col">User ID</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+                <%let i=1%>
+        <% allOrders.forEach(orders => { %>
+            <%var order=[orders]%>
+                <% order.forEach(order => { %>
+                <tr>
+                    <th scope="row" style="text-align: center;"><%=i%></th>
+                    <%var pros=order.products.items.length-1%>
+                    <% order.products.items.forEach((item, index) => { %>
+                        <% if (index === 0) { %>
+                          <td style="max-width: 150px; text-align: center; display: grid; ">
+                            <a href="/admin/orderDetailed?id=<%= order._id %>">
+                              <img style="border-radius: 20px; margin-top: 10px;" src="../../public/productImages/<%= item.product.images[0] %>" alt="Product Image" class="card-img-top">
+                            </a>
+                           <%if(pros>0){%>
+                            <span>+ <%=pros%> more</span>
+                            <%}%>
+                          </td>
+                        <% } %>
+                      <% }); %>
+                      
+                    <td class="align-middle" style="text-align: center;">&#x20B9  <%= order.payment.amount %></td>
+                    <td class="align-middle" style="text-align: center;"><%= order._id %></td>
+                    <td class="align-middle" style="text-align: center;"><%= order.userId %></td>
+                    <td class="align-middle" style="text-align: center;">
+                      <a href="/admin/orderDetailed?id=<%= order._id %>">
+                      <% if (order.status === 'Processing') { %>
+                      <p > <span class="btn py-2 px-3 btn-warning rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+                  <% } else if (order.status === 'Shipped') { %>
+                      <p > <span class="btn py-2 px-3 btn-outline-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+                  <% } else if (order.status === 'Out of Delivery') { %>
+                      <p > <span class="btn py-2 px-3 btn-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+                  <% } else { %>
+                      <p><span  class="btn py-2 px-3 btn-danger rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+                  <% } %>
+                      </a>
+                </td>
+                </tr>
+                <%i=(i+1)%>
+                <% }); %>
+            <% }); %>
+            </tbody>
+          </table>
+    </div><%}else {%>
+      <div class="text-center text-dark mt-4" style=" font-family: 'Michroma', sans-serif;">
+        <h3>No Orders!</h3>
+    </div>
+      <%}%>
+     <div class="footerA">
+            <p>&copy; 2023 Your Store. All rights reserved.</p>
+            <h2 class="text-center mb-4" style="font-family: 'Michroma', sans-serif;"><u>RARE KICK'S</u></h2>
+        </div>
+    <%- include('../layout/footer')-%>
+    <%- include('../layout/footerHTML')-%>
+

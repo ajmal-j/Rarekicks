@@ -5,15 +5,10 @@
     justify-content: center;
     align-items: center;
     z-index: 0;
-    background: linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
-
-    background: -moz-linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
-
-    background: -webkit-linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
-
-    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#EBF4F5", endColorstr="#B5C6E0", GradientType=1 );
+    background: linear-gradient(#2b2e2f,#414345) ;
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.641);
     border-top: 0.7px solid black;
+    color: white;
 }
 
 body {

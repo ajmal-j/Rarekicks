@@ -5,6 +5,10 @@ const orderSchema = new mongoose.Schema({
         ref:"user",
         required:true
     },
+    isCancelled:{
+        type:Boolean,
+        default:false
+    },
     payment:{
       method:{
         type:String,

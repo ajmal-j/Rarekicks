@@ -3,6 +3,7 @@ const adminRouter=express();
 const adminController= require("../controller/adminController")
 const productController= require("../controller/productController")
 const userController= require("../controller/userController")
+const orderController= require("../controller/orderController")
 const JWT=require("../middlewares/jwtToken")
 adminRouter.set("view engine","ejs")
 adminRouter.set("views","./views/admin")
@@ -42,6 +43,9 @@ adminRouter.get('/editCategory',JWT.checkJwtAdmin,productController.editCategory
 adminRouter.post('/editCategory',JWT.checkJwtAdmin,productController.editCategory)
 adminRouter.get('/deleteCategory',JWT.checkJwtAdmin,productController.deleteCategory)
 adminRouter.get('/deleteCategoryCompletly',JWT.checkJwtAdmin,productController.deleteCategoryCompletly)
+adminRouter.get('/allOrders',orderController.allOrders)
+adminRouter.get('/orderDetailed',orderController.orderDetailedAdmin)
+adminRouter.get('/cancelOrder',orderController.cancelOrder)
 
 
 module.exports=adminRouter
