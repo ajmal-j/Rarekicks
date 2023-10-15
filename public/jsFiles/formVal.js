@@ -40,7 +40,7 @@ function showSuccess(message) {
     alertDiv.style.top = '60px';
     alertDiv.style.opacity = '0';
     alertDiv.style.transition = 'opacity 0.5s ease-in-out';
-    alertDiv.style.backgroundColor = '#4CAF50'; // Green
+    alertDiv.style.backgroundColor = '#00cc00'; // Green
     alertDiv.style.color = 'white';
     alertDiv.style.padding = '15px';
     alertDiv.style.marginBottom = '15px';

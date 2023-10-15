@@ -12,9 +12,7 @@
     }
   }
   @media(min-width:992px){
-    .sideMain{
-      transform: translateX(-10px)
-    }
+    
   }
 
   
@@ -52,6 +50,8 @@
 @media (max-width: 991.98px) {
     /* Styles for screens smaller than LG */
     .imageText {
+      margin-top: 20px;
+      margin-bottom: -20px;
         position: static;
         transform: none;
         text-align: left;
@@ -128,11 +128,6 @@
     word-wrap: break-word;
   }
 
-  
-/* 
-  .sideMain{
-    transform: translateX(60px)
-  } */
 
 
   .slider-container {
@@ -162,7 +157,9 @@
 
 
 .sideMain {
-  background: linear-gradient(to right, #e1e1e1, #636363, #e1e1e1 );
+  background-color: #f0f0f0;
   border-radius: 20px;
   border: 1px solid black;
 }
+
+

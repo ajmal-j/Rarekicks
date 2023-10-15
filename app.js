@@ -40,9 +40,6 @@ app.set('view engine','ejs');
 app.use('/public',express.static("public"));
 
 
-
-
-
 app.use("/user",userRoutes)
 app.use("/admin",adminRoutes)
 
@@ -63,7 +60,7 @@ app.get("*",(req,res)=>{
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).send('500\tSomething went wrong!');
+    res.status(500).redirect('/user/home/');
 });
 
 app.listen(PORT,()=>{console.log(`Server running :http://localhost:${PORT}`)})

@@ -42,10 +42,18 @@ adminRouter.post('/createCategory',JWT.checkJwtAdmin,productController.createCat
 adminRouter.get('/editCategory',JWT.checkJwtAdmin,productController.editCategoryShow)
 adminRouter.post('/editCategory',JWT.checkJwtAdmin,productController.editCategory)
 adminRouter.get('/deleteCategory',JWT.checkJwtAdmin,productController.deleteCategory)
-adminRouter.get('/deleteCategoryCompletly',JWT.checkJwtAdmin,productController.deleteCategoryCompletly)
-adminRouter.get('/allOrders',orderController.allOrders)
-adminRouter.get('/orderDetailed',orderController.orderDetailedAdmin)
-adminRouter.get('/cancelOrder',orderController.cancelOrder)
+adminRouter.get('/deleteCategoryCompletely',JWT.checkJwtAdmin,productController.deleteCategoryCompletely)
 
+
+adminRouter.get('/allOrders',JWT.checkJwtAdmin,orderController.allOrders)
+adminRouter.get('/orderDetailed',JWT.checkJwtAdmin,orderController.orderDetailedAdmin)
+adminRouter.get('/cancelOrder',JWT.checkJwtAdmin,orderController.cancelOrder)
+adminRouter.get('/change',JWT.checkJwtAdmin,orderController.changeStatus)
+adminRouter.get('/deleteOrder',JWT.checkJwtAdmin,orderController.deleteOrder)
+adminRouter.get('/editOrders',JWT.checkJwtAdmin,orderController.editOrdersShow)
+adminRouter.get('/editOrder',JWT.checkJwtAdmin,orderController.editOrders)
+
+adminRouter.get('/bannerManagement',JWT.checkJwtAdmin,adminController.bannerManagement)
+adminRouter.post('/updateBanner',JWT.checkJwtAdmin,productController.upload.array('images',5),productController.updateBanner)
 
 module.exports=adminRouter

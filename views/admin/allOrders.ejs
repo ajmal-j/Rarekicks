@@ -52,10 +52,12 @@
                       <% if (order.status === 'Processing') { %>
                       <p > <span class="btn py-2 px-3 btn-warning rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
                   <% } else if (order.status === 'Shipped') { %>
-                      <p > <span class="btn py-2 px-3 btn-outline-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+                      <p > <span class="btn py-2 px-3 btn-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
                   <% } else if (order.status === 'Out of Delivery') { %>
                       <p > <span class="btn py-2 px-3 btn-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
-                  <% } else { %>
+                  <% } else if (order.status === 'Delivered') { %>
+                    <p > <span class="btn py-2 px-3 btn-light rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+                <% } else { %>
                       <p><span  class="btn py-2 px-3 btn-danger rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
                   <% } %>
                       </a>
@@ -72,7 +74,7 @@
     </div>
       <%}%>
      <div class="footerA">
-            <p>&copy; 2023 Your Store. All rights reserved.</p>
+            <p>&copy; 2023 Rare Kicks. All rights reserved.</p>
             <h2 class="text-center mb-4" style="font-family: 'Michroma', sans-serif;"><u>RARE KICK'S</u></h2>
         </div>
     <%- include('../layout/footer')-%>

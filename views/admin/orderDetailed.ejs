@@ -5,8 +5,7 @@
 </head>
 <body>
     <%- include('../layout/adminHeader')-%>
-    
-
+   
 
 <div class="container">
         <%let i=1%>
@@ -33,17 +32,70 @@
     <% }); %>
     </div>
     
-
     <div class="d-flex mt-3" style="justify-content: center;">
         <% if (order.status === 'Processing') { %>
-            <p > <span class="btn py-2 px-3 btn-warning rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+          <div class="dropdown">
+            <button class=" btn py-2 px-3 btn-warning rounded-pill dropdown-toggle" id="statusDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" cursor: pointer; font-family: 'Michroma', sans-serif;">
+              <span class="statusButton"><%= order.status %></span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="statusDropdown" style=" cursor: pointer ;">
+              <% const statuses = ['Shipped', 'Out of Delivery', 'Cancelled' ,'Delivered']; %>
+              <% statuses.forEach(status => { %>
+                <a class="dropdown-item" onclick="changeStatus('<%= status %>')"><%= status %></a>
+              <% }); %>
+            </div>
+          </div>
+          
         <% } else if (order.status === 'Shipped') { %>
-            <p > <span class="btn py-2 px-3 btn-outline-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+          <div class="dropdown">
+            <button class=" btn py-2 px-3 btn-success rounded-pill dropdown-toggle" id="statusDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" cursor: pointer; font-family: 'Michroma', sans-serif;">
+              <span class="statusButton"><%= order.status %></span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="statusDropdown" style=" cursor: pointer;">
+              <% const statuses = ['Processing', 'Out of Delivery', 'Cancelled' ,'Delivered']; %>
+              <% statuses.forEach(status => { %>
+                <a class="dropdown-item" onclick="changeStatus('<%= status %>')"><%= status %></a>
+              <% }); %>
+            </div>
+          </div>
         <% } else if (order.status === 'Out of Delivery') { %>
-            <p > <span class="btn py-2 px-3 btn-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
-        <% } else { %>
-            <p><span  class="btn py-2 px-3 btn-danger rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
-        <% } %></div>
+          <div class="dropdown">
+            <button class=" btn py-2 px-3 btn-info rounded-pill dropdown-toggle" id="statusDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" cursor: pointer; font-family: 'Michroma', sans-serif;">
+              <span class="statusButton"><%= order.status %></span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="statusDropdown" style=" cursor: pointer;">
+              <% const statuses = ['Shipped', 'Processing', 'Cancelled' ,'Delivered']; %>
+              <% statuses.forEach(status => { %>
+                <a class="dropdown-item" onclick="changeStatus('<%= status %>')"><%= status %></a>
+              <% }); %>
+            </div>
+          </div>
+        <% } else if(order.status === 'Cancelled') { %>
+          <div class="dropdown">
+            <button class=" btn py-2 px-3 btn-danger rounded-pill dropdown-toggle" id="statusDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" cursor: pointer; font-family: 'Michroma', sans-serif;">
+              <span class="statusButton"><%= order.status %></span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="statusDropdown" style=" cursor: pointer;">
+              <% const statuses = ['Shipped', 'Out of Delivery', 'Processing' ,'Delivered']; %>
+              <% statuses.forEach(status => { %>
+                <a class="dropdown-item" onclick="changeStatus('<%= status %>')"><%= status %></a>
+              <% }); %>
+            </div>
+          </div>
+        <% } else {%>
+          <div class="dropdown">
+            <button class=" btn py-2 px-3 btn-dark rounded-pill dropdown-toggle" id="statusDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style=" cursor: pointer; font-family: 'Michroma', sans-serif;">
+              <span class="statusButton"><%= order.status %></span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="statusDropdown" style=" cursor: pointer;">
+              <% const statuses = ['Shipped', 'Out of Delivery', 'Cancelled' ,'Delivered' , 'Processing']; %>
+              <% statuses.forEach(status => { %>
+                <a class="dropdown-item" onclick="changeStatus('<%= status %>')"><%= status %></a>
+              <% }); %>
+            </div>
+          </div>
+        <%}%>
+        </div>
 
 
     <div class="container mb-3 mt-2" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 370px;">
@@ -58,7 +110,7 @@
             <tbody>
               <tr>
                 <th scope="row"><h6 style="font-family: 'Michroma', sans-serif; ">Purchaser :</h6></th>
-                <td style="text-transform: capitalize;"><%= user.name %></td>
+                <td style="text-transform: capitalize;"><%= user?.name %></td>
               </tr>
               <tr>
               <tr>
@@ -86,12 +138,17 @@
                   <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
                   <td>Order Cancelled</td>
                 </tr>
-                <%}else {%>
+                <%}else if (order.status==='Delivered'){%>
                   <tr>
                     <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
-                    <td><%= new Date(order.createdAt.getTime() + 5*24*60*60*1000) %></td>
+                    <td>Order Delivered</td>
                   </tr>
-                  <%}%>
+                  <%}else {%>
+                    <tr>
+                      <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
+                      <td><%= new Date(order.createdAt.getTime() + 5*24*60*60*1000) %></td>
+                    </tr>
+                    <%}%>
               <%var offer=parseInt(order.offer)%>
               <%if(offer){%>
                 <%var discount=(order.payment.amount*offer/100)%>
@@ -110,7 +167,9 @@
               </tr>
             </tbody>
           </table>
-    </div>
+          <div class="d-flex justify-content-end"><a class="btn btn-danger rounded-pill me-2" href="/admin/editOrders?id=<%=order._id%>">edit</a>
+            <a id="<%=order._id%>"  class="btn btn-danger rounded-pill py-2 px-3 deleteButton">Delete Order</a></div>
+        </div>
 
     <div class="container mb-3" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 400px;">
         <table class="table table-dark">
@@ -145,6 +204,9 @@
           </table>
     </div>
 
+
+    <% if (locals?.user){%>
+      
     <div class="container mb-1" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 400px;">
       <table class="table table-dark">
           <h4 class="text-center text-light" style="font-family: 'Michroma', sans-serif;">Purchaser Details</h4>
@@ -186,25 +248,49 @@
           </tbody>
         </table>
   </div>
+      <%}else{%>
+        <h4 class="text-center text-dark" style="font-family: 'Michroma', sans-serif;">User Not Found!</h4>
+        <%}%>
 </div>
 
 <div class="container">
-  <%if(order.isCancelled){%>
+  <%if(order.isCancelled||order.status==="Delivered"){%>
     <div class="d-flex mb-5" style="justify-content: end;">
-      <button class="btn btn-danger py-2 px-3" disabled>Order Cancelled</button>
+      <button class="btn btn-danger cancelButton py-2 px-3" disabled hidden>Order Cancelled</button>
   </div>
     <%}else {%>
       <div class="d-flex mb-5" style="justify-content: end;">
         <a id="<%=order._id%>"  class="btn btn-danger py-2 px-3 cancelButton">Cancel Order</a>
     </div>
       <%}%>
-    
 </div>
 
 <script>
+    const statusButton=document.querySelector('.statusButton');
+  
+  function changeStatus(newStatus) {
+      const id='<%=order._id%>';
+      fetch('/admin/change?id='+id+'&status='+newStatus)
+      .then(response => response.json())
+      .then(data => {
+          if(data.changed){
+            showSuccess("Status Changed To "+newStatus)
+            statusButton.textContent=newStatus;
+            location.reload();
+          }else{
+            showAlert("no")
+          }
+      })
+      .catch(error => {
+        console.error('Error updating status:', error);
+      });
+    }
+
   document.addEventListener('DOMContentLoaded',()=>{
     const cancelButton=document.querySelector('.cancelButton');
+    const deleteButton=document.querySelector('.deleteButton');
     const orderId=cancelButton.id;
+    const id=deleteButton.id;
     cancelButton.addEventListener('click',()=>{
       fetch('/user/cancelOrder?id='+orderId).then(response=>response.json()).then(
         data=>{
@@ -212,9 +298,13 @@
             showAlert("Product Is Already Shipped")
           }else if(data.cancelled==='already'){
             showAlert("Already Cancelled!")
-          }else if (data.cancelled===true){
+          }else if(data.cancelled==='Out of Delivery'){
+            showAlert("Product Is Out Of Delivery")
+          }
+          else if (data.cancelled===true){
             cancelButton.textContent="Order Cancelled"
             showSuccess("Order Cancelled")
+            location.reload()
           }else{
             showAlert("Not Cancelled Error Ocurred")
           }
@@ -223,8 +313,24 @@
         console.log("Order cancellation error"+err);
       })
     })
-  })
+    deleteButton.addEventListener('click',()=>{
+      fetch('/admin/deleteOrder?id='+id).then(response=>response.json()).then(
+        data=>{
+          if(data.deleted===true){
+            showAlert("Deleting Order")
+            window.location.href = '/admin/allOrders';
+          }else{
+            showAlert("Not deleted Error Ocurred")
+          }
+        }
+      ).catch(err=>{
+        console.log("Order cancellation error"+err);
+      })
+    })
 
+
+  })
+  
 
 </script>
 

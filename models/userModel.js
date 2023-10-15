@@ -77,7 +77,21 @@ const userSchema = mongoose.Schema(
     next();
 });
 
+userSchema.methods.updateCartPrices = async function () {
+  let cart = this.cart;
+  cart.totalPrice = 0;
 
+  for (const item of cart.items) {
+    const product = await mongoose.model('product').findById(item.product);
+    console.log(product)
+    if (product) {
+      item.price = product.price;
+      cart.totalPrice += item.quantity * item.price;
+    }
+  }
+
+  await this.save();
+};
 
 
 

@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt=require("jsonwebtoken");
 const productModel = require("../models/productModel");
 const addressModel = require("../models/addressModel");
+const bannerModel = require("../models/bannerModel");
 const mail=require('../public/jsFiles/mail');
 const storage=require("../public/jsFiles/storage")
 
@@ -101,7 +102,7 @@ const loginValidation=async (req,res)=>{
   try{
     const email=req.body.email.trim()
     const user=await userModel.findOne({email:email})
-    if(user.validated===false){
+    if(user?.validated===false){
       res.redirect("/user/loginWithOtp?email="+user.email)
       return;
     }
@@ -116,7 +117,7 @@ const loginValidation=async (req,res)=>{
         req.session._id=user._id;
         res.cookie("userToken",token,{
           httpOnly: true,
-          expires: new Date(Date.now() + 10 * 60 * 60 * 1000), 
+          expires:new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), 
         })
         res.redirect("/user/home/")
       }
@@ -131,27 +132,32 @@ catch(err){
 }
 
 const loginValidationOtp=async (req,res)=>{
-    const {otp,email}=await userModel.findOne({email:req.body.email})
-    console.log(otp)
-    const enteredOtp=await req.body.otp.trim();
-    console.log(enteredOtp)
-        if(req.body.counter){
-              if(otp===enteredOtp){
-                const user=await userModel.findOne({email:req.body.email})
-                await userModel.findByIdAndUpdate(user._id,{otp:'',validated:true})
-                const token = jwt.sign({ name: user.name }, process.env.JWT_SECRET, { expiresIn: "1d" });
-                    req.session.user=user.email;
-                    res.cookie("userToken",token,{
-                      httpOnly: true,
-                      expires: new Date(Date.now() + 10 * 60 * 60 * 1000), 
-                    })
-                    res.redirect("/user/home/")
-              }else{
-                res.render('verifyOtpLogin',{email:req.body.email,message:"Invalid Otp!!"});
-              }
-          }else {
-            res.render('verifyOtpLogin',{email:email,message:"Otp Expired!!"});
-          }
+    try {
+      const {otp,email}=await userModel.findOne({email:req.body.email})
+      // console.log(otp)
+      const enteredOtp=await req.body.otp.trim();
+      // console.log(enteredOtp)
+          if(req.body.counter){
+                if(otp===enteredOtp){
+                  const user=await userModel.findOne({email:req.body.email})
+                  await userModel.findByIdAndUpdate(user._id,{otp:'',validated:true})
+                  const token = jwt.sign({ name: user.name }, process.env.JWT_SECRET, { expiresIn: "730d" });
+                      req.session.user=user.email;
+                      req.session._id=user._id;
+                      res.cookie("userToken",token,{
+                        httpOnly: true,
+                        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), 
+                      })
+                      res.redirect("/user/home/")
+                }else{
+                  res.render('verifyOtpLogin',{email:req.body.email,message:"Invalid Otp!!"});
+                }
+            }else {
+              res.render('verifyOtpLogin',{email:email,message:"Otp Expired!!"});
+            }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
 const allUsers=async (req,res)=>{
@@ -257,7 +263,7 @@ const sendOtp=async (req,res,next)=>{
     const generatedOTP = mail.generateOTP();
     await mail.sendOTPByEmail(email, generatedOTP);
     await userModel.findByIdAndUpdate(req.user._id,{otp:generatedOTP});
-    console.log("Done");
+    // console.log("Done");
     req.user=req.user;
     next()
     // res.render('verifyOtp',{email});
@@ -309,7 +315,7 @@ const verifyEmailShowAgain=async (req, res) => {
 const verifyEmail=async (req,res)=>{
     try{
         const {_id,otp,email}=await userModel.findOne({email:req.body.email});
-          console.log("reg")
+          // console.log("reg")
           const enteredOtp=await req.body.otp.trim();
             if(req.body.counter){
               if(otp===enteredOtp){
@@ -336,12 +342,13 @@ const homePage=async (req,res)=>{
     req.session.checkOut=false;
     req.session.orderConfirmed=false;
     const products=await productModel.find({deleted:false}).limit(9);
-    const products2=await productModel.find({deleted:false}).skip(17);
+    const products2=await productModel.find({deleted:false}).skip(16);
+    const {images}=await bannerModel.findOne()
     const message=req.query.message;
     if(message){
-      res.render('homePage',{products,products2,messageS:message})
+      res.render('homePage',{products,products2,messageS:message,banners:images})
     }else{
-      res.render('homePage',{products,products2})
+      res.render('homePage',{products,products2,banners:images})
     }
   }catch(err){
     res.end(err)
@@ -367,7 +374,7 @@ const productDetailed = async (req, res) => {
     const userId=req.session._id;
     const user = await userModel.findOne({ _id:userId });
     const wish = user?.wishlist.includes(id);
-    console.log(wish);
+    // console.log(wish);
     const product = await productModel.findOne({
       $and: [
         { _id: id },
@@ -473,7 +480,8 @@ const changePasswordShow=async(req,res)=>{
   try {
     res.render("changePassword")
   } catch (error) {
-    
+    console.log(error);
+    res.send("Error while changing password"+error)
   }
 }
 const checkPasswordNewPassword=async(req,res)=>{
@@ -496,7 +504,8 @@ const checkPasswordNewPassword=async(req,res)=>{
         return res.json({valid:"new"})
     }
   } catch (error) {
-    
+    console.log(error);
+    res.send("Error while changing password"+error)
   }
 }
 
@@ -504,7 +513,8 @@ const addAddressShow=async(req,res)=>{
   try {
     res.render('addAddress');
   } catch (error) {
-    
+    console.log(error);
+    res.send("Error while adding new address"+error)
   }
 }
 
@@ -592,7 +602,7 @@ const editAddress = async (req, res) => {
     const contactNew = req.query.contact;
     const addressNew = req.query.address;
     const addressId = req.query.addressId;
-    console.log(req.query.country);
+    // console.log(req.query.country);
     const id = req.session._id;
     const user = await userModel.findOne({ _id: id });
     const anyUserByContact = await userModel.findOne({ contact: contactNew });

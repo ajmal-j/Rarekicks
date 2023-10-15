@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const increaseButton = document.querySelectorAll('.increaseQuantity');
     const decreaseButton = document.querySelectorAll('.decreaseQuantity');
     const totalButton = document.querySelector('.totalPrice');
-    const wishCount = document.querySelector(".wishlistCount");
-    const cartCount = document.querySelector(".cartCount");
+    const wishCount = document.getElementById("wishCount");
+    const cartCount = document.getElementById("cartCount");
 
     const selectedSizes = {};
 
@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const sizeValue = button.getAttribute('data-size');
             const productId = button.getAttribute('data-product-id');
 
-            // Initialize the selectedSizes object for the product if not already initialized
+        
             selectedSizes[productId] = selectedSizes[productId] || {};
 
-            // Deselect all size buttons for the specific product
+           
             const productSizeButtons = document.querySelectorAll(`[data-product-id="${productId}"]`);
             productSizeButtons.forEach(otherButton => {
                 if (otherButton.classList.contains('selected-size')) {
@@ -89,9 +89,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (data.added) {
                         showSuccess("Added To Wishlist");
                         button.innerHTML = '<i class="bi bi-heart-fill ms-2" style="font-size:40px;"></i>';
+                        let count=parseInt(wishCount.innerText)
+                        count++;
+                        wishCount.innerText=count
                     } else {
                         button.innerHTML = '<i class="bi bi-heart ms-2" style="font-size:40px;"></i>';
                         showAlert("Removed from Wishlist");
+                        let count=parseInt(wishCount.innerText)
+                                        count--;
+                                        wishCount.innerText=count
                     }
                 })
                 .catch(error => {
@@ -120,16 +126,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     else if (data.added) {
                         showSuccess("Added To Cart");
                         button.firstElementChild.textContent = 'Added To Cart';
-                        const cartCountValue=parseInt(cartCount.textContent);
-                        console.log(cartCountValue);
-                        // cartCountValue++;
-                        // cartCount.textContent=cartCountValue;
+                        let cartCountValue=parseInt(cartCount.textContent);
+                        cartCountValue++;
+                        cartCount.textContent=cartCountValue;
                     } else {
                         button.firstElementChild.textContent = 'Removed from Cart';
-                        const cartCountValue=parseInt(cartCount.textContent);
-                        console.log(cartCountValue);
-                        // cartCountValue--;
-                        // cartCount.textContent=cartCountValue;
+                        let cartCountValue=parseInt(cartCount.textContent);
+                        cartCountValue--;
+                        cartCount.textContent=cartCountValue;
                         showAlert("Removed from Cart");
                     }
                 })
@@ -155,6 +159,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         button.firstElementChild.textContent = 'removed';
                         showAlert("Removed from Cart");
                         totalButton.innerText=data.total;
+                        let cartCountValue=parseInt(cartCount.textContent);
+                        cartCountValue--;
+                        cartCount.textContent=cartCountValue;
                         location.reload()
                     }
                 })

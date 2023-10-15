@@ -1,0 +1,379 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
+<link rel="stylesheet" type="text/css" href="../../public/css/profile.css">
+
+</head>
+<body>
+    <%- include('../layout/adminHeader') %>
+
+    <div class="container mt-5 mb-5" style="display: flex; justify-content: center;">
+        <div class="mainCont" style="max-width: 700px; border: 1px solid black; border-radius: 20px; padding: 20px;">
+            <h4 class="text-center mb-3 text-dark" style="font-family: 'Michroma', sans-serif;">Edit Order</h4>
+            <form class="row g-3 needs-validation"  novalidate enctype="application/form-data" >
+
+                <div class="col-md-12">
+                    <label for="validationCustom01" class="form-label">Order Id</label>
+                    <input type="text" class="form-control" id="validationCustom01" value="<%= order._id%>" disabled>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="validationCustom01" class="form-label">Ordered Date</label>
+                    <input type="text" class="form-control" id="validationCustom01"   required value="<%= order.createdAt %>" disabled>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="validationCustom02" class="form-label">Total Amount (with out discount)</label>
+                    <input type="number" class="form-control" id="validationCustom02" name="totalAmount" required value="<%= order.products.totalPrice %>" disabled>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                
+                <div class="col-md-12">
+                    <label for="validationCustom02" class="form-label">Payment Method</label>
+                    <input type="tel" class="form-control" id="validationCustom02" name="paymentMethod" required value="<%= order.payment.method %>">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="validationCustom02" class="form-label">Paid Amount</label>
+                    <input type="number" class="form-control" id="validationCustom02" name="paidAmount" required value="<%= order.payment.amount %>">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="validationCustom02" class="form-label">Offer</label>
+                    <input type="text" class="form-control" id="validationCustom02" name="offer"  required value="<%= order.offer %>">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+    
+                <div class="col-md-12">
+                    <label for="validationCustom02" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="validationCustom02" name="name" required value="<%= order.address.name %>">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+    
+                <div class="col-md-12">
+                    <label for="validationCustomUsername" class="form-label">Country</label>
+                    <div class="input-group has-validation">
+                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="country" required value="<%= order.address.country %>">
+                        <div class="invalid-feedback">
+                            Enter A Valid Country!
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col-md-12">
+                    <label for="validationCustomUsername" class="form-label">Landmark</label>
+                    <div class="input-group has-validation">
+                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="landmark" required value="<%= order.address.landmark %>">
+                        <div class="invalid-feedback">
+                            Enter A Valid Landmark!
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="validationCustomUsername" class="form-label">Address</label>
+                    <div class="input-group has-validation">
+                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="address" required value="<%= order.address.address %>">
+                        <div class="invalid-feedback">
+                            Enter A Valid Address!
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="validationCustomUsername" class="form-label">Town/City</label>
+                    <div class="input-group has-validation">
+                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="city" required value="<%=order.address.city %>">
+                        <div class="invalid-feedback">
+                            Enter A Valid City!
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="validationCustomUsername" class="form-label">State</label>
+                    <div class="input-group has-validation">
+                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="state" required value="<%=order.address.state %>">
+                        <div class="invalid-feedback">
+                            Enter A Valid State!
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="validationCustomUsername" class="form-label">Contact</label>
+                    <div class="input-group has-validation">
+                        <input type="number" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="contact" required value="<%=order.address.contact %>">
+                        <div class="invalid-feedback">
+                            Enter A Valid Contact!
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="validationCustom02" class="form-label">Pin Code</label>
+                    <input type="text" class="form-control" id="validationCustom02" name="pinCode" pattern="[0-9]{5,10}" title="Please enter a valid pin code (5-10 digits)" required value="<%= order.address.pinCode %>">
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="validationCustomUsername" class="form-label">Email</label>
+                    <div class="input-group has-validation">
+                        <input type="email" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email" required value="<%=order.address.email %>">
+                        <div class="invalid-feedback">
+                            Enter A Valid Email!
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="save">
+                    <div class="d-flex" style="justify-content: center;">
+                        <button class="btn btn-dark rounded-pill mt-2" id="startCountdownButton" type="submit">Save</button>
+                    </div>
+                </div>
+            </form>
+    
+        </div>
+        <div class="alertKey">
+            <% if(locals.message) { %>
+              <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+                data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
+                <strong><%= message %></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              
+              <script>
+                // Add this script to your page
+                setTimeout(function() {
+                  document.getElementById('success-alert').style.display = 'none';
+                }, 2000); // Adjust the delay (in milliseconds) as needed
+              </script>
+            <% } %>      
+          </div>
+          <div class="alertKey">
+            <% if(locals.messageS) { %>
+              <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+                data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
+                <strong><%= messageS %></strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+          
+              <script>
+                // Add this script to your page
+                setTimeout(function() {
+                  document.getElementById('success-alert').style.display = 'none';
+                }, 2000); // Adjust the delay (in milliseconds) as needed
+              </script>
+            <% } %>      
+          </div>
+    </div>
+    
+
+        <script>
+            (() => {
+                'use strict';
+            
+                const forms = document.querySelectorAll('.needs-validation');
+            
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', async event => {
+                        event.preventDefault();
+            
+                        const contactInput = form.querySelector('[name="contact"]');
+                        const contactValue = contactInput.value.trim();
+            
+                        const nameInput = form.querySelector('[name="name"]');
+                        const nameValue = nameInput.value.trim();
+            
+                        const pinCodeInput = form.querySelector('[name="pinCode"]');
+                        const pinCodeValue = pinCodeInput.value.trim();
+            
+                        const addressInput = form.querySelector('[name="address"]');
+                        const addressValue = addressInput.value.trim();
+            
+                        const landmarkInput = form.querySelector('[name="landmark"]');
+                        const landmarkValue = landmarkInput.value.trim();
+            
+                        const cityInput = form.querySelector('[name="city"]');
+                        const cityValue = cityInput.value.trim();
+                        
+                        const emailInput = form.querySelector('[name="email"]');
+                        const emailValue = emailInput.value.trim();
+                        
+                        const stateInput = form.querySelector('[name="state"]');
+                        const stateValue = stateInput.value.trim();
+                        
+                        const countryInput = form.querySelector('[name="country"]');
+                        const countryValue = countryInput.value.trim();
+                        
+                        const paymentMethodInput = form.querySelector('[name="paymentMethod"]');
+                        const paymentMethodValue = paymentMethodInput.value.trim();
+                        
+                        const offerInput = form.querySelector('[name="offer"]');
+                        const offerValue = offerInput.value.trim();
+                        
+                        const totalAmountInput = form.querySelector('[name="totalAmount"]');
+                        const totalAmountValue = totalAmountInput.value.trim();
+
+                        const paidAmountInput = form.querySelector('[name="paidAmount"]');
+                        const paidAmountValue = paidAmountInput.value.trim();
+
+                        const orderId="<%=order._id%>";
+
+                        console.log("bcvcutgueef");
+
+                        if (nameValue === '') {
+                            showAlert('Please enter a name.');
+                            return;
+                        }
+
+                        if (/\d/.test(nameValue)) {
+                        showAlert('Name cannot contain numbers.');
+                        return;
+                        }
+
+                        if (contactValue === '' || isNaN(contactValue) || contactValue.length >12 || contactValue.length < 10) {
+                            showAlert('Please enter a valid contact number.');
+                            return;
+                        }
+
+
+                        if (pinCodeValue === '' || pinCodeValue.length < 5 || pinCodeValue.length > 10 || isNaN(pinCodeValue)) {
+                            showAlert('Please enter a valid pin code.');
+                            return;
+                        }
+                        if (stateValue === '' || stateValue.length < 2 || stateValue.length > 20 || !isNaN(stateValue)) {
+                            showAlert('Please enter a valid State.');
+                            return;
+                        }
+                        
+                        if (countryValue === '' || countryValue.length < 2 || countryValue.length > 20 || !isNaN(countryValue)) {
+                            showAlert('Please enter a valid Country.');
+                            return;
+                        }
+
+                        if (paymentMethodValue === '' || paymentMethodValue.length < 5 || paymentMethodValue.length > 20 || !isNaN(paymentMethodValue)) {
+                            showAlert('Please enter a valid payment method.');
+                            return;
+                        }
+                        
+                        if (paidAmountValue === '' || paidAmountValue.length < 1 || paidAmountValue.length > 20 || isNaN(paidAmountValue)) {
+                            showAlert('Please enter a valid amount.');
+                            return;
+                        }
+                        
+                        if (totalAmountValue === '' || totalAmountValue.length < 1 || totalAmountValue.length > 20 || isNaN(totalAmountValue)) {
+                            showAlert('Please enter a valid amount.');
+                            return;
+                        }
+                        if (offerValue === ''  || offerValue.length > 20 ) {
+                            showAlert('Please enter a valid offer input.');
+                            return;
+                        }
+
+
+                        if (addressValue === '') {
+                            showAlert('Please enter an address.');
+                            return;
+                        }
+
+                        if (/^\d+$/.test(addressValue)) {
+                            showAlert('Address cannot contain only numbers.');
+                            return;
+                        }
+                        if (addressValue.length>200) {
+                            showAlert('Address is too long.');
+                            return;
+                        }
+
+
+                        if (emailValue === '') {
+                            showAlert('Please enter a valid email.');
+                            return;
+                        }
+
+                        if (/^\d+$/.test(emailValue)) {
+                            showAlert('Email cannot contain only numbers.');
+                            return;
+                        }
+                        if (emailValue.length>200) {
+                            showAlert('Email is too long.');
+                            return;
+                        }
+
+                        if (landmarkValue === '') {
+                            showAlert('Please enter a landmark.');
+                            return;
+                        }
+                        if (/^\d+$/.test(landmarkValue)) {
+                        showAlert('Landmark cannot contain only numbers.');
+                        return;
+                        }
+                        if (landmarkValue.length>200) {
+                        showAlert('Landmark is too long.');
+                        return;
+                        }
+                        if (cityValue === '') {
+                            showAlert('Please enter a city.');
+                            return;
+                        }
+                        if (/^\d+$/.test(cityValue)) {
+                        showAlert('City cannot contain only numbers.');
+                        return;
+                        }
+                        if (cityValue.length>2000) {
+                        showAlert('City cannot contain only numbers.');
+                        return;
+                        }
+                        if (!form.checkValidity()) {
+                            return;
+                        }
+            
+                        try {
+                            const response = await fetch(`/admin/editOrder?country=${countryValue}&state=${stateValue}&name=${nameValue}&contact=${contactValue}&pinCode=${pinCodeValue}&address=${addressValue}&landmark=${landmarkValue}&city=${cityValue}&offer=${offerValue}&totalAmount=${totalAmountValue}&paidAmount=${paidAmountValue}&orderId=${orderId}&paymentMethod=${paymentMethodValue}&email=${emailValue}`);
+                            const data = await response.json();
+                            console.log(data)
+                            if(data.updated===true){
+                                showAlert("Updating")
+                                clearForm(form);
+                                window.location.href = '/admin/orderDetailed?id='+orderId;
+                            }else if(data.updated===false){
+                                showAlert("Not Updated")
+                            }else{
+                                showAlert("Error")
+                            }
+                        } catch (error) {
+                            showAlert("blalalalalalalala")
+                            console.error("Error checking category:", error);
+                        }
+                    });
+            
+                    form.classList.add('was-validated');
+                }, false);
+            })();
+            function clearForm(form) {
+                // Iterate through all form elements
+                Array.from(form.elements).forEach(element => {
+                    // Check if the element is an input field and not a submit button
+                    if (element.tagName === 'INPUT' && element.type !== 'submit') {
+                        element.value = ''; // Reset the value
+                    }
+                });
+
+                // Reset any additional form properties if needed
+                form.reset();
+            }
+
+            </script>
+            
+<%- include('../layout/footer')-%>
+<%- include('../layout/footerHTML')-%>

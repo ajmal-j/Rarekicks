@@ -96,7 +96,7 @@ const placeOrderCOD=async (req,res)=>{
         });
         newOrder.save()
             .then(async savedOrder => {
-                console.log('Order saved successfully:', savedOrder);
+                // console.log('Order saved successfully:', savedOrder);
                 for (const item of savedOrder.products.items) {
                     const productId = item.product._id;
                     const orderedQuantity = item.quantity;
@@ -123,6 +123,31 @@ const placeOrderCOD=async (req,res)=>{
         console.log(error);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 const orderShow = async (req, res) => {
@@ -170,7 +195,6 @@ const allOrders = async (req, res) => {
             })
         );
 
-        console.log(orders.length);
         // res.json({ orders });
         const completeOrders=orders.reverse();
         res.render("allOrders",{allOrders:completeOrders})
@@ -187,10 +211,15 @@ const orderDetailedAdmin = async (req, res) => {
             path: 'products.items.product',
         });
         const user=await userModel.findById(order.userId)
-        const total=await orderModel.find({userId:user._id})
-        res.render("orderDetailed", { order,user,total:total.length });
+        if(user){
+            const total=await orderModel.find({userId:user._id})
+            res.render("orderDetailed", { order,user,total:total.length });
+        }
+        res.render("orderDetailed", { order,user,total:0 });
+
     } catch (error) {
         console.log(error);
+        res.redirect('/admin/allOrders')
     }
 };
 
@@ -199,11 +228,15 @@ const cancelOrder=async (req,res)=>{
     try {
         const orderId=await req.query.id;
         const {isCancelled,status}=await orderModel.findById({_id:orderId});
-        if(status==="shipped"){
+        if(status==="Shipped"){
            return res.json({cancelled:"shipped"})
-        }else if(isCancelled===true){
+        }else if(status==="Out of Delivery"){
+            return res.json({cancelled:"Out of Delivery"})
+        }
+        else if(isCancelled===true){
             return res.json({cancelled:"already"})
-        }else{
+        }
+        else{
             await orderModel.findByIdAndUpdate({_id:orderId},{isCancelled:true,status:"cancelled"});
             return res.json({cancelled:true})
         }
@@ -214,6 +247,80 @@ const cancelOrder=async (req,res)=>{
 }
 
 
+
+const changeStatus=async (req,res)=>{
+    try {
+        const id=req.query.id;
+        const status=req.query.status;
+        if(status==='Cancelled'){
+            await orderModel.findByIdAndUpdate(id,{status:status,isCancelled:true})
+            return res.json({changed:true})
+        }else{
+            await orderModel.findByIdAndUpdate(id,{status:status,isCancelled:false})
+            return res.json({changed:true})
+        }
+    } catch (error) {
+        console.log(error);
+        return res.json({changed:false})
+    }
+}
+
+const deleteOrder=async (req,res)=>{
+    try {
+        const id=req.query.id;
+        await orderModel.findByIdAndDelete(id);
+        return res.json({deleted:true})
+    } catch (error) {
+        console.log(error);
+       return res.json({deleted:false})
+    }
+}
+
+
+const editOrdersShow=async (req,res)=>{
+    try {
+        const orderId=req.query.id;
+        const order=await orderModel.findOne({_id:orderId})
+        res.render("editOrders",{order})
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const editOrders=async(req,res)=>{
+    try {
+        const orderId=req.query.orderId;
+        const address = {
+            country: req.query.country,
+            state: req.query.state,
+            name: req.query.name,
+            contact: req.query.contact,
+            pinCode: req.query.pinCode,
+            address: req.query.address,
+            landmark: req.query.landmark,
+            city: req.query.city,
+            email: req.query.email,
+        };
+        const payment = {
+            method: req.query.paymentMethod,
+            amount: req.query.paidAmount,
+        };
+        const details={
+            address:address,
+            offer:req.query.offer,
+            payment:payment
+        }
+        if(!orderId||!details||!payment||!address){
+            return res.json({updated:false})
+        }
+        await orderModel.findByIdAndUpdate(orderId,details)
+        res.json({updated:true})
+    } catch (error) {
+        console.log(error);
+        res.json({updated:false})
+    }
+}
+
 module.exports={
     placeOrderCOD,
     testData,
@@ -221,5 +328,9 @@ module.exports={
     orderDetailed,
     allOrders,
     orderDetailedAdmin,
-    cancelOrder
+    cancelOrder,
+    changeStatus,
+    deleteOrder,
+    editOrdersShow,
+    editOrders
 }

@@ -9,6 +9,7 @@ const productModel = require("../models/productModel");
 const product = require("../models/productModel");
 const categoryModel = require("../models/categoryModel");
 const userModel = require("../models/userModel");
+const bannerModel= require("../models/bannerModel");
 const { json } = require("express");
 const { type } = require("os");
 
@@ -25,7 +26,7 @@ function deleteImage(filename) {
             console.log(`Image ${filename} not found.`);
         }
     }catch(err){
-        res.send(err)
+        console.log(err)
     }
 }
 
@@ -146,12 +147,14 @@ const editProduct=async (req,res)=>{
     const id=await req.query.id
     const product=await Product.findById(id)
     const imagesFull = product.images;
-    const imageD = Array.isArray(req.body.selectedImages) ? req.body.selectedImages : [];
+    const imageD = Array.isArray(req.body.selectedImages) ? req.body.selectedImages : [req.body.selectedImages];
     const images = req.files ? req.files.map(file => file.filename) : [];
     const lastImage = imagesFull.filter(value => !imageD.includes(value));
     const combinedArray = images.concat(lastImage);
+    const sizes= Array.isArray(req.body.sizes) ? req.body.sizes : [req.body.sizes];
+    const updateSize=sizes[0]===undefined?[]:sizes;
             try {
-                if(imageD){
+                if(imageD[0]!==undefined){
                     deleteImages(imageD)
                 }
                 if(images){
@@ -162,11 +165,15 @@ const editProduct=async (req,res)=>{
                     category:req.body.category,
                     description:req.body.description.trim(),
                     brand:req.body.brand,
-                    sizes:req.body.sizes,
+                    sizes:updateSize,
                     images:combinedArray,
                     }
                     await Product.findByIdAndUpdate(id,details)
-                    res.redirect("/admin/home")
+                    const users = await userModel.find();
+                    for (const user of users) {
+                    await user.updateCartPrices();
+                    }
+                    res.redirect("/admin/home?messageS=Updated")
                 }else{
                     const details={
                         name:req.body.name.trim(),
@@ -175,14 +182,20 @@ const editProduct=async (req,res)=>{
                         category:req.body.category,
                         description:req.body.description.trim(),
                         brand:req.body.brand,
+                        sizes:updateSize,
                         images:lastImage,
                         }
-                    await Product.findByIdAndUpdate(id,details)
-                    res.redirect("/admin/home")
+                        await Product.findByIdAndUpdate(id,details)
+                        const users = await userModel.find();
+                        for (const user of users) {
+                        await user.updateCartPrices();
+                        }
+                    res.redirect("/admin/home?messageS=Updated")
                 }
             }
             catch(err){
                 const id=await req.query.id.trim();
+                console.log(err);
                 const product=await Product.findOne({_id:id}).populate("category")
                 const categories=await category.find({ name: { $ne:product?.category?.name  } })
                 res.render("editProduct",{product,categories,message:"Product Already Exist!"})
@@ -329,7 +342,7 @@ const editCategoryShow = async (req, res) => {
 const editCategory= async (req, res) => {
     const id= await req.query.id
     const name=req.body.name.toLowerCase().trim()
-    console.log(name)
+    // console.log(name)
     const check= await categoryModel.findOne({name:name});
     const self= await categoryModel.findById(id);
     if(!check){
@@ -368,7 +381,7 @@ const deleteCategory= async (req, res) => {
     // res.render('category',{categories});
 };
 
-const deleteCategoryCompletly= async (req, res) => {
+const deleteCategoryCompletely= async (req, res) => {
     const id= await req.query.id
     await category.findByIdAndDelete(id)
     // const categories=await categoryModel.find()
@@ -475,7 +488,7 @@ const wishlist=async(req,res)=>{
     try {
         const userId=await req.session._id;
         const productId=req.query.id;
-        console.log(productId);
+        // console.log(productId);
         const user=await userModel.findById(userId);
         const userWishlist=user.wishlist
         if(user){
@@ -512,7 +525,7 @@ const wishlistShow=async(req,res)=>{
                     });
         if(user){
             const products=user.wishlist;
-            console.log(products);
+            // console.log(products);
             res.render("wishlist",{products})
         }else{
             res.render("wishlist",{products:false,message:"Error while Loading wishlist!"})
@@ -594,7 +607,7 @@ const removeFromCart=async(req,res)=>{
         // Call save to trigger pre save middleware
         updatedUser = await updatedUser.save();
 
-        console.log(updatedUser)
+        // console.log(updatedUser)
         return res.json({removed:false,total:updatedUser.cart.totalPrice})
         // res.render("cart",{products:updatedUser.cart.items})
     } catch (error) {
@@ -737,6 +750,26 @@ const getCount=async(req,res)=>{
   }
 
 
+const updateBanner=async (req,res)=>{
+    try {
+        const image =await req.files.map(file => file.filename);
+        const banner=await bannerModel.findOne()
+        const existingImages=banner.images;
+        const images=existingImages.concat(image)
+        const imageD = Array.isArray(req.body.selectedImages) ? req.body.selectedImages : [req.body.selectedImages];
+        const lastImage = images.filter(value => !imageD.includes(value));
+        if(imageD[0]!==undefined){
+            deleteImages(imageD)
+        }
+        console.log(images);
+        await bannerModel.updateOne({images:lastImage})
+        res.redirect('/admin/home?messageS=Updating Banner')
+    } catch (error) {
+        console.log(error);
+        res.send("error")
+    }
+}
+
 module.exports=
     {addProduct,
     insertProduct,
@@ -755,7 +788,7 @@ module.exports=
     getBrand,
     brandBased,
     brandBasedAdmin,
-    deleteCategoryCompletly,
+    deleteCategoryCompletely,
     deleteProductCompletely,
     getProductAdmin,
     checkCategory,
@@ -766,5 +799,6 @@ module.exports=
     removeFromCart,
     decreaseQuantity,
     increaseQuantity,
-    getCount
+    getCount,
+    updateBanner
 }  

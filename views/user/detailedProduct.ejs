@@ -71,6 +71,7 @@
             </div>
             <script>
                         const addToWishlist = document.getElementById('addToWishlist');
+                        const wishCount = document.getElementById('wishCount');
 
                         addToWishlist.addEventListener('click', (e) => {
                             e.preventDefault();
@@ -82,9 +83,15 @@
                                     if (data.added) {
                                         showSuccess("Added To Wishlist");
                                         addToWishlist.innerHTML='<i class="bi bi-heart-fill ms-2" style="font-size:40px;"></i>';
+                                        let count=parseInt(wishCount.innerText)
+                                        count++;
+                                        wishCount.innerText=count
                                     } else {
                                         addToWishlist.innerHTML='<i class="bi bi-heart ms-2" style="font-size:40px;"></i>';
                                         showAlert("Removed from Wishlist");
+                                        let count=parseInt(wishCount.innerText)
+                                        count--;
+                                        wishCount.innerText=count
                                     }
                                 })
                                 .catch(error => {

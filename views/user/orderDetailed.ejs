@@ -14,7 +14,7 @@
         <h4 class="text-center text-dark" style="font-family: 'Michroma', sans-serif;">Products</h4>
     </div>
     <div class="d-flex" style="justify-content: space-around; flex-wrap: wrap;">
-        <% order.products.items.forEach(item => { %>
+        <% order?.products?.items.forEach(item => { %>
     <div class="card mb-3" style="max-width: 540px; border: 1px solid black ; border-radius: 10px;">
     <div class="row g-0">
       <div class="col-md-4" style=" border-radius: 10px; display: flex; justify-content: center; align-items: center; background-color: rgb(246, 246, 246);">
@@ -35,18 +35,20 @@
     
 
     <div class="d-flex mt-3" style="justify-content: center;">
-      <% if (order.status === 'Processing') { %>
+      <% if (locals?.order?.status === 'Processing') { %>
         <p > <span class="btn py-2 px-3 btn-warning rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
     <% } else if (order.status === 'Shipped') { %>
-        <p > <span class="btn py-2 px-3 btn-outline-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+        <p > <span class="btn py-2 px-3 btn-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
     <% } else if (order.status === 'Out of Delivery') { %>
         <p > <span class="btn py-2 px-3 btn-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
-    <% } else { %>
-        <p><span  class="btn py-2 px-3 btn-danger rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+    <% } else if (order.status === 'Delivered') { %>
+        <p><span  class="btn py-2 px-3 btn-dark rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+    <% }else { %>
+      <p><span  class="btn py-2 px-3 btn-danger rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
     <% } %></div>
 
 
-    <div class="container mb-5 mt-2" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 370px;">
+    <div class="container mb-4 mt-2" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 370px;">
         <table class="table table-hover table-dark">
             <h4 class="text-center text-light" style="font-family: 'Michroma', sans-serif;">Order Details</h4>
             <thead>
@@ -77,12 +79,17 @@
                   <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
                   <td>Order Cancelled</td>
                 </tr>
-                <%}else {%>
+                <%}else if (order.status==='Delivered'){%>
                   <tr>
                     <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
-                    <td><%= new Date(order.createdAt.getTime() + 5*24*60*60*1000) %></td>
+                    <td>Order Delivered</td>
                   </tr>
-                  <%}%>
+                  <%}else {%>
+                    <tr>
+                      <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
+                      <td><%= new Date(order.createdAt.getTime() + 5*24*60*60*1000) %></td>
+                    </tr>
+                    <%}%>
               <%var offer=parseInt(order.offer)%>
               <%if(offer){%>
                 <%var discount=(order.payment.amount*offer/100)%>
@@ -138,9 +145,9 @@
 </div>
 
 <div class="container">
-    <%if(order.isCancelled){%>
+    <%if(order.isCancelled||order.status==="Delivered"){%>
       <div class="d-flex mb-5" style="justify-content: end;">
-        <button class="btn btn-danger py-2 px-3" disabled>Order Cancelled</button>
+        <button class="btn btn-warning py-2 px-3" disabled>Order <%=order.status%></button>
     </div>
       <%}else {%>
         <div class="d-flex mb-5" style="justify-content: end;">
@@ -159,7 +166,10 @@
         data=>{
           if(data.cancelled==='shipped'){
             showAlert("Product Is Already Shipped")
-          }else if(data.cancelled==='already'){
+          }else if(data.cancelled==='Out of Delivery'){
+            showAlert("Product Is Out Of Delivery")
+          }
+          else if(data.cancelled==='already'){
             showAlert("Already Cancelled!")
           }else if (data.cancelled===true){
             cancelButton.textContent="Order Cancelled"

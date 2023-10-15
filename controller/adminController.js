@@ -1,11 +1,13 @@
 const adminModel=require("../models/adminModel")
+const bannerModel=require("../models/bannerModel")
 const getProduct=require("../models/productModel")
 const jwt=require("jsonwebtoken");
 
 const home= async(req,res)=>{
     try {
       const products=await req.products;
-        res.render("adminHome",{products:products,search:false});
+      const messageS=req.query.messageS
+        res.render("adminHome",{products:products,search:false,messageS});
       } catch (error) {
         console.log(error.message);
       }
@@ -57,10 +59,22 @@ const logout=async (req,res)=>{
   }
 }
 
+const bannerManagement=async(req,res)=>{
+  try {
+    const {images}=await bannerModel.findOne()
+    console.log(images);
+    res.render('bannerManagement',{images:images})
+  } catch (error) {
+    console.log(error);
+    res.send("banner")
+  }
+}
+
   module.exports={
     login,
     loginValidation,
     home,
     loginToken,
     logout,
+    bannerManagement
   }

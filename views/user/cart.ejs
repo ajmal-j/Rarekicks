@@ -33,14 +33,16 @@
                         <div class="col-12 col-lg-7 pt-1 pb-1 ps-4 pe-2 " style="background-color: #ffffff; border-radius: 20px;">
                             <a href="/user/productDetailed?id=<%=product?._id%>" style="text-decoration: none; color: black;">
                             <h4 class="card-title mb-1 mt-1 text-center" style="font-family: 'Michroma', sans-serif;"><u><%= product?.name %></u></h4></a>
-                            <div class="d-flex align-item-center ms-3 me-3 mt-5" style="flex-wrap: wrap; justify-content: center;" >
+                            <div class="d-flex align-item-center ms-3 me-3 mt-5" style="flex-wrap: wrap; justify-content: space-between;">
                                 <a class="btn btn-dark rounded-pill text-center text-danger ps-4 pe-4 pt-2" style="font-size: 30px; letter-spacing: 2px;">&#x20B9 <%= product?.price %>.00</a>
-                               
-                                <div class="d-flex pe-2 ms-auto" style="justify-content: end; ">
-                                <a href="" id="<%=_id%>" class="removeFromCart btn btn-dark rounded-pill  d-flex justify-content-center pt-2 pb-2 ">
-                                    <h3 class="text-danger" style="font-family: 'Michroma', sans-serif;">remove</h3>
-                                </a></div>
+                            
+                                <div class="d-flex pe-1 " style="justify-content: flex-end; margin-top: 10px;">
+                                    <a href="" id="<%=_id%>" class="removeFromCart btn btn-dark rounded-pill  d-flex justify-content-center pt-2 pb-2 ">
+                                        <h3 class="text-danger" style="font-family: 'Michroma', sans-serif;">remove</h3>
+                                    </a>
+                                </div>
                             </div>
+                            
                             <div class="container mt-2">
                                 
                                 <div class="btn-group mb-2 d-flex" style="justify-content: space-evenly; row-gap: 10px; column-gap: 20px; flex-wrap: wrap;" role="group" aria-label="Sizes">
@@ -121,10 +123,33 @@
 <div class="alertKey">
     <% if(locals.message) { %>
       <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-        data-bs-autohide="true" data-bs-delay="2000"> 
+        data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
         <strong><%= message %></strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
+      
+      <script>
+        // Add this script to your page
+        setTimeout(function() {
+          document.getElementById('success-alert').style.display = 'none';
+        }, 2000); // Adjust the delay (in milliseconds) as needed
+      </script>
+    <% } %>      
+  </div>
+  <div class="alertKey">
+    <% if(locals.messageS) { %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+        data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
+        <strong><%= messageS %></strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+  
+      <script>
+        // Add this script to your page
+        setTimeout(function() {
+          document.getElementById('success-alert').style.display = 'none';
+        }, 2000); // Adjust the delay (in milliseconds) as needed
+      </script>
     <% } %>      
   </div>
         
