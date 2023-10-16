@@ -3,7 +3,7 @@ function showAlert(message) {
     alertDiv.className = 'alert';
     alertDiv.style.position = 'fixed';
     alertDiv.style.right = '20px';
-    alertDiv.style.zIndex = '2000';
+    alertDiv.style.zIndex = '2000000000000000';
     alertDiv.style.top = '60px';
     alertDiv.style.opacity = '0';
     alertDiv.style.transition = 'opacity 0.5s ease-in-out';
@@ -36,7 +36,7 @@ function showSuccess(message) {
     alertDiv.className = 'alert';
     alertDiv.style.position = 'fixed';
     alertDiv.style.right = '20px';
-    alertDiv.style.zIndex = '2000';
+    alertDiv.style.zIndex = '200000000000000000000000';
     alertDiv.style.top = '60px';
     alertDiv.style.opacity = '0';
     alertDiv.style.transition = 'opacity 0.5s ease-in-out';

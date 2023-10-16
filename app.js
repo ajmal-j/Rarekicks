@@ -54,6 +54,15 @@ app.get("/admin",(req,res)=>{
     res.redirect("/admin/home")
 })
 
+
+
+
+
+
+
+
+
+
 app.get("*",(req,res)=>{
     res.status(404).render('user/404',{url:req.url})
 })

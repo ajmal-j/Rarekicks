@@ -62,6 +62,9 @@ userRouter.get('/updateDefaultAddress',JWT.checkJwt,userController.updateDefault
 
 userRouter.get('/checkOut',JWT.checkJwt,userController.checkOutShow)
 userRouter.get('/placeOrderCOD',JWT.checkJwt,orderController.placeOrderCOD)
+userRouter.post('/placeOrderOnline',JWT.checkJwt,orderController.placeOrderOnline)
+userRouter.post('/confirmOrderOnline',JWT.checkJwt,orderController.confirmOrderOnline)
+userRouter.get('/showConfirmOrder',JWT.checkJwt,orderController.showConfirmOrder)
 userRouter.get('/placeOrder',JWT.checkJwt,orderController.testData)
 userRouter.get('/orders',JWT.checkJwt,orderController.orderShow)
 userRouter.get('/orderDetailed',JWT.checkJwt,orderController.orderDetailed)

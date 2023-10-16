@@ -668,6 +668,7 @@ const checkOutShow=async(req,res)=>{
     const id=req.session._id;
     req.session.checkOut=id;
     const address=await addressModel.findOne({userId:id,default:true})
+    const {email}=await userModel.findOne({_id:id})
     const user = await userModel
                 .findOne({ _id: id })
                 .populate({
@@ -675,21 +676,12 @@ const checkOutShow=async(req,res)=>{
                     model: 'product',
                 });
     const total=user.cart.totalPrice;
-    let grandTotal;
 
-    if (total >= 20000) {
-      grandTotal = total * 0.8; 
-    } else if (total >= 15000) {
-      grandTotal = total * 0.85; 
-    } else {
-      grandTotal = total;
-    }
-    const grand=grandTotal.toFixed(2);
     const message=req.query.message;
     if(message){
-      res.render("checkOut",{address,products:user.cart.items,total:total,grandTotal:grand,message})
+      res.render("checkOut",{address,email,products:user.cart.items,total:total,grandTotal:total,message})
     }else{
-      res.render("checkOut",{address,products:user.cart.items,total:total,grandTotal:grand})
+      res.render("checkOut",{address,email,products:user.cart.items,total:total,grandTotal:total})
     }
   } catch (error) {
     console.log(error);

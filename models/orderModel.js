@@ -9,6 +9,10 @@ const orderSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    isPaid: {
+      type: Boolean,
+      default: false,
+    },
     payment:{
       method:{
         type:String,
@@ -104,6 +108,12 @@ const orderSchema = new mongoose.Schema({
       },
       createdAt: {
         type: Date,
+      },
+      paymentId: {
+        type: String,
+      },
+      orderId: {
+        type:String
       }
   
     }

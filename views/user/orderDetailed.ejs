@@ -102,10 +102,17 @@
                   <td class="text-danger">&#x20B9  -<%= discount.toFixed(2) %></td>
                 </tr>
                 <%}%>
-              <tr>
-                <th scope="row"><h5  style="font-family: 'Michroma', sans-serif;">Total Paid:</h5></th>
-                <td class="text-danger"><h2>&#x20B9  <%= order.payment.amount.toFixed(2) %></h2></td>
-              </tr>
+              <%if(order.payment.method==="online payment"){%>
+                <tr>
+                  <th scope="row"><h5  style="font-family: 'Michroma', sans-serif;">Total Paid:</h5></th>
+                  <td class="text-danger"><h2>&#x20B9  <%= order.payment.amount.toFixed(2) %></h2></td>
+                </tr>
+                <%}else{%>
+                  <tr>
+                    <th scope="row"><h5  style="font-family: 'Michroma', sans-serif;">Total :</h5></th>
+                    <td class="text-danger"><h2>&#x20B9  <%= order.payment.amount.toFixed(2) %></h2></td>
+                  </tr>
+                  <%}%>
             </tbody>
           </table>
     </div>
