@@ -7,7 +7,7 @@
     <%- include('../layout/header') %>
 
     <div class="container mt-5 mb-5" style="display: flex; justify-content: center;">
-        <div class="mainCont" style="max-width: 700px; border: 1px solid black; border-radius: 20px; padding: 20px;">
+        <div class="mainCont" style="max-width: 700px; border: 1px solid black; border-radius: 20px; padding: 20px;"><h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Add Address</h3>
             <form class="row g-3 needs-validation" action="/user/redirect/" method="get" novalidate enctype="application/form-data" onsubmit="return validateForm()">
                 <div class="form-group col-md-12">
                     <label for="countrySelect">Select Country:</label>
@@ -188,6 +188,7 @@
                         const countryValue=countrySelect.value
                         if (countrySelect.value === '') {
                             showAlert('Please select a country.');
+                            form.classList.add('was-validated');
                             return false;
                         }
 
@@ -196,53 +197,64 @@
                         const stateValue=stateSelect.value;
                         if (stateSelect.value === '') {
                             showAlert('Please select a state.');
+                            form.classList.add('was-validated');
                             return false;
                         }
 
                         if (nameValue === '') {
                             showAlert('Please enter a name.');
+                            form.classList.add('was-validated');
                             return;
                         }
                         if (/\d/.test(nameValue)) {
                         showAlert('Name cannot contain numbers.');
+                            form.classList.add('was-validated');
                         return;
                         }
 
                         if (contactValue === '' || isNaN(contactValue)) {
                             showAlert('Please enter a valid contact number.');
+                            form.classList.add('was-validated');
                             return;
                         }
 
 
                         if (pinCodeValue === '' || pinCodeValue.length < 5 || pinCodeValue.length > 10) {
                             showAlert('Please enter a valid pin code.');
+                            form.classList.add('was-validated');
                             return;
                         }
 
                         if (addressValue === '') {
                             showAlert('Please enter an address.');
+                            form.classList.add('was-validated');
                             return;
                         }
 
                         if (/^\d+$/.test(addressValue)) {
                             showAlert('Address cannot contain only numbers.');
+                            form.classList.add('was-validated');
                             return;
                         }
 
                         if (landmarkValue === '') {
                             showAlert('Please enter a landmark.');
+                            form.classList.add('was-validated');
                             return;
                         }
                         if (/^\d+$/.test(landmarkValue)) {
                         showAlert('Landmark cannot contain only numbers.');
+                            form.classList.add('was-validated');
                         return;
                         }
                         if (cityValue === '') {
                             showAlert('Please enter a city.');
+                            form.classList.add('was-validated');
                             return;
                         }
                         if (/^\d+$/.test(cityValue)) {
                         showAlert('City cannot contain only numbers.');
+                            form.classList.add('was-validated');
                         return;
                         }
                         if (!form.checkValidity()) {
@@ -270,9 +282,7 @@
                             console.error("Error checking category:", error);
                         }
                     });
-            
-                    form.classList.add('was-validated');
-                    console.log('sdfgvsgfsgfdg');
+        
                 }, false);
             })();
             

@@ -54,6 +54,12 @@ adminRouter.get('/editOrders',JWT.checkJwtAdmin,orderController.editOrdersShow)
 adminRouter.get('/editOrder',JWT.checkJwtAdmin,orderController.editOrders)
 
 adminRouter.get('/bannerManagement',JWT.checkJwtAdmin,adminController.bannerManagement)
+adminRouter.get('/couponManagement',JWT.checkJwtAdmin,adminController.couponManagement)
+adminRouter.get('/addCoupon',JWT.checkJwtAdmin,adminController.addCoupon)
+adminRouter.get('/deleteCoupon',JWT.checkJwtAdmin,adminController.deleteCoupon)
+adminRouter.get('/hideCoupon',JWT.checkJwtAdmin,adminController.hideCoupon)
+adminRouter.get('/editCouponShow',JWT.checkJwtAdmin,adminController.editCouponShow)
+adminRouter.get('/editCoupon',JWT.checkJwtAdmin,adminController.editCoupon)
 adminRouter.post('/updateBanner',JWT.checkJwtAdmin,productController.upload.array('images',5),productController.updateBanner)
 
 module.exports=adminRouter

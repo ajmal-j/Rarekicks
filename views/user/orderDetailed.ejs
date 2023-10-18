@@ -92,7 +92,7 @@
                     <%}%>
               <%var offer=parseInt(order.offer)%>
               <%if(offer){%>
-                <%var discount=(order.payment.amount*offer/100)%>
+                <%var discount=(order.products.totalPrice*offer/100)%>
                 <tr>
                   <th scope="row"><h6  style="font-family: 'Michroma', sans-serif;">Total:</h5></th>
                     <td class="text-danger">&#x20B9  <%= (order.payment.amount+discount).toFixed(2) %></td>
@@ -180,6 +180,7 @@
             showAlert("Already Cancelled!")
           }else if (data.cancelled===true){
             cancelButton.textContent="Order Cancelled"
+            window.location.href="/user/orders"
             showSuccess("Order Cancelled")
           }else{
             showAlert("Not Cancelled Error Ocurred")

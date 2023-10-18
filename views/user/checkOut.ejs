@@ -125,6 +125,146 @@
     </div>
 
 
+    <div class="container mt-2 mb-3" style="display: flex; justify-content: center;">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form class="row g-3 needs-validation" action="" method="get" novalidate enctype="application/form-data" style="width: 20vw; min-width: 300px; border: 1px solid rgb(174, 174, 174); border-radius: 10px; padding: 10px 5px;">
+                    <div class="col-md-12">
+                        <label for="validationCustom01" class="form-label" style="font-family: 'Michroma', sans-serif;">Apply Coupon</label>
+                        <input type="text" class="form-control codeInput" id="validationCustom01 codeInput" name="code" required>
+                        <input type="hidden" name="appliedCoupon" id="appliedCoupon" class="appliedCoupon" value="">
+                        <div class="validSpan text-danger" id="validSpan">
+                            &nbsp;
+                        </div>
+                    </div>
+                    <div class="save">
+                        <div class="d-flex" style="justify-content: center; gap: 10px;">
+                            <button class="btn btn-dark rounded-pill " id="applyCouponButton" type="submit">Apply</button>
+                            <a class="btn btn-danger rounded-pill " id="clearCouponButton">Clear</a>
+                        </div>
+                    </div>
+                    <script>
+                        const clearCouponButton = document.getElementById('clearCouponButton');
+
+                        clearCouponButton.addEventListener("click", () => {
+                            const totalAmount = document.getElementById("totalAmount"); 
+                            const totalPrice = document.querySelector(".totalPrice"); 
+                            const codeInput = document.querySelector(".codeInput"); 
+                            const appliedCoupon = document.querySelector('.appliedCoupon');
+                            const validSpan= document.getElementById('validSpan')
+                            if(appliedCoupon.value){
+                                const tableBody = document.querySelector('.table tbody');
+                                tableBody.removeChild(tableBody.children[2]);
+                            }
+                            validSpan.innerHTML='&nbsp;';
+                            applyCouponButton.textContent="Apply"
+                            totalAmount.textContent = '<%=grandTotal%>';
+                            totalPrice.textContent ='<%=grandTotal%>' ;
+                            codeInput.value = '';
+                            appliedCoupon.value = '';
+                        });
+
+                    </script>
+                </form>
+                <script>
+                    (() => {
+                        'use strict';
+                        
+                        const forms = document.querySelectorAll('.needs-validation');
+                        const validSpan=document.querySelector(".validSpan");
+                        Array.from(forms).forEach(form => {
+                            form.addEventListener('submit', async event => {
+                                event.preventDefault();
+                                    const totalAmount=document.getElementById("totalAmount")
+                                    const totalPrice=document.getElementById("totalPrice")
+                                    const applyCouponButton=document.getElementById("applyCouponButton")
+                                    const codeInput = form.querySelector('[name="code"]');
+                                    const codeValue = codeInput.value.toUpperCase().trim();
+                                    const appliedCoupon=form.querySelector('[name="appliedCoupon"]');
+                                    const discountTable = document.getElementById('discountTable');
+                                    console.log(appliedCoupon.value)
+                                    if (codeValue === '' || !isNaN(codeValue) || codeValue.length > 15 || codeValue.length < 4) {
+                                        showAlert('Please enter a valid code.');
+                                        form.classList.add('was-validated'); // Add 'was-validated' class
+                                        return;
+                                    }
+
+                                    if (!form.checkValidity()) {
+                                        form.classList.add('was-validated'); // Add 'was-validated' class
+                                        return;
+                                    }
+
+                                    try {
+                                        const response = await fetch(`/user/addCoupon?code=${codeValue}`);
+                                        const data = await response.json();
+                                        if (data.added === "expired") {
+                                            showAlert('Coupon is expired!');
+                                            validSpan.textContent="Coupon Expired!"
+                                        } else if (data.added === "added") {
+                                            applyCouponButton.textContent="Applied"
+                                            const discount=data.discount.toFixed(2)
+                                            if(appliedCoupon.value){
+                                                const tableBody = document.querySelector('.table tbody');
+                                                tableBody.removeChild(tableBody.children[2]);
+                                            }
+                                            // Create a new row
+                                            const newRow = document.createElement('tr');
+
+                                            // Create the first cell (Discount)
+                                            const discountCell1 = document.createElement('td');
+                                            discountCell1.textContent = 'Discount'+' (' +data.discountPercentage+"%)";
+                                            discountCell1.style.fontWeight = 'bold';
+
+                                            // Create the second cell (Discount value)
+                                            const discountCell2 = document.createElement('td');
+                                            discountCell2.classList.add('ps-2');
+                                            discountCell2.textContent = '-₹ '+discount;
+
+                                            // Append cells to the new row
+                                            newRow.appendChild(discountCell1);
+                                            newRow.appendChild(discountCell2);
+
+                                            // Append the new row to the table body
+                                            const tableBody = document.querySelector('.table tbody');
+                                            tableBody.insertBefore(newRow, tableBody.children[2]); // Insert before the 3rd row
+                                            totalAmount.innerText=data.grandTotal.toFixed(2);
+                                            totalPrice.innerText=data.grandTotal.toFixed(2);
+                                            appliedCoupon.value=codeValue;
+                                            validSpan.innerHTML = '&nbsp;';
+                                            showSuccess('Coupon Applied!');
+                                        } else if (data.added === "not") {
+                                            applyCouponButton.textContent="Apply"
+                                            if(appliedCoupon.value){
+                                                const tableBody = document.querySelector('.table tbody');
+                                                tableBody.removeChild(tableBody.children[2]);
+                                            }
+                                            
+                                            appliedCoupon.value=""
+                                            totalAmount.innerText="<%=grandTotal%>"
+                                            totalPrice.innerText="<%=grandTotal%>"
+                                            validSpan.textContent="Not A Valid Coupon!"
+                                            showAlert('Not A Valid Coupon!');
+                                        } else if (data.added === false) {
+                                            applyCouponButton.textContent="Apply"
+                                            showSuccess('Not Added');
+                                        }
+                                    } catch (error) {
+                                        console.error("Error checking category:", error);
+                                    }
+                                });
+
+                                // Remove the 'was-validated' class from here
+                            });
+                        })();
+                        
+                </script>
+            </div>
+        </div>
+    </div>
+
+
+
+
 
     <div class="container">
         <div class="row" style="display: flex; justify-content: center;">
@@ -141,20 +281,8 @@
                 <tr>
                     <td>Price (<%= products?.length %> items)</td>
                     <td>₹ <%= total %></td>
-                </tr>
-            
-                <!-- <% if (total >= 20000) { %>
-                    <tr>
-                        <td style="font-weight: bold;">Discount</td>
-                        <td class="ps-2">-₹ <%= (total * 20 / 100).toFixed(2) %></td>
-                    </tr>
-                <% } else if (total >= 15000) { %>
-                    <tr>
-                        <td style="font-weight: bold;">Discount</td>
-                        <td class="ps-2">-₹ <%= (total * 10 / 100).toFixed(2) %></td>
-                    </tr>
-                <% } %> -->
-            
+                </tr id="discountTable">
+                    
                 <tr>
                     <td>Delivery Charges</td>
                     <td>(Free)</td>
@@ -162,7 +290,7 @@
             
                 <tr class="table-success" style="padding-top: 30px; font-size: 1.5em;">
                     <th>Total Amount</th>
-                    <th>₹ <%=grandTotal%></th>
+                    <th>₹ <span id="totalAmount"><%=grandTotal%></span></th>
                 </tr>
                 
             </tbody>
@@ -174,10 +302,10 @@
             <% if(locals.products.length!==0) { %>
                 <div class="container d-flex flex-wrap justify-content-center mt-5 mb-5" style="gap: 10px;">
                     <a  id="payNowButton" class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4" style="width: fit-content;">
-                        <h3 style="font-family: 'Michroma', sans-serif; margin-bottom: 5px;">Total : <span class="text-danger"> &#x20B9 </span><span  class="totalPrice" style="color: red; letter-spacing: 2px;"><%=locals?.grandTotal%></span><span style="color: red; letter-spacing: 2px;">.00</span></h3>
+                        <h3 style="font-family: 'Michroma', sans-serif; margin-bottom: 5px;">Total : <span class="text-danger"> &#x20B9 </span><span class="totalPrice" id="totalPrice" style="color: red; letter-spacing: 2px;"><%=locals?.grandTotal%></span><span style="color: red; letter-spacing: 2px;"></span></h3>
                         <h4 style="font-family: 'Michroma', sans-serif; margin: 0; border-top: 4px dashed rgb(205, 205, 205);">Pay Now</h4>
                     </a>
-                    <a href="/user/placeOrderCOD/" class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4" style="width: fit-content;">
+                    <a  class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4" style="width: fit-content;" id="placeOrderCOD">
                         <h3 style="font-family: 'Michroma', sans-serif; margin-bottom: 5px;">Cash On Delivery</h3>
                         <h4 style="font-family: 'Michroma', sans-serif; margin: 0; border-top: 4px dashed rgb(205, 205, 205);">Place Order</h4>
                     </a>
@@ -195,10 +323,34 @@
 
 
 <script>
+
     const payNowButton=document.getElementById('payNowButton');
+    const placeOrderCOD=document.getElementById('placeOrderCOD');
+
+
+
+    placeOrderCOD.addEventListener('click',async ()=>{
+        const appliedCoupon=document.getElementById('appliedCoupon');
+        try {
+            const response = await fetch(`/user/placeOrderCOD?code=${appliedCoupon.value}`);
+            const data = await response.json();
+            if(data.data===true){
+                showSuccess("Creating Order")
+                window.location.href = '/user/showConfirmOrder?id='+data.orderId;
+            }else{
+                showAlert("Order Not Created!")
+            }
+        } catch (error) {
+            
+        }
+    })
+
+
+
     payNowButton.addEventListener('click',()=>{
+        const appliedCoupon=document.getElementById('appliedCoupon');
         const settings = {
-                "url": "/user/placeOrderOnline",
+                "url": "/user/placeOrderOnline?code="+appliedCoupon.value,
                 "method": "POST",
                 "timeout": 0,
                 "headers": {
@@ -211,12 +363,13 @@
                 const orderId= response.orderId;
                 const keyId= response.keyId;
                 const razorpayorder=response.razorpayorder;
+                const userId=response.userId;
                 var options = {
                 "key": keyId, 
                 "amount": "<%=locals?.grandTotal%>",
                 "currency": "INR",
                 "name": "Rare Kicks",
-                "description": "Payment for the order ",
+                "description": "Payment for the order of <%= locals?.products.length%> items by the user "+userId,
                 "image": "../../public/images/kn (1).png",
                 "order_id": orderId,
                 "handler": function (response) {
@@ -227,7 +380,8 @@
                             paymentId: response.razorpay_payment_id,
                             orderId: response.razorpay_order_id,
                             signature: response.razorpay_signature,
-                            razorpayorder:razorpayorder
+                            razorpayorder:razorpayorder,
+                            code:appliedCoupon.value,
                         };
 
                         $.ajax({
@@ -272,6 +426,8 @@
             e.preventDefault();
             });
     })
+
+
 </script>
 
 

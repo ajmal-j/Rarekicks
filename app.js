@@ -69,7 +69,13 @@ app.get("*",(req,res)=>{
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).redirect('/user/home/');
+    try {
+        console.log("back");
+        res.status(500).redirect('back');        
+    } catch (error) {
+        console.log("home");
+        res.status(500).redirect('/user/home/');
+    }
 });
 
 app.listen(PORT,()=>{console.log(`Server running :http://localhost:${PORT}`)})

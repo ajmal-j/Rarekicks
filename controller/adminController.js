@@ -1,6 +1,7 @@
 const adminModel=require("../models/adminModel")
 const bannerModel=require("../models/bannerModel")
 const getProduct=require("../models/productModel")
+const couponModel=require("../models/couponModel")
 const jwt=require("jsonwebtoken");
 
 const home= async(req,res)=>{
@@ -70,11 +71,121 @@ const bannerManagement=async(req,res)=>{
   }
 }
 
-  module.exports={
-    login,
-    loginValidation,
-    home,
-    loginToken,
-    logout,
-    bannerManagement
+
+const couponManagement=async(req,res)=>{
+  try {
+    const coupons=await couponModel.find()
+    res.render('coupon',{coupons})
+  } catch (error) {
+    console.log(error);
+    res.send("Error")
   }
+}
+
+const addCoupon=async(req,res)=>{
+  try {
+    const {code,discount}=req.query;
+    const cod=code.toUpperCase().trim()
+    const disc=discount.toUpperCase().trim()
+    const exist = await couponModel.findOne({ $or: [{ code:cod }, {discountPercentage:disc }] });
+    if(exist){
+      return res.json({added:"exist"})
+    }
+    const data={
+      code:code,
+      discountPercentage:discount
+    }
+    const newCoupon = await couponModel.create(data);
+    console.log(newCoupon);
+    res.json({added:true})
+  } catch (error) {
+    console.log(error);
+    res.json({added:false})
+  }
+}
+
+
+const deleteCoupon=async(req,res)=>{
+  try {
+    const id=req.query.id;
+    await couponModel.findByIdAndDelete(id)
+    res.redirect("/admin/couponManagement/")
+  } catch (error) {
+    console.log(error);
+    res.send("Error")
+  }
+}
+
+
+const hideCoupon=async (req,res)=>{
+  try {
+    const id=req.query.id;
+    const {isActive}=await couponModel.findById(id)
+    if(isActive){
+      await couponModel.findByIdAndUpdate(id,{isActive:false})
+    }else{
+      await couponModel.findByIdAndUpdate(id,{isActive:true})
+    }
+    res.redirect("/admin/couponManagement/")
+  } catch (error) {
+    console.log(error);
+    res.send("error")
+  }
+}
+
+
+const editCouponShow=async (req,res)=>{
+  try {
+    const id=req.query.id;
+    const check=await couponModel.findById(id)
+    if(!check){
+      return res.redirect("/admin/couponManagement")
+    }else{
+      const {code,discountPercentage}=await couponModel.findOne({_id:id})
+      res.render('editCoupon',{code,discountPercentage,id})
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+const editCoupon = async (req, res) => {
+  try {
+    const { code, discount, id } = req.query;
+    const cod=code.toUpperCase().trim()
+    const disc=discount.toUpperCase().trim()
+    const existingCoupon = await couponModel.findOne({
+      $and: [{ _id: { $ne: id } }, { $or: [{ code:cod }, { discountPercentage: disc }] }],
+    });
+    if (existingCoupon) {
+      return res.json({ added: "exist" });
+    }
+
+    // Perform the update
+    await couponModel.findByIdAndUpdate(id, { code, discountPercentage: discount });
+
+    res.json({ added: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ added: false });
+  }
+};
+
+
+
+
+module.exports={
+  login,
+  loginValidation,
+  home,
+  loginToken,
+  logout,
+  bannerManagement,
+  couponManagement,
+  addCoupon,
+  deleteCoupon,
+  hideCoupon,
+  editCouponShow,
+  editCoupon
+}

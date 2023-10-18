@@ -69,6 +69,8 @@ userRouter.get('/placeOrder',JWT.checkJwt,orderController.testData)
 userRouter.get('/orders',JWT.checkJwt,orderController.orderShow)
 userRouter.get('/orderDetailed',JWT.checkJwt,orderController.orderDetailed)
 userRouter.get('/cancelOrder',JWT.checkJwt,orderController.cancelOrder)
+userRouter.get('/addCoupon',JWT.checkJwt,orderController.addCoupon)
+userRouter.get('/allCategories',JWT.checkJwt,productController.allCategories,userController.allProducts)
 
 
 

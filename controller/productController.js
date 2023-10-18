@@ -770,6 +770,24 @@ const updateBanner=async (req,res)=>{
     }
 }
 
+
+const allCategories=async (req,res,next)=>{
+    try {
+        const id=req.query.id;
+        const products = await productModel.find({$and:[{ category: { _id: id } },{deleted:false}]});
+        req.products=products;
+        const {name}=await categoryModel.findById(id)
+        req.brand=name.toUpperCase();
+        next()
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+
+
 module.exports=
     {addProduct,
     insertProduct,
@@ -800,5 +818,6 @@ module.exports=
     decreaseQuantity,
     increaseQuantity,
     getCount,
-    updateBanner
+    updateBanner,
+    allCategories
 }  

@@ -8,6 +8,7 @@ const mail=require('../public/jsFiles/mail');
 const storage=require("../public/jsFiles/storage")
 
 const { json } = require("express");
+const categoryModel = require("../models/categoryModel");
 
 const register= async(req,res)=>{
     try {
@@ -361,7 +362,8 @@ const allProducts=async (req,res)=>{
   try {
     const brand=await req.brand;
     const products=await req.products;
-    res.render("allProducts",{products,brand})
+    const categories=await categoryModel.find()
+    res.render("allProducts",{products,brand,categories})
   } catch (error) {
     res.end("Error")
   }

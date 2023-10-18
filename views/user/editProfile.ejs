@@ -9,7 +9,7 @@
     <div class="container mt-5 mb-5" style="display: flex; justify-content: center;">
         <div class="mainCont" style="max-width: 700px; border: 1px solid black; border-radius: 20px; padding: 20px;">
             <form class="row g-3 needs-validation" action="/user/editProfile/" method="post" novalidate enctype="application/form-data">
-                <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Edit User!</h3>
+                <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Edit Profile!</h3>
                 <div class="col-md-12">
                   <label for="validationCustom01" class="form-label">Name</label>
                   <input type="text" class="form-control" id="validationCustom01" value="<%=user.name%>" name="name" required>
@@ -88,21 +88,25 @@
             
                         if (/^\s*$/.test(nameValue)) {
                             showAlert('Name cannot be just spaces.');
+                            form.classList.add('was-validated');
                             return;
                         }
             
                         if (contactValue.length < 10||contactValue.length>12) {
                             showAlert('Contact number must be at least 10 digits And not more than 12 digits.');
+                            form.classList.add('was-validated');
                             return;
                         }
             
                         if (/^\s*$/.test(passwordValue)) {
                             showAlert('Password cannot be just spaces.');
+                            form.classList.add('was-validated');
                             return;
                         }
             
                         if (passwordValue.length < 8) {
                             showAlert('Password must be at least 8 characters.');
+                            form.classList.add('was-validated');
                             return;
                         }
             
@@ -135,7 +139,6 @@
                         }
                     });
             
-                    form.classList.add('was-validated');
                 }, false);
             })();
             function togglePassword() {

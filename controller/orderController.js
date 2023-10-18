@@ -1,9 +1,13 @@
 const userModel=require('../models/userModel')
 const productModel=require('../models/productModel')
 const addressModel=require('../models/addressModel');
+const couponModel=require('../models/couponModel');
 const orderModel = require('../models/orderModel');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
+
+
+
 const testData = async (req, res) => {
     try {
         console.log("yes");
@@ -50,25 +54,26 @@ const placeOrderCOD=async (req,res)=>{
         if(cart.totalPrice===0){
             return res.redirect('/user/home')
         }
-        // let grandTotal;
-        // let checkOutOffer;
-        // if (total >= 20000) {
-        // checkOutOffer='20%'
-        // grandTotal = total * 0.8; 
-        // } else if (total >= 15000) {
-        // checkOutOffer='15%'
-        // grandTotal = total * 0.85; 
-        // } else {
-        // checkOutOffer='None'
-        // grandTotal = total;
-        // }
+        const couponCode=req.query.code;
+        let discount=1;
+        let grandTotal=total;
+        let discountedPercentage="none";
+        if(couponCode){
+            const coupon=await couponModel?.findOne({code:couponCode})
+            if(coupon!==null){
+            discountedPercentage=coupon.discountPercentage
+            discount=coupon.discountPercentage/100;
+            grandTotal=total-(total*discount).toFixed(2)
+            }
+        }
+        
         const currentAddress=await addressModel.findOne({userId:userId,default:true})
         if(!currentAddress){
             return res.redirect('/user/checkOut?message=Please Add A Address')
         }
         const payment={
             method:'cash on delivery',
-            amount:total.toFixed(2),
+            amount:grandTotal,
         }
         const address={
             name:currentAddress.name,
@@ -87,12 +92,13 @@ const placeOrderCOD=async (req,res)=>{
             totalPrice:total
         }
 
-        // const offer=checkOutOffer;
+        const offer=discountedPercentage;
 
         const newOrder = new orderModel({
             userId: userId,
             payment: payment,
             address: address,
+            offer:offer,
             products: product,
         });
         newOrder.save()
@@ -113,7 +119,8 @@ const placeOrderCOD=async (req,res)=>{
 
                 await userModel.findByIdAndUpdate(userId, { $unset: { cart: 1 } });
                 req.session.orderConfirmed=true;
-                res.render('orderConfirmation',{products:order.products.items,total:total.toFixed(2)})
+                res.json({data:true,orderId:savedOrder._id})
+                // res.render('orderConfirmation',{products:order.products.items,total:total.toFixed(2)})
             })
             .catch(error => {
                 console.error('Error saving order:', error);
@@ -153,26 +160,25 @@ const placeOrderOnline=async (req,res)=>{
         if(cart.totalPrice===0){
             return res.redirect('/user/home')
         }
-        // let grandTotal;
-        // let checkOutOffer;
-        // if (total >= 20000) {
-        // checkOutOffer='20%'
-        // grandTotal = total * 0.8; 
-        // } else if (total >= 15000) {
-        // checkOutOffer='15%'
-        // grandTotal = total * 0.85; 
-        // } else {
-        // checkOutOffer='None'
-        // grandTotal = total;
-        // }
-
+        const couponCode=req.query.code;
+        let discount=1;
+        let grandTotal=total;
+        let discountedPercentage="none";
+        if(couponCode){
+            const coupon=await couponModel?.findOne({code:couponCode})
+            if(coupon!==null){
+            discountedPercentage=coupon.discountPercentage
+            discount=coupon.discountPercentage/100;
+            grandTotal=total-(total*discount).toFixed(2)
+            }
+        }
         const currentAddress=await addressModel.findOne({userId:userId,default:true})
         if(!currentAddress){
             return res.redirect('/user/checkOut?message=Please Add A Address')
         }
         const payment={
             method:'online payment',
-            amount:total.toFixed(2),
+            amount:grandTotal.toFixed(2),
         }
         const address={
             name:currentAddress.name,
@@ -209,12 +215,12 @@ const placeOrderOnline=async (req,res)=>{
                 currency: 'INR',
                 receipt: newOrder._id.toString()
             })
-            console.log(razorpayorder);
 
             res.json({
                 orderId: razorpayorder.id,
                 keyId: process.env.RAZOR_ID,
-                razorpayorder:JSON.stringify(razorpayorder)
+                razorpayorder:JSON.stringify(razorpayorder),
+                userId:userId
             });
 
     } catch (error) {
@@ -230,7 +236,7 @@ const confirmOrderOnline=async (req,res)=>{
         if(req.session.orderConfirmed){
             return res.redirect('/user/cart/')
         }
-        const {paymentId,orderId,signature,razorpayorder}=req.body
+        const {paymentId,orderId,signature,razorpayorder,code}=req.body
         const razorKeySecret = process.env.RAZOR_KEY_SECRET;
         const dataToHash = `${orderId}|${paymentId}`;
         const generated_signature  = crypto.createHmac('sha256', razorKeySecret).update(dataToHash).digest('hex');
@@ -242,22 +248,21 @@ const confirmOrderOnline=async (req,res)=>{
             if(cart.totalPrice===0){
                 return res.redirect('/user/home')
             }
-            // let grandTotal;
-            // let checkOutOffer;
-            // if (total >= 20000) {
-            // checkOutOffer='20%'
-            // grandTotal = total * 0.8; 
-            // } else if (total >= 15000) {
-            // checkOutOffer='15%'
-            // grandTotal = total * 0.85; 
-            // } else {
-            // checkOutOffer='None'
-            // grandTotal = total;
-            // }
+            let discount=1;
+            let grandTotal=total;
+            let discountedPercentage="none";
+            if(code){
+                const coupon=await couponModel?.findOne({code:code})
+                if(coupon!==null){
+                discountedPercentage=coupon.discountPercentage
+                discount=coupon.discountPercentage/100;
+                grandTotal=total-(total*discount).toFixed(2)
+                }
+            }
             const currentAddress=await addressModel.findOne({userId:userId,default:true})
             const payment={
                 method:'online payment',
-                amount:total.toFixed(2),
+                amount:grandTotal.toFixed(2),
             }
             const address={
                 name:currentAddress.name,
@@ -295,10 +300,10 @@ const confirmOrderOnline=async (req,res)=>{
                 payment: payment,
                 address: address,
                 products: product,
+                offer:discountedPercentage,
                 paymentDetails:paymentDetails,
                 isPaid:true
             });
-            console.log(onlineOrder);
 
             onlineOrder.save()
             .then(async savedOrder => {
@@ -327,16 +332,6 @@ const confirmOrderOnline=async (req,res)=>{
         res.status(500).json({backendResponse:false})
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -512,6 +507,28 @@ const editOrders=async(req,res)=>{
     }
 }
 
+const addCoupon=async (req,res)=>{
+    try {
+        const code=req.query.code
+        const id=req.session._id;
+        const coupon=await couponModel.findOne({code})
+        if(!coupon){
+            res.json({added:"not"})
+        }else if(coupon.isActive===false){
+            res.json({added:"expired"})
+        }else{
+            const user=await userModel.findById(id)
+            let total=user.cart.totalPrice;
+            const discount=total*(coupon.discountPercentage/100);
+            const grandTotal=total-(total*(coupon.discountPercentage/100)).toFixed(2)
+            return res.json({added:"added",grandTotal,discount,discountPercentage:coupon.discountPercentage})
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 module.exports={
     placeOrderCOD,
     testData,
@@ -526,5 +543,6 @@ module.exports={
     editOrders,
     placeOrderOnline,
     showConfirmOrder,
-    confirmOrderOnline
+    confirmOrderOnline,
+    addCoupon
 }
