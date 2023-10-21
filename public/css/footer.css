@@ -8,6 +8,8 @@
     background: linear-gradient(#2b2e2f,#414345) ;
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.641);
     border-top: 0.7px solid black;
+    /* border-top-left-radius:30px ;
+    border-top-right-radius:30px ; */
     color: white;
 }
 

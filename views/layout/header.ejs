@@ -10,7 +10,7 @@
         <div class="topHeader">
             <div><a class="left text-danger" href="/user/logout/" title="logout" style="display:flex; justify-content: center;"><i class="bi bi-box-arrow-left"></i></a></div>
             <div class="center text-center RARE" style=" text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.573);">
-                <a href="/user/home/" >RARE KICK'S</a>
+                <a href="/user/home/" class="RAREHEAD">RARE KICK'S</a>
             </div>
             <div class="right">
                 <div class="productCounter">
@@ -53,23 +53,30 @@
 
               <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel" style="overflow: visible;">
                 <div class="offcanvas-header">
-                  <i class="bi bi-person-circle" style="font-size: 60px;"></i>
-                  <h5 class="offcanvas-title" id="staticBackdropLabel">Hello <span class="userName capitalizeFirst"></span>!</h5>
+                  <h5 class="offcanvas-title" id="staticBackdropLabel">Hello <span class="userName capitalizeFirst"></span> !</h5>
                   <button type="button" class="btn-close" id="closeButton" data-bs-dismiss="offcanvas" aria-label="Close" style="font-size: 30px; margin: 10px;"></button>
                 </div>
                 <div class="offcanvas-body">
                   <div class="d-flex" style="flex-direction: column; justify-content: center; row-gap: 10px;">
                   <div>
-                    <a type="button" href="/user/profile" class="btn btn-dark d-flex justify-content-center" style=" text-decoration: none;">PROFILE MANAGEMENT</a>
+                    <a type="button" href="/user/profile" class="py-3 btn btn-dark d-flex justify-content-center" style=" text-decoration: none; align-items: center;"><i class="fa-regular fa-user me-3" style="font-size: 30px;"></i>PROFILE</a>
                   </div>
                   <div>
-                    <a type="button" href="/user/orders" class="btn btn-dark d-flex justify-content-center" style=" text-decoration: none;">ORDERS</a>
+                    <a type="button" href="/user/orders" class="py-3 btn btn-dark d-flex justify-content-center" style=" text-decoration: none; align-items: center;"><i class="fa-solid fa-truck-fast me-3" style="font-size: 30px;"></i>ORDERS</a>
                   </div>
-                    <div class="btn-group dropdown">
-                <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="btn-group dropdown">
+                <button type="button" class="py-3 btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     BRANDS
                 </button>
-                
+                <ul class="dropdown-menu bg-dark text-center p-4 " style="box-shadow: 4px 4px 8px rgba(255, 255, 255, 0.913);">
+                    <li class="text-center hover   pb-4 ps-3 pe-3"><a class="" style="text-decoration: none;" href="/user/brandBased/">All Brands</a></li>
+                    <li class="text-center hover  pb-4 ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=adidas">ADIDAS</a></li>
+                    <li class="text-center hover  pb-4 ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=reebok">REEBOK</a></li>
+                    <li class="text-center hover  pb-4 ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=jordan">JORDAN</a></li>
+                    <li class="text-center hover  pb-4 ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=asics">ASICS</a></li>
+                    <li class="text-center hover  pb-4 ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=crocs">CROCS</a></li>
+                    <li class="text-center hover  ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=converse">CONVERSE</a></li>
+                </ul>
               </div>
                   </div>
                 </div>
@@ -94,7 +101,7 @@
                             <button type="reset" class="btn border-dark-subtle" id="clearSearch" onclick="clearA()" style="background: white;">
                                 <i class="bi bi-x-lg"></i></button></div>
                         <% } %>
-                        <button class="btn btn-dark text-center rounded" type="submit" style="width: 100px; margin-left: 10px;">Search</button>
+                        <button class="btn btn-dark text-center rounded" type="submit" style="width: 50px; margin-left: 10px;"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
                 </form>
                </div>

@@ -1,31 +1,84 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
+<style>
+    .card {
+    position: relative;
+    overflow: hidden;
+}
 
+.overlay  {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover .overlay {
+    opacity: 1;
+    padding: 10px ;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.861); /* Adjust the background color and opacity as needed */
+}
+
+.overlay i {
+    color: #000000a4; /* Icon color */
+    font-size: 2rem; /* Icon size */
+    cursor: pointer;
+}
+
+</style>
 </head>
 <body>
     <%- include('../layout/header')-%>
     <div class="container" style="margin-top: 20px;">
         <div class="row" style="border: 1px solid black; border-radius: 20px; ">
-            <div class="col-12 col-lg-7 p-2 d-flex align-items-center">
+            <div class="col-12 col-xl-7 col-lg-12 p-2 d-flex align-items-center">
                 <div class="row g-2">
                     <% if (product?.images && product?.images.length === 1) { %>
-                        <div class="col-lg-12 col-12">
-                            <div class="card">
-                                <img src="../../public/productImages/<%= product.images[0] %>" class="card-img-top" alt="...">
+                        <div class="col-12">
+                            <div class="card position-relative">
+                                <img src="../../public/productImages/<%= product.images[0] %>" class="card-img-top" alt="..." style="width: 100%; height: auto;">
+                                <div class="overlay">
+                                    <i class="fa-solid fa-search-plus"></i>
+                                </div>
                             </div>
                         </div>
+                        
                     <% } else { %>
-                        <% product?.images?.forEach((image) => { %>
-                            <div class="col-lg-6 col-12">
+                        <% product?.images?.forEach((image, index) => { %>
+                            <div class="col-xl-6 col-lg-6 col-12">
                                 <div class="card">
-                                    <img src="../../public/productImages/<%= image %>" class="card-img-top" alt="...">
+                                    <!-- Add data-toggle and data-target attributes to the img element -->
+                                    <img src="../../public/productImages/<%= image %>" class="card-img-top" alt="..." data-toggle="modal" data-target="#imageModal<%= index %>">
+                                    <div class="overlay">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <!-- Modal -->
+                            <div class="modal fade" id="imageModal<%= index %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="display: flex; justify-content: end;">
+                                            <button type="button" class="btn btn-dark" data-dismiss="modal"><i class="fa-solid fa-xmark fs-3" style="color: #ffffff;"></i></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Display the image in the modal body -->
+                                            <img src="../../public/productImages/<%= image %>" class="img-fluid" alt="...">
+                                        </div>
+                                        
+                                    </div>
                                 </div>
                             </div>
                         <% }) %>
+                        
                     <% } %>
             </div>
         </div>
-            <div class="col-12 col-lg-5 pt-3 pb-2 ps-4 pe-2 " style="background-color: #D9D9D9; border-radius: 20px;" >
+            <div class="col-12 col-xl-5 col-lg-12 pt-3 pb-2 ps-4 pe-2 " style="background-color: #D9D9D9; border-radius: 20px;" >
                 <h3 class="card-title mb-2 mt-2 text-center" style=" font-family: 'Michroma', sans-serif;"><u><%= product?.name%></u></h3>
                 <div class="d-flex align-item-center mt-5">
                 <a class="btn btn-dark rounded-pill text-center text-danger ps-4 pe-4" style="font-size: 30px; letter-spacing: 2px;">&#x20B9 <%= product?.price%>.00
@@ -103,6 +156,88 @@
         </div>
     </div>
     </div>
+
+
+    <div class="container mt-5" style="border: 1px solid rgb(57, 57, 57) !important; border-radius: 5px; padding: 20px; font-family: 'Michroma', sans-serif; ">
+        <!-- Product Card -->
+        <div class="product-card" style="border: 1px solid rgb(68, 67, 67); background-color: rgba(255, 255, 255, 0.804);">
+            <div class="product-info">
+                <h5><i class="fa-regular fa-circle-user fs-1 me-2"></i> Ajmal</h5>
+                <p><b>Posted On : </b> October 20, 2023</p>
+                <p style="margin-top: -10px;"><b>Review : </b> A fantastic product with great features! Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique neque consectetur hic numquam dicta eligendi molestias eum vitae, accusamus ipsum consequuntur repellat quisquam illum error distinctio ullam natus ducimus harum.</p>
+            </div>
+            <div style="min-width: 240px; margin-left: 20px;">
+                <% const rating = 3; %>
+
+                <% for (let i = 0; i < 5; i++) { %>
+                <% if (i < rating) { %>
+                    <i class="fa-solid fa-star fs-3" style="color: gold;"></i>
+                <% } else { %>
+                    <i class="fa-regular fa-star fs-3" style="color: rgba(255, 217, 0, 0.787);"></i>
+                <% } %>
+                <% } %>
+
+            </div>
+        </div>
+        
+    
+        <!-- Button to Open Review Modal -->
+        <button type="button" class="btn btn-dark rounded-pill px-3 py-2 mt-2" data-toggle="modal" data-target="#reviewModal">
+            Add Review
+        </button>
+    
+        <!-- Review Modal -->
+        <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="background-color: black; color: white;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="returnModalLabel" style="font-family: 'Michroma', sans-serif;">Write Your Review!</h5>
+                        <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="bi bi-x-square-fill" style="font-size: 30px; color: white;"></i></span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Review Form -->
+                        <form>
+                            <div class="form-group">
+                                <label for="userReviewRating">Your Review Rating:</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="userReviewRating" id="rating1" value="1" required>
+                                    <label class="form-check-label" for="rating1">1 (Poor)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="userReviewRating" id="rating2" value="2" required>
+                                    <label class="form-check-label" for="rating2">2 (Fair)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="userReviewRating" id="rating3" value="3" required>
+                                    <label class="form-check-label" for="rating3">3 (Average)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="userReviewRating" id="rating4" value="4" required>
+                                    <label class="form-check-label" for="rating4">4 (Good)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="userReviewRating" id="rating5" value="5" required>
+                                    <label class="form-check-label" for="rating5">5 (Excellent)</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="userReview">Your Review:</label>
+                                <textarea class="form-control" id="userReview" rows="3" required></textarea>
+                            </div>
+                           <div style="display: flex; ">
+                            <button type="submit" class="btn ms-auto btn-warning rounded-pill px-3 py-2 mt-2">Submit Review</button>
+                           </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
     <div class="container Cont mt-5">
         <div class="responsive-container">
             <div class="info-box border border-dark ">

@@ -111,6 +111,28 @@ const getProduct=async(req,res,next)=>{
         res.json(err)
     }
 }
+const getProductByPage = async (req, res, next) => {
+    try {
+        const page = parseInt(req.query.page) || 0;
+        if(page<0){
+            return res.redirect('/user/allProducts/')
+        }
+        const total = await Product.countDocuments({});
+        const totalDocuments = Math.ceil(total / 6); 
+        const products = await Product.find({ deleted: false })
+            .skip(page * 6)
+            .limit(6)
+            .populate("category");
+
+        req.products = products;
+        req.page = page;
+        req.totalDocuments = totalDocuments;
+        next();
+    } catch (err) {
+        res.json(err);
+    }
+};
+
 const getBrand=async(req,res,next)=>{
     try {
         const branded=await req.query.brand;
@@ -794,6 +816,7 @@ module.exports=
     upload,
     getProduct,
     editProductShow,
+    getProductByPage,
     editProduct,
     deleteProduct,
     searchProduct,

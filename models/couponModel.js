@@ -21,6 +21,9 @@ const couponSchema = new mongoose.Schema({
         type: Number,
         default:0
     },
+    validUpTo:{
+        type:Date
+    },
     isActive: {
         type: Boolean,
         default: true,

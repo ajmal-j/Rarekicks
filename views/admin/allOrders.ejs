@@ -45,8 +45,8 @@
                       <% }); %>
                       
                     <td class="align-middle" style="text-align: center;">&#x20B9  <%= order.payment.amount %></td>
-                    <td class="align-middle" style="text-align: center;"><%= order._id %></td>
-                    <td class="align-middle" style="text-align: center;"><%= order.userId %></td>
+                    <td class="align-middle" style="text-align: center;"><%= order?.orderId %></td>
+                    <td class="align-middle" style="text-align: center;"><%= order?.userId %></td>
                     <td class="align-middle" style="text-align: center;">
                       <a href="/admin/orderDetailed?id=<%= order._id %>">
                       <% if (order.status === 'Processing') { %>

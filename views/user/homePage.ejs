@@ -5,7 +5,7 @@
 <body>
     <%- include('../layout/header')-%>
     <div class="container margineTop">
-        <h2 class="text-center mb-4" style="  font-family: 'Michroma', sans-serif;">Hei there!</h2>
+        <!-- <h2 class="text-center mb-4" style="  font-family: 'Michroma', sans-serif;">Hei there!</h2> -->
         <div class="row">
             <div class="col-12 imageContainer" id="imageContainer1">
                 <img src="../../public/images/fachry-zella-devandra-bNSdIkCBJOs-unsplash.jpg" class="img-fluid firstImage" alt="..." style="border-radius: 20px; border: 1px solid black;">
@@ -14,7 +14,8 @@
               <p>" Step into style with our latest arrivals! Explore our shoe store's freshest collection, featuring trendy designs, comfort, and quality that will keep you walking in confidence. Discover the perfect pair to elevate your every step ”</p>
             </div>
         </div>
-        <div class="col-12 mt-5 sideMain" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around;">
+        <h3 class="text-center mb-2 mt-4" style="  font-family: 'Michroma', sans-serif;">New Arrivals</h3>
+        <div class="col-12 sideMain" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around;">
             <% products2?.forEach((product, index) => {
                 if (index < 2) {
             %>

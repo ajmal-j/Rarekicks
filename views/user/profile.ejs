@@ -1,20 +1,123 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/profile.css">
+<style>
+  
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
 
+.profile-card {
+    border: 1px solid rgb(146, 146, 146);
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.02), 0 10px 10px rgba(0, 0, 0, 0.0);
+    overflow: hidden;
+    width: 80%;
+    max-width: 400px;
+}
+
+.headerC {
+    background-color: #000000;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    color: white;
+}
+
+.headerC::before,
+.headerC::after {
+    content: "";
+    background-color: #424242;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 2;
+}
+
+.headerC::before {
+    height: 200px;
+    width: 200px;
+    top: -60px;
+    left: -100px;
+}
+
+.headerC::after {
+    height: 100px;
+    width: 100px;
+    right: -20px;
+    bottom: -30px;
+}
+
+.header-summary {
+    display: flex;
+    flex-direction: column;
+    z-index: 3;
+    margin-left: 20px;
+}
+
+.summary-text {
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+}
+
+.summary-balance {
+    font-size: 1.5rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.8rem;
+}
+
+.content {
+    z-index: 4;
+    margin-top: 20px;
+}
+
+.card-item {
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-item span:first-child {
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-item span:last-child {
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.dollar {
+    color: #FFC168;
+}
+
+.transaction:hover {
+    box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+</style>
 </head>
 <body>
     <%- include('../layout/header') %>
     <div class="container mt-5"><h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Hello <%=user.name%>!</h3></div>
     <div class="container mt-2 mb-5" style="font-family: 'Michroma', sans-serif; border: 1px solid black; border-radius: 20px; padding: 10px;">
 
-        <div class="row mt-4">
+        <div class="row mt-4 ">
             <div class="col-12 col-sm-3 d-flex justify-content-center align-items-center">
                 <div style="border: 1px solid black; padding: 30px; border-radius: 20px;">
                     <i class="bi bi-person-circle display-1"></i>
                 </div>
             </div>
-            <div class="col-12 col-sm-9 d-flex" style="flex-direction: column; row-gap: 20px; font-family: 'Michroma', sans-serif;">
+            <div class="mt-2 col-12 col-sm-9 d-flex" style="flex-direction: column; row-gap: 20px; font-family: 'Michroma', sans-serif;">
                 <div class="d-flex" style="align-items: center; flex-wrap: wrap;">
                     <span class="btn btn-dark rounded" style="flex: 0 0 60px; min-width: 180px;"><h6>NAME </h6></span>
                     <span style="flex: 1; text-align: start; margin-left: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%=user.name%></span>
@@ -35,8 +138,47 @@
         <a href="/user/changePassword" style="text-decoration: none; color: white;"><button class="btn btn-dark pt-2 pb-2 ps-1 pe-1 mt-3">Change Password</button></div></a>
     </div>
 
+
+
+
+    <div class="container mb-2" style="font-family: 'Michroma', sans-serif;">
+        <h3 class="mb-4 mt-2 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;"><i class="fa-solid fa-wallet me-2" style="font-size: 30px;"></i>Wallet</h3>
+        <div class="profile-container">
+            <div class="profile-card">
+                <div class="headerC">
+                    <div class="header-summary">
+                        <div class="summary-text text-center mt-3">
+                            Wallet Balance
+                        </div>
+                        <div class="summary-balance text-center">
+                            &#8377; <%=user.wallet.balance||0%>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="content">
+                    <div class="card">
+                        <div class="upper-row">
+                            <div class="card-item">
+                                <span>Total</span>
+                                <span><%=user.wallet.total||0%> <span class="dollar">&#8377;</span></span>
+                            </div>
+                            <div class="card-item">
+                                <span>Used</span>
+                                <span><%=user.wallet.used||0%> <span class="dollar">&#8377;</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       </div>
+
+
+
+
     <div class="container mt-2 d-flex" style="align-items: center;">
-        <h3 class="mb-4 mt-2 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;">Address !</h3>
+        <h3 class="mb-4 mt-2 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;"><i class="fa-solid fa-location-dot me-2" style="font-size: 30px;"></i>Address !</h3>
         <a href="/user/addAddress/" style="text-decoration: none; color: black;">
         <h3 class="ms-3 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;">+</h3></a></div>
 

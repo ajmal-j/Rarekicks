@@ -2,7 +2,9 @@
     position: sticky;
     
     background: linear-gradient(#2b2e2f,#414345) ;
-
+    border-top: 0.7px solid black;
+    /* border-bottom-left-radius:30px ;
+    border-bottom-right-radius:30px ; */
     height: 160px;
     padding-bottom: 70px;
     box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.691);
@@ -143,6 +145,7 @@ h5 {
 .RARE{
     padding-left: 100px;
 }
+
 
 .right {
     display: flex;

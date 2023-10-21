@@ -132,7 +132,7 @@
               <tr>
               <tr>
                 <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Order ID:</h6></th>
-                <td><%= order._id %></td>
+                <td><%= order?.orderId %></td>
               </tr>
               <tr>
                 <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">User ID:</h6></th>
@@ -146,50 +146,84 @@
                 <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Offer Applied:</h6></th>
                 <td><%= order.offer %></td>
               </tr>
-              <tr>
-                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Order Date:</h6></th>
-                <td><%= order.createdAt %></td>
-              </tr>
-              <%if(order.isCancelled){%>
+              <%if(order?.offer!=="none"){%>
                 <tr>
-                  <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
-                  <td>Order Cancelled</td>
-                </tr>
-                <%}else if (order.status==='Delivered'){%>
-                  <tr>
-                    <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
-                    <td>Order Delivered</td>
-                  </tr>
-                  <%}else {%>
-                    <tr>
-                      <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
-                      <td><%= new Date(order.createdAt.getTime() + 5*24*60*60*1000) %></td>
-                    </tr>
-                    <%}%>
-              <%var offer=parseInt(order.offer)%>
-              <%if(offer){%>
-                <%var discount=(order.products.totalPrice*offer/100)%>
-                <tr>
-                  <th scope="row"><h6  style="font-family: 'Michroma', sans-serif;">Total:</h5></th>
-                    <td class="text-danger">&#x20B9  <%= (order.payment.amount+discount).toFixed(2) %></td>
-                  </tr>
-                <tr>
-                <th scope="row"><h6  style="font-family: 'Michroma', sans-serif;">Discount:</h5></th>
-                  <td class="text-danger">&#x20B9  -<%= discount.toFixed(2) %></td>
+                  <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Coupon Applied:</h6></th>
+                  <td><%= order?.couponApplied %></td>
                 </tr>
                 <%}%>
-                <%if(order.payment.method==="online payment"){%>
+                <tr>
+                  <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Order Date:</h6></th>
+                  <td><%= moment(order.createdAt).format('YYYY-MM-DD') %></td>
+                </tr>
+                <%if(order.isCancelled){%>
                   <tr>
-                    <th scope="row"><h5  style="font-family: 'Michroma', sans-serif;">Total Paid:</h5></th>
-                    <td class="text-danger"><h2>&#x20B9  <%= order.payment.amount.toFixed(2) %></h2></td>
+                    <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Cancelled On:</h6></th>
+                    <td><%=moment(order.cancelledDate).format('YYYY-MM-DD')%></td>
                   </tr>
-                  <%}else{%>
+                  <tr>
+                    <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Reason For cancellation:</h6></th>
+                    <td><%=order.reasonForCancellation%></td>
+                  </tr>
+                  <%}else if (order.status==='Delivered'){%>
                     <tr>
-                      <th scope="row"><h5  style="font-family: 'Michroma', sans-serif;">Total :</h5></th>
-                      <td class="text-danger"><h2>&#x20B9  <%= order.payment.amount.toFixed(2) %></h2></td>
+                      <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Delivered On:</h6></th>
+                      <td><%=moment(order.deliveredDate).format('YYYY-MM-DD')%></td>
                     </tr>
-                    <%}%>
-            </tbody>
+                    <%}else if(order.status==="Returned") {%>
+                      <tr>
+                        <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Returned On:</h6></th>
+                        <td><%= moment(order.returnedDate).format('YYYY-MM-DD')||"Orderer Returned"%></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Reason For Return:</h6></th>
+                        <td><%=order?.reasonForReturn%></td>
+                      </tr>
+                      <%}else {%>
+                        <tr>
+                          <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
+                          <td><%=moment( new Date(order.createdAt.getTime() + 5*24*60*60*1000) ).format('YYYY-MM-DD') %></td>
+                        </tr>
+                        <%}%>
+                    <%var offer=parseInt(order.offer)%>
+                    <%if(offer){%>
+                      <%var discount=(order.products.totalPrice*offer/100)%>
+                      <tr>
+                        <th scope="row"><h6  style="font-family: 'Michroma', sans-serif;">Total:</h5></th>
+                          <td class="text-danger">&#x20B9  <%= (order.payment.amount+discount).toFixed(2) %></td>
+                        </tr>
+                      <tr>
+                      <th scope="row"><h6  style="font-family: 'Michroma', sans-serif;">Discount:</h5></th>
+                        <td class="text-danger">&#x20B9  -<%= discount.toFixed(2) %></td>
+                      </tr>
+                      <%}%>
+                    <%if(order.payment.method==="online payment"){%>
+                      <tr>
+                        <th scope="row"><h6  style="font-family: 'Michroma', sans-serif;">Used From Wallet:</h6></th>
+                        <td class="text-danger"><h4>&#x20B9  <%= (locals?.order?.usedFromWallet)||0 %></h2></td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><h5  style="font-family: 'Michroma', sans-serif;">Total Paid:</h5></th>
+                        <td class="text-danger"><h2>&#x20B9  <%= order.payment.amount.toFixed(2) %></h2></td>
+                      </tr>
+                      <%}else{%>
+                        <tr>
+                          <th scope="row"><h6  style="font-family: 'Michroma', sans-serif;">Used From Wallet:</h6></th>
+                          <td class="text-danger"><h4>&#x20B9  <%= (locals?.order?.usedFromWallet)||0 %></h4></td>
+                        </tr>
+                        <%if(order.status==="Delivered"){%>
+                          <tr>
+                            <th scope="row"><h5  style="font-family: 'Michroma', sans-serif;">Paid Amount:</h5></th>
+                            <td class="text-danger"><h2>&#x20B9  <%= order.payment.amount.toFixed(2) %></h2></td>
+                          </tr>
+                          <%}else{%>
+                            <tr>
+                              <th scope="row"><h5  style="font-family: 'Michroma', sans-serif;">Payment Amount:</h5></th>
+                              <td class="text-danger"><h2>&#x20B9  <%= order.payment.amount.toFixed(2) %></h2></td>
+                            </tr>
+                            <%}%>
+                        <%}%>
+                  </tbody>
           </table>
           <div class="d-flex justify-content-end"><a class="btn btn-danger rounded-pill me-2" href="/admin/editOrders?id=<%=order._id%>">edit</a>
             <a id="<%=order._id%>"  class="btn btn-danger rounded-pill py-2 px-3 deleteButton">Delete Order</a></div>
@@ -277,17 +311,25 @@
         <%}%>
 </div>
 
-<div class="container">
-  <%if(order.isCancelled||order.status==="Delivered"){%>
+<!-- <div class="container">
+  <%if(order.isCancelled&&order.status!=="Delivered"){%>
     <div class="d-flex mb-5" style="justify-content: end;">
       <button class="btn btn-danger cancelButton py-2 px-3" disabled hidden>Order Cancelled</button>
   </div>
-    <%}else {%>
+    <%}else if(order.status==="Delivered"){%>
       <div class="d-flex mb-5" style="justify-content: end;">
-        <a id="<%=order._id%>"  class="btn btn-danger py-2 px-3 cancelButton">Cancel Order</a>
+        <a id="<%=order._id%>"  class="btn btn-danger py-2 px-3 cancelButton" style="display: none !important;" >Cancel Order</a>
     </div>
-      <%}%>
-</div>
+        <%}else if(order.status!=="Returned"&&order.isCancelled===false) {%>
+          <div class="d-flex mb-5" style="justify-content: end;">
+            <a id="<%=order._id%>"  class="btn btn-danger py-2 px-3 cancelButton">Cancel Order</a>
+          </div>
+        <%}else{%>
+          <div class="d-flex mb-5" style="justify-content: end;">
+            <a id="<%=order._id%>"  class="btn btn-danger py-2 px-3 cancelButton" style="display: none !important;" >Cancel Order</a>
+          </div>
+          <%}%>
+</div> -->
 
 <script>
     const statusButton=document.querySelector('.statusButton');
@@ -311,32 +353,32 @@
     }
 
   document.addEventListener('DOMContentLoaded',()=>{
-    const cancelButton=document.querySelector('.cancelButton');
+    // const cancelButton=document.querySelector('.cancelButton');
     const deleteButton=document.querySelector('.deleteButton');
-    const orderId=cancelButton.id;
+    // const orderId=cancelButton.id;
     const id=deleteButton.id;
-    cancelButton.addEventListener('click',()=>{
-      fetch('/user/cancelOrder?id='+orderId).then(response=>response.json()).then(
-        data=>{
-          if(data.cancelled==='shipped'){
-            showAlert("Product Is Already Shipped")
-          }else if(data.cancelled==='already'){
-            showAlert("Already Cancelled!")
-          }else if(data.cancelled==='Out of Delivery'){
-            showAlert("Product Is Out Of Delivery")
-          }
-          else if (data.cancelled===true){
-            cancelButton.textContent="Order Cancelled"
-            showSuccess("Order Cancelled")
-            window.location.href="/admin/allOrders"
-          }else{
-            showAlert("Not Cancelled Error Ocurred")
-          }
-        }
-      ).catch(err=>{
-        console.log("Order cancellation error"+err);
-      })
-    })
+    // cancelButton.addEventListener('click',()=>{
+    //   fetch('/user/cancelOrder?id='+orderId).then(response=>response.json()).then(
+    //     data=>{
+    //       if(data.cancelled==='shipped'){
+    //         showAlert("Product Is Already Shipped")
+    //       }else if(data.cancelled==='already'){
+    //         showAlert("Already Cancelled!")
+    //       }else if(data.cancelled==='Out of Delivery'){
+    //         showAlert("Product Is Out Of Delivery")
+    //       }
+    //       else if (data.cancelled===true){
+    //         cancelButton.textContent="Order Cancelled"
+    //         showSuccess("Order Cancelled")
+    //         window.location.href="/admin/allOrders"
+    //       }else{
+    //         showAlert("Not Cancelled Error Ocurred")
+    //       }
+    //     }
+    //   ).catch(err=>{
+    //     console.log("Order cancellation error"+err);
+    //   })
+    // })
     deleteButton.addEventListener('click',()=>{
       fetch('/admin/deleteOrder?id='+id).then(response=>response.json()).then(
         data=>{

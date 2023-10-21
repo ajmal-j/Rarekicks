@@ -84,19 +84,21 @@ const couponManagement=async(req,res)=>{
 
 const addCoupon=async(req,res)=>{
   try {
-    const {code,discount}=req.query;
+    const {code,discount,date}=req.query;
     const cod=code.toUpperCase().trim()
     const disc=discount.toUpperCase().trim()
+    
     const exist = await couponModel.findOne({ $or: [{ code:cod }, {discountPercentage:disc }] });
     if(exist){
       return res.json({added:"exist"})
     }
     const data={
       code:code,
-      discountPercentage:discount
+      discountPercentage:discount,
+      validUpTo: new Date(date)
     }
     const newCoupon = await couponModel.create(data);
-    console.log(newCoupon);
+    // console.log(newCoupon);
     res.json({added:true})
   } catch (error) {
     console.log(error);
@@ -141,8 +143,8 @@ const editCouponShow=async (req,res)=>{
     if(!check){
       return res.redirect("/admin/couponManagement")
     }else{
-      const {code,discountPercentage}=await couponModel.findOne({_id:id})
-      res.render('editCoupon',{code,discountPercentage,id})
+      const {code,discountPercentage,validUpTo}=await couponModel.findOne({_id:id})
+      res.render('editCoupon',{code,discountPercentage,id,validUpTo})
     }
   } catch (error) {
     console.log(error);
@@ -152,7 +154,7 @@ const editCouponShow=async (req,res)=>{
 
 const editCoupon = async (req, res) => {
   try {
-    const { code, discount, id } = req.query;
+    const { code, discount, id ,date} = req.query;
     const cod=code.toUpperCase().trim()
     const disc=discount.toUpperCase().trim()
     const existingCoupon = await couponModel.findOne({
@@ -161,10 +163,7 @@ const editCoupon = async (req, res) => {
     if (existingCoupon) {
       return res.json({ added: "exist" });
     }
-
-    // Perform the update
-    await couponModel.findByIdAndUpdate(id, { code, discountPercentage: discount });
-
+    await couponModel.findByIdAndUpdate(id, { code, discountPercentage: discount,validUpTo: new Date(date)});
     res.json({ added: true });
   } catch (error) {
     console.error(error);

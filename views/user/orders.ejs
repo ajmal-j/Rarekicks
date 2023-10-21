@@ -42,7 +42,7 @@
                       <% }); %>
                       
                     <td class="align-middle" style="text-align: center;">&#x20B9  <%= order.payment.amount %></td>
-                    <td class="align-middle" style="text-align: center;"><%= order.createdAt %></td>
+                    <td class="align-middle" style="text-align: center;"><%= moment(order.createdAt).format('YYYY-MM-DD') %></td>
                     <td class="align-middle" style="text-align: center;">
                       <a href="/user/orderDetailed?id=<%= order._id %>">
                         <% if (order.status === 'Processing') { %>

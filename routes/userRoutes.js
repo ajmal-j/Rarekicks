@@ -10,7 +10,7 @@ userRouter.set("views","./views/user")
 
 
 userRouter.get('/home',JWT.checkJwt,userController.homePage);
-userRouter.get('/allProducts',JWT.checkJwt,productController.getProduct,userController.allProducts);
+userRouter.get('/allProducts',JWT.checkJwt,productController.getProductByPage,userController.allProducts);
 userRouter.get('/brand',JWT.checkJwt,productController.getBrand,userController.allProducts);
 userRouter.get('/searchProduct',JWT.checkJwt,productController.searchProductUser);
 userRouter.get('/brandBased',JWT.checkJwt,productController.brandBased);
@@ -65,10 +65,11 @@ userRouter.get('/placeOrderCOD',JWT.checkJwt,orderController.placeOrderCOD)
 userRouter.post('/placeOrderOnline',JWT.checkJwt,orderController.placeOrderOnline)
 userRouter.post('/confirmOrderOnline',JWT.checkJwt,orderController.confirmOrderOnline)
 userRouter.get('/showConfirmOrder',JWT.checkJwt,orderController.showConfirmOrder)
-userRouter.get('/placeOrder',JWT.checkJwt,orderController.testData)
+userRouter.get('/testOrder',orderController.testData)
 userRouter.get('/orders',JWT.checkJwt,orderController.orderShow)
 userRouter.get('/orderDetailed',JWT.checkJwt,orderController.orderDetailed)
 userRouter.get('/cancelOrder',JWT.checkJwt,orderController.cancelOrder)
+userRouter.get('/returnOrder',JWT.checkJwt,orderController.returnOrder)
 userRouter.get('/addCoupon',JWT.checkJwt,orderController.addCoupon)
 userRouter.get('/allCategories',JWT.checkJwt,productController.allCategories,userController.allProducts)
 

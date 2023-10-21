@@ -5,6 +5,9 @@ const orderSchema = new mongoose.Schema({
         ref:"user",
         required:true
     },
+    orderId:{
+        type:String,
+    },
     isCancelled:{
         type:Boolean,
         default:false
@@ -22,6 +25,11 @@ const orderSchema = new mongoose.Schema({
         type:Number,
         required:true
       }
+    },
+    usedFromWallet:{
+        type:Number,
+        default:0,
+        get: (v) => v.toFixed(2),
     },
     address:{
         name: {
@@ -95,9 +103,28 @@ const orderSchema = new mongoose.Schema({
         type:String,
         default:"Processing"
     },
+    deliveredDate:{
+        type:Date,
+    },
+    returnedDate:{
+        type:Date,
+    },
+    cancelledDate:{
+        type:Date,
+    },
+    reasonForCancellation:{
+        type:String
+    },
+    reasonForReturn:{
+        type:String
+    },
     offer:{
         type:String,
-        default:"None"
+        default:"none"
+    },
+    couponApplied:{
+        type:String,
+        default:"none"
     },
     paymentDetails: {
       receipt: {

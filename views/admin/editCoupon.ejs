@@ -9,9 +9,7 @@
 <main class="container mt-5">
     <section class="content-main">
         <div class="content-header">
-            <div style="font-family: 'Michroma', sans-serif;">
-                <h2 class="content-title card-title">Edit Coupon</h2>
-            </div>
+            
         </div>
 <!-- 
         <form>
@@ -22,11 +20,17 @@
         </form> -->
 <div class="container" style="display: flex; justify-content: center;">
         <div class="card" style="width: max-content; display: flex; justify-content: center;">
-            <div class="card-body">
+            <div class="card-body" style="background-color: #ffffff; border: 1px solid rgb(30, 28, 28); border-radius: 5px;">
+                <div style="display: flex; justify-content: end;">
+                    <a href="/admin/deleteCoupon?id=<%=id%>" class="btn btn-outline-dark mb-2"  id="button" >Delete</a>
+                </div>
+               
+                <div class="mb-3" style="font-family: 'Michroma', sans-serif;">
+                    <h2 class="text-center">Edit Coupon</h2>
+                </div>
                 <div class="row" style="display: flex; justify-content: center;" >
                     <div class="col-md-4">
-                        <div style="display: flex; justify-content: end;">
-                            <a href="/admin/deleteCoupon?id=<%=id%>" class="btn btn-dark mb-3"  id="button" >Delete</a></div>
+                        
                         <form class="row g-3 needs-validation" action="" method="get" novalidate enctype="application/form-data">
                             <div class="col-md-12">
                                 <label for="validationCustom01" class="form-label">Code</label>
@@ -38,6 +42,13 @@
                             <div class="col-md-12">
                                 <label for="validationCustom02" class="form-label">DiscountPercentage</label>
                                 <input type="number" class="form-control" id="validationCustom02" name="discountPercentage" value="<%=discountPercentage%>" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="validationCustom02" class="form-label">Discount Expiry Date:</label>
+                                <input type="date" class="form-control" id="validationCustom02" name="discountExpiryDate" required value="<%=validUpTo.toISOString().split('T')[0]%>">
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
@@ -68,6 +79,9 @@
     
                 const codeInput = form.querySelector('[name="code"]');
                 const codeValue = codeInput.value.trim();
+                const dateInput = form.querySelector('[name="discountExpiryDate"]');
+                const dateValue = dateInput.value;
+
                 const id = "<%=id%>";
     
                 const discountInput = form.querySelector('[name="discountPercentage"]');
@@ -78,6 +92,24 @@
                     showAlert('Please enter a valid code.');
                     form.classList.add('was-validated'); // Add 'was-validated' class
                     return;
+                }
+                if (!isValidFutureDate(dateValue)) {
+                    showAlert('Please enter a valid future date.');
+                    form.classList.add('was-validated'); // Add 'was-validated' class
+                    return;
+                }
+
+                function isValidFutureDate(dateString) {
+                    // Check if the input is a non-empty string
+                    if (!dateString || typeof dateString !== 'string') {
+                        return false;
+                    }
+
+                    // Attempt to create a Date object from the input
+                    const dateObject = new Date(dateString);
+
+                    // Check if the Date object is valid and if it is a future date
+                    return !isNaN(dateObject.getTime()) && dateObject > new Date();
                 }
     
                 if (discountValue === '' || discount >= 80 || discount < 1) {
@@ -92,7 +124,7 @@
                 }
     
                 try {
-                    const response = await fetch(`/admin/editCoupon?code=${codeValue}&discount=${discountValue}&id=${id}`);
+                    const response = await fetch(`/admin/editCoupon?code=${codeValue}&discount=${discountValue}&id=${id}&date=${dateValue}`);
                     const data = await response.json();
                     console.log(data);
                     if (data.added === true) {

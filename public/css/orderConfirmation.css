@@ -1,6 +1,6 @@
 body {
     background-color: #ffffff;
-    color: black;
+    color: rgb(0, 0, 0);
 }
 .expected-delivery {
     background-color: #f8d7da;
@@ -14,19 +14,20 @@ body {
 .containerMa {
     max-width: 800px;
     margin: 10px auto;
-    /* background-image: url('../images/image_processing20210909-17717-aeuuah.gif');
+    background-image: url('../images/people-collaborating-with-tech-.jpg');
             background-size: cover; 
             background-position: center;
             background-repeat: no-repeat;
-            height: fit-content;  */
-    padding: 20px;
+            height: fit-content; 
+    /* padding: 20px; */
     border-radius: 10px;
     border: 1px solid black;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .cont{
-    background-color: rgba(240, 240, 240, 0.535);
+    padding: 20px;
+    background-color: rgba(71, 66, 42, 0.344);
 }
 h3 {
     color: #000000;
@@ -35,7 +36,7 @@ h3 {
 
 
 .confirmation-message {
-    color: rgb(125, 17, 17);
+    color: rgb(0, 0, 0);
     text-align: center;
     margin-top: 20px;
 }

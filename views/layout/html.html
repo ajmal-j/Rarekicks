@@ -1,69 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet Design</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <style>
-        .wallet-container {
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-top: 20px;
-            background-color: #f8f9fa;
-        }
-
-        .wallet-icon {
-            font-size: 32px;
-            color: #28a745;
-        }
-
-        .wallet-info {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .wallet-actions {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 300px;
-        }
-
-        .wallet-action-btn {
-            padding: 8px 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            color: #333;
-            text-decoration: none;
-            margin-left: 8px;
-        }
-
-        .wallet-action-btn:hover {
-            background-color: #ddd;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Bootstrap Button Popup with Select</title>
 </head>
 <body>
-    <div class="container">
-        <div class="wallet-container">
-            <div class="wallet-info">
-                <div class="wallet-icon">
-                    <i class="fas fa-wallet"></i>
-                </div>
-                <div>
-                    <h5>My Wallet</h5>
-                    <p>Wallet Balance: $100.00</p>
-                </div>
-            </div>
-            <div class="wallet-actions">
-                <a href="#" class="wallet-action-btn">Deposit</a>
-                <a href="#" class="wallet-action-btn">Withdraw</a>
-                <a href="#" class="wallet-action-btn">Transfer</a>
-            </div>
-        </div>
+
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Select an Option</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Form with select dropdown -->
+        <form>
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">Select an option:</label>
+            <select class="form-control" id="exampleFormControlSelect1">
+              <option>Option 1</option>
+              <option>Option 2</option>
+              <option>Option 3</option>
+              <!-- Add more options as needed -->
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
     </div>
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  </div>
+</div>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Open Popup
+</button>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

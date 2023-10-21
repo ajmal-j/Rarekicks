@@ -103,6 +103,9 @@ const loginValidation=async (req,res)=>{
   try{
     const email=req.body.email.trim()
     const user=await userModel.findOne({email:email})
+    if(!user){
+      return res.render("userLogin",{message:"Invalid User",email:req.body.email||" "})
+    }
     if(user?.validated===false){
       res.redirect("/user/loginWithOtp?email="+user.email)
       return;
@@ -120,6 +123,7 @@ const loginValidation=async (req,res)=>{
           httpOnly: true,
           expires:new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), 
         })
+        mail.sendEmail(req.body.email);
         res.redirect("/user/home/")
       }
     }else{
@@ -149,6 +153,7 @@ const loginValidationOtp=async (req,res)=>{
                         httpOnly: true,
                         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), 
                       })
+                      mail.sendEmail(req.body.email);
                       res.redirect("/user/home/")
                 }else{
                   res.render('verifyOtpLogin',{email:req.body.email,message:"Invalid Otp!!"});
@@ -343,7 +348,11 @@ const homePage=async (req,res)=>{
     req.session.checkOut=false;
     req.session.orderConfirmed=false;
     const products=await productModel.find({deleted:false}).limit(9);
-    const products2=await productModel.find({deleted:false}).skip(16);
+    const products2 = await productModel
+                          .find({ deleted: false })
+                          .sort({ _id: -1 }) 
+                          .limit(2);
+
     const {images}=await bannerModel.findOne()
     const message=req.query.message;
     if(message){
@@ -361,9 +370,11 @@ const homePage=async (req,res)=>{
 const allProducts=async (req,res)=>{
   try {
     const brand=await req.brand;
+    const page=await req.page;
+    const totalDocuments=await req.totalDocuments;
     const products=await req.products;
     const categories=await categoryModel.find()
-    res.render("allProducts",{products,brand,categories})
+    res.render("allProducts",{products,brand,categories,page,totalDocuments})
   } catch (error) {
     res.end("Error")
   }
@@ -681,9 +692,9 @@ const checkOutShow=async(req,res)=>{
 
     const message=req.query.message;
     if(message){
-      res.render("checkOut",{address,email,products:user.cart.items,total:total,grandTotal:total,message})
+      res.render("checkOut",{address,email,products:user.cart.items,total:total,grandTotal:total,message,user})
     }else{
-      res.render("checkOut",{address,email,products:user.cart.items,total:total,grandTotal:total})
+      res.render("checkOut",{address,email,products:user.cart.items,total:total,grandTotal:total,user})
     }
   } catch (error) {
     console.log(error);

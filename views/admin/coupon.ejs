@@ -1,7 +1,13 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/profile.css">
-
+<style>
+    @media(min-width:768px){
+        .addCoupon{
+            margin-left: 10px;
+        }
+    }
+</style>
 </head>
 <body>
     <%- include('../layout/adminHeader') %>
@@ -24,43 +30,48 @@
         <div class="card">
             <div class="card-body">
                 <div class="row" >
-                    <div class="col-md-4 mb-3" style="border: 1px solid rgb(187, 187, 187); border-radius: 20px; padding: 15px 10px;">
+                    <div class="col-md-4 mb-3 addCoupon" style="background-color: rgb(249, 249, 249); border: 1px solid rgb(187, 187, 187); border-radius: 5px; padding: 15px 10px;">
                         <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Add Coupon</h3>
                         <form class="row g-3 needs-validation" action="" method="get" novalidate enctype="application/form-data">
                             <div class="col-md-12">
-                                <label for="validationCustom01" class="form-label">Code</label>
+                                <label for="validationCustom01" class="form-label">Coupon Code :</label>
                                 <input type="text" class="form-control" id="validationCustom01" name="code" required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="validationCustom02" class="form-label">DiscountPercentage</label>
+                                <label for="validationCustom02" class="form-label">Discount % :</label>
                                 <input type="number" class="form-control" id="validationCustom02" name="discountPercentage"  required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="validationCustom02" class="form-label">Discount Expiry Date:</label>
+                                <input type="date" class="form-control" id="validationCustom02" name="discountExpiryDate" required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
                             </div>
                             <div class="save">
                                 <div class="d-flex" style="justify-content: center;">
-                                    <button class="btn btn-dark rounded-pill mt-2" id="startCountdownButton" type="submit">Save</button>
+                                    <button class="btn btn-dark rounded-pill px-4 py-2 mt-2" id="startCountdownButton" type="submit">Add</button>
                                 </div>
                             </div>
                         </form>
                     </div>
 
-                    <div class="col-md-8" style="display: flex; justify-content: center; align-items: center;">
-                        <div class="row g-3">
+                    <div class="col" style="display: flex; justify-content: center; align-items: center;">
+                        <div class="row g-3" style="display: flex; justify-content: center;">
                             <% if (locals.coupons && locals.coupons.length > 0) { %>
                               <% coupons.forEach(coupon => { %>
                                 <div class="col-12 col-md-3 col-lg-3 col-sm-6" style="min-width: 270px;">
                                   <div class="card h-100">
                                     <div class="card-body">
                                       <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Name : </span><%= coupon.code %></span>
-                                      <span class="card-title d-block text-center mt-2"><span style="font-size: 17px; font-weight: 700;">Percentage</span></span>
-                                      <span style="display: flex; justify-content: center;">
-                                        <p class="card-text ps-2 pe-2 pb-2"><%= coupon.discountPercentage %>%</p>
-                                      </span>
+                                      <span class="card-title d-block mt-2"><span style="font-size: 17px; font-weight: 700;">Discount : </span><%= coupon.discountPercentage %>%</span>
+                                      
                                     </div>
                                     <div class="card-footer " style="display: flex; justify-content: center; gap: 5px;">
                                       <a href="/admin/editCouponShow?id=<%= coupon._id %>" class="btn btn-outline-success">Edit</a>
@@ -98,6 +109,9 @@
             const codeInput = form.querySelector('[name="code"]');
             const codeValue = codeInput.value.trim();
 
+            const dateInput = form.querySelector('[name="discountExpiryDate"]');
+            const dateValue = dateInput.value;
+
             const discountInput = form.querySelector('[name="discountPercentage"]');
             const discountValue = discountInput.value.trim();
             const discount = parseInt(discountValue);
@@ -106,6 +120,25 @@
                 showAlert('Please enter a valid code.');
                 form.classList.add('was-validated'); // Add 'was-validated' class
                 return;
+            }
+
+            if (!isValidFutureDate(dateValue)) {
+                showAlert('Please enter a valid future date.');
+                form.classList.add('was-validated'); // Add 'was-validated' class
+                return;
+            }
+
+            function isValidFutureDate(dateString) {
+                // Check if the input is a non-empty string
+                if (!dateString || typeof dateString !== 'string') {
+                    return false;
+                }
+
+                // Attempt to create a Date object from the input
+                const dateObject = new Date(dateString);
+
+                // Check if the Date object is valid and if it is a future date
+                return !isNaN(dateObject.getTime()) && dateObject > new Date();
             }
 
             if (discountValue === '' || discount >= 80 || discount < 1) {
@@ -120,7 +153,7 @@
             }
 
             try {
-                const response = await fetch(`/admin/addCoupon?code=${codeValue}&discount=${discountValue}`);
+                const response = await fetch(`/admin/addCoupon?code=${codeValue}&discount=${discountValue}&date=${dateValue}`);
                 const data = await response.json();
                 console.log(data);
                 if (data.added === true) {

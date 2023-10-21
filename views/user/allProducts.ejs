@@ -8,8 +8,8 @@
 <div class="container productCont productContAll">
 
     <div class="btn-group dropdown" style="font-family: 'Michroma', sans-serif; font-size: large; ">
-        <button type="button " style="font-size: larger;" class="btn btn-dark rounded-pill dropdown-toggle px-3 py-2" data-bs-toggle="dropdown" aria-expanded="false">
-            Filter
+        <button type="button " style="font-size: large;" class=" btn btn-dark rounded-pill dropdown-toggle px-3 py-2" data-bs-toggle="dropdown" aria-expanded="false" style="display: block; align-items: center;">
+            <i class="fa-solid fa-filter me-3 " style="font-size: 20px;"></i>Filter
         </button>
         <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 4px 4px 8px rgba(255, 255, 255, 0.913);">
             <li class="dropdown pb-4 ps-3 pe-3">
@@ -75,8 +75,44 @@
             </div>
         <% } %>
     </div>
-    
 </div>
+
+    
+<style>
+    .dark-pagination .page-link {
+        background-color: #000000;
+        color: #fff;
+    }
+    .dark-pagination .page-item.active .page-link {
+        background-color: #ffffff;
+        border-color: #000000;
+        color: rgb(0, 0, 0) !important;
+    }
+</style>
+
+<div class="container mt-2">
+    <nav aria-label="Page navigation example " style="font-family: 'Michroma', sans-serif;">
+        <ul class="pagination justify-content-center dark-pagination">
+            <li class="page-item <%= page === 0 ? 'disabled' : '' %>">
+                <a class="page-link" href="<%= page > 0 ? '/user/allProducts?page=' + (page-1) : '#' %>" aria-label="Previous">
+                    <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+                </a>
+            </li>
+            <% for (let i = 0; i < totalDocuments; i++) { %>
+                <li class="page-item <%= i === page ? 'active' : '' %>">
+                    <a class="page-link" href="/user/allProducts?page=<%= i %>"><%= i + 1 %></a>
+                </li>
+            <% } %>
+            <li class="page-item <%= page === totalDocuments - 1 ? 'disabled' : '' %>">
+                <a class="page-link" href="<%= page < totalDocuments - 1 ? '/user/allProducts?page=' + (page+1) : '#' %>" aria-label="Next">
+                    <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+
 
 <div class="container Cont mt-5">
     <div class="responsive-container">

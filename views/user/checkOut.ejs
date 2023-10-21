@@ -19,7 +19,7 @@
         <div class="row d-flex" style="justify-content: center;">
             <div class="p-3 col-lg-6 col-12 rounded" style="border: 1px solid black;">
                 <div class="row">
-                    <h5 class="text-center pt-1 pb-3"><u>Current Address</u></h3>
+                    <h5 class="text-center pt-1 pb-3"><u><i class="fa-solid fa-location-dot me-2" style="font-size: 30px;"></i>Address</u></h3>
                     <div class="col-12 col-md-3 mt-3 d-flex" style="justify-content: baseline; text-align: center; row-gap: 10px; column-gap: 10px; flex-direction: column; align-items: center;">
                         <a href="/user/profile/" style="text-decoration: none; color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Change Address</span></a>
                         <a href="/user/addAddress/" style="text-decoration: none; color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Add New Address</span></a>
@@ -51,9 +51,14 @@
         </div>
     </div>
 
-
+<script>
+    let grandTotal="<%=grandTotal%>"
+    let discount=0;
+    let walletBalance="<%=user.wallet.balance%>"
+</script>
 
     <div class="container productCont" style="margin-top: 10px; border: none; background-color: #ffffff; ">
+        <h3 class="text-center pt-1 pb-3" style="font-family: 'Michroma', sans-serif; ">Products</h3>
         <div class="row row-cols-1 row-cols-lg-3  g-4 d-flex" style="justify-content: center;">
         <% if (locals?.products) { %>
             <% products?.forEach(item => { %>
@@ -121,31 +126,31 @@
                     <div class="delivery-date" id="deliveryDate"></div>
                 </div>
                 
+            </div>
         </div>
-    </div>
 
 
     <div class="container mt-2 mb-3" style="display: flex; justify-content: center;">
         <div class="row">
             <div class="col-12 col-md-6">
-                <form class="row g-3 needs-validation" action="" method="get" novalidate enctype="application/form-data" style="width: 20vw; min-width: 300px; border: 1px solid rgb(174, 174, 174); border-radius: 10px; padding: 10px 5px;">
+                <form class="row g-3 needs-validation" action="" method="get" novalidate enctype="application/form-data" style="width: 20vw; min-width: 300px; border: 1px solid rgb(174, 174, 174); border-radius: 7px; padding: 10px 5px;">
                     <div class="col-md-12">
-                        <label for="validationCustom01" class="form-label" style="font-family: 'Michroma', sans-serif;">Apply Coupon</label>
+                        <i class="fa-solid fa-ticket me-2 ms-2" style="font-size: 30px;"></i><label for="validationCustom01" class="form-label" style="font-family: 'Michroma', sans-serif;">Select Coupon</label>
                         <input type="text" class="form-control codeInput" id="validationCustom01 codeInput" name="code" required>
                         <input type="hidden" name="appliedCoupon" id="appliedCoupon" class="appliedCoupon" value="">
-                        <div class="validSpan text-danger" id="validSpan">
+                        <div class="validSpan text-danger" id="validSpan" style=" font-family: 'Michroma', sans-serif; font-size: 13px;">
                             &nbsp;
                         </div>
                     </div>
                     <div class="save">
                         <div class="d-flex" style="justify-content: center; gap: 10px;">
-                            <button class="btn btn-dark rounded-pill " id="applyCouponButton" type="submit">Apply</button>
-                            <a class="btn btn-danger rounded-pill " id="clearCouponButton">Clear</a>
+                            <button class="btn btn-dark rounded " id="applyCouponButton" type="submit">Apply</button>
+                            <a class="btn btn-dark rounded " id="clearCouponButton"><i class="fa-solid fa-xmark fs-5 mt-1"></i></a>
                         </div>
                     </div>
                     <script>
                         const clearCouponButton = document.getElementById('clearCouponButton');
-
+                        
                         clearCouponButton.addEventListener("click", () => {
                             const totalAmount = document.getElementById("totalAmount"); 
                             const totalPrice = document.querySelector(".totalPrice"); 
@@ -162,16 +167,21 @@
                             totalPrice.textContent ='<%=grandTotal%>' ;
                             codeInput.value = '';
                             appliedCoupon.value = '';
+                            discount=0;
+                            couponTotal=0;
+                            handleWalletCheckbox()
                         });
 
                     </script>
                 </form>
                 <script>
+                    
                     (() => {
                         'use strict';
                         
                         const forms = document.querySelectorAll('.needs-validation');
                         const validSpan=document.querySelector(".validSpan");
+                        let couponTotal;
                         Array.from(forms).forEach(form => {
                             form.addEventListener('submit', async event => {
                                 event.preventDefault();
@@ -182,7 +192,6 @@
                                     const codeValue = codeInput.value.toUpperCase().trim();
                                     const appliedCoupon=form.querySelector('[name="appliedCoupon"]');
                                     const discountTable = document.getElementById('discountTable');
-                                    console.log(appliedCoupon.value)
                                     if (codeValue === '' || !isNaN(codeValue) || codeValue.length > 15 || codeValue.length < 4) {
                                         showAlert('Please enter a valid code.');
                                         form.classList.add('was-validated'); // Add 'was-validated' class
@@ -193,16 +202,31 @@
                                         form.classList.add('was-validated'); // Add 'was-validated' class
                                         return;
                                     }
-
+                                    // if(parseInt(totalAmount.innerText)<1){
+                                    //     showAlert("Cannot Apply Coupon!")
+                                    //     return;
+                                    // }
                                     try {
                                         const response = await fetch(`/user/addCoupon?code=${codeValue}`);
                                         const data = await response.json();
                                         if (data.added === "expired") {
-                                            showAlert('Coupon is expired!');
-                                            validSpan.textContent="Coupon Expired!"
+                                            couponTotal=0;
+                                            applyCouponButton.textContent="Apply"
+                                            couponTotal=0;
+                                            if(appliedCoupon.value){
+                                                const tableBody = document.querySelector('.table tbody');
+                                                tableBody.removeChild(tableBody.children[2]);
+                                            }
+                                            discount=0;
+                                            appliedCoupon.value=""
+                                            totalAmount.innerText="<%=grandTotal%>"
+                                            totalPrice.innerText="<%=grandTotal%>"
+                                            handleWalletCheckbox()
+                                            // showAlert('Coupon is expired!');
+                                            validSpan.innerHTML='<span class="text-danger">Coupon Expired!</span>';
                                         } else if (data.added === "added") {
                                             applyCouponButton.textContent="Applied"
-                                            const discount=data.discount.toFixed(2)
+                                            discount=data.discount.toFixed(2)
                                             if(appliedCoupon.value){
                                                 const tableBody = document.querySelector('.table tbody');
                                                 tableBody.removeChild(tableBody.children[2]);
@@ -227,26 +251,34 @@
                                             // Append the new row to the table body
                                             const tableBody = document.querySelector('.table tbody');
                                             tableBody.insertBefore(newRow, tableBody.children[2]); // Insert before the 3rd row
+                                            couponTotal=data.grandTotal.toFixed(2);
                                             totalAmount.innerText=data.grandTotal.toFixed(2);
                                             totalPrice.innerText=data.grandTotal.toFixed(2);
                                             appliedCoupon.value=codeValue;
-                                            validSpan.innerHTML = '&nbsp;';
-                                            showSuccess('Coupon Applied!');
+                                            
+                                            validSpan.innerHTML = '<span class="text-success">Coupon Applied!</span>';
+                                            // showSuccess('Coupon Applied!');
+                                            handleWalletCheckbox()
                                         } else if (data.added === "not") {
                                             applyCouponButton.textContent="Apply"
+                                            couponTotal=0;
                                             if(appliedCoupon.value){
                                                 const tableBody = document.querySelector('.table tbody');
                                                 tableBody.removeChild(tableBody.children[2]);
                                             }
-                                            
+                                            discount=0;
                                             appliedCoupon.value=""
                                             totalAmount.innerText="<%=grandTotal%>"
                                             totalPrice.innerText="<%=grandTotal%>"
-                                            validSpan.textContent="Not A Valid Coupon!"
-                                            showAlert('Not A Valid Coupon!');
+                                            validSpan.innerHTML='<span class="text-danger">Not A Valid Coupon!</span>';
+                                            // showAlert('Not A Valid Coupon!');
+                                            handleWalletCheckbox()
                                         } else if (data.added === false) {
+                                            couponTotal=0;
+                                            validSpan.innerHTML='&nbsp;'
                                             applyCouponButton.textContent="Apply"
                                             showSuccess('Not Added');
+                                            handleWalletCheckbox()
                                         }
                                     } catch (error) {
                                         console.error("Error checking category:", error);
@@ -256,7 +288,44 @@
                                 // Remove the 'was-validated' class from here
                             });
                         })();
-                        
+                        function handleWalletCheckbox() {
+                            var checkbox = document.getElementById("walletCheckbox");
+                            var amountElement = document.getElementById("walletAmount");
+                            var totalPrice=document.querySelector('.totalPrice')
+                            var usedWallet = document.getElementById("usedWallet");
+                            var totalAmount = document.getElementById("totalAmount");
+                            const payNowButton=document.querySelector('.payNowButton');
+                            const placeOrderCOD=document.querySelector('.placeOrderCOD');
+                            if (checkbox && amountElement && usedWallet && totalAmount) {
+                                let total = grandTotal-discount;
+
+                                if (checkbox.checked) {
+                                    const deductionAmount = total > walletBalance ? walletBalance : total;
+                                    const balance = walletBalance - deductionAmount;
+                                    amountElement.textContent = balance > 0 ? (balance).toFixed(2) : 0;
+                                    usedWallet.textContent = deductionAmount;
+                                    totalAmount.textContent=(total-deductionAmount).toFixed(2);
+                                    totalPrice.textContent=(total-deductionAmount).toFixed(2);
+                                    if((total-deductionAmount)===0){
+                                        payNowButton.setAttribute('style', 'display: none !important;');
+                                        placeOrderCOD.setAttribute('style', 'display: none !important;');
+                                    }else{
+                                        payNowButton.style.display='block';
+                                        placeOrderCOD.style.display='block';
+                                    }
+                                } else {
+                                    amountElement.textContent = walletBalance;
+                                    usedWallet.textContent = 0;
+                                    totalAmount.textContent=total;
+                                    totalPrice.textContent=total;
+                                    payNowButton.style.display='block';
+                                    placeOrderCOD.style.display='block';
+                                }
+                            } else {
+                                console.error("One or more elements not found.");
+                            }
+                        }
+
                 </script>
             </div>
         </div>
@@ -268,7 +337,7 @@
 
     <div class="container">
         <div class="row" style="display: flex; justify-content: center;">
-            <div class="col-6 bg-dark" style="border: 1px solid black; border-radius: 20px;  min-width: 300px;">
+            <div class="col-6 bg-dark" style="border: 1px solid black; border-radius: 10px;  min-width: 300px;">
                 <h4 class="text text-center mb-2 text-white" style="margin-top: 20px;  font-family: 'Michroma', sans-serif;">Order Summary</h4>
         <table  class="table table-dark table-striped" style="margin-top: 20px; ">
             <thead>
@@ -287,7 +356,35 @@
                     <td>Delivery Charges</td>
                     <td>(Free)</td>
                 </tr>
-            
+                <%if(user.wallet.balance>=1){%>
+                    <tr>
+                        <td>
+                            <div class="form-check ">
+                                <input
+                                class="form-check-input bg-dark walletCheckbox"
+                                type="checkbox"
+                                onclick="handleWalletCheckbox()"
+                                id="walletCheckbox"
+                                style=" font-size: 25px; margin-left: -9px; margin-top: 10px;"
+                                />
+    
+                                <label class="form-check-label" for="deliveryCheckbox">
+                                    <i class="bi bi-wallet2 ms-2 me-2" style="font-size: 30px ;"></i>  Wallet  <span id="walletAmount">(<%=user.wallet.balance||0%>)</span> 
+                                </label>
+                            </div>
+                        </td>
+                        <td class=" align-middle">
+                                - <span id="usedWallet">0</span>
+                        </td>
+                    </tr>
+                <%} else {%>
+                    <input
+                    class="form-check-input bg-dark walletCheckbox"
+                    type="checkbox"
+                    id="walletCheckbox"
+                    style="display: none !important; font-size: 25px; margin-left: -9px; margin-top: 10px;"
+                    />
+                    <%}%>
                 <tr class="table-success" style="padding-top: 30px; font-size: 1.5em;">
                     <th>Total Amount</th>
                     <th>₹ <span id="totalAmount"><%=grandTotal%></span></th>
@@ -299,14 +396,15 @@
 </div>
 
 
+
             <% if(locals.products.length!==0) { %>
                 <div class="container d-flex flex-wrap justify-content-center mt-5 mb-5" style="gap: 10px;">
-                    <a  id="payNowButton" class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4" style="width: fit-content;">
+                    <a  id="payNowButton" class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4 payNowButton" style="width: fit-content;">
                         <h3 style="font-family: 'Michroma', sans-serif; margin-bottom: 5px;">Total : <span class="text-danger"> &#x20B9 </span><span class="totalPrice" id="totalPrice" style="color: red; letter-spacing: 2px;"><%=locals?.grandTotal%></span><span style="color: red; letter-spacing: 2px;"></span></h3>
                         <h4 style="font-family: 'Michroma', sans-serif; margin: 0; border-top: 4px dashed rgb(205, 205, 205);">Pay Now</h4>
                     </a>
-                    <a  class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4" style="width: fit-content;" id="placeOrderCOD">
-                        <h3 style="font-family: 'Michroma', sans-serif; margin-bottom: 5px;">Cash On Delivery</h3>
+                    <a  class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4 " style="width: fit-content; font-family: 'Michroma', sans-serif;" id="placeOrderCOD">
+                        <h3 class="placeOrderCOD" style=" margin-bottom: 5px;">Cash On Delivery</h3>
                         <h4 style="font-family: 'Michroma', sans-serif; margin: 0; border-top: 4px dashed rgb(205, 205, 205);">Place Order</h4>
                     </a>
                 </div>
@@ -319,9 +417,21 @@
 
 </div>
 
+<div id="overlay"></div>
 
+<style>
+    #overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(255, 255, 255); /* Adjust the alpha (4th parameter) for transparency */
+  z-index: 1000; /* Make sure it's above other content */
+}
 
-
+</style>
 <script>
 
     const payNowButton=document.getElementById('payNowButton');
@@ -331,8 +441,15 @@
 
     placeOrderCOD.addEventListener('click',async ()=>{
         const appliedCoupon=document.getElementById('appliedCoupon');
+        const walletCheckbox=document.querySelector('.walletCheckbox')
+        let checked=false;
+        if(walletCheckbox.checked){
+            checked=true;
+        }else{
+            checked=false;
+        }
         try {
-            const response = await fetch(`/user/placeOrderCOD?code=${appliedCoupon.value}`);
+            const response = await fetch(`/user/placeOrderCOD?code=${appliedCoupon.value}&wallet=${checked}`);
             const data = await response.json();
             if(data.data===true){
                 showSuccess("Creating Order")
@@ -344,13 +461,21 @@
             
         }
     })
-
-
-
+    
+    
+    
     payNowButton.addEventListener('click',()=>{
         const appliedCoupon=document.getElementById('appliedCoupon');
+        const walletCheckbox=document.querySelector('.walletCheckbox')
+        const overlay = document.getElementById('overlay');
+        let checked=false;
+        if(walletCheckbox.checked){
+            checked=true;
+        }else{
+            checked=false;
+        }
         const settings = {
-                "url": "/user/placeOrderOnline?code="+appliedCoupon.value,
+            "url": "/user/placeOrderOnline?code="+appliedCoupon.value+"&wallet="+checked,
                 "method": "POST",
                 "timeout": 0,
                 "headers": {
@@ -358,6 +483,7 @@
                 }
             };
 
+            
             // Creates new orderId every time
             $.ajax(settings).done(function (response) {
                 const orderId= response.orderId;
@@ -374,7 +500,7 @@
                 "order_id": orderId,
                 "handler": function (response) {
                         // Success
-
+                        overlay.style.display = 'block';
                         // Send data to the backend
                         var paymentData = {
                             paymentId: response.razorpay_payment_id,
@@ -382,6 +508,7 @@
                             signature: response.razorpay_signature,
                             razorpayorder:razorpayorder,
                             code:appliedCoupon.value,
+                            wallet:checked,
                         };
 
                         $.ajax({
@@ -392,7 +519,6 @@
                             success: function (backendResponse) {
                                 if(backendResponse.orderId){
                                     showSuccess("Order Placed SuccessFully")
-                                    console.log(backendResponse.orderId);
                                     window.location.href = '/user/showConfirmOrder?id='+backendResponse.orderId;
                                 }else if(backendResponse.response===false){
                                     showAlert("Order Not Placed!")
@@ -481,5 +607,6 @@
       </script>
     <% } %>      
   </div>
+  <script></script>
 <%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>

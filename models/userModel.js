@@ -6,6 +6,23 @@ const userSchema = mongoose.Schema(
         type: String,
         required: true,
       },
+      wallet: {
+        total: {
+          type: Number,
+          default: 0,
+          get: (v) => v.toFixed(2),
+        },
+        balance: {
+            type: Number,
+            default: 0,
+            get: (v) => v.toFixed(2),
+        },
+        used: {
+            type: Number,
+            default: 0,
+            get: (v) => v.toFixed(2),
+        }
+      },
       email: {
         type: String,
         required: true,
