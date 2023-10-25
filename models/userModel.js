@@ -1,4 +1,5 @@
-const mongoose=require('mongoose')
+const mongoose=require('mongoose');
+const productModel = require('./productModel');
 
 const userSchema = mongoose.Schema(
     {
@@ -83,30 +84,64 @@ const userSchema = mongoose.Schema(
   );
 
 
-  userSchema.pre('save', function(next) {
+  userSchema.pre('save', async function (next) {
     let cart = this.cart;
     cart.totalPrice = 0;
 
-    cart.items.forEach(item => {
-        cart.totalPrice += item.quantity * item.price;
-    });
+    for (const item of cart.items) {
+        try {
+            const product = await productModel.findById(item.product);
+            if (product) {
+                const { discountPercentage} = product;
+                if(discountPercentage>0){
+                  const discount=((product.price*product.discountPercentage)/100)
+                  if (item.quantity !== 0) {
+                    item.price=product.price-discount
+                    cart.totalPrice += item.quantity * (product.price-discount);
+                }
+                }else{
+                  if (item.quantity !== 0) {
+                    item.price=product.price
+                    cart.totalPrice += item.quantity * product.price;
+                }
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching product:', error);
+        }
+    }
 
     next();
 });
+
 
 userSchema.methods.updateCartPrices = async function () {
   let cart = this.cart;
   cart.totalPrice = 0;
 
+  cart.items = cart.items.filter((item) => item.quantity > 0);
   for (const item of cart.items) {
     const product = await mongoose.model('product').findById(item.product);
-    console.log(product)
+    // console.log(product)
     if (product) {
-      item.price = product.price;
-      cart.totalPrice += item.quantity * item.price;
+      if(item.quantity>=product.quantity){
+        item.quantity=product.quantity
+      }
+      if(item.quantity===0&&product.quantity>0){
+        item.quantity=1;
+      }
+      if(item.quantity!==0){
+          if(product.discountPercentage>0){
+            const discount=((product.price*product.discountPercentage)/100)
+            item.price=product.price-discount
+            cart.totalPrice += item.quantity * (product.price-discount);
+          }else{
+            item.price=product.price
+            cart.totalPrice += item.quantity * item.price;
+          }
+      }
     }
   }
-
   await this.save();
 };
 

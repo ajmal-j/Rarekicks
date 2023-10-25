@@ -12,6 +12,7 @@ const userModel = require("../models/userModel");
 const bannerModel= require("../models/bannerModel");
 const { json } = require("express");
 const { type } = require("os");
+const orderModel = require("../models/orderModel");
 
 
 function deleteImage(filename) {
@@ -51,13 +52,13 @@ const upload = multer({ storage: storage });
 const addProduct= async (req,res)=>{
     try{
         if(req.query.message){
-            const categories = await category.find({deleted:false})
+            const categories = await category.find({$and:[{deleted:false},{ _id: { $ne: "6537f0cec483201d20b35f83" } }]})
             res.render("addProduct",{categories:categories,message:req.query.message})
         }else if(req.query.messageS){
-            const categories = await category.find({deleted:false})
+            const categories = await category.find({$and:[{deleted:false},{ _id: { $ne: "6537f0cec483201d20b35f83" } }]})
             res.render("addProduct",{categories:categories,messageS:req.query.messageS})
         }else{
-            const categories = await category.find({deleted:false})
+            const categories = await category.find({$and:[{deleted:false},{ _id: { $ne: "6537f0cec483201d20b35f83" } }]})
             res.render("addProduct",{categories:categories,message:''})
         }
     }catch(err){
@@ -67,6 +68,10 @@ const addProduct= async (req,res)=>{
 
 const insertProduct =async (req,res)=>{
     const images =await req.files.map(file => file.filename);
+    const category=req.body.category.trim();
+    const {discountPercentage}= await categoryModel.findById(category)
+    const discount=req.body.discountPercentage.trim();
+    const newDiscount=discount+discountPercentage;
     try {
         const productData= new Product({
             name:req.body.name.trim(),
@@ -75,11 +80,12 @@ const insertProduct =async (req,res)=>{
             quantity:req.body.quantity.trim(),
             category:req.body.category.trim(),
             description:req.body.description.trim(),
+            discountPercentage:newDiscount,
             brand:req.body.brand.trim(),
             images:images,
         })
         await productData.save();
-        res.redirect("/admin/addProduct?messageS=Product Added")
+        res.redirect("/admin/productList?messageS=Product Added")
     }catch(err){
         deleteImages(images)
         console.log(err)
@@ -99,15 +105,40 @@ const getProductAdmin=async(req,res,next)=>{
         res.json(err)
     }
 }
+
 const getProduct=async(req,res,next)=>{
     try {
-        const products=await Product.find({deleted:false}).populate("category");
+        const products = await Product.aggregate([
+            {
+              $match: {
+                deleted: false,
+              },
+            },
+            {
+              $lookup: {
+                from: 'categories',  // Assuming your category model is named 'category'
+                localField: 'category',
+                foreignField: '_id',
+                as: 'category',
+              },
+            },
+            {
+              $unwind: '$category',
+            },
+            {
+              $match: {
+                'category.deleted': false,
+              },
+            },
+          ]);
+
         // console.log(products)
         req.products=products;
         // console.log(products)
         next()
         }   
     catch(err){
+        console.log(err);
         res.json(err)
     }
 }
@@ -120,11 +151,21 @@ const getProductByPage = async (req, res, next) => {
         const total = await Product.countDocuments({});
         const totalDocuments = Math.ceil(total / 6); 
         const products = await Product.find({ deleted: false })
-            .skip(page * 6)
-            .limit(6)
-            .populate("category");
+        .skip(page * 6)
+        .limit(6)
+        .populate({
+            path: 'category',
+            match: { deleted: false }, // Filter the populated documents
+        })
+        .exec();
 
-        req.products = products;
+        // Filter out products with category.deleted set to false
+        const filteredProducts = products.filter(product => product.category !== null);
+
+        // filteredProducts now contains the products with category.deleted set to false
+
+        // console.log(filteredProducts);
+        req.products = filteredProducts;
         req.page = page;
         req.totalDocuments = totalDocuments;
         next();
@@ -158,8 +199,9 @@ const editProductShow=async (req,res)=>{
     try{
         const id=await req.query.id.trim();
         const product=await Product.findOne({_id:id}).populate("category")
-        const categories=await category.find({ name: { $ne:product?.category?.name  } })
-        res.render("editProduct",{product,categories})
+        const categories = await category.find({$and:[{deleted:false},{ _id: { $ne: "6537f0cec483201d20b35f83" } },{ name: { $ne:product?.category?.name  } }]})
+        const {discountPercentage}= await categoryModel.findById(product.category)
+        res.render("editProduct",{product,categories,discountPercentage})
     }catch(err){
         console.log(err)
     }
@@ -168,6 +210,9 @@ const editProductShow=async (req,res)=>{
 const editProduct=async (req,res)=>{
     const id=await req.query.id
     const product=await Product.findById(id)
+    const {discountPercentage}= await categoryModel.findById(req.body.category)
+    const discount=parseInt(req.body.discountPercentage.trim());
+    const newDiscount=discount+discountPercentage;
     const imagesFull = product.images;
     const imageD = Array.isArray(req.body.selectedImages) ? req.body.selectedImages : [req.body.selectedImages];
     const images = req.files ? req.files.map(file => file.filename) : [];
@@ -175,6 +220,7 @@ const editProduct=async (req,res)=>{
     const combinedArray = images.concat(lastImage);
     const sizes= Array.isArray(req.body.sizes) ? req.body.sizes : [req.body.sizes];
     const updateSize=sizes[0]===undefined?[]:sizes;
+    // console.log(discount,newDiscount,discountPercentage)
             try {
                 if(imageD[0]!==undefined){
                     deleteImages(imageD)
@@ -186,6 +232,7 @@ const editProduct=async (req,res)=>{
                     quantity:req.body.quantity.trim(),
                     category:req.body.category,
                     description:req.body.description.trim(),
+                    discountPercentage:newDiscount,
                     brand:req.body.brand,
                     sizes:updateSize,
                     images:combinedArray,
@@ -195,7 +242,7 @@ const editProduct=async (req,res)=>{
                     for (const user of users) {
                     await user.updateCartPrices();
                     }
-                    res.redirect("/admin/home?messageS=Updated")
+                    res.redirect("/admin/productList?messageS=Updated")
                 }else{
                     const details={
                         name:req.body.name.trim(),
@@ -204,6 +251,7 @@ const editProduct=async (req,res)=>{
                         category:req.body.category,
                         description:req.body.description.trim(),
                         brand:req.body.brand,
+                        discountPercentage:newDiscount,
                         sizes:updateSize,
                         images:lastImage,
                         }
@@ -212,14 +260,14 @@ const editProduct=async (req,res)=>{
                         for (const user of users) {
                         await user.updateCartPrices();
                         }
-                    res.redirect("/admin/home?messageS=Updated")
+                    res.redirect("/admin/productList?messageS=Updated")
                 }
             }
             catch(err){
                 const id=await req.query.id.trim();
                 console.log(err);
                 const product=await Product.findOne({_id:id}).populate("category")
-                const categories=await category.find({ name: { $ne:product?.category?.name  } })
+                const categories = await category.find({$and:[{deleted:false},{ _id: { $ne: "6537f0cec483201d20b35f83" } },{ name: { $ne:product?.category?.name  } }]})
                 res.render("editProduct",{product,categories,message:"Product Already Exist!"})
             }
 
@@ -277,7 +325,7 @@ const deleteProductCompletely = async (req, res) => {
         await Product.findByIdAndDelete(productId);
 
         // Redirect to admin home
-        res.redirect("/admin/home/");
+        res.redirect("/admin/productList/");
     } catch (err) {
         res.status(500).send(err.message || "Internal Server Error");
     }
@@ -290,6 +338,16 @@ const searchProduct=async (req,res)=>{
     try{
       const products=await Product.find({name:new RegExp(search.trim(),"i")}).exec();
       products?res.render("adminHome",{products:products,search}):res.redirect("admin/home");
+      }
+      catch(err){
+      res.send("Error occurred")
+      }
+}
+const searchProductList=async (req,res)=>{
+    const search=await req.query.search||"";
+    try{
+      const products=await Product.find({name:new RegExp(search.trim(),"i")}).exec();
+      products?res.render("productList",{products:products,search}):res.redirect("admin/home");
       }
       catch(err){
       res.send("Error occurred")
@@ -311,16 +369,18 @@ const searchProductUser=async (req,res)=>{
   const  createCategory = async (req, res) => {
     try {
         const checkName= req.body.name.toLowerCase().trim();
+        const discountPercentage= req.body.discountPercentage;
         const check=await categoryModel.findOne({name:checkName})
         if(check){
-            const categories=await category.find()
-            res.render("category",{message:"Category Aldready exist!",categories})
+            res.json({category:"exist",message:"Category Already exist!"})
         }else{
-            const newcategory = new category({
+            const newCategory = new category({
                 name:req.body.name.toLowerCase(),
+                discountPercentage:discountPercentage,
                 description:req.body.description});
-            await newcategory.save();
-            // console.log(newcategory)
+            await newCategory.save();
+            // console.log(newCategory)
+            res.json({category:"true"})
         }
     } catch (err) {
       if (err.code === 11000) {
@@ -338,20 +398,25 @@ const searchProductUser=async (req,res)=>{
 
   
 const checkCategory=async (req,res)=>{
-    const id=req.query.id;
-    const check=await categoryModel.findOne({name:id})
-    if(check){
-        return res.json({exists:true})
-    }else{
-        return res.json({exists:false})
+    try {
+        const id=req.query.id;
+        const name=req.query.name;
+        const check = await categoryModel.findOne({ name: name, _id: { $ne: id } });
+        if(check){
+            return res.json({exists:true})
+        }else{
+            return res.json({exists:false})
+        }
+    } catch (error) {
+     console.log(error)   
     }
 }
 
 
 
 const createCategoryShow = async (req, res) => {
-    const categories=await category.find()
-      res.render('category',{categories});
+    const categories = await category.find({ _id: { $ne: "6537f0cec483201d20b35f83" } });
+    res.render('category',{categories});
 };
 
 
@@ -361,31 +426,33 @@ const editCategoryShow = async (req, res) => {
       res.render('editCategory',{categories});
 };
 
-const editCategory= async (req, res) => {
-    const id= await req.query.id
-    const name=req.body.name.toLowerCase().trim()
-    // console.log(name)
-    const check= await categoryModel.findOne({name:name});
-    const self= await categoryModel.findById(id);
-    if(!check){
-        const data={
-            name:req.body.name.trim(),
-            description:req.body.description.trim()
+const editCategory = async (req, res) => {
+    const id = req.query.id;
+    const name = req.body.name.toLowerCase().trim();
+    const discount=parseInt(req.body.discountPercentage);
+    const check = await categoryModel.findOne({ name: name, _id: { $ne: id } });
+    const {discountPercentage}=await categoryModel.findById(id);
+    const products=await productModel.find({category:id})
+    if (!check) {
+        const data = {
+            name: req.body.name.trim(),
+            discountPercentage:discount,
+            description: req.body.description.trim()
+        };
+        for (const product of products){
+            const discountNew=product.discountPercentage-discountPercentage;
+            const set=discountNew+discount;
+            console.log(discountNew,set,discount)
+            await productModel.findByIdAndUpdate(product._id,{$set:{discountPercentage:set}})
         }
-        await category.findByIdAndUpdate(id,data)
-        res.redirect("/admin/createCategory")
-    }else if(self.name===name&&name!==check.name){
-        const data={
-            name:req.body.name.trim(),
-            description:req.body.description.trim()
-        }
-        await category.findByIdAndUpdate(id,data)
-        res.redirect("/admin/createCategory")
+        await categoryModel.findByIdAndUpdate(id, data);
+        res.redirect("/admin/createCategory");
     } else {
-        const categories=await category.findOne({_id:id})
-        res.render('editCategory',{categories,message:"Category Already Exist!"});
+        const categories = await categoryModel.findOne({ _id: id });
+        res.render('editCategory', { categories, message: "Category Already Exist!" });
     }
-    };
+};
+
 
 
 const deleteCategory= async (req, res) => {
@@ -404,11 +471,16 @@ const deleteCategory= async (req, res) => {
 };
 
 const deleteCategoryCompletely= async (req, res) => {
+    try {
     const id= await req.query.id
+    await productModel.updateMany({ category: id }, { $set: { category: "6537f0cec483201d20b35f83" } });
     await category.findByIdAndDelete(id)
     // const categories=await categoryModel.find()
     // res.render('category',{categories});
     res.redirect("/admin/createCategory/")
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 
@@ -424,7 +496,8 @@ const brandBased=async (req,res)=>{
                     _id: '$_id',
                     name: '$name',
                     price: '$price',
-                    images: '$images'
+                    images: '$images',
+                    discountPercentage: '$discountPercentage'
                   }
                 }
               }
@@ -657,7 +730,8 @@ const decreaseQuantity=async (req,res)=>{
         );
         await updatedUser.save(); // Save the changes
         const product = updatedUser.cart.items.find(item => item._id.toString() === productId);
-        return res.json({updated:false,price:product.price,total:updatedUser.cart.totalPrice})
+        const {discountPercentage}=await productModel.findById(product.product)
+        return res.json({updated:false,price:product.price,discount:discountPercentage,total:updatedUser.cart.totalPrice})
     } catch (error) {
         res.send(error)
     }
@@ -687,7 +761,8 @@ const increaseQuantity=async (req,res)=>{
         );
         await updatedUser.save(); // Save the changes
         const product = updatedUser.cart.items.find(item => item._id.toString() === productId);
-        return res.json({updated:false,price:product.price,total:updatedUser.cart.totalPrice})
+        const {discountPercentage}=await productModel.findById(product.product)
+        return res.json({updated:false,price:product.price,discount:discountPercentage,total:updatedUser.cart.totalPrice})
     } catch (error) {
         res.send(error)
     }
@@ -807,7 +882,52 @@ const allCategories=async (req,res,next)=>{
 }
 
 
+const addReview=async (req,res)=>{
+    try {
+        const {rating,review,productId}=req.body;
+        const id=req.session._id;
+        const purchases=await orderModel.find({userId:id})
+        const productIdToCheck = new mongoose.Types.ObjectId(productId);
+        const productExists = isProductExist(productIdToCheck, purchases);
+        if(!productExists){
+            return res.json({added:"notABuyer"})
+        }
+        const product=await productModel.findById(productId)
+        const userReviewCount = product.reviews.filter(review => review.userId.equals(id)).length;
+        if(userReviewCount>=3){
+            return res.json({added:"maximum"})
+        }
+        const {name}=await userModel.findById(id)
+        const data={
+            userName:name,
+            userId:id,
+            postedOn:new Date(),
+            review:review,
+            rating:rating
+        }
+        await productModel.findByIdAndUpdate(productId, {
+            $inc: { 'rating.totalRating': rating },
+            $push: { reviews: data }
+        });
+        res.json({added:true})
+    } catch (error) {
+        console.log(error);
+        res.json({added:false})
+    }
+}
 
+
+const isProductExist = (productId, orders) => {
+    for (const order of orders) {
+        if (order.products && order.products.items) {
+            // Check if the productId is present in the product field of any item
+            if (order.products.items.some(item => item.product.equals(productId))) {
+                return true; // Product ID found in this order
+            }
+        }
+    }
+    return false; // Product ID not found in any order
+};
 
 
 module.exports=
@@ -842,5 +962,7 @@ module.exports=
     increaseQuantity,
     getCount,
     updateBanner,
-    allCategories
+    allCategories,
+    addReview,
+    searchProductList
 }  

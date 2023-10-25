@@ -1,0 +1,135 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
+<style>
+    .card {
+    position: relative;
+    overflow: hidden;
+}
+
+.overlay  {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover .overlay {
+    opacity: 1;
+    padding: 10px ;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.861); /* Adjust the background color and opacity as needed */
+}
+
+.overlay i {
+    color: #000000a4; /* Icon color */
+    font-size: 2rem; /* Icon size */
+    cursor: pointer;
+}
+
+</style>
+</head>
+<body>
+    <%- include('../layout/adminHeader')-%>
+    <div class="container mb-3" style="margin-top: 20px;">
+        <div class="row" style="display: flex; justify-content: center;">
+            <div class="col-10 pt-3 pb-2 ps-4 pe-2 " style="border: 1px solid rgb(75, 75, 75); background-color: #dfcfe9; border-radius: 20px; box-shadow: 0px 0px 3px rgb(132, 0, 255);" >
+                <h3 class="card-title mb-2 mt-2 text-center" style=" font-family: 'Michroma', sans-serif;"><u><%= product?.name%></u></h3>
+                
+                <div class="d-flex align-item-center mt-2">
+                <a class="btn btn-dark rounded-pill text-center text-danger ps-4 pe-4" style="font-size: 30px; letter-spacing: 2px;">&#x20B9 <%= product?.price%>.00
+                </a>
+            </div>
+     
+            <div class="container ">
+                <div class="sizeChart d-flex align-items-baseline">
+                     
+                    <div id="selectedSizes"  style="font-family: 'Michroma', sans-serif;">
+                    <span class="me-2" style="font-size: 20px;">Size Chart</span></div>
+                   <i class="bi bi-bar-chart-line" style="font-size: 30px;"></i>
+                </div>
+                <div class="btn-group d-flex" style="justify-content: space-around;" role="group" aria-label="Sizes">
+                    <% if (product?.sizes && product?.sizes.length > 0 && product?.quantity>0) { %>
+                        <% product.sizes.forEach((size) => { %>
+                            <div class="btn btn-dark size-button rounded-pill" data-size="<%= size %>" data-product-id="<%= product._id %>"><%= size %></div>
+                        <% }) %>
+                 
+                    <% } else { %>
+                        <p class="text-danger btn rounded-pill btn-dark pb-2" style="font-family: 'Michroma', sans-serif; font-size: 20px;">
+                            <span class="fs-4">Out Of Stock!! </span>
+                        </p>
+                    <% } %>
+                    
+                </div>
+
+
+                <h3 class="mt-2" style="font-family: 'Michroma', sans-serif; font-weight: bolder;">Description : </h3>
+                <p class="" style="font-family: 'Michroma', sans-serif; font-size: 16px;" ><%=product?.description%></p>
+               <div class="d-flex detailsContainer" style="flex-wrap: wrap; row-gap: 10px; column-gap: 30px;">
+                <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-4">Category : </span><%=product?.category?.name%></p>
+                <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-4">Brand : </span><%=product?.brand%></p>
+                <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-4">Quantity : </span><%=product?.quantity%></p>
+                <%if(product?.discountPercentage&&product?.discountPercentage>0){%>
+                    <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-4">Discount : </span><%=product?.discountPercentage%> % </p>
+                <%}%>
+                <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-4">Sales Count : </span><%=product?.salesCount%></p>
+                <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-4">Created At : </span><%=moment(product?.createdAt).format("YYYY-MM-DD")%></p>
+                <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-4">Last Updated : </span><%=moment(product?.updatedAt).format("YYYY-MM-DD")%></p>
+               </div>
+            </div>
+            <div class="d-flex justify-content-end mt-auto pb-2" style="gap: 10px;">
+                <a href="/admin/editProduct?id=<%= product._id %>" class="btn btn-dark rounded-pill px-3"><i class="fa-solid fa-pencil"></i></a>
+                <a href="/admin/deleteProduct?id=<%= product._id %>" class="btn btn-warning rounded-pill px-3" id="button" onclick="handleButtonClick()"><%= product.deleted ? "Show" : "Hide"; %></a>
+            </div>
+            
+        </div>
+            <div class="col-10 mt-2 p-2 d-flex align-items-center" style="border: 1px solid rgb(75, 75, 75); border-radius: 20px; background-color: #dfcfe9; border-radius: 20px; box-shadow: 0px 0px 3px rgb(132, 0, 255);">
+                <div class="row g-2">
+                    <% if (product?.images && product?.images.length === 1) { %>
+                        <div class="col-12">
+                            <div class="card position-relative">
+                                <img src="../../public/productImages/<%= product.images[0] %>" class="card-img-top" alt="..." style="width: 100%; height: auto;">
+                                <div class="overlay">
+                                    <i class="fa-solid fa-search-plus"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    <% } else { %>
+                        <% product?.images?.forEach((image, index) => { %>
+                            <div class="col-xl-6 col-lg-6 col-12">
+                                <div class="card">
+                                    <!-- Add data-toggle and data-target attributes to the img element -->
+                                    <img src="../../public/productImages/<%= image %>" class="card-img-top" alt="..." data-toggle="modal" data-target="#imageModal<%= index %>">
+                                    <div class="overlay">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <!-- Modal -->
+                            <div class="modal fade" id="imageModal<%= index %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="display: flex; justify-content: end;">
+                                            <button type="button" class="btn btn-dark" data-dismiss="modal"><i class="fa-solid fa-xmark fs-3" style="color: #ffffff;"></i></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <img src="../../public/productImages/<%= image %>" class="img-fluid" alt="...">
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                        
+                    <% } %>
+            </div>
+        </div>
+           
+    </div>
+    </div>
+
+<%- include('../layout/footer')-%>
+<%- include('../layout/footerHTML')-%>

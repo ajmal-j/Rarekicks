@@ -1,0 +1,118 @@
+<%- include('../layout/headerHTML')-%>
+
+
+<link rel="stylesheet" type="text/css" href="../../public/css/adminHome.css">
+
+<link rel="stylesheet" type="text/css" href="../../public/css/adminDash.css">
+
+</head>
+<body>
+    <%- include('../layout/adminHeader')-%>
+
+
+
+
+
+
+
+<div class="container mt-5" style="font-family: 'Michroma', sans-serif;">
+
+  <h3 class="text-center mb-3">Total Sales & Stats</h3>
+  <div class="d-flex justify-content-center gap-3 flex-wrap">
+    <div class="card">
+      <div class="card-details">
+        <p class="text-title"><i class="fa-solid fa-money-bills"></i> Total Revenue</p>
+        <div class="mt-auto" style="display: flex; justify-content: center;">
+          <p class="text-body"><i class="fa-solid fa-indian-rupee-sign"></i> <%=totalSales%></p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-details">
+        <p class="text-title"><i class="fa-solid fa-box"></i> Orders Completed</p>
+        <div class="mt-auto" style="display: flex; justify-content: center;">
+          <p class="text-body"><%=orderCompleted%></p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-details">
+        <p class="text-title"><i class="fa-solid fa-box"></i> Orders Pending</p>
+        <div class="mt-auto" style="display: flex; justify-content: center;">
+          <p class="text-body"><%=orderPending%></p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-details">
+        <p class="text-title"><i class="fa-solid fa-users"></i> Total Users</p>
+        <div class="mt-auto" style="display: flex; justify-content: center;">
+          <p class="text-body"><%=totalUsers%></p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-details">
+        <p class="text-title"><i class="fa-solid fa-truck-arrow-right"></i> Total Orders</p>
+        <div class="mt-auto" style="display: flex; justify-content: center;">
+          <p class="text-body"><%=total%></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="alertKey">
+  <% if(locals.message) { %>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+      data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
+      <strong><%= message %></strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    
+    <script>
+      // Add this script to your page
+      setTimeout(function() {
+        document.getElementById('success-alert').style.display = 'none';
+      }, 2000); // Adjust the delay (in milliseconds) as needed
+    </script>
+  <% } %>      
+</div>
+<div class="alertKey">
+  <% if(locals.messageS) { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+      data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
+      <strong><%= messageS %></strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <script>
+      // Add this script to your page
+      setTimeout(function() {
+        document.getElementById('success-alert').style.display = 'none';
+      }, 2000); // Adjust the delay (in milliseconds) as needed
+    </script>
+  <% } %>      
+</div>
+
+
+<script src="../../public/jsFiles/searchVal.js"></script>
+
+<%- include('../layout/footer')-%>
+<%- include('../layout/footerHTML')-%>

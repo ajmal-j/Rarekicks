@@ -60,10 +60,19 @@
                 <div class="col">
                     <div class="card h-100">
                         <a href="/user/productDetailed?id=<%= product._id %>" style="text-decoration: none; color: black;">
-                            <img src="../../public/productImages/<%= product.images[0] %>" class="card-img-top" alt="...">
+                            <img src="../../public/productImages/<%= product.images[0]%>" class="card-img-top" alt="..." style="position: relative;">
+                        <%if(product?.discountPercentage>0){%>
+                            <span class="text-white" style="position: absolute; top: 10px; right: 10px; font-size: 15px; background-color:#CC0C39!important; border-radius: 10px; font-weight: bold; padding:8px ;"><%=product.discountPercentage%>% off</span>
+                            <%}%>
                             <div class="card-body d-flex justify-content-center" style="flex-direction: column; align-items: center; font-family: 'Michroma', sans-serif;">
                                 <h5 class="card-title text-center mb-2"><%= product.name %></h5>
-                                <a href="/user/productDetailed?id=<%= product._id %>" class="btn btn-dark mt-2 rounded-pill">&#x20B9 &nbsp; <%= product.price %></a>
+                                <a href="/user/productDetailed?id=<%=product._id%>" class="btn btn-dark mt-auto rounded-pill"><%if(product?.discountPercentage&&product?.discountPercentage>0){%>
+                                    <span class="text-danger"> &#x20B9 <%= (product.price-((product?.price*product?.discountPercentage)/100)).toFixed(0)%></span>
+                                   
+                                <%}else {%>
+                                    &#x20B9 <%= product?.price%>
+                                <%}%>
+                                </a>
                             </div>
                         </a>
                     </div>
@@ -90,27 +99,29 @@
     }
 </style>
 
-<div class="container mt-2">
-    <nav aria-label="Page navigation example " style="font-family: 'Michroma', sans-serif;">
-        <ul class="pagination justify-content-center dark-pagination">
-            <li class="page-item <%= page === 0 ? 'disabled' : '' %>">
-                <a class="page-link" href="<%= page > 0 ? '/user/allProducts?page=' + (page-1) : '#' %>" aria-label="Previous">
-                    <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
-                </a>
-            </li>
-            <% for (let i = 0; i < totalDocuments; i++) { %>
-                <li class="page-item <%= i === page ? 'active' : '' %>">
-                    <a class="page-link" href="/user/allProducts?page=<%= i %>"><%= i + 1 %></a>
+<%if(locals?.totalDocuments){%>
+    <div class="container mt-2">
+        <nav aria-label="Page navigation example " style="font-family: 'Michroma', sans-serif;">
+            <ul class="pagination justify-content-center dark-pagination">
+                <li class="page-item <%= page === 0 ? 'disabled' : '' %>">
+                    <a class="page-link" href="<%= page > 0 ? '/user/allProducts?page=' + (page-1) : '#' %>" aria-label="Previous">
+                        <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+                    </a>
                 </li>
-            <% } %>
-            <li class="page-item <%= page === totalDocuments - 1 ? 'disabled' : '' %>">
-                <a class="page-link" href="<%= page < totalDocuments - 1 ? '/user/allProducts?page=' + (page+1) : '#' %>" aria-label="Next">
-                    <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
-                </a>
-            </li>
-        </ul>
-    </nav>
-</div>
+                <% for (let i = 0; i < locals?.totalDocuments; i++) { %>
+                    <li class="page-item <%= i === page ? 'active' : '' %>">
+                        <a class="page-link" href="/user/allProducts?page=<%= i %>"><%= i + 1 %></a>
+                    </li>
+                <% } %>
+                <li class="page-item <%= page === totalDocuments - 1 ? 'disabled' : '' %>">
+                    <a class="page-link" href="<%= page < totalDocuments - 1 ? '/user/allProducts?page=' + (page+1) : '#' %>" aria-label="Next">
+                        <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+<%}%>
 
 
 

@@ -9,6 +9,10 @@ const categorySchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  discountPercentage:{
+    type:Number,
+    default:0
+  },
   deleted:{
     type: Boolean,
     default: false

@@ -1,5 +1,6 @@
 <%- include('./headerHTML')-%>
-<link rel="stylesheet" type="text/css" href="../../public/css/header.css">
+<link rel="stylesheet" type="text/css" href="../../public/css/adminHeader.css">
+
 </head>
 <body>
   <div class="loading-screen">
@@ -22,74 +23,81 @@
             ADMIN <i class="bi bi-list"></i>
           </button>
               
-              <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel" style="overflow: visible;">
+              <div class="offcanvas offcanvas-start bg-dark" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel" style="overflow: visible;">
                 <div class="offcanvas-header">
-                  <h3 class="offcanvas-title text-center ms-2" id="staticBackdropLabel">Hello Admin!</h5>
+                  <h3 class="offcanvas-title text-center text-light ms-2" id="staticBackdropLabel">Hello Admin!</h5>
                   <button type="button" class="btn-close" id="closeButton" data-bs-dismiss="offcanvas" aria-label="Close" style="font-size: 30px; margin: 10px;"></button>
                 </div>
                 <div class="offcanvas-body">
                   <div class="d-flex" style="flex-direction: column; justify-content: center; row-gap: 10px;">
-                    
                     <div>
-                      <a type="button" href="/admin/home" class="btn py-3 btn-dark d-flex align-items-center" style="text-decoration: none;">
-                        <i class="fa-solid fa-users me-2 ms-2" style="font-size: 30px;"></i>
-                        <span class="w-100 ms-3 text-start">USER'S</span>
+                      <a type="button" href="/admin/dashBoard" class=" openButton
+                      openButton
+                      openButton btn py-2 btn-dark d-flex align-items-center" style="text-decoration: none;">
+                        <i class="fa-solid fa-chart-line me-2 ms-2" style="font-size: 30px;"></i>
+                        <span class="w-100 ms-3 text-start">&nbsp;Dashboard</span>
                       </a>
                     </div>
                     <div>
-                      <a type="button" href="/admin/home" class="btn py-3 btn-dark d-flex align-items-center" style="text-decoration: none;">
+                      <a type="button" href="/admin/viewUsers" class=" openButton
+                      openButton
+                      openButton btn py-2 btn-dark d-flex align-items-center" style="text-decoration: none;">
+                        <i class="fa-solid fa-users me-2 ms-2" style="font-size: 30px;"></i>
+                        <span class="w-100 ms-3 text-start">User's</span>
+                      </a>
+                    </div>
+                    <div>
+                      <a type="button" href="/admin/home" class="openButton btn py-2 btn-dark d-flex align-items-center" style="text-decoration: none;">
                           <i class="fa-solid fa-shoe-prints me-2 ms-2 " style="font-size: 30px;"></i>
-                          <span class="w-100 ms-3 text-start">PRODUCT'S</span>
+                          <span class="w-100 ms-3 text-start">All Product's</span>
+                      </a>
+                  </div>
+                    <div>
+                      <a type="button" href="/admin/productList" class="openButton btn py-2 btn-dark d-flex align-items-center" style="text-decoration: none;">
+                        <i class="fa-solid fa-bars-staggered me-2 ms-2 " style="font-size: 30px;"></i>
+                          <span class="w-100 ms-3 text-start">&nbsp;Product list</span>
                       </a>
                   </div>
                     
                 <div>
-                    <a type="button" href="/admin/allOrders" class="btn py-3 btn-dark d-flex align-items-center" style="text-decoration: none;">
+                    <a type="button" href="/admin/allOrders" class="openButton btn py-2 btn-dark d-flex align-items-center" style="text-decoration: none;">
                         <i class="fa-solid fa-truck-fast me-2 ms-2" style="font-size: 30px;"></i>
-                        <span class="w-100 ms-3 text-start">ORDER'S</span>
+                        <span class="w-100 ms-3 text-start">Order's</span>
                     </a>
                 </div>
                 
                 <div>
-                    <a type="button" href="/admin/bannerManagement" class="btn py-3 btn-dark d-flex align-items-center" style="text-decoration: none;">
+                    <a type="button" href="/admin/bannerManagement" class="openButton btn py-2 btn-dark d-flex align-items-center" style="text-decoration: none;">
                         <i class="fa-solid fa-panorama me-2 ms-2" style="font-size: 30px;"></i>
-                        <span class="w-100 ms-3 text-start">BANNER'S</span>
+                        <span class="w-100 ms-3 text-start">Banner</span>
                     </a>
                 </div>
                 
                 <div>
-                    <a type="button" href="/admin/couponManagement" class="btn py-3 btn-dark d-flex align-items-center" style="text-decoration: none;">
+                    <a type="button" href="/admin/couponManagement" class="openButton btn py-2 btn-dark d-flex align-items-center" style="text-decoration: none;">
                         <i class="fa-solid fa-ticket me-2 ms-2" style="font-size: 30px;"></i>
-                        <span class="w-100 ms-3 text-start">COUPON'S</span>
+                        <span class="w-100 ms-3 text-start">Coupon</span>
                     </a>
                 </div>
                 
                 <div>
-                    <a type="button" href="/admin/createCategory" class="btn py-3 btn-dark d-flex align-items-center" style="text-decoration: none;">
+                    <a type="button" href="/admin/createCategory" class="openButton btn py-2 btn-dark d-flex align-items-center" style="text-decoration: none;">
                         <i class="fa-solid fa-list me-2 ms-2" style="font-size: 30px;"></i>
-                        <span class="w-100 ms-3 text-start">CATEGORIE'S</span>
+                        <span class="w-100 ms-3 text-start">Category</span>
+                    </a>
+                </div>
+                <div>
+                    <a type="button" href="/admin/brandBased/" class="openButton btn py-2 btn-dark d-flex align-items-center" style="text-decoration: none;">
+                        <span class="w-100 ms-3 text-center">All Brands</span>
                     </a>
                 </div>
                 
-                    <div class="btn-group dropdown mt-3">
-                <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    BRANDS
-                </button>
-                <ul class="dropdown-menu bg-dark text-center p-4">
-                  <li class=" pb-4 ps-3 pe-3"><a class="" href="/admin/brandBased/">All Brands</a></li>
-                  <li class="pb-4 ps-3 pe-3"><a class=" " href="/admin/brand?brand=adidas">ADIDAS</a></li>
-                  <li class="pb-4 ps-3 pe-3"><a class=" " href="/admin/brand?brand=reebok">REEBOK</a></li>
-                  <li class="pb-4 ps-3 pe-3"><a class=" " href="/admin/brand?brand=jordan">JORDAN</a></li>
-                  <li class="pb-4 ps-3 pe-3"><a class=" " href="/admin/brand?brand=asics">ASICS</a></li>
-                  <li class="pb-4 ps-3 pe-3"><a class=" " href="/admin/brand?brand=crocs">CROCS</a></li>
-                  <li class="ps-3 pe-3"><a class=" " href="/admin/brand?brand=converse">CONVERSE</a></li>
-                </ul>
-              </div>
+                 
                   </div>
                 </div>
               </div>
 
-          <a class="" href="/admin/home/"><h3 class="text-danger"><u>Home</u></h3></a>
+          <a class="" href="/admin/productList/"><h3 class="text-danger"><u>Home</u></h3></a>
             
                </div>
     </div>

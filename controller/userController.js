@@ -6,6 +6,7 @@ const addressModel = require("../models/addressModel");
 const bannerModel = require("../models/bannerModel");
 const mail=require('../public/jsFiles/mail');
 const storage=require("../public/jsFiles/storage")
+const moment=require("moment")
 
 const { json } = require("express");
 const categoryModel = require("../models/categoryModel");
@@ -255,10 +256,14 @@ const blockUser=async (req,res)=>{
 const searchUser=async(req,res)=>{
   const search=await req.query.search||"";
   try{
-    const users=await userModel.find({name:new RegExp(search.trim(),"i")}).exec();
+    let users=await userModel.find({name:new RegExp(search.trim(),"i")}).exec();
+    if(users.length===0){
+      users=await userModel.find({_id:search});
+    }
     users?res.render("adminUserManagement",{users,search}):res.redirect("admin/viewUsers");
     }
     catch(err){
+      console.log(err)
     res.send("Error occurred")
     }
 }
@@ -373,9 +378,10 @@ const allProducts=async (req,res)=>{
     const page=await req.page;
     const totalDocuments=await req.totalDocuments;
     const products=await req.products;
-    const categories=await categoryModel.find()
+    const categories=await categoryModel.find({deleted:false})
     res.render("allProducts",{products,brand,categories,page,totalDocuments})
   } catch (error) {
+    console.log(error);
     res.end("Error")
   }
 }
@@ -387,18 +393,17 @@ const productDetailed = async (req, res) => {
     const userId=req.session._id;
     const user = await userModel.findOne({ _id:userId });
     const wish = user?.wishlist.includes(id);
-    // console.log(wish);
     const product = await productModel.findOne({
       $and: [
         { _id: id },
         { deleted: false }
       ]
     }).populate("category");
-
+    const averageRating = product.rating.averageRating;
     if (product) {
-      res.render("detailedProduct", { products: req.products, product, wishlist: wish });
+      res.render("detailedProduct", { products: req.products, product, wishlist: wish ,moment,averageRating});
     } else {
-      res.render("detailedProduct", { products: req.products, product: null, wishlist: wish });
+      res.render("detailedProduct", { products: req.products, product: null, wishlist: wish ,moment,averageRating});
     }
   } catch (err) {
     console.error(err);
@@ -673,33 +678,31 @@ const deleteAddress=async (req,res)=>{
 }
 
 
-const checkOutShow=async(req,res)=>{
+const checkOutShow = async (req, res) => {
   try {
-    if(req.session.orderConfirmed){
-      return res.redirect('/user/cart/')
+    if (req.session.orderConfirmed) {
+      return res.redirect('/user/cart/');
     }
-    const id=req.session._id;
-    req.session.checkOut=id;
-    const address=await addressModel.findOne({userId:id,default:true})
-    const {email}=await userModel.findOne({_id:id})
-    const user = await userModel
-                .findOne({ _id: id })
-                .populate({
-                    path: 'cart.items.product',
-                    model: 'product',
-                });
-    const total=user.cart.totalPrice;
 
-    const message=req.query.message;
-    if(message){
-      res.render("checkOut",{address,email,products:user.cart.items,total:total,grandTotal:total,message,user})
-    }else{
-      res.render("checkOut",{address,email,products:user.cart.items,total:total,grandTotal:total,user})
+    const id = req.session._id;
+    req.session.checkOut = id;
+    const address = await addressModel.findOne({ userId: id, default: true });
+    const user = await userModel.findOne({ _id: id });
+    const email=user.email;
+    await user.updateCartPrices();
+    await user.populate('cart.items.product');
+    const total = user.cart.totalPrice;
+    const message = req.query.message;
+    if (message) {
+      res.render('checkOut', { address, email, products: user.cart.items, total, grandTotal: total, message, user });
+    } else {
+      res.render('checkOut', { address, email, products: user.cart.items, total, grandTotal: total, user });
     }
   } catch (error) {
     console.log(error);
   }
-}
+};
+
 
 module.exports={
   createUser,

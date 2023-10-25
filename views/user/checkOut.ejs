@@ -25,7 +25,7 @@
                         <a href="/user/addAddress/" style="text-decoration: none; color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Add New Address</span></a>
                     </div>
                     <% if(!address){%>
-                        <div class="container mt-5" style="border: 1px solid black; border-radius: 20px;"><h4 class="mb-4 text-center mt-4" style="font-family: 'Michroma', sans-serif;">No addresses have been added yet. Please add an address.</h4></div>
+                        <div class="col-12 col-md-9 mt-3"><h5 class="mb-4 text-center mt-4" style="font-family: 'Michroma', sans-serif;">No addresses have been added yet. Please add an address.</h5></div>
                     <%} else {%>
                     <div class="col-12 col-md-9 mt-3">
                         <table>
@@ -82,7 +82,11 @@
                                 </a> -->
                             </div>
                             
-                                                            <a class="btn btn-dark rounded text-center text-danger" style=" letter-spacing: 2px; font-size: 30px;">&#x20B9 <%= product?.price %>.00</a>
+                                                            <a class="btn btn-dark rounded text-center text-danger" style=" letter-spacing: 2px; font-size: 30px;">&#x20B9 <%if(product?.discountPercentage&&product?.discountPercentage>0){%>
+                                                                <%= product.price-((product?.price*product?.discountPercentage)/100)%>
+                                                            <%}else {%>
+                                                                <%= product?.price%>
+                                                            <%}%></a>
                                                            
                                                             
                             
@@ -105,7 +109,11 @@
                             </div>
                             <div class="card-footer d-flex justify-content-center align-items-center">
                                 <% if (product?.deleted===false) { %>
-                                    <a class="subTotal btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h4 style=" font-family: 'Michroma', sans-serif;"><span class="">&#x20B9</span><span class="" id="<%=_id%>subTotal"> <%=product.price*quantity%></span><span>.00</span></h3></a> 
+                                    <a class="subTotal btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h4 style=" font-family: 'Michroma', sans-serif;"><span class="">&#x20B9</span><span class="" id="<%=_id%>subTotal"> <%if(product?.discountPercentage&&product?.discountPercentage>0){%>
+                                        <%=(product.price-(product.price*product.discountPercentage)/100)*quantity%>
+                                        <%}else{%>
+                                            <%=product.price*quantity%>
+                                            <%}%></span><span></span></h3></a> 
                                         <% } else { %>
                                 <a class="text-danger btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Not Available!</h3></a>
                             <% } %>
@@ -133,10 +141,10 @@
     <div class="container mt-2 mb-3" style="display: flex; justify-content: center;">
         <div class="row">
             <div class="col-12 col-md-6">
-                <form class="row g-3 needs-validation" action="" method="get" novalidate enctype="application/form-data" style="width: 20vw; min-width: 300px; border: 1px solid rgb(174, 174, 174); border-radius: 7px; padding: 10px 5px;">
+                <form class="row g-3 needs-validation" action="" method="get" novalidate enctype="application/form-data" style="width: 20vw; min-width: 300px; border: 1px solid rgb(174, 174, 174); border-radius: 7px; padding: 10px 5px; box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.705);">
                     <div class="col-md-12">
                         <i class="fa-solid fa-ticket me-2 ms-2" style="font-size: 30px;"></i><label for="validationCustom01" class="form-label" style="font-family: 'Michroma', sans-serif;">Select Coupon</label>
-                        <input type="text" class="form-control codeInput" id="validationCustom01 codeInput" name="code" required>
+                        <input type="text" class="rounded-pill form-control codeInput" id="validationCustom01 codeInput" name="code" required style="box-shadow: 0px 0px 3px rgb(0, 0, 0);">
                         <input type="hidden" name="appliedCoupon" id="appliedCoupon" class="appliedCoupon" value="">
                         <div class="validSpan text-danger" id="validSpan" style=" font-family: 'Michroma', sans-serif; font-size: 13px;">
                             &nbsp;
@@ -144,8 +152,8 @@
                     </div>
                     <div class="save">
                         <div class="d-flex" style="justify-content: center; gap: 10px;">
-                            <button class="btn btn-dark rounded " id="applyCouponButton" type="submit">Apply</button>
-                            <a class="btn btn-dark rounded " id="clearCouponButton"><i class="fa-solid fa-xmark fs-5 mt-1"></i></a>
+                            <button class="btn btn-dark rounded-pill px-3 " id="applyCouponButton" type="submit">Apply</button>
+                            <a class="btn btn-dark rounded-pill px-3 " id="clearCouponButton"><i class="fa-solid fa-xmark fs-5 mt-1"></i></a>
                         </div>
                     </div>
                     <script>
@@ -348,10 +356,9 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Price (<%= products?.length %> items)</td>
+                    <td>Total of (<%= products?.length %> items)</td>
                     <td>₹ <%= total %></td>
                 </tr id="discountTable">
-                    
                 <tr>
                     <td>Delivery Charges</td>
                     <td>(Free)</td>
@@ -369,7 +376,7 @@
                                 />
     
                                 <label class="form-check-label" for="deliveryCheckbox">
-                                    <i class="bi bi-wallet2 ms-2 me-2" style="font-size: 30px ;"></i>  Wallet  <span id="walletAmount">(<%=user.wallet.balance||0%>)</span> 
+                                    <i class="bi bi-wallet2 ms-2 me-2" style="font-size: 30px ;"></i>  Wallet balance : <span id="walletAmount">(<%=user.wallet.balance||0%>)</span> 
                                 </label>
                             </div>
                         </td>

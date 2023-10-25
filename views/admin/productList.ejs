@@ -1,0 +1,121 @@
+<%- include('../layout/headerHTML')-%>
+<link rel="stylesheet" type="text/css" href="../../public/css/adminHome.css">
+
+</head>
+<body>
+    <%- include('../layout/adminHeader')-%>
+
+        <div class="container" style="margin-top: 20px; margin-bottom: 50px;"> 
+<div class="container-fluid adminContainer">
+            <div class="row g-5"> 
+                <div class="adminCenter col-12 col-xxl-2 col-xl-2 col-md-12 col-lg-2 col-sm-12">
+                    <button class="btn btn-dark rounded">Total Item : <%=products.length%></button>
+                    <button class="btn btn-dark rounded mt-2">Total Quantity : <%= products.reduce((total, product) => total + product.quantity, 0) %></button>
+                </div>
+                <div class="adminRight col-12 col-xxl-2 col-xl-2 col-md-12 col-lg-2 col-sm-12">
+                    <a href="/admin/addProduct" style="min-width: 180px;">
+                        <button class="btn btn-dark rounded">Add Item</button>
+                    </a>
+                    <a href="/admin/createCategory" style="min-width: 180px;">
+                        <button class="btn btn-dark rounded mt-2">Categories</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+      <div class="container mt-1 p-4" style="background-color: #e9ddf3cd !important;  border: 1px solid rgb(27, 27, 27); border-radius: 10px;  padding: 20px;">
+            <h2 class="text-center" style="font-family: 'Michroma', sans-serif;">Products</h2>
+            <div class="d-flex justify-content-center mt-2">
+                <form action="/admin/searchProductList" method="get" class="w-50 mt-2 mb-3 needs-validation" enctype="application/form-data">
+                    <div class="input-group mt-3">
+                        <input type="text" class="form-control" name="search" placeholder="Search Product" value="<%= search ? search : '' %>">
+                        <button class="btn btn-dark" type="submit"><i class="bi bi-search"></i></button>
+                    </div>
+                    <div class="d-flex justify-content-end mt-2">
+                        <a href="/admin/productList" class="btn btn-warning rounded-pill px-3"><i class="fa-solid fa-broom"></i></a>
+                    </div>
+                </form>
+            </div>
+            
+
+            <div class="row row-cols-1 row-cols-xl-3 row-cols-md-2 g-4  d-flex" style="justify-content: center;">
+              <% if (products=='') { %>
+                <h2 class="text-center">No Such Products</h2>
+              <% } %>
+              
+              <% if (products) { %>
+     
+              <% products.forEach(product=>{%>
+   
+                <div class="card w-100 p-0" style="height: auto; font-family: 'Michroma', sans-serif; border: 1px solid rgb(121, 121, 121); border-radius: 20px; box-shadow: 0px 0px 3px rgb(191, 0, 255); color: rgb(0, 0, 0);"> 
+                    <div class="row g-0 align-items-center">
+                        <div class="col-lg-2 " >
+                            <a href="/admin/productDetailed?id=<%=product._id%>">
+                              <img src="../../public/productImages/<%= product.images[0] %>" class="img-fluid " alt="Product Image" style="border-radius: 20px; margin-left: 2px;">
+                            </a>
+                        </div>
+                        <div class="col-lg-10 px-2" style="display: flex; flex-direction: column;">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= product.name %></h5>
+                                <span class="card-text d-block"><span style="font-weight: 700;">Quantity:</span> <%= product.quantity %></span>
+                                <span class="card-text d-block"><span style="font-weight: 700;">Category:</span> <%= product.category ? product.category.name : 'N/A' %></span>
+                                <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Brand : </span><%= product.brand%></span>
+                                <p class="card-text"><span style="font-weight: 700;">Price:</span> <%= product.price %><%if(product?.discountPercentage&&product?.discountPercentage>0){%>
+                                  || <b>
+                                    Discount
+                                  </b> = <%=product.discountPercentage||0%> %
+                                <%}%></p>
+                            </div>
+                            <div class="d-flex justify-content-end mt-auto pb-2" style="gap: 10px;">
+                                <a href="/admin/editProduct?id=<%= product._id %>" class="btn btn-dark rounded-pill px-3"><i class="fa-solid fa-pencil"></i></a>
+                                <a href="/admin/deleteProduct?id=<%= product._id %>" class="btn btn-warning rounded-pill px-3" id="button" onclick="handleButtonClick()"><%= product.deleted ? "Show" : "Hide"; %></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                  <%})%>
+              <% } else { %>
+                <h2 class="text-center">No Such Products</h2>
+              <% } %>
+              </div> 
+        </div>
+</div>
+
+<div class="alertKey">
+  <% if(locals.message) { %>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+      data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
+      <strong><%= message %></strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    
+    <script>
+      // Add this script to your page
+      setTimeout(function() {
+        document.getElementById('success-alert').style.display = 'none';
+      }, 2000); // Adjust the delay (in milliseconds) as needed
+    </script>
+  <% } %>      
+</div>
+<div class="alertKey">
+  <% if(locals.messageS) { %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
+      data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
+      <strong><%= messageS %></strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <script>
+      // Add this script to your page
+      setTimeout(function() {
+        document.getElementById('success-alert').style.display = 'none';
+      }, 2000); // Adjust the delay (in milliseconds) as needed
+    </script>
+  <% } %>      
+</div>
+
+
+<script src="../../public/jsFiles/searchVal.js"></script>
+
+
+<%- include('../layout/footer')-%>
+<%- include('../layout/footerHTML')-%>

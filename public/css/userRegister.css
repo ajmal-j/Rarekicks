@@ -5,16 +5,35 @@ font-family: 'Plus Jakarta Sans', sans-serif; */
 }
 
 body{
-    background: hsla(186, 33%, 94%, 1);
+/* background-color: #ecd7ff; */
 
-    background: linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+--s: 100px; /* control the size */
+--c1: #f8b195;
+--c2: #355c7d;
 
-    background: -moz-linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
+--_g: var(--c2) 6% 14%, var(--c1) 16% 24%, var(--c2) 26% 34%,
+  var(--c1) 36% 44%, var(--c2) 46% 54%, var(--c1) 56% 64%, var(--c2) 66% 74%,
+  var(--c1) 76% 84%, var(--c2) 86% 94%;
+background: radial-gradient(
+    100% 100% at 100% 0,
+    var(--c1) 4%,
+    var(--_g),
+    #0008 96%,
+    #0000
+  ),
+  radial-gradient(
+      100% 100% at 0 100%,
+      #0000,
+      #0008 4%,
+      var(--_g),
+      var(--c1) 96%
+    )
+    var(--c1);
+background-size: var(--s) var(--s);
 
-    background: -webkit-linear-gradient(225deg, hsla(186, 33%, 94%, 1) 0%, hsla(216, 41%, 79%, 1) 100%);
-
-    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#EBF4F5", endColorstr="#B5C6E0", GradientType=1 );
 }
+
+  
 .mainContainer{
     flex-direction: row;
     justify-content: center;
@@ -30,12 +49,13 @@ body{
 }
 .mainForm{
     display: flex;
-    background-color: rgba(255, 255, 255, 0.791);
+    background-color: rgba(246, 246, 246, 0.791);
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgb(0, 0, 0);
-    border-radius: 30px;
+    border: 1px solid rgb(53, 53, 53);
+    box-shadow: 2px 2px 5px black;
+    border-radius: 15px;
     padding: 20px;
     min-width: 500px;
 }
@@ -52,13 +72,14 @@ body{
 }
 
 .mainCont{
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.792);
     background-color: rgba(255, 255, 255, 0.676);
     display: flex;
     flex-direction: row;
     width: 550px;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
+    border: 1px solid rgb(72, 72, 72);
     padding: 20px;
     border-radius: 20px;
 }

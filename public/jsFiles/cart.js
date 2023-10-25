@@ -191,7 +191,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             let currentQuantity = parseInt(quantityDisplay.textContent);
                             currentQuantity++;
                             quantityDisplay.textContent = currentQuantity;
-                            subTotal.innerText=(data.price*currentQuantity)
+                            console.log(data)
+                            const price = parseInt(data.price);
+                            subTotal.innerText = (price*currentQuantity);
                             totalButton.innerText=data.total;
                         }
                     }
@@ -218,7 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             let currentQuantity = parseInt(quantityDisplay.textContent);
                             currentQuantity--;
                             quantityDisplay.textContent = currentQuantity;
-                            subTotal.innerText=(data.price*currentQuantity)
+                            const price = parseInt(data.price);
+                            subTotal.innerText = (price*currentQuantity);
                             totalButton.innerText=data.total;
                         }
                     }

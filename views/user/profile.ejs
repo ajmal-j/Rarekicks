@@ -134,7 +134,7 @@
         </div>
         
         <div class="d-flex" style="justify-content: end;">
-        <a href="/user/editProfile" style="text-decoration: none; color: white;"><button class="btn btn-dark pt-2 pb-2 ps-1 pe-1 mt-3 me-3">Edit</button></a>
+        <a href="/user/editProfile" style="text-decoration: none; color: white;"><button class="btn btn-dark pt-2 pb-2 ps-1 pe-1 mt-3 me-3"><i class="fa-regular fa-pen-to-square fs-4 ps-1"></i></button></a>
         <a href="/user/changePassword" style="text-decoration: none; color: white;"><button class="btn btn-dark pt-2 pb-2 ps-1 pe-1 mt-3">Change Password</button></div></a>
     </div>
 
@@ -190,6 +190,7 @@
             <% addresses?.forEach((address, index) => { %>
             <%var _id=address?._id%>
               <form class="addressForm">
+                  <label class="form-check-label" for="flexSwitchCheck<%= index %>" style="font-family: 'Michroma', sans-serif;">Current</label>
                   <div class="form-check form-switch">
                       <% if (length>1){%>
                         <%if(address.default){%>
@@ -198,7 +199,6 @@
                                 <input class="form-check-input currentSwitch" type="checkbox" role="switch" id="<%=_id%>" >
                                 <%}%>
                         <%}%>
-                        <label class="form-check-label" for="flexSwitchCheck<%= index %>">Current</label>
                 </div>
                 <fieldset>
                   <label class="addressLabel" for="fname">First name:</label><br>
@@ -214,8 +214,10 @@
                   <label class="addressLabel" for="city">City:</label><br>
                   <input class="inputAddress" type="text" id="city" name="city" value="<%= address.city %>" readonly><br>
                 </fieldset> 
-                <a href="/user/editAddressShow?id=<%=_id%>" class="btn p-2 btn-dark rounded mt-4 ms-2">Edit</a>
-                <a href="/user/deleteAddress?id=<%=_id%>" class="btn p-2 btn-danger rounded mt-4 ms-3">Remove</a>
+                <div class="d-flex justify-content-end">
+                    <a href="/user/editAddressShow?id=<%=_id%>" class="btn p-2 btn-dark rounded mt-4 ms-2"><i class="fa-regular fa-pen-to-square fs-4 ps-1"></i></a>
+                <a href="/user/deleteAddress?id=<%=_id%>" class="btn p-2 btn-danger rounded mt-4 ms-3"><i class="fa-regular fa-trash-can fs-4 "></i></a>
+                </div>
               </form>
             <% }) %>
           </div>

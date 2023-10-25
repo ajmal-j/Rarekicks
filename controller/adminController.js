@@ -1,14 +1,26 @@
 const adminModel=require("../models/adminModel")
 const bannerModel=require("../models/bannerModel")
-const getProduct=require("../models/productModel")
+const productModel=require("../models/productModel")
+const userModel=require("../models/userModel")
 const couponModel=require("../models/couponModel")
+const orderModel=require("../models/orderModel")
 const jwt=require("jsonwebtoken");
+const moment=require("moment")
 
 const home= async(req,res)=>{
     try {
       const products=await req.products;
       const messageS=req.query.messageS
         res.render("adminHome",{products:products,search:false,messageS});
+      } catch (error) {
+        console.log(error.message);
+      }
+}
+const homeList= async(req,res)=>{
+    try {
+      const products=await req.products;
+      const messageS=req.query.messageS
+        res.render("productList",{products:products,search:false,messageS});
       } catch (error) {
         console.log(error.message);
       }
@@ -31,7 +43,7 @@ const loginValidation=async (req,res)=>{
           httpOnly: true,
           expires: new Date(Date.now() + 10 * 60 * 60 * 1000),
         })
-        res.redirect("/admin/home")
+        res.redirect("/admin/productList")
       }else{
           res.render("adminLogin",{email:req.body.email.trim(),message:"Incorrect Password"})
       }
@@ -172,7 +184,40 @@ const editCoupon = async (req, res) => {
 };
 
 
+const dashBoard=async(req,res)=>{
+  try {
+    const orders=await orderModel.find({status:"Delivered"})
+    const totalUsers=await userModel.countDocuments({})
+    const total=await orderModel.countDocuments({})
+    const orderCompleted=await orderModel.countDocuments({status:"Delivered"})
+    const orderPending = await orderModel.countDocuments({
+      status: { $nin: ["Delivered", "Returned", "Cancelled"] }
+    });
+    const totalSalesForEachOrder = orders.map(order => {
+      const amount = parseFloat(order.payment.amount);
+      const usedFromWallet = parseFloat(order.usedFromWallet);
+      return amount + usedFromWallet;
+    });
+    const totalSales = totalSalesForEachOrder.reduce((accumulator, currentValue) => {
+      return accumulator + currentValue;
+    }, 0);
+    const totalOrders=orders.length;
+    res.render("dashBoard",{totalOrders,orderPending,totalUsers,orderCompleted,totalSales,total})
+  } catch (error) {
+    console.log();
+  }
+}
 
+
+const productDetailed=async(req,res)=>{
+  try {
+    const  id=req.query.id;
+    const product=await productModel.findOne({_id:id}).populate("category")
+    res.render("productDetailed",{product,moment})
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports={
   login,
@@ -186,5 +231,8 @@ module.exports={
   deleteCoupon,
   hideCoupon,
   editCouponShow,
-  editCoupon
+  editCoupon,
+  homeList,
+  dashBoard,
+  productDetailed
 }

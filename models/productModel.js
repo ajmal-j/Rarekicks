@@ -44,11 +44,14 @@ const productSchema = new mongoose.Schema({
     sizes:{
         type: [String],
         required: true 
-     },
+    },
     price : {
         type: Number,
         required: true
-        
+    },
+    discountPercentage:{
+        type:Number,
+        default:0
     },
     description: {
         type: String,
@@ -71,15 +74,25 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     reviews: [reviewSchema],
-    overallRating:{
-        type:Number,
-        default:0
-    },
+    rating: {
+        totalRating: {
+            type: Number,
+            default: 0
+        },
+    }
+}, { timestamps: true });
 
-},{timestamps:true})
+productSchema.virtual('rating.averageRating').get(function () {
+    const totalRating = this.rating.totalRating;
+    const numberOfRating = this.reviews.length;
+    if (numberOfRating === 0) {
+        return 0;
+    }
+    const rawAverage = totalRating / numberOfRating;
+    return Math.max(1, Math.min(5, Math.round(rawAverage)));
+});
 
-
-
-
+productSchema.set('toObject', { virtuals: true });
+productSchema.set('toJSON', { virtuals: true });
 
 module.exports = mongoose.model('product',productSchema)

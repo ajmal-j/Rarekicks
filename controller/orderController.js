@@ -29,6 +29,13 @@ function generateShortID() {
     return shortID;
 }
 
+const success=(req,res)=>{
+    try {
+        res.render("confirm")
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 const testData = async (req, res) => {
     try {
@@ -261,7 +268,7 @@ const confirmOrderOnline=async (req,res)=>{
         if(req.session.orderConfirmed){
             return res.redirect('/user/cart/')
         }
-        const {paymentId,orderId,signature,razorpayorder,code}=req.body
+        const {paymentId,orderId,signature,razorpayorder,code,response}=req.body
         const razorKeySecret = process.env.RAZOR_KEY_SECRET;
         const dataToHash = `${orderId}|${paymentId}`;
         const generated_signature  = crypto.createHmac('sha256', razorKeySecret).update(dataToHash).digest('hex');
@@ -666,5 +673,6 @@ module.exports={
     showConfirmOrder,
     confirmOrderOnline,
     addCoupon,
-    returnOrder
+    returnOrder,
+    success
 }

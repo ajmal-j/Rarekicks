@@ -20,7 +20,7 @@
         </form> -->
 <div class="container" style="display: flex; justify-content: center;">
         <div class="card" style="width: max-content; display: flex; justify-content: center;">
-            <div class="card-body" style="background-color: #ffffff; border: 1px solid rgb(30, 28, 28); border-radius: 5px;">
+            <div class="card-body" style="background-color: #be6fff; border: 1px solid rgb(30, 28, 28); border-radius: 5px;">
                 <div style="display: flex; justify-content: end;">
                     <a href="/admin/deleteCoupon?id=<%=id%>" class="btn btn-outline-dark mb-2"  id="button" >Delete</a>
                 </div>
@@ -34,21 +34,21 @@
                         <form class="row g-3 needs-validation" action="" method="get" novalidate enctype="application/form-data">
                             <div class="col-md-12">
                                 <label for="validationCustom01" class="form-label">Code</label>
-                                <input type="text" class="form-control" id="validationCustom01" name="code" value="<%=code%>" required>
+                                <input type="text" class="form-control rounded-pill" id="validationCustom01" name="code" value="<%=code%>" required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <label for="validationCustom02" class="form-label">DiscountPercentage</label>
-                                <input type="number" class="form-control" id="validationCustom02" name="discountPercentage" value="<%=discountPercentage%>" required>
+                                <input type="number" class="form-control rounded-pill" id="validationCustom02" name="discountPercentage" value="<%=discountPercentage%>" required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <label for="validationCustom02" class="form-label">Discount Expiry Date:</label>
-                                <input type="date" class="form-control" id="validationCustom02" name="discountExpiryDate" required value="<%=validUpTo.toISOString().split('T')[0]%>">
+                                <input type="date" class="form-control rounded-pill" id="validationCustom02" name="discountExpiryDate" required value="<%=validUpTo.toISOString().split('T')[0]%>">
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>

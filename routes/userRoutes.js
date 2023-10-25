@@ -66,6 +66,7 @@ userRouter.post('/placeOrderOnline',JWT.checkJwt,orderController.placeOrderOnlin
 userRouter.post('/confirmOrderOnline',JWT.checkJwt,orderController.confirmOrderOnline)
 userRouter.get('/showConfirmOrder',JWT.checkJwt,orderController.showConfirmOrder)
 userRouter.get('/testOrder',orderController.testData)
+userRouter.get('/success',orderController.success)
 userRouter.get('/orders',JWT.checkJwt,orderController.orderShow)
 userRouter.get('/orderDetailed',JWT.checkJwt,orderController.orderDetailed)
 userRouter.get('/cancelOrder',JWT.checkJwt,orderController.cancelOrder)
@@ -73,6 +74,7 @@ userRouter.get('/returnOrder',JWT.checkJwt,orderController.returnOrder)
 userRouter.get('/addCoupon',JWT.checkJwt,orderController.addCoupon)
 userRouter.get('/allCategories',JWT.checkJwt,productController.allCategories,userController.allProducts)
 
+userRouter.post('/addReview',JWT.checkJwt,productController.addReview)
 
 
 

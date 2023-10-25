@@ -10,6 +10,9 @@ adminRouter.set("views","./views/admin")
 
 
 adminRouter.get('/home',JWT.checkJwtAdmin,productController.getProductAdmin,adminController.home)
+adminRouter.get('/dashBoard',JWT.checkJwtAdmin,adminController.dashBoard)
+adminRouter.get('/productList',JWT.checkJwtAdmin,productController.getProductAdmin,adminController.homeList)
+adminRouter.get('/productDetailed',JWT.checkJwtAdmin,adminController.productDetailed)
 adminRouter.get('/adminLogin',adminController.login)
 adminRouter.get('/logout',adminController.logout)
 adminRouter.get("/loginToken",adminController.loginToken);
@@ -23,6 +26,7 @@ adminRouter.post('/editProduct',JWT.checkJwtAdmin,productController.upload.array
 adminRouter.get('/deleteProduct',JWT.checkJwtAdmin,productController.deleteProduct)
 adminRouter.get('/deleteProductCompletely',JWT.checkJwtAdmin,productController.deleteProductCompletely)
 adminRouter.get('/searchProduct',JWT.checkJwtAdmin,productController.searchProduct)
+adminRouter.get('/searchProductList',JWT.checkJwtAdmin,productController.searchProductList)
 adminRouter.get('/brandBased',JWT.checkJwtAdmin,productController.brandBasedAdmin);
 
 

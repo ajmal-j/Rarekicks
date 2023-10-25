@@ -25,7 +25,6 @@ function clearA() {
                         event.stopPropagation();
                     }
 
-                    form.classList.add('was-validated');
                 }, false);
             });
         })();

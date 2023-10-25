@@ -132,6 +132,10 @@
     word-wrap: break-word;
   }
 
+  .detailsContainer span{
+    font-weight: bolder;
+  }
+
   .info-box p {
     width: 100%;
     max-width: 256px;

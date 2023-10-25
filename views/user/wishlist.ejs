@@ -31,18 +31,30 @@
                                     <a href="/user/productDetailed?id=<%=product._id%>" style="text-decoration: none; color: black;">
                                         <h4 class="card-title mb-1 mt-1 text-center" style="font-family: 'Michroma', sans-serif;"><u><%= product?.name %></u></h4></a>
                                     <div class="d-flex align-item-center mt-4 ms-3">
-                                    <a href="" class="btn btn-dark rounded-pill text-center text-danger ps-4 pe-4" style="font-size: 30px; letter-spacing: 2px;">&#x20B9 <%= product?.price%>.00
-                                    </a>
+                                      <a class="btn btn-dark rounded-pill text-center text-danger ps-4 pe-4" style="font-size: 30px; letter-spacing: 2px;">&#x20B9 <%if(product?.discountPercentage&&product?.discountPercentage>0){%>
+                                        <%= product.price-((product?.price*product?.discountPercentage)/100)%>.00
+                                    <%}else {%>
+                                        <%= product?.price%>.00
+                                    <%}%>
+                                </a>
                                     <a class="addToWishlist" id="<%=product._id%>" style="text-decoration: none; color: black;">
                                     <i class="bi bi-heart-fill ms-2" style="font-size: 40px;"></i></a>
                                 </div>
+                                <%if(product?.discountPercentage&&product?.discountPercentage>0){%>
+                                  <div class="ms-3 d-flex text-danger" style="font-size: 16px; font-family: 'Michroma', sans-serif;">
+                                      <span>Discount : - <%=product.discountPercentage%> %</span>  
+                                    </div>
+                                  <div class="ms-3 d-flex" style="font-size: 13px; font-family: 'Michroma', sans-serif;">
+                                      <span>M.R.P : &#x20B9 <strike><%=product?.price%></strike></span>  
+                                    </div>
+                              <%}%>                  
                                 <div class="container">
                                     <div class="sizeChart d-flex justify-content-end align-items-baseline">
                                         <div id="selectedSizes" class="me-auto" style="font-family: 'Michroma', sans-serif;"></div>
                                         <span class="me-2" style="font-size: 20px;"><u>Size Chart</u></span>
                                         <i class="bi bi-bar-chart-line" style="font-size: 30px;"></i>
                                     </div>
-                                    <div class="btn-group d-flex mb-2" style="justify-content: space-around;" role="group" aria-label="Sizes">
+                                    <div class="btn-group d-flex mb-1" style="justify-content: space-around;" role="group" aria-label="Sizes">
                                         <% if (product?.sizes && product?.sizes.length > 0 && product?.quantity>0) { %>
                                             <% product.sizes.forEach((size) => { %>
                                                 <div class="btn btn-dark size-button rounded" data-size="<%= size %>" data-product-id="<%= product._id %>"><%= size %></div>
@@ -54,7 +66,7 @@
                                             </p>
                                         <% } %>
                                     </div>
-                                    <div class="d-flex mt-3;" style="flex-wrap: wrap; column-gap:30px;">
+                                    <div class="d-flex mt-2;" style="flex-wrap: wrap; column-gap:30px;">
                                         <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-5"><b>Category :</b> </span><%=product?.category?.name%></p>
                                         <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-5"><b>Brand :</b> </span><%=product?.brand%></p>
                                     </div>
@@ -64,9 +76,9 @@
                                     
                                     
                                     <% if (product?.deleted===false && product?.sizes.length>0 && product?.quantity>0) { %>
-                                        <a  id="<%=product._id%>" class="addToCart btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Add To Cart</h3></a>
+                                        <a  id="<%=product._id%>" class="addToCart btn btn-dark d-flex justify-content-center pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Add To Cart</h3></a>
                                     <% } else { %>
-                                        <a class="text-danger btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Not Available!</h3></a>
+                                        <a class="text-danger btn btn-dark d-flex justify-content-center pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Not Available!</h3></a>
                                     <% } %>
 
 

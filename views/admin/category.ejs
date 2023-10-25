@@ -1,10 +1,11 @@
 <%- include('../layout/headerHTML')-%>
-<link rel="stylesheet" type="text/css" href="../../public/css/addProduct.css">
+<link rel="stylesheet" href="../../public/css/addProduct.css">
 
 </head>
 <body>
+  <%- include('../layout/adminHeader') %>
     <div class="backButton" style="text-decoration: none;">
-        <a href="/admin/home">
+        <a href="/admin/productList">
             <button class="btn btn-dark">Back</button>
         </a>
     </div>
@@ -20,34 +21,32 @@
         </header>
         <section class="content-main">
             <div class="content-header">
-                <div>
-                    <h2 class="content-title card-title">Categories </h2>
-                    <p>Add, edit or delete a category</p>
-                </div>
-                <form >
-                    <!-- <div class="input-group">
-                        <input list="search_terms" type="text" class="form-control" placeholder="Search term" name="search">
-                        <input class="btn btn-primary" type="submit" value="search"> 
-                    </div> -->
-                   
-                </form>
+               
             </div>
-            <div class="card">
+            <div class="card p-2" style="background-color:  #be6fff; border-radius: 20px; border: 1px solid rgb(60, 60, 60); ">
                 <div class="card-body">
+                  <div>
+                    <h3 class="text-center mb-3"  style="font-family: 'Michroma', sans-serif;">Add Categories</h3>
+                </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <form action="/admin/createCategory" class="needs-validation" method="post">
+                            <form class="needs-validation">
                                 <div class="mb-4">
-                                    <label for="product_name" class="form-label">Name</label>
-                                    <input name="name" type="text" placeholder="Type here" class="form-control" id="product_name" required/>
+                                    <label for="product_name" class="form-label " style="font-family: 'Michroma', sans-serif;">Name</label>
+                                    <input name="name" type="text" placeholder="Type here" class="form-control rounded-pill" id="product_name" required/>
                                 </div>
                                
                                 <div class="mb-4">
-                                    <label class="form-label">Description</label>
-                                    <textarea name="description" type="text" placeholder="Type here" class="form-control"></textarea>
+                                    <label class="form-label" style="font-family: 'Michroma', sans-serif;">Discount %</label>
+                                    <input name="discountPercentage" type="number" value="0" placeholder="Type here"  class="form-control "></input>
                                 </div>
-                                <div class="d-grid">
-                                    <button class="btn btn-dark" id="button" onclick="handleButtonClick()">Create category</button>
+                               
+                                <div class="mb-4">
+                                    <label class="form-label" style="font-family: 'Michroma', sans-serif;">Description</label>
+                                    <textarea name="description" type="text" placeholder="Type here" class="form-control "></textarea>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <button class="btn btn-warning  rounded-pill px-5" id="button">Add</button>
                                 </div>
                             </form>
                         </div>
@@ -58,28 +57,27 @@
         </section>
     </main>
     <div class="container w-50">
-    <div class="row row-cols-1 row-cols-xl-3 row-cols-md-2 g-4 mt-5 d-flex" style="justify-content: center;">
+    <div class="row g-4 mt-5 d-flex" style="background-color: #ecd7ff; justify-content: center; border: 1px solid rgb(159, 159, 159); border-radius: 20px ; padding: 20px; margin-bottom: 40px;">
         <% if (categories=='') { %>
           <h2 class="text-center">No Such categories</h2>
         <% } %>
         
         <% if (categories) { %>
-
+          <h4 class="text-center mb-3 mt-2"  style="font-family: 'Michroma', sans-serif;">Categories ( <%=categories.length%> )</h4>
         <% categories.forEach(category=>{%>
 
-          <div class="col">
-            <div class="card h-100">
-              <div class="card-body">
-                <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Name : </span><%= category.name%></span>
-                <span class="card-title d-block text-center mt-2"><span style="font-size: 17px; font-weight: 700;"><u>Description</u></span></span>
-                <p class="card-text ps-2 pe-2 pb-2"><%= category.description%></p>
+            <div class=" w-100 p-3 m-3" style="display: flex; flex-wrap: wrap; justify-content: space-between; border: 1px solid rgb(189, 189, 189); border-radius: 20px; background-color: #be6fff; box-shadow: 0px 0px 3px violet;" >
+              <div class=""  style="font-family: 'Michroma', sans-serif;">
+                <span class="card-title d-block"><span class=" text-break overflow-auto word-wrap" style="font-size: 17px; font-weight: 700;">Name : </span><%= category.name%></span>
+                <span class="card-title d-block"><span class=" text-break overflow-auto word-wrap" style="font-size: 17px; font-weight: 700;">Discount : </span><%= category.discountPercentage||0%></span>
+                <span class="card-title inline-block mt-2"><span style="font-size: 17px; font-weight: 700;">Description : </span></span>
+                <p class="ps-2 pe-2 pb-2 text-break overflow-auto word-wrap"><%= category.description %></p>
               </div>
-              <div class="card-footer">
-                  <a href="/admin/editCategory?id=<%=category._id%>" class="btn btn-dark">Edit</a>
-                  <a href="/admin/deleteCategory?id=<%=category._id%>" class="btn btn-danger" id="button" onclick="handleButtonClick()" ><%=category.deleted?"Show":"Hide"; %></a>
+              <div class="d-flex" style="justify-content: end; align-self: baseline;">
+                  <a href="/admin/editCategory?id=<%=category._id%>" class="btn btn-dark rounded-pill px-3"><i class="fa-solid fa-pencil"></i></a>
+                  <a href="/admin/deleteCategory?id=<%=category._id%>" class="btn ms-2 btn-danger rounded-pill px-3" id="button" onclick="handleButtonClick()" ><%=category.deleted?"Show":"Hide"; %></a>
                 </div>
               </div>
-            </div>
             
             
             
@@ -126,35 +124,55 @@
 </div>
 
 <script>
-    (() => {
-        'use strict';
-        const forms = document.querySelectorAll('.needs-validation');
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                const nameInput = form.querySelector('[name="name"]');
-                const nameValue = nameInput.value;
+  (() => {
+      'use strict';
+      const forms = document.querySelectorAll('.needs-validation');
+      Array.from(forms).forEach(form => {
+          form.addEventListener('submit', async event => {
+              event.preventDefault();
+              const nameInput = form.querySelector('[name="name"]');
+              const nameValue = nameInput.value;
+              const discountPercentageInput = form.querySelector('[name="discountPercentage"]');
+              const discountPercentageValue = discountPercentageInput.value;
 
-                if (/^\s*$/.test(nameValue)) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    alert('Name cannot be just spaces.');
-                    return;
-                }
-                
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
+              if (/^\s*$/.test(nameValue) || nameValue === '' || nameValue.length > 15) {
+                  showAlert('Enter a valid name.');
+                  return;
+              }
 
-                form.classList.add('was-validated');
-            }, false);
-        });
-    })();
-    form.addEventListener('keydown', event => {
-            if (event.key === 'Enter') {
-                form.dispatchEvent(new Event('submit'));
-            }
-        });
+              const discountValue = parseInt(discountPercentageValue);
+              if (/^\s*$/.test(discountPercentageValue) || isNaN(discountValue) || discountValue > 80 || discountValue < 0) {
+                  showAlert('Enter a valid discount percentage between 0 and 80.');
+                  return;
+              }
+
+              try {
+                // Submit the form using AJAX
+                const response = await fetch("/admin/createCategory", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name: nameValue, discountPercentage: discountPercentageValue }),
+                }).then(response=>response.json()).then(data=>{
+                  if(data.category==="exist"){
+                    showAlert(data.message)
+                  }else if(data.category==="true"){
+                    showSuccess("Updating");
+                    window.location.reload()
+                  }else{
+                    showAlert("Error While Updating!!")
+                  }
+                })
+              } catch (error) {
+                  console.error('Error submitting the form:', error);
+                  showAlert('An error occurred while submitting the form.');
+              }
+          });
+      });
+  })();
 </script>
+
+
 
     <%- include('../layout/footerHTML')-%>

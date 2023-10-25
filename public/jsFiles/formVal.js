@@ -40,7 +40,7 @@ function showSuccess(message) {
     alertDiv.style.top = '60px';
     alertDiv.style.opacity = '0';
     alertDiv.style.transition = 'opacity 0.5s ease-in-out';
-    alertDiv.style.backgroundColor = '#00cc00'; // Green
+    alertDiv.style.backgroundColor = '#00A36C'; // Green
     alertDiv.style.color = 'white';
     alertDiv.style.padding = '15px';
     alertDiv.style.marginBottom = '15px';
@@ -64,24 +64,6 @@ function showSuccess(message) {
      }, 2000);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         (() => {
             'use strict';
             const forms = document.querySelectorAll('.needs-validation');
@@ -95,6 +77,8 @@ function showSuccess(message) {
                     const quantityValue = quantityInput.value;
                     const descriptionInput = form.querySelector('[name="description"]');
                     const descriptionValue = descriptionInput.value;
+                    const discountPercentageInput = form.querySelector('[name="discountPercentage"]');
+                    const discountPercentageValue = discountPercentageInput.value;
                     
 
                     if (/^\s*$/.test(nameValue)) {
@@ -131,6 +115,13 @@ function showSuccess(message) {
                         showAlert(alertMessage);
                         return;
                     }
+                    if (/^\s*$/.test(discountPercentageValue) || isNaN(discountPercentageValue)) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        const alertMessage='Discount cannot be just spaces, and it must be a valid number.';
+                        showAlert(alertMessage);
+                        return;
+                    }
 
                     const numericPrice = parseFloat(priceValue);
                     if (numericPrice < 500 || numericPrice > 100000) {
@@ -140,9 +131,17 @@ function showSuccess(message) {
                         showAlert(alertMessage);
                         return;
                     }
+                    const numericDiscountPercentage= parseFloat(discountPercentageValue);
+                    if (numericDiscountPercentage < 0 || numericDiscountPercentage > 80) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        const alertMessage = 'Discount must be between 0 and 80.';
+                        showAlert(alertMessage);
+                        return;
+                    }
 
                     const quantityParse = parseFloat(quantityValue);
-                    if (quantityParse < 1 || quantityParse > 100000) {
+                    if (quantityParse < 0 || quantityParse > 100000) {
                         event.preventDefault();
                         event.stopPropagation();
                         const alertMessage='Quantity must be between 1 and 100,000.';
