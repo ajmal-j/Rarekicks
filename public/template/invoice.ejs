@@ -30,8 +30,9 @@
 
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+            /* border-collapse: collapse; */
+            margin-top: 40px;
+            margin-bottom: 40px;
         }
 
         th, td {
@@ -84,13 +85,13 @@
         <p>Email: <%= order.address.email %></p>
     </div>
 
-    <table>
+    <table style="border: 2px solid rgb(0, 0, 0) !important; ">
         <thead>
             <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Size</th>
-                <th>Price</th>
+                <th style="background-color: #0c0c4b;  color: white;">Product Name</th>
+                <th style="background-color: #0c0c4b;  color: white;">Quantity</th>
+                <th style="background-color: #0c0c4b;  color: white;">Size</th>
+                <th style="background-color: #0c0c4b;  color: white;">Price</th>
             </tr>
         </thead>
         <tbody>

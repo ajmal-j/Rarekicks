@@ -78,7 +78,7 @@
 
                                     <% if (product?.deleted===false && product?.quantity>0) { %>
                                         <a class="subTotal btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h4 style=" font-family: 'Michroma', sans-serif;"><span>Sub Total : </span><span class="">&#x20B9</span><span class="" id="<%=_id%>subTotal"> <%if(product?.discountPercentage&&product?.discountPercentage>0){%>
-                                            <%=(product.price-((product.price*product.discountPercentage)/100))*quantity%>
+                                            <%=((product.price-((product.price*product.discountPercentage)/100))*quantity).toFixed(2)%>
                                             <%}else{%>
                                                 <%=product.price*quantity%>
                                                 <%}%>

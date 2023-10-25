@@ -4,6 +4,7 @@ const productModel=require("../models/productModel")
 const userModel=require("../models/userModel")
 const couponModel=require("../models/couponModel")
 const orderModel=require("../models/orderModel")
+const category=require("../models/categoryModel")
 const jwt=require("jsonwebtoken");
 const moment=require("moment")
 
@@ -202,9 +203,27 @@ const dashBoard=async(req,res)=>{
       return accumulator + currentValue;
     }, 0);
     const totalOrders=orders.length;
-    res.render("dashBoard",{totalOrders,orderPending,totalUsers,orderCompleted,totalSales,total})
+    let xValues ;
+    let yValues ;
+
+    try {
+      const result = await orderModel.aggregate([
+          { $group: {_id: "$payment.method" , total : {$sum:1}} }
+      ]);
+      xValues = result.map(item => item._id);
+      yValues = result.map(item => {
+        const total=item.total
+        return total.toString()
+      });
+      // console.log(xValues,yValues);
   } catch (error) {
-    console.log();
+      console.error("Error in aggregation:", error);
+  }
+  const topProducts = await productModel.find({}).sort({ salesCount: -1 }).limit(4);
+  // console.log(topProducts);
+  res.render("dashBoard",{totalOrders,orderPending,totalUsers,orderCompleted,totalSales,total,xValues,yValues,topProducts})
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -214,6 +233,121 @@ const productDetailed=async(req,res)=>{
     const  id=req.query.id;
     const product=await productModel.findOne({_id:id}).populate("category")
     res.render("productDetailed",{product,moment})
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+const getByMonth=async(req,res)=>{
+  try {
+    const {month}=req.body;
+    let x=[];
+    let y=[];
+    try {
+      const result = await orderModel.aggregate([
+        {
+          $group: {
+            _id: {
+              month: { $month: "$createdAt" },
+              year: { $year: "$createdAt" },
+              status: "$status"
+            },
+            totalOrders: { $sum: 1 },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            month: {
+              $let: {
+                vars: {
+                  monthsInString: [, 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                },
+                in: {
+                  $arrayElemAt: ['$$monthsInString', '$_id.month'],
+                },
+              },
+            },
+            status: "$_id.status",
+            totalOrders: 1,
+          },
+        },
+        {
+          $sort: {month: 1 },
+        },
+      ]);
+      
+      console.log(result);
+    
+      
+      for (const data of result) {
+        if(data.month===month){
+          x.push(data.status)
+          y.push(data.totalOrders)
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    res.send({get:true,x,y})
+  } catch (error) {
+    console.log(error);
+  }
+}
+const getByYear=async(req,res)=>{
+  try {
+    const {year}=req.body;
+    let x=[];
+    let y=[];
+    try {
+      const result = await orderModel.aggregate([
+        {
+          $group: {
+            _id: {
+              month: { $month: "$createdAt" },
+              year: { $year: "$createdAt" },
+              status: "$status"
+            },
+            totalOrders: { $sum: 1 },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            month: {
+              $let: {
+                vars: {
+                  monthsInString: [, 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                },
+                in: {
+                  $arrayElemAt: ['$$monthsInString', '$_id.month'],
+                },
+              },
+            },
+            year: '$_id.year',
+            totalOrders: 1,
+            status: "$_id.status"
+          },
+        },
+        {
+          $sort: { year: 1, month: 1  },
+        },
+      ]);
+      
+      console.log(result)
+      for (const data of result) {
+        if(data.year===Number(year)){
+          x.push(data.status);
+          y.push(data.totalOrders);
+        }
+      }
+      console.log(x,y);
+    } catch (error) {
+      console.error(error);
+    }
+    
+    res.send({get:true,x,y})
   } catch (error) {
     console.log(error);
   }
@@ -234,5 +368,7 @@ module.exports={
   editCoupon,
   homeList,
   dashBoard,
-  productDetailed
+  productDetailed,
+  getByMonth,
+  getByYear
 }

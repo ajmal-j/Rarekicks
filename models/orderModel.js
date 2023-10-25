@@ -23,7 +23,10 @@ const orderSchema = new mongoose.Schema({
       },
       amount:{
         type:Number,
-        required:true
+        required:true,
+        set: function(value) {
+            return parseFloat(value).toFixed(2);
+        }
       }
     },
     usedFromWallet:{
@@ -72,7 +75,6 @@ const orderSchema = new mongoose.Schema({
       
     createdAt:{
         type:Date,
-        immutable:true,
         default:()=>Date.now()
     },
     products:{
@@ -92,11 +94,17 @@ const orderSchema = new mongoose.Schema({
             },
             price:{
                 type:Number,
+                set: function(value) {
+                    return parseFloat(value).toFixed(2);
+                }
             }
         }],
         totalPrice:{
             type:Number,
-            default:0
+            default:0,
+            set: function(value) {
+                return parseFloat(value).toFixed(2);
+            }
         }
     },
     status:{

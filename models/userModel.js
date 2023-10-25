@@ -65,7 +65,10 @@ const userSchema = mongoose.Schema(
                 required: true
             },
             price:{
-                type:Number
+                type:Number,
+                set: function(value) {
+                  return parseFloat(value).toFixed(2);
+              }
             },
             size:{
                 type:Number
@@ -74,7 +77,10 @@ const userSchema = mongoose.Schema(
         }],
         totalPrice: {
             type: Number,
-            default: 0
+            default: 0,
+            set: function(value) {
+              return parseFloat(value).toFixed(2);
+          }
         }
     },
     },

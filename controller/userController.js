@@ -399,7 +399,10 @@ const productDetailed = async (req, res) => {
         { deleted: false }
       ]
     }).populate("category");
-    const averageRating = product.rating.averageRating;
+    let averageRating = null;
+    if(product){
+      averageRating = product.rating.averageRating;
+    }
     if (product) {
       res.render("detailedProduct", { products: req.products, product, wishlist: wish ,moment,averageRating});
     } else {
@@ -407,7 +410,6 @@ const productDetailed = async (req, res) => {
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send("Internal Server Error");
   }
 };
 

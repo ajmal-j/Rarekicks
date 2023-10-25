@@ -70,7 +70,8 @@ const insertProduct =async (req,res)=>{
     const images =await req.files.map(file => file.filename);
     const category=req.body.category.trim();
     const {discountPercentage}= await categoryModel.findById(category)
-    const discount=req.body.discountPercentage.trim();
+    const disc=req.body.discountPercentage.trim();
+    const discount=parseInt(disc)
     const newDiscount=discount+discountPercentage;
     try {
         const productData= new Product({
@@ -401,7 +402,18 @@ const checkCategory=async (req,res)=>{
     try {
         const id=req.query.id;
         const name=req.query.name;
+        const {discountPercentage}=await categoryModel.findById(id)
+        const discount=parseInt(req.query.discount.trim())
+        const products=await productModel.find({category:id})
+        for(const product of products){
+            const currentDisc=product.discountPercentage-discountPercentage;
+            const value=currentDisc+discount
+            if(value>80){
+                return res.json({maximum:"true",max:(80-currentDisc)})
+            }
+        }        
         const check = await categoryModel.findOne({ name: name, _id: { $ne: id } });
+        console.log("hahahahahahaah");
         if(check){
             return res.json({exists:true})
         }else{
@@ -421,9 +433,13 @@ const createCategoryShow = async (req, res) => {
 
 
 const editCategoryShow = async (req, res) => {
-    const id= await req.query.id
-    const categories=await category.findOne({_id:id})
-      res.render('editCategory',{categories});
+    try {
+        const id= await req.query.id
+        const categories=await category.findOne({_id:id})
+        res.render('editCategory',{categories});
+    } catch (error) {
+        console.log(error)
+    }
 };
 
 const editCategory = async (req, res) => {
@@ -442,7 +458,7 @@ const editCategory = async (req, res) => {
         for (const product of products){
             const discountNew=product.discountPercentage-discountPercentage;
             const set=discountNew+discount;
-            console.log(discountNew,set,discount)
+            // console.log(discountNew,set,discount)
             await productModel.findByIdAndUpdate(product._id,{$set:{discountPercentage:set}})
         }
         await categoryModel.findByIdAndUpdate(id, data);
@@ -473,7 +489,14 @@ const deleteCategory= async (req, res) => {
 const deleteCategoryCompletely= async (req, res) => {
     try {
     const id= await req.query.id
-    await productModel.updateMany({ category: id }, { $set: { category: "6537f0cec483201d20b35f83" } });
+    const {discountPercentage}=await categoryModel.findById(id)
+    await productModel.updateMany(
+        { category: id },
+        {
+            $set: { category: "6537f0cec483201d20b35f83" },
+            $inc: { discountPercentage: -discountPercentage }
+        }
+    );
     await category.findByIdAndDelete(id)
     // const categories=await categoryModel.find()
     // res.render('category',{categories});
@@ -873,9 +896,13 @@ const allCategories=async (req,res,next)=>{
         const id=req.query.id;
         const products = await productModel.find({$and:[{ category: { _id: id } },{deleted:false}]});
         req.products=products;
-        const {name}=await categoryModel.findById(id)
-        req.brand=name.toUpperCase();
-        next()
+        const category=await categoryModel.findById(id)
+        if(category){
+            req.brand=category.name.toUpperCase();
+            next()
+        }else{
+            return res.redirect('back')
+        }
     } catch (error) {
         console.log(error);
     }
@@ -930,6 +957,24 @@ const isProductExist = (productId, orders) => {
 };
 
 
+const checkDiscount=async(req,res)=>{
+    try {
+        const {discount,category}=req.query;
+        const {discountPercentage}=await categoryModel.findById(category)
+        const discountValue=parseInt(discount)
+        const value=discountValue+discountPercentage;
+        if(value>80){
+            res.json({discount:"false",select:(80-discountPercentage)})
+        }else{
+            res.json({discount:"true"})
+        }
+    } catch (error) {
+        res.json({discount:"error"})
+        console.log(error);
+    }
+}
+
+
 module.exports=
     {addProduct,
     insertProduct,
@@ -964,5 +1009,6 @@ module.exports=
     updateBanner,
     allCategories,
     addReview,
-    searchProductList
+    searchProductList,
+    checkDiscount
 }  

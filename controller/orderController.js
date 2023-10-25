@@ -8,6 +8,7 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const mail =require('../public/jsFiles/mail')
 const moment = require('moment');
+const { error } = require('console');
   
   
 async function sendCoupon(email){
@@ -189,10 +190,15 @@ const showConfirmOrder=async (req,res)=>{
                 .populate({
                     path: 'products.items.product',
                 });
-                const grandTotal=order.payment.amount
-        res.render('orderConfirmation',{products:order.products.items,total:grandTotal.toFixed(2),id:order._id})   
+                if(order){
+                    const grandTotal=order.payment.amount
+                    res.render('orderConfirmation',{products:order.products.items,total:grandTotal.toFixed(2),id:order._id})   
+                }else{
+                    throw new Error("Order not found");
+                }
     } catch (error) {
         console.log(error);
+        res.status(500)
     }
 }
 

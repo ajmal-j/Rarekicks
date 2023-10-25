@@ -36,11 +36,11 @@
                                 </div>
                                 <div class="">
                                     <label for="product_name" class="form-label"  style="font-family: 'Michroma', sans-serif;">Name</label>
-                                    <input name="name" type="text" placeholder="Type here" class="form-control rounded-pill"  value="<%=categories.name%>" id="product_name" /><span class="error-span text-danger">&nbsp;</span>
+                                    <input name="name" type="text" placeholder="Type here" class="form-control rounded-pill"  value="<%=categories.name%>" id="product_name" /><span class="error-span text-danger" style="font-size: 15px; font-weight: bold;">&nbsp;</span>
                                 </div>
                                 <div class="">
                                     <label for="discountPercentage" class="form-label"  style="font-family: 'Michroma', sans-serif;">Discount</label>
-                                    <input name="discountPercentage" type="number" placeholder="Type here" class="form-control rounded-pill"  value="<%=categories.discountPercentage%>" id="discountPercentage" />
+                                    <input name="discountPercentage" type="number" placeholder="Type here" class="form-control rounded-pill"  value="<%=categories.discountPercentage%>" id="discountPercentage" /><span class="errorSpan text-danger" style="font-size: 15px; font-weight: bold;">&nbsp;</span>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label"  style="font-family: 'Michroma', sans-serif;">Description</label>
@@ -123,10 +123,12 @@
         }
         // Add additional form validation conditions as needed
 
-        fetch('/admin/checkCategory?name=' + category+"&id=" +id)
+        fetch('/admin/checkCategory?name=' + category+"&id=" +id+"&discount="+discount)
             .then(response => response.json())
             .then(data => {
-                if (data.exists) {
+                if(data.maximum==="true"){
+                    document.querySelector(".errorSpan").textContent = "Total Discount of Some of the Product is More than 80. Max("+data.max+")";
+                }else if (data.exists) {
                     document.querySelector(".error-span").textContent = "Category name already exists";
                     categoryNameInput.focus();
                 } else {

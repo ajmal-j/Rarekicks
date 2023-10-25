@@ -1,23 +1,65 @@
 <%- include('../layout/headerHTML')-%>
-
-
 <link rel="stylesheet" type="text/css" href="../../public/css/adminHome.css">
-
-<link rel="stylesheet" type="text/css" href="../../public/css/adminDash.css">
-
+<link rel="stylesheet" type="text/css" href="../../public/css/card.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </head>
 <body>
     <%- include('../layout/adminHeader')-%>
 
+    <div class="container mt-5 mb-5">
+      <h3 class="text-center mb-2 d-block" style="  font-family: 'Michroma', sans-serif;">Total Sales & Stats</h3>
+      <div class="btn-group dropdown" style="font-family: 'Michroma', sans-serif; font-size: large; color: white !important;">
+        <button type="button" style="font-size: large;" class="btn btn-dark rounded-pill dropdown-toggle px-3 py-2 ms-3" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-chart-simple me-3" style="font-size: 20px;"></i>Browse
+        </button>
+        <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 4px 4px 8px rgba(255, 255, 255, 0.913);">
+            <li class="dropdown pb-4 ps-3 pe-3">
+                <div class="btn-group dropend">
+                    <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Monthly
+                    </button>
+                    <ul class="dropdown-menu bg-dark text-center p-4">
+                        <% const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; %>
+                        <% months.forEach(month => { %>
+                          <li class="pb-4 ps-3 pe-3">
+                            <a style="text-decoration: none; color:white !important;" onclick="selectMonth('<%= month %>');"><%= month %></a>
+                        </li>
+                        
+                        <% }); %>
+                    </ul>
+                </div>
+                <div class="btn-group dropend">
+                    <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Yearly
+                    </button>
+                    <ul class="dropdown-menu bg-dark text-center p-4">
+                        <% 
+                            const currentYear = new Date().getFullYear();
+                            for (let year = 2023; year <= currentYear; year++) { 
+                        %>
+                            <li class="pb-4 ps-3 pe-3">
+                                <a style="text-decoration: none; color:white !important;" onclick="selectYear('<%= year %>');"><%= year %></a>
+                            </li>
+                        <% } %>
+                    </ul>
+                </div>
+            </li>
+            <li class="pb-4 ps-3 pe-3">
+                <a style="text-decoration: none; color:white !important;" onclick="reset();">By Payment Method</a>
+            </li>
+        </ul>
+        <script>
+          $('.dropdown-menu').on('click', function(e) {
+            if ($(this).hasClass('dropdown-menu')) {
+                e.stopPropagation();
+            }
+          });
+      </script>
+    </div>
+      <canvas id="myChart" style="width:100%; max-width:1000 px"></canvas>
+    </div>
 
-
-
-
-
-
-<div class="container mt-5" style="font-family: 'Michroma', sans-serif;">
-
-  <h3 class="text-center mb-3">Total Sales & Stats</h3>
+<div class="container mt-5 mb-4" style="font-family: 'Michroma', sans-serif;">
   <div class="d-flex justify-content-center gap-3 flex-wrap">
     <div class="card">
       <div class="card-details">
@@ -37,7 +79,7 @@
     </div>
     <div class="card">
       <div class="card-details">
-        <p class="text-title"><i class="fa-solid fa-box"></i> Orders Pending</p>
+        <p class="text-title"><i class="fa-solid fa-boxes-packing"></i> Orders Pending</p>
         <div class="mt-auto" style="display: flex; justify-content: center;">
           <p class="text-body"><%=orderPending%></p>
         </div>
@@ -60,23 +102,188 @@
       </div>
     </div>
   </div>
-  
-
 </div>
 
 
+<h3 class="text-center mb-3 mt-5 d-block" style="  font-family: 'Michroma', sans-serif;">Top Selling Products</h3>
+<div class="container d-flex mb-5">
+  <div class="col-12" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around;">
+      <% topProducts?.forEach((product) => {%>
+      <div class="col-md-5 col-12 pt-3 pb-3">
+          <div class="card">
+              <a href="/admin/productDetailed?id=<%=product._id%>" style="text-decoration: none; color: black;">
+                  <img src="../../public/productImages/<%= product.images[0]%>" class="card-img-top" alt="...">
+              </a>
+              <h5 class="text-center mb-2 mt-4" style="  font-family: 'Michroma', sans-serif;">Sales Count : <%=product.salesCount%></h5>
+          </div>
+      </div>
+      <%})%>
+  </div>
+</div>
+
+
+<script>
+let x = "<%=xValues%>";
+let y = "<%=yValues%>";
+const defaultX=x.split(',')
+const defaultY=y.split(',').map(Number)
+
+
+
+ function selectMonth(selectedItem) {
+  $('.dropdown-toggle').dropdown('toggle');
+    // Perform Fetch API request based on the selected item
+    fetch('/admin/getByMonth', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ month: selectedItem }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.get === true) {
+            x = data.x;
+            y = data.y;
+            let message='Orders Of '+selectedItem;
+            const label="Status"
+            if((x.length&&y.length)===0){
+              message='No Orders In '+selectedItem;
+            }
+            // showAlert("This is it")
+            updateChart(x, y,message,label);
+        } else {
+            showAlert("Error");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
 
 
 
+ function selectYear(selectedItem) {
+  $('.dropdown-toggle').dropdown('toggle');
+    // Perform Fetch API request based on the selected item
+    fetch('/admin/getByYear', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ year: selectedItem }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.get === true) {
+            x = data.x;
+            y = data.y;
+            const message='Orders Of The Year '+selectedItem;
+            const label="Status"
+            // showAlert("This is it")
+            updateChart(x, y,message,label);
+        } else {
+            showAlert("Ooops!");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
 
 
+function updateChart(xValues, yValues,message,label) {
+    // Assuming "myChart" is the variable referencing your chart
+    myChart.data.labels = xValues;
+    myChart.data.datasets[0].data = yValues;
+    myChart.options.title.text=message;
+    myChart.options.scales.xAxes[0].scaleLabel.labelString = label;
+    // Update the chart
+    myChart.update();
+}
+function reset() {
+    // Assuming "myChart" is the variable referencing your chart
+    myChart.data.labels = defaultX;
+    myChart.data.datasets[0].data = defaultY;
+    myChart.options.title.text="Orders By Payment Method";
+    myChart.options.scales.xAxes[0].scaleLabel.labelString="Payment Method";
+    // Update the chart
+    myChart.update();
+}
 
+// Your existing chart creation code
 
+let xValues = x.split(',');
+let yValues = y.split(',').map(Number);
+console.log(xValues);
+console.log(yValues);
+const barColors = ["#00008b" , "#000000 ", "blue", "orange", "brown"];
 
+let myChart = new Chart("myChart", {
+    type: "bar",
+    data: {
+        labels: xValues,
+        datasets: [{
+            backgroundColor: barColors,
+            data: yValues,
+        }],
+    },
+    options: {
+    legend: { display: false },
+    title: {
+        display: true,
+        text: "Orders By Payment Method",
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    scales: {
+        xAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: "Payment Method",
+                fontSize: 16,
+                fontWeight: 'bold',
+            },
+            ticks: {
+                fontSize: 17,
+            },
+        }], 
+        yAxes: [{
+            scaleLabel: {
+                display: true,
+                labelString: "Orders",
+                fontSize: 16,
+                fontWeight: 'bold',
+            },
+            ticks: {
+                fontSize: 17,
+                precision: 0,
+                suggestedMax: 10,
+                suggestedMin: 0,
+            },
+        }],
+    },
+    animation: {
+        duration: 1500,
+    },
+},
 
+});
 
-
+document.querySelectorAll('.dropdown-item').forEach(function(item) {
+  item.addEventListener('click', function(event) {
+    var submenu = this.nextElementSibling;
+    if (submenu.style.display === 'none') {
+      submenu.style.display = 'block';
+    } else {
+      submenu.style.display = 'none';
+    }
+    // This line is to prevent the dropdown from closing
+    event.stopPropagation();
+  });
+});
+</script>
 
 <div class="alertKey">
   <% if(locals.message) { %>

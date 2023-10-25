@@ -32,7 +32,7 @@
                                         <h4 class="card-title mb-1 mt-1 text-center" style="font-family: 'Michroma', sans-serif;"><u><%= product?.name %></u></h4></a>
                                     <div class="d-flex align-item-center mt-4 ms-3">
                                       <a class="btn btn-dark rounded-pill text-center text-danger ps-4 pe-4" style="font-size: 30px; letter-spacing: 2px;">&#x20B9 <%if(product?.discountPercentage&&product?.discountPercentage>0){%>
-                                        <%= product.price-((product?.price*product?.discountPercentage)/100)%>.00
+                                        <%= (product.price-((product?.price*product?.discountPercentage)/100)).toFixed(2)%>
                                     <%}else {%>
                                         <%= product?.price%>.00
                                     <%}%>
