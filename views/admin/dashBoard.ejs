@@ -2,9 +2,20 @@
 <link rel="stylesheet" type="text/css" href="../../public/css/adminHome.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/card.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<style>
+  * a{
+    cursor: pointer;
+  }
+</style>
 </head>
 <body>
     <%- include('../layout/adminHeader')-%>
+    
+
+
+
+
+
 
     <div class="container mt-5 mb-5">
       <h3 class="text-center mb-2 d-block" style="  font-family: 'Michroma', sans-serif;">Total Sales & Stats</h3>
@@ -14,11 +25,14 @@
         </button>
         <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 4px 4px 8px rgba(255, 255, 255, 0.913);">
             <li class="dropdown pb-4 ps-3 pe-3">
+              <div class="btn-group dropend">
+                <a class="btn btn-dark  px-3 py-2" id="customDatesBtn2" style="text-decoration: none; color:white !important;" >Select Period</a>
+            </div>
                 <div class="btn-group dropend">
-                    <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-dark dropdown-toggle px-3 py-3" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 16px;">
                         Monthly
                     </button>
-                    <ul class="dropdown-menu bg-dark text-center p-4">
+                    <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 0px 0px 3px rgba(255, 255, 255, 0.574);">
                         <% const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; %>
                         <% months.forEach(month => { %>
                           <li class="pb-4 ps-3 pe-3">
@@ -32,21 +46,68 @@
                     <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Yearly
                     </button>
-                    <ul class="dropdown-menu bg-dark text-center p-4">
+                    <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 0px 0px 3px rgba(255, 255, 255, 0.575);">
                         <% 
                             const currentYear = new Date().getFullYear();
                             for (let year = 2023; year <= currentYear; year++) { 
                         %>
-                            <li class="pb-4 ps-3 pe-3">
+                            <li class="ps-3 pe-3">
                                 <a style="text-decoration: none; color:white !important;" onclick="selectYear('<%= year %>');"><%= year %></a>
                             </li>
                         <% } %>
+                    </ul>
+                </div>
+                <div class="btn-group dropend">
+                    <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Sales Report <i class="ms-1 fa-regular fa-file-lines"></i>
+                    </button>
+                    <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 0px 0px 3px rgba(255, 255, 255, 0.575);">
+                          <li class="pb-4 ps-3 pe-3">
+                            <a class="btn btn-dark" id="customDatesBtn" style="text-decoration: none; color:white !important;" >Select Period</a>
+                          </li>
+
+
+
+                          <%if(locals?.salesWeekly.length>0){%>
+                            <div class="btn-group dropend">
+                              <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Weekly
+                              </button>
+                              <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 0px 0px 3px rgba(255, 255, 255, 0.575);">
+                                  <%for (const sale of salesWeekly ){%>
+                                    <li class="p-3">
+                                        <a style="text-decoration: none; color:white !important; text-wrap: nowrap;" href="/admin/salesReport?id=<%=sale._id%>"><%= sale.date %></a>
+                                    </li>
+                                  <% } %>
+                              </ul>
+                          </div>
+                          <%}%>
+
+                          <%if(locals?.salesMonthly.length>0){%>
+                            <div class="btn-group dropend">
+                              <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Monthly
+                              </button>
+                              <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 0px 0px 3px rgba(255, 255, 255, 0.575);">
+                                  <%for (const sale of salesMonthly ){%>
+                                    <li class="p-3">
+                                        <a style="text-decoration: none; color:white !important; text-wrap: nowrap;" href="/admin/salesReport?id=<%=sale._id%>"><%= sale.date %></a>
+                                    </li>
+                                  <% } %>
+                              </ul>
+                            </div>
+                          <%}%>
+
                     </ul>
                 </div>
             </li>
             <li class="pb-4 ps-3 pe-3">
                 <a style="text-decoration: none; color:white !important;" onclick="reset();">By Payment Method</a>
             </li>
+            <li class="pb-4 ps-3 pe-3">
+                <a style="text-decoration: none; color:white !important;" onclick="salesByCategory();">By Category</a>
+            </li>
+            
         </ul>
         <script>
           $('.dropdown-menu').on('click', function(e) {
@@ -58,6 +119,226 @@
     </div>
       <canvas id="myChart" style="width:100%; max-width:1000 px"></canvas>
     </div>
+   
+    
+
+    
+    <div class="modal fade" id="datepickerModal" tabindex="-1" role="dialog" aria-labelledby="datepickerModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <form id="datePickerForm" action="/admin/customDates" method="post">
+            <div class="modal-header">
+              <h5 class="modal-title" id="datepickerModalLabel">Select Date Range</h5>
+              <button type="button" class=" btn rounded" data-dismiss="modal" aria-label="Close">
+                <i class="fas fa-times fs-3 " aria-hidden="true"></i>
+            </button>
+            </div>
+            <div class="modal-body">
+              <!-- Date picker input fields -->
+              <div class="form-group">
+                <label for="startDate">Start Date:</label>
+                <input type="date" class="form-control" id="startDate" name="startDate">
+              </div>
+              <div class="form-group">
+                <label for="endDate">End Date:</label>
+                <input type="date" class="form-control" id="endDate" name="endDate">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <!-- Add any other actions you need, such as submitting the selected dates -->
+              <button type="submit" class="btn btn-primary">Apply</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal fade datepickerModal2" id="datepickerModal2" tabindex="-1" role="dialog" aria-labelledby="datepickerModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <form id="datePickerForm2">
+            <div class="modal-header">
+              <h5 class="modal-title" id="datepickerModalLabel">Select Date Range</h5>
+              <button type="button" class=" btn rounded" data-dismiss="modal" aria-label="Close" id="closeModel">
+                <i class="fas fa-times fs-3 " aria-hidden="true"></i>
+            </button>
+            </div>
+            <div class="modal-body">
+              <!-- Date picker input fields -->
+              <div class="form-group">
+                <label for="startDate">Start Date:</label>
+                <input type="date" class="form-control" id="startDateChart" name="startDate">
+              </div>
+              <div class="form-group">
+                <label for="endDate">End Date:</label>
+                <input type="date" class="form-control" id="endDateChart" name="endDate">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <!-- Add any other actions you need, such as submitting the selected dates -->
+              <button type="submit" class="btn btn-primary">Apply</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // Handle button click
+        document.getElementById('customDatesBtn').addEventListener('click', function() {
+          // Show the date picker modal or perform any other actions
+          var modal = new bootstrap.Modal(document.getElementById('datepickerModal'));
+          modal.show();
+        });
+
+        document.getElementById('customDatesBtn2').addEventListener('click', function() {
+          // Show the date picker modal or perform any other actions
+          var modal = new bootstrap.Modal(document.getElementById('datepickerModal2'));
+          modal.show();
+        });
+    
+        // Handle form submission
+        document.getElementById('datePickerForm').addEventListener('submit', function (event) {
+          event.preventDefault(); // Prevent the default form submission behavior
+          handleCustomDates();
+        });
+        document.getElementById('datePickerForm2').addEventListener('submit', function (event) {
+          event.preventDefault(); // Prevent the default form submission behavior
+          handleCustomDates2();
+        });
+      });
+    
+      const handleCustomDates = () => {
+        const startDateInput = document.getElementById('startDate');
+        const endDateInput = document.getElementById('endDate');
+    
+        // Get the values
+        const startDateValue = startDateInput.value;
+        const endDateValue = endDateInput.value;
+    
+        // Validate if both dates are selected
+        if (!startDateValue || !endDateValue) {
+            showAlert("Please select both start and end dates.");
+            return;
+        }
+    
+        // Convert the string values to Date objects
+        const startDate = new Date(startDateValue);
+        const endDate = new Date(endDateValue);
+    
+        // Validate if the dates have a valid format
+        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+            showAlert("Invalid date format. Please select valid dates.");
+            return;
+        }
+    
+        // Validate if there is a difference between the dates
+        if (startDate > endDate) {
+            showAlert("End date must be greater or equal to the start date.");
+            return;
+        }
+    
+        // Validate if the selected date is not a future date
+        const today = new Date();
+        if (endDate > today) {
+            showAlert("End date cannot be a future date.");
+            return;
+        }
+    
+        const form=document.getElementById('datePickerForm')
+        form.submit();
+        form.reset();
+      };
+      const handleCustomDates2 = () => {
+        const startDateInput = document.getElementById('startDateChart');
+        const endDateInput = document.getElementById('endDateChart');
+    
+        // Get the values
+        const startDateValue = startDateInput.value;
+        const endDateValue = endDateInput.value;
+    
+        // Validate if both dates are selected
+        if (!startDateValue || !endDateValue) {
+            showAlert("Please select both start and end dates.");
+            return;
+        }
+    
+        // Convert the string values to Date objects
+        const startDate = new Date(startDateValue);
+        const endDate = new Date(endDateValue);
+    
+        // Validate if the dates have a valid format
+        if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+            showAlert("Invalid date format. Please select valid dates.");
+            return;
+        }
+    
+        // Validate if there is a difference between the dates
+        if (startDate > endDate) {
+            showAlert("End date must be greater or equal to the start date.");
+            return;
+        }
+    
+        // Validate if the selected date is not a future date
+        const today = new Date();
+        if (endDate > today) {
+            showAlert("End date cannot be a future date.");
+            return;
+        }
+    
+        const form=document.getElementById('datePickerForm2')
+        salesByRange(startDateValue,endDateValue);
+        form.reset();
+      };
+    
+    </script>
+    
+
+
+<div class="container dataContainer">
+  <style>
+    .custom-table {
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,.15);
+      overflow: hidden;
+      z-index: 1;
+    }
+    .custom-table thead tr {
+      background-color: #343a40;
+      color: #fff;
+    }
+    .custom-table th,
+    .custom-table td {
+      vertical-align: middle;
+    }
+  </style>
+  <table class="table table-responsive custom-table" cellpadding="10">
+    <thead>
+      <tr>
+        <th>Method</th>
+        <th>Orders</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% data.forEach((data, index) => { %>
+        <tr>
+          <td><%= xValues[index] %></td>
+          <td><%= data %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+    
 
 <div class="container mt-5 mb-4" style="font-family: 'Michroma', sans-serif;">
   <div class="d-flex justify-content-center gap-3 flex-wrap">
@@ -105,6 +386,9 @@
 </div>
 
 
+
+
+
 <h3 class="text-center mb-3 mt-5 d-block" style="  font-family: 'Michroma', sans-serif;">Top Selling Products</h3>
 <div class="container d-flex mb-5">
   <div class="col-12" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: space-around;">
@@ -123,8 +407,24 @@
 
 
 <script>
+  const dataContainer=document.querySelector(".dataContainer");
 let x = "<%=xValues%>";
-let y = "<%=yValues%>";
+let y = "<%= yValues %>";
+function decodeHtml(html) {
+    var txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+}
+
+let description = "<%= JSON.stringify(data) %>";
+let decodedDescription = decodeHtml(description);
+let parsedDescription = JSON.parse(decodedDescription);
+let disc=[];
+parsedDescription.forEach(data => {
+  disc.push(data.toString())
+});
+// console.log(disc);
+
 const defaultX=x.split(',')
 const defaultY=y.split(',').map(Number)
 
@@ -180,8 +480,61 @@ const defaultY=y.split(',').map(Number)
             x = data.x;
             y = data.y;
             const message='Orders Of The Year '+selectedItem;
-            const label="Status"
+            const label="Months"
             // showAlert("This is it")
+            updateChart(x, y,message,label);
+        } else {
+            showAlert("Ooops!");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+ function salesByCategory() {
+  $('.dropdown-toggle').dropdown('toggle');
+    fetch('/admin/salesByCategory')
+    .then(response => response.json())
+    .then(data => {
+        if(data.get === true) {
+            x = data.x;
+            y = data.y;
+            const message='Orders Based On the Category';
+            const label="Categories"
+            updateChart(x, y,message,label);
+        } else {
+            showAlert("Ooops!");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+ function salesByRange(start,end) {
+  const datepickerModal2 = document.querySelector('.datepickerModal2');
+
+if (datepickerModal2) {
+  const modalInstance = new bootstrap.Modal(datepickerModal2);
+  datepickerModal2.style.display='none'
+  const backdropElement = document.querySelector('.modal-backdrop');
+  if (backdropElement) {
+    backdropElement.remove();
+  }
+} else {
+  console.error("Modal element not found or is null");
+}
+console.log("hahahhahah")
+
+    fetch(`/admin/getByDateRange?startDate=${start}&endDate=${end}`)
+    .then(response => response.json())
+    .then(data => {
+        if(data.get === true) {
+            x = data.x;
+            y = data.y;
+            const message=`Orders From ${start} to ${end}` ;
+            const label="Status"
             updateChart(x, y,message,label);
         } else {
             showAlert("Ooops!");
@@ -194,6 +547,7 @@ const defaultY=y.split(',').map(Number)
 
 
 function updateChart(xValues, yValues,message,label) {
+  dataContainer.style.display='none';
     // Assuming "myChart" is the variable referencing your chart
     myChart.data.labels = xValues;
     myChart.data.datasets[0].data = yValues;
@@ -203,6 +557,8 @@ function updateChart(xValues, yValues,message,label) {
     myChart.update();
 }
 function reset() {
+  $('.dropdown-toggle').dropdown('toggle');
+  dataContainer.style.display='block';
     // Assuming "myChart" is the variable referencing your chart
     myChart.data.labels = defaultX;
     myChart.data.datasets[0].data = defaultY;
@@ -216,9 +572,11 @@ function reset() {
 
 let xValues = x.split(',');
 let yValues = y.split(',').map(Number);
-console.log(xValues);
-console.log(yValues);
-const barColors = ["#00008b" , "#000000 ", "blue", "orange", "brown"];
+let descriptions = disc;
+// console.log(xValues);
+// console.log(yValues);
+const barColors = ["#00008b", "#000000", "brown", "#186F65", "purple"];
+
 
 let myChart = new Chart("myChart", {
     type: "bar",
@@ -267,6 +625,17 @@ let myChart = new Chart("myChart", {
     animation: {
         duration: 1500,
     },
+    // tooltips: {
+    //         callbacks: {
+    //             label: function (tooltipItem, data) {
+    //                 let index = tooltipItem.index;
+    //                 let value = data.datasets[0].data[index];
+    //                 let label = data.labels[index];
+    //                 let description = descriptions[index];
+    //                 return `Orders: ${value}   Status : ${description}`;
+    //             }
+    //         }
+    //     },
 },
 
 });

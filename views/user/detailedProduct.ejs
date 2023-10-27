@@ -246,40 +246,97 @@ products?.forEach(productA => {
 
 
 
-<div class="container mt-3 mb-5" style="border: 1px solid rgb(57, 57, 57) !important; border-radius: 5px; padding: 20px; font-family: 'Michroma', sans-serif; ">
+<div class="container mt-3 mb-5" style=" padding: 20px; font-family: 'Michroma', sans-serif; ">
     <%if(product.reviews&&product.reviews.length>0){%>
         <%product.reviews.forEach(review=>{%>
-            <div class="product-card" style="border: 1px solid rgb(68, 67, 67); background-color: rgba(255, 255, 255, 0.804);">
+            <style>
+              .product-card {
+                    border: 1px solid rgb(109, 108, 108);
+                    background-color: rgba(255, 255, 255, 0.804);
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 20px;
+                    padding: 20px;
+                    box-sizing: border-box;
+                    border-radius: 20px;
+                    transition: 0.5s ease-out;
+                }
+
+                .product-card:hover {
+                    box-shadow: 0px 0px 7px rgb(192, 115, 255);
+                    border-radius: 30px;
+                }
+
+            
+                .product-info {
+                    flex: 1 1 100%;
+                    max-width: 400px; /* Adjust the max-width based on your design */
+                }
+            
+                .product-info h5 {
+                    margin-bottom: 5px;
+                }
+            
+                .product-info p {
+                    margin: 5px 0;
+                }
+            
+                .rating-container {
+                    min-width: 240px;
+                    margin-left: 20px;
+                    flex: 1 1 100%;
+                    display: flex;
+                    align-items: center;
+                }
+            
+                .rating-container i {
+                    color: rgba(255, 217, 0, 0.787);
+                    font-size: 1.5rem; /* Adjust the font size based on your design */
+                }
+            
+                @media only screen and (min-width: 768px) {
+                    .product-info {
+                        flex: 1 1 calc(70% - 20px);
+                        max-width: calc(70% - 20px);
+                    }
+            
+                    .rating-container {
+                        flex: 1 1 30%;
+                    }
+                }
+            </style>
+            
+            <div class="product-card">
                 <div class="product-info">
                     <h5><i class="fa-regular fa-circle-user fs-1 me-2"></i> <%=review.userName.toUpperCase()%></h5>
                     <p><b>Posted On : </b><%=moment(review.postedOn).format('YYYY-MM-DD')%></p>
-                    <p style="margin-top: -10px;"><b>Review : </b><%=review.review%></p>
+                    <p style="margin-top: -10px;"><b>Review : <%=review.rating%>/5 </b><%=review.review%></p>
                 </div>
-                <div style="min-width: 240px; margin-left: 20px;">
+                <div class="rating-container">
                     <% const rating = review.rating; %>
-    
                     <% for (let i = 0; i < 5; i++) { %>
-                    <% if (i < rating) { %>
-                        <i class="fa-solid fa-star fs-3" style="color: gold;"></i>
-                    <% } else { %>
-                        <i class="fa-regular fa-star fs-3" style="color: rgba(255, 217, 0, 0.787);"></i>
+                        <% if (i < rating) { %>
+                            <i class="fa-solid fa-star fs-3" style="color: gold;"></i>
+                        <% } else { %>
+                            <i class="fa-regular fa-star fs-3"></i>
+                        <% } %>
                     <% } %>
-                    <% } %>
-    
                 </div>
             </div>
+            
             <%})%>
         <%} else {%>
             <div class="product-card" style="border: 1px solid rgb(68, 67, 67); background-color: rgba(255, 255, 255, 0.804);">
                 <div class="product-info">
-                    <h3 class="text-center">No review's</h5>
+                    <h5 class="text-center">No review's</h5>
             </div>
             <%}%>
 
     <!-- Button to Open Review Modal -->
-    <button type="button" class="btn btn-dark rounded-pill px-3 py-2 mt-2" data-toggle="modal" data-target="#reviewModal">
+    <button type="button" class="btn btn-dark rounded-pill px-3 py-2 mt-2 " data-toggle="modal" data-target="#reviewModal">
         Add Review
     </button>
+    
 
     <!-- Review Modal -->
     <div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">

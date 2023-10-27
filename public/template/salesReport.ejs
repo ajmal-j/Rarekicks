@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Overview</title>
+  <!-- Add any additional styling here -->
+  <style>
+    body{
+      padding: 100px;
+      border: 1px solid rgb(100, 99, 99) !important;
+      border-radius: 5px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      
+      padding: 80px;
+    }
+
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <h2 style="text-align: center;">Sales Report</h2>
+
+  <!-- Overall sales summary table -->
+  <h3>Overall Sales Summary</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Type</th>
+        <th>Total Orders</th>
+        <th>Successful Orders</th>
+        <th>Total Sales</th>
+        <th>Total Revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= doc.date %></td>
+        <td><%= doc.type %></td>
+        <td><%= doc.totalOrders %></td>
+        <td><%= doc.successfulOrders %></td>
+        <td><%= doc.totalSales %></td>
+        <td><%= doc.totalRevenue %></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Product details table -->
+  <h3>Product Details</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Product ID</th>
+        <th>Product Sales</th>
+        <th>Product Count</th>
+        <th>Product Revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% doc.products.forEach((product) => { %>
+        <tr>
+          <td><%= product.id %></td>
+          <td><%= product.sales %></td>
+          <td><%= product.count %></td>
+          <td><%= product.revenue %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+
+  <!-- Category details table -->
+  <h3>Category Details</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Category ID</th>
+        <th>Category Name</th>
+        <th>Category Sales</th>
+        <th>Category Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% doc.categories.forEach((category) => { %>
+        <tr>
+          <td><%= category.id %></td>
+          <td><%= category.category %></td>
+          <td><%= category.sales %></td>
+          <td><%= category.count %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+
+  <!-- Payment methods table -->
+  <h3>Payment Methods</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Payment Method</th>
+        <th>Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% doc.paymentMethods.forEach((method) => { %>
+        <tr>
+          <td><%= method.method %></td>
+          <td><%= method.count %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+
+</body>
+</html>

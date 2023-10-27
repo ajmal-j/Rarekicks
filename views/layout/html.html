@@ -7,44 +7,86 @@
   <title>Bootstrap Button Popup with Select</title>
 </head>
 <body>
-
-<!-- Button trigger modal -->
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Select an Option</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- Form with select dropdown -->
-        <form>
-          <div class="form-group">
-            <label for="exampleFormControlSelect1">Select an option:</label>
-            <select class="form-control" id="exampleFormControlSelect1">
-              <option>Option 1</option>
-              <option>Option 2</option>
-              <option>Option 3</option>
-              <!-- Add more options as needed -->
-            </select>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 </div>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Open Popup
-</button>
+<canvas id="myChart" style="width:100%; max-width:1000 px"></canvas>
+</div>
+  <script>
+    let dataPoints = [
+      { label: "Method A", value: 5, description: "Description A", value2: 10, description2: "Extra Info A" },
+      { label: "Method B", value: 8, description: "Description B", value2: 15, description2: "Extra Info B" },
+      { label: "Method C", value: 3, description: "Description C", value2: 8, description2: "Extra Info C" },
+    ];
+  
+    let labels = dataPoints.map(point => point.label);
+    let values = dataPoints.map(point => point.value);
+  
+    console.log(labels);
+    console.log(values);
+  
+    const barColors = ["#00008b", "#000000", "brown", "yellow", "purple"];
+  
+    let ctx = document.getElementById("myChart").getContext('2d');
+  
+    let myChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [{
+          backgroundColor: barColors,
+          data: values,
+        }],
+      },
+      options: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "Orders By Payment Method",
+          fontSize: 18,
+          fontWeight: 'bold',
+        },
+        scales: {
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: "Payment Method",
+              fontSize: 16,
+              fontWeight: 'bold',
+            },
+            ticks: {
+              fontSize: 17,
+            },
+          }],
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: "Orders",
+              fontSize: 16,
+              fontWeight: 'bold',
+            },
+            ticks: {
+              fontSize: 17,
+              precision: 0,
+              suggestedMax: 10,
+              suggestedMin: 0,
+            },
+          }],
+        },
+        animation: {
+          duration: 1500,
+        },
+        tooltips: {
+          callbacks: {
+            label: function (tooltipItem, data) {
+              let point = dataPoints[tooltipItem.index];
+              return `Orders: ${point.value}\nDescription: ${point.description}\nExtra Info: ${point.value2} - ${point.description2}`;
+            }
+          }
+        },
+      },
+    });
+  </script>
+  
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
