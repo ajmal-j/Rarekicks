@@ -1,68 +1,3 @@
-function showAlert(message) {
-    const alertDiv = document.createElement('div');
-    alertDiv.className = 'alert';
-    alertDiv.style.position = 'fixed';
-    alertDiv.style.right = '20px';
-    alertDiv.style.zIndex = '2000000000000000';
-    alertDiv.style.top = '60px';
-    alertDiv.style.opacity = '0';
-    alertDiv.style.transition = 'opacity 0.5s ease-in-out';
-    alertDiv.style.backgroundColor = '#D80032'; // Red
-    alertDiv.style.color = 'white';
-    alertDiv.style.padding = '15px';
-    alertDiv.style.marginBottom = '15px';
-    alertDiv.style.borderRadius = '4px';
-    alertDiv.style.boxShadow = '0 2px 15px 0 rgba(0,0,0,0.24), 0 5px 5px 0 rgba(0,0,0,0.19)';
-    alertDiv.setAttribute('role', 'alert');
-    alertDiv.innerHTML = `<strong>${message}</strong>`;
-    document.body.appendChild(alertDiv);
-
-    // Fade in
-    setTimeout(() => {
-        alertDiv.style.opacity = '1';
-    }, 50);
-
-    // Fade out and remove
-    setTimeout(() => {
-        alertDiv.style.opacity = '0';
-        setTimeout(() => {
-            alertDiv.remove();
-        }, 500);
-    }, 2000);
-}
-
-function showSuccess(message) {
-    const alertDiv = document.createElement('div');
-    alertDiv.className = 'alert';
-    alertDiv.style.position = 'fixed';
-    alertDiv.style.right = '20px';
-    alertDiv.style.zIndex = '200000000000000000000000';
-    alertDiv.style.top = '60px';
-    alertDiv.style.opacity = '0';
-    alertDiv.style.transition = 'opacity 0.5s ease-in-out';
-    alertDiv.style.backgroundColor = '#00A36C'; // Green
-    alertDiv.style.color = 'white';
-    alertDiv.style.padding = '15px';
-    alertDiv.style.marginBottom = '15px';
-    alertDiv.style.borderRadius = '4px';
-    alertDiv.style.boxShadow = '0 2px 15px 0 rgba(0,0,0,0.24), 0 5px 5px 0 rgba(0,0,0,0.19)';
-    alertDiv.setAttribute('role', 'alert');
-    alertDiv.innerHTML = `<strong>${message}</strong>`;
-    document.body.appendChild(alertDiv);
-
-     // Fade in
-     setTimeout(() => {
-        alertDiv.style.opacity = '1';
-     }, 50);
-
-     // Fade out and remove
-     setTimeout(() => {
-        alertDiv.style.opacity = '0';
-        setTimeout(() => {
-            alertDiv.remove();
-        }, 500);
-     }, 2000);
-}
 
         (() => {
             'use strict';
@@ -72,14 +7,25 @@ function showSuccess(message) {
                     const nameInput = form.querySelector('[name="name"]');
                     const nameValue = nameInput.value;
                     const priceInput = form.querySelector('[name="price"]');
-                    const priceValue = priceInput.value;
+                    let priceValue; 
+                    if(priceInput){
+                        priceValue=priceInput.value;
+                    }
                     const quantityInput = form.querySelector('[name="quantity"]');
-                    const quantityValue = quantityInput.value;
+                    let quantityValue; 
+                    if(quantityInput){
+                        quantityValue=quantityInput.value;
+                    }
                     const descriptionInput = form.querySelector('[name="description"]');
-                    const descriptionValue = descriptionInput.value;
+                    let descriptionValue; 
+                    if(descriptionInput){
+                        descriptionValue=descriptionInput.value;
+                    }
                     const discountPercentageInput = form.querySelector('[name="discountPercentage"]');
-                    const discountPercentageValue = discountPercentageInput.value;
-                    
+                    let discountPercentageValue; 
+                    if(discountPercentageInput){
+                        discountPercentageValue=discountPercentageInput.value;
+                    }
 
                     if (/^\s*$/.test(nameValue)) {
                         event.preventDefault();
@@ -108,12 +54,14 @@ function showSuccess(message) {
                     }
 
                     if (/^\s*$/.test(priceValue) || isNaN(priceValue)) {
-                        event.preventDefault();
+                        if(priceValue){
+                            event.preventDefault();
                         event.stopPropagation();
                         priceInput.value='';
                         const alertMessage='Price cannot be just spaces, and it must be a valid number.';
                         showAlert(alertMessage);
                         return;
+                        }
                     }
                     if (/^\s*$/.test(discountPercentageValue) || isNaN(discountPercentageValue)) {
                         event.preventDefault();

@@ -83,7 +83,7 @@ const placeOrderCOD=async (req,res)=>{
         const userId=req.session._id;
         req.session.checkOut=false;
         req.session.orderConfirmed=false
-        const {cart,email,wallet,orderedByReferral,referredBy}=await userModel.findById(userId);
+        const {cart,email,wallet}=await userModel.findById(userId);
         const total=cart.totalPrice;
         if(cart.totalPrice===0){
             return res.redirect('/user/home')
@@ -159,14 +159,7 @@ const placeOrderCOD=async (req,res)=>{
         newOrder.save()
             .then(async savedOrder => {
                 // console.log('Order saved successfully:', savedOrder);
-                if(orderedByReferral===false){
-                    const {referralsApplied}=await userModel.findById(referredBy);
-                    if(referralsApplied<=3){
-                        await userModel.findByIdAndUpdate(referredBy,
-                            {$inc:{'wallet.balance':500,'wallet.total':500,referralsApplied:1}}
-                        )
-                    }
-                }
+                
                 for (const item of savedOrder.products.items) {
                     const productId = item.product._id;
                     const orderedQuantity = item.quantity;
@@ -175,8 +168,7 @@ const placeOrderCOD=async (req,res)=>{
                     });
                 }
                 await userModel.findByIdAndUpdate(userId, {
-                    $unset: { cart: 1 },
-                    $set: { orderedByReferral: true }
+                    $unset: { cart: 1 }
                   });
                 req.session.orderConfirmed=true;
                 sendCoupon(email)

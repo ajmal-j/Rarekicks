@@ -258,6 +258,8 @@
                         return;
                         }
                         if (!form.checkValidity()) {
+                            showAlert("Fill The Form Correctly")
+                            form.classList.add('was-validated');
                             return;
                         }
             

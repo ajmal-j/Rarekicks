@@ -134,29 +134,78 @@
         </div>
         
         <div class="d-flex" style="justify-content: end;">
-        <a href="/user/editProfile" style="text-decoration: none; color: white;"><button class="btn btn-dark pt-2 pb-2 ps-1 pe-1 mt-3 me-3"><i class="fa-regular fa-pen-to-square fs-4 ps-1"></i></button></a>
+        <a href="/user/editProfile" style="text-decoration: none; color: white;"><button class="btn btn-dark pt-2 pb-2 ps-1 pe-1 mt-3 me-2"><i class="fa-solid fa-pencil  px-2"></i></button></a>
         <a href="/user/changePassword" style="text-decoration: none; color: white;"><button class="btn btn-dark pt-2 pb-2 ps-1 pe-1 mt-3">Change Password</button></div></a>
     </div>
 
-
     <style>
-        #copyButton {
-            padding: 10px;
-            cursor: pointer;
+        .referral-container {
+            max-width: 400px;
+            margin: 20px auto;
+            text-align: center;
+            font-family: 'Michroma', sans-serif;
+            background-color: #f9f9f9;
         }
-    </style>
+        .referral-container p {
+            font-size: 16px;
+            color: #333;
+        }
+        .referral-container strong {
+            color: #140656;
+        }
+        .referral-container .input-group {
+            justify-content: center;
+        }
+        .referral-container button {
+            background-color: #000000;
+            color: #fff;
+        }
+        .border-design {
+        position: relative;
+        }
 
-<%if(user.referralCode){%>
-    <div class="container">
-        <div class="input-group mb-3" style="width: 200px !important;">
-            <input type="text" class="form-control" placeholder="Copy Referral Link" aria-label="copyButton" aria-describedby="copyButton" readonly style="border: 0.5px solid rgb(79, 78, 78);">
-            <input type="text" class="form-control input" id="referralLink" value="http://localhost:3000/user/register?ref=<%=user.referralCode%>" hidden readonly>
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="copyButton" onclick="copyReferralLink()"><i class="fa-regular fa-copy"></i></button>
+        .border-design::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 0.5px;
+        bottom: 0;
+        left: 0;
+        background-color: rgb(74, 74, 74);
+        transition: width 0.3s ease-in-out; /* Adjust the duration and easing as needed */
+        }
+
+        .border-design:hover::before {
+        width: 0; /* Change this value to adjust the "moving" effect */
+        }
+
+    </style>
+    
+    <%if(user.referralCode){%>
+        <div class="referral-container card" style="padding: 20px !important;">
+            <div class="text-success text-center mt-3 mb-3 fs-5 " >
+                <i class="fa-solid fa-gift fa-shake me-2 fs-4" style="color: #133c05;"></i> <b>Referral Offer</b>
             </div>
-        </div>
-    </div>
-<%}%>
+            <p>Invite a friend with this link and they'll receive <strong>₹500</strong> instantly!</p>
+            <p>You'll also receive <strong>₹500</strong> when they place their first paid order.</p>
+            <p><strong>Your Referral Link:</strong></p>
+            <%if(user.referralsApplied<=3){%>
+                <div class="container">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="referralLink" value="http://localhost:3000/user/register?ref=<%=user.referralCode%>" readonly>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="copyButton" onclick="copyReferralLink()"><i class="fa-regular fa-copy"></i></button>
+                        </div>
+                    </div>
+                </div>
+            <%}else {%>
+                <div class="text-danger text-center mt-3 mb-3">
+                    <b>Your referrals are over. Thank you for participating!</b>
+                </div>
+            <%}%>
+          </div>
+    <%}%>
+    
 
 <script>
     function copyReferralLink() {
@@ -182,7 +231,7 @@
 
 
     <div class="container mb-2" style="font-family: 'Michroma', sans-serif;">
-        <h3 class="mb-4 mt-2 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;"><i class="fa-solid fa-wallet me-2" style="font-size: 30px;"></i>Wallet</h3>
+        <h3 class="mb-4 mt-2 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;"><i class="fa-solid fa-wallet me-2" style="font-size: 20px;"></i>Wallet</h3>
         <div class="profile-container">
             <div class="profile-card">
                 <div class="headerC">
@@ -218,7 +267,7 @@
 
 
     <div class="container mt-2 d-flex" style="align-items: center;">
-        <h3 class="mb-4 mt-2 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;"><i class="fa-solid fa-location-dot me-2" style="font-size: 30px;"></i>Address !</h3>
+        <h3 class="mb-4 mt-2 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;"><i class="fa-solid fa-location-dot me-2" style="font-size: 20px;"></i>Address !</h3>
         <a href="/user/addAddress/" style="text-decoration: none; color: black;">
         <h3 class="ms-3 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;">+</h3></a></div>
 
@@ -229,7 +278,7 @@
             <%} %>
             <% addresses?.forEach((address, index) => { %>
             <%var _id=address?._id%>
-              <form class="addressForm">
+              <form class="addressForm card" style="padding: 30px !important;  min-width: 400px !important; gap: 0px !important;" >
                   <label class="form-check-label" for="flexSwitchCheck<%= index %>" style="font-family: 'Michroma', sans-serif;">Current</label>
                   <div class="form-check form-switch">
                       <% if (length>1){%>
