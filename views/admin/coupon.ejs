@@ -35,6 +35,20 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
+                                <label for="validationCustom02" class="form-label">Minimum Amount :</label>
+                                <input type="number" class="form-control rounded-pill" id="validationCustom02" name="minimumAmount"  required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="validationCustom02" class="form-label">Maximum Amount :</label>
+                                <input type="number" class="form-control rounded-pill" id="validationCustom02" name="maximumAmount"  required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                            <div class="col-md-12">
                                 <label for="validationCustom02" class="form-label">Discount Expiry Date:</label>
                                 <input type="date" class="form-control rounded-pill" id="validationCustom02" name="discountExpiryDate" required>
                                 <div class="valid-feedback">
@@ -107,16 +121,25 @@
             const discountValue = discountInput.value.trim();
             const discount = parseInt(discountValue);
 
+            const minimumInput = form.querySelector('[name="minimumAmount"]');
+            const minimumValue = minimumInput.value;
+
+            const maximumInput = form.querySelector('[name="maximumAmount"]');
+            const maximumValue = maximumInput.value;
+
             if (codeValue === '' || !isNaN(codeValue) || codeValue.length > 15 || codeValue.length < 4) {
                 showAlert('Please enter a valid code.');
-                form.classList.add('was-validated'); // Add 'was-validated' class
                 return;
             }
 
             if (!isValidFutureDate(dateValue)) {
                 showAlert('Please enter a valid future date.');
-                form.classList.add('was-validated'); // Add 'was-validated' class
                 return;
+            }
+
+            if (((minimumValue||maximumValue)<0)||(minimumValue>=maximumValue)||((minimumValue||maximumValue)==='')) {
+                    showAlert('Please enter a valid Amount.');
+                    return;
             }
 
             function isValidFutureDate(dateString) {
@@ -134,21 +157,20 @@
 
             if (discountValue === '' || discount >= 80 || discount < 1) {
                 showAlert('Please enter a valid discount value.');
-                form.classList.add('was-validated'); // Add 'was-validated' class
                 return;
             }
 
             if (!form.checkValidity()) {
-                form.classList.add('was-validated'); // Add 'was-validated' class
                 return;
             }
 
             try {
-                const response = await fetch(`/admin/addCoupon?code=${codeValue}&discount=${discountValue}&date=${dateValue}`);
+                const response = await fetch(`/admin/addCoupon?code=${codeValue}&discount=${discountValue}&date=${dateValue}&min=${minimumValue}&max=${maximumValue}`);
                 const data = await response.json();
                 console.log(data);
                 if (data.added === true) {
                     showSuccess('Updating!');
+                    form.classList.add('was-validated');
                     location.reload();
                 } else if (data.added === "exist") {
                     showAlert('Coupon already exists!');

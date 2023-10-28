@@ -29,6 +29,22 @@ const userSchema = mongoose.Schema(
         required: true,
         unique: true,
       },
+      referralCode: {
+        type: String,
+        unique: true,
+      },
+      referredBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+      orderedByReferral:{
+        type:Boolean,
+        default:false
+      },
+      referralsApplied: {
+        type: Number,
+        default: 0,
+      },
       password: {
         type: String,
         required: true,
@@ -150,8 +166,6 @@ userSchema.methods.updateCartPrices = async function () {
   }
   await this.save();
 };
-
-
 
 const userModel=mongoose.model("user",userSchema)
 module.exports=userModel

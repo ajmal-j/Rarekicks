@@ -28,6 +28,14 @@ const couponSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
+    minimumAmount:{
+        type:Number,
+        default:0
+    },
+    maximumAmount:{
+        type:Number,
+        default:0
+    }
 });
 
 module.exports = mongoose.model('coupon', couponSchema);

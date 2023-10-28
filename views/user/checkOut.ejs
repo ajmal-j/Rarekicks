@@ -1,7 +1,44 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/checkOut.css">
+<style>
+    .walletCheck {
+ display: inline-block;
+  text-align: center;
+}
 
+input[type="checkbox"] {
+  position: relative;
+  top: 8px;
+  width: 35px;
+  height: 35px;
+  -webkit-appearance: none;
+  outline: none;
+  transition: 0.5s;
+}
+
+input[type="checkbox"]:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 3px solid #ffffff;
+  box-sizing: border-box;
+  border-radius: 5px;
+  transition: 0.5s;
+}
+
+input:checked[type="checkbox"]:before {
+  border-left: none;
+  border-top: none;
+  width: 20px;
+  border-color: rgb(128, 0, 255);
+  border-radius: 0px;
+  transform: rotate(45deg) translate(5px, -10px);
+}
+</style>
 </head>
 <body>
     <%- include('../layout/header') %>
@@ -139,21 +176,79 @@
 
 
     <div class="container mt-2 mb-3" style="display: flex; justify-content: center;">
-        <div class="row">
-            <div class="col-12 col-md-6">
-                <form class="row g-3 needs-validation" action="" method="get" novalidate enctype="application/form-data" style="width: 20vw; min-width: 300px; border: 1px solid rgb(174, 174, 174); border-radius: 7px; padding: 10px 5px; box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.705);">
+        <div class="row ">
+            <div class="col-12 card">
+                <form class="row g-3 needs-validation" action="" method="get" novalidate enctype="application/form-data" style="width: 20vw; min-width: 300px;">
                     <div class="col-md-12">
-                        <i class="fa-solid fa-ticket me-2 ms-2" style="font-size: 30px;"></i><label for="validationCustom01" class="form-label" style="font-family: 'Michroma', sans-serif;">Select Coupon</label>
-                        <input type="text" class="rounded-pill form-control codeInput" id="validationCustom01 codeInput" name="code" required style="box-shadow: 0px 0px 3px rgb(0, 0, 0);">
+                        <i class="fa fa-gift me-2 ms-2  fa-bounce" style="font-size: 30px;  "></i><label for="validationCustom01" class="form-label ms-2" style="font-family: 'Michroma', sans-serif;">Select Coupon</label>
+                        <div class="input-group">
+                            <input type="text" class=" form-control codeInput" id="validationCustom01 codeInput" name="code" required style="border-top: 1px solid rgb(126, 126, 126); border-bottom: 1px solid rgb(126, 126, 126); border-left: 1px solid rgb(126, 126, 126);"
+                            >
+                        <a class="btn btn-outline-dark " id="clearCouponButton"><i class="fa-solid fa-broom "></i></a>
+                        </div>
                         <input type="hidden" name="appliedCoupon" id="appliedCoupon" class="appliedCoupon" value="">
                         <div class="validSpan text-danger" id="validSpan" style=" font-family: 'Michroma', sans-serif; font-size: 13px;">
                             &nbsp;
                         </div>
                     </div>
-                    <div class="save">
-                        <div class="d-flex" style="justify-content: center; gap: 10px;">
-                            <button class="btn btn-dark rounded-pill px-3 " id="applyCouponButton" type="submit">Apply</button>
-                            <a class="btn btn-dark rounded-circle " id="clearCouponButton"><i class="fa-solid fa-xmark fs-5 mt-1"></i></a>
+                    <style>
+                        .Btn {
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            justify-content: flex-start;
+                            width: 100px;
+                            height: 40px;
+                            border: none;
+                            padding: 0px 20px;
+                            background-color: #a826ff;
+                            color: white;
+                            font-weight: 500;
+                            cursor: pointer;
+                            border-radius: 10px;
+                            box-shadow: 5px 5px 0px rgb(140, 32, 212);
+                            transition-duration: .2s;
+                            }
+
+                            .svg {
+                            width: 13px;
+                            position: absolute;
+                            right: 0;
+                            margin-right: 10px;
+                            margin-left: 100px;
+                            fill: white;
+                            transition-duration: .2s;
+                            }
+
+                            .Btn:hover {
+                            color: transparent;
+                            }
+
+                            .Btn:hover svg {
+                            right: 43%;
+                            margin: 0;
+                            padding: 0;
+                            border: none;
+                            transition-duration: .2s;
+                            }
+
+                            .Btn:active {
+                            transform: translate(3px , 3px);
+                            transition-duration: .3s;
+                            box-shadow: 2px 2px 0px rgb(140, 32, 212);
+                            }
+                    </style>
+                    <div class="save" style="margin: 0 !important;">
+                        <div class="d-flex mb-auto" style="justify-content: center; gap: 10px; margin-top: 3px;">
+
+                            <button class="Btn"  type="submit"><span id="applyCouponButton">Apply</span>
+                                <svg class="svg" viewBox="0 0 512 512">
+                                    <path d="M448 127.1c0 9.7-3.9 18.9-11 25.5l-236 236c-3.1 3.1-7.2 4.8-11.5 4.8s-8.4-1.7-11.5-4.8l-124-124c-6.2-6.2-6.2-16.4 0-22.6s16.4-6.2 22.6 0L180 360.6 425.9 114.7c6.2-6.2 16.4-6.2 22.6 0s6.1 16.4 0 22.4L237.1 402.5c-5.5 5.5-14.4 5.5-19.9 0L43.5 232.9c-5.5-5.5-5.5-14.4 0-19.9s14.4-5.5 19.9 0l157.6 157.5 236-236c6.1-6.1 15.2-8.3 24.3-5.6 9.1 2.8 16 9.7 18.8 18.8C448.1 112 448 119.1 448 127.1z"></path>
+                                  </svg>
+                                  
+                              </button>
+                              
+                            
                         </div>
                     </div>
                     <script>
@@ -202,12 +297,10 @@
                                     const discountTable = document.getElementById('discountTable');
                                     if (codeValue === '' || !isNaN(codeValue) || codeValue.length > 15 || codeValue.length < 4) {
                                         showAlert('Please enter a valid code.');
-                                        form.classList.add('was-validated'); // Add 'was-validated' class
                                         return;
                                     }
 
                                     if (!form.checkValidity()) {
-                                        form.classList.add('was-validated'); // Add 'was-validated' class
                                         return;
                                     }
                                     // if(parseInt(totalAmount.innerText)<1){
@@ -281,7 +374,36 @@
                                             validSpan.innerHTML='<span class="text-danger">Not A Valid Coupon!</span>';
                                             // showAlert('Not A Valid Coupon!');
                                             handleWalletCheckbox()
-                                        } else if (data.added === false) {
+                                        }else if (data.added === "minimum"){
+                                            applyCouponButton.textContent="Apply"
+                                            couponTotal=0;
+                                            if(appliedCoupon.value){
+                                                const tableBody = document.querySelector('.table tbody');
+                                                tableBody.removeChild(tableBody.children[2]);
+                                            }
+                                            discount=0;
+                                            appliedCoupon.value=""
+                                            totalAmount.innerText="<%=grandTotal%>"
+                                            totalPrice.innerText="<%=grandTotal%>"
+                                            validSpan.innerHTML=`<span class="text-danger">Coupon is valid for orders over ${data.min} !</span>`;
+                                            // showAlert('Not A Valid Coupon!');
+                                            handleWalletCheckbox()
+                                        }else if(data.added === "maximum"){
+                                            applyCouponButton.textContent="Apply"
+                                            couponTotal=0;
+                                            if(appliedCoupon.value){
+                                                const tableBody = document.querySelector('.table tbody');
+                                                tableBody.removeChild(tableBody.children[2]);
+                                            }
+                                            discount=0;
+                                            appliedCoupon.value=""
+                                            totalAmount.innerText="<%=grandTotal%>"
+                                            totalPrice.innerText="<%=grandTotal%>"
+                                            validSpan.innerHTML=`<span class="text-danger">Coupon is valid for orders between ${data.min} and ${data.max}!</span>`;
+                                            // showAlert('Not A Valid Coupon!');
+                                            handleWalletCheckbox()
+                                        }
+                                         else if (data.added === false) {
                                             couponTotal=0;
                                             validSpan.innerHTML='&nbsp;'
                                             applyCouponButton.textContent="Apply"
@@ -365,17 +487,18 @@
                 <%if(user.wallet.balance>=1){%>
                     <tr>
                         <td>
-                            <div class="form-check ">
-                                <input
-                                class="form-check-input bg-dark walletCheckbox"
-                                type="checkbox"
-                                onclick="handleWalletCheckbox()"
-                                id="walletCheckbox"
-                                style=" font-size: 25px; margin-left: -9px; margin-top: 10px;"
-                                />
-    
+                            <div class="form-check" style="padding-left: 0px ;">
+                                <div class="walletCheck">
+                                    <input
+                                    class="walletCheckbox"
+                                    type="checkbox"
+                                    onclick="handleWalletCheckbox()"
+                                    id="walletCheckbox"
+                                    
+                                    />
+                                </div>
                                 <label class="form-check-label" for="deliveryCheckbox">
-                                    <i class="bi bi-wallet2 ms-2 me-2" style="font-size: 30px ;"></i>  Wallet balance : <span id="walletAmount">(<%=user.wallet.balance||0%>)</span> 
+                                    <i class="bi bi-wallet2 ms-2 me-2" style="font-size: 30px ;"></i>  Wallet balance : <span id="walletAmount"><%=user.wallet.balance||0%></span> 
                                 </label>
                             </div>
                         </td>
@@ -492,6 +615,11 @@
             
             // Creates new orderId every time
             $.ajax(settings).done(function (response) {
+                if(response.address===true){
+                    showAlert("Please Add A Address!")
+                    return;
+                }
+                try {
                 const orderId= response.orderId;
                 const keyId= response.keyId;
                 const razorpayorder=response.razorpayorder;
@@ -556,6 +684,9 @@
 
             rzp1.open();
             e.preventDefault();
+                } catch (error) {
+                    console.log(error);
+                }
             });
     })
 

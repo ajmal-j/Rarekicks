@@ -7,16 +7,23 @@ const bannerModel = require("../models/bannerModel");
 const mail=require('../public/jsFiles/mail');
 const storage=require("../public/jsFiles/storage")
 const moment=require("moment")
+const orderController=require('./orderController')
 
 const { json } = require("express");
 const categoryModel = require("../models/categoryModel");
+const orderModel = require("../models/orderModel");
 
 const register= async(req,res)=>{
     try {
       if(req.session.user){
         res.redirect("/user/home/")
       }else{
-        res.render("userRegister");
+        const ref= await req.query.ref;
+        if(ref){
+          res.render("userRegister",{ref});
+        }else{
+          res.render("userRegister",{ref:null});
+        }
       }
       } catch (error) {
         console.log(error.message);
@@ -74,14 +81,31 @@ const createUser=async (req,res,next)=>{
       if(!check){
         if(!contact){
           req.details=req.body
+          const ref=req.body.ref;
+          const referredBy=await( ref!==''? userModel.findOne({referralCode:ref}):undefined);
+          let walletTotal=0;
+          let walletBalance=0;
+          if(referredBy&&referredBy.referralsApplied<=3){
+            walletBalance=500;
+            walletTotal=500;
+          }
+          wallet={
+            total:walletTotal,
+            balance:walletBalance
+          }
           let passwordBcrypt=req.body.password.trim();
           const  salt= await bcrypt.genSalt(3)
           passwordBcrypt=await bcrypt.hash(passwordBcrypt,salt)
+          const referralCode=orderController.generateShortID()
           const userDetails={
             name :req.body.name.trim(),
             email :req.body.email.trim(),
             password: passwordBcrypt,
-            contact :req.body.contact.trim()
+            contact :req.body.contact.trim(),
+            referralCode,
+            referredBy:referredBy?referredBy:'',
+            referralStatus:referredBy?true:false,
+            wallet
           }
           await userModel.insertMany([userDetails]);
           const user=await userModel.findOne({email:req.body.email.trim()})
@@ -95,6 +119,7 @@ const createUser=async (req,res,next)=>{
         res.render("userLogin",{email:req.body.email.trim(),message:req.body.email+' '+"Already Exist!"})
       }
   }catch(err){
+    console.log(err)
     res.render("userRegister",{message:"Something went wrong!"})
   }
       
@@ -366,6 +391,7 @@ const homePage=async (req,res)=>{
       res.render('homePage',{products,products2,banners:images})
     }
   }catch(err){
+    console.log(err)
     res.end(err)
   }
 }

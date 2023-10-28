@@ -11,9 +11,9 @@
 }
 
 .profile-card {
-    border: 1px solid rgb(146, 146, 146);
+    /* border: 1px solid rgb(146, 146, 146); */
     background-color: white;
-    border-radius: 12px;
+    border-radius: 30px;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.02), 0 10px 10px rgba(0, 0, 0, 0.0);
     overflow: hidden;
     width: 80%;
@@ -139,6 +139,46 @@
     </div>
 
 
+    <style>
+        #copyButton {
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+
+<%if(user.referralCode){%>
+    <div class="container">
+        <div class="input-group mb-3" style="width: 200px !important;">
+            <input type="text" class="form-control" placeholder="Copy Referral Link" aria-label="copyButton" aria-describedby="copyButton" readonly style="border: 0.5px solid rgb(79, 78, 78);">
+            <input type="text" class="form-control input" id="referralLink" value="http://localhost:3000/user/register?ref=<%=user.referralCode%>" hidden readonly>
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="copyButton" onclick="copyReferralLink()"><i class="fa-regular fa-copy"></i></button>
+            </div>
+        </div>
+    </div>
+<%}%>
+
+<script>
+    function copyReferralLink() {
+        var referralLink = document.getElementById("referralLink");
+
+        // Select the text field
+        referralLink.select();
+        referralLink.setSelectionRange(0, 99999); /* For mobile devices */
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(referralLink.value)
+            .then(() => {
+                showSuccess("Copied the referral link");
+            })
+            .catch((err) => {
+                console.error('Unable to copy:', err);
+            });
+    }
+</script>
+
+
+
 
 
     <div class="container mb-2" style="font-family: 'Michroma', sans-serif;">
@@ -215,8 +255,8 @@
                   <input class="inputAddress" type="text" id="city" name="city" value="<%= address.city %>" readonly><br>
                 </fieldset> 
                 <div class="d-flex justify-content-end">
-                    <a href="/user/editAddressShow?id=<%=_id%>" class="btn p-2 btn-dark rounded mt-4 ms-2"><i class="fa-regular fa-pen-to-square fs-4 ps-1"></i></a>
-                <a href="/user/deleteAddress?id=<%=_id%>" class="btn p-2 btn-danger rounded mt-4 ms-3"><i class="fa-regular fa-trash-can fs-4 "></i></a>
+                    <a href="/user/editAddressShow?id=<%=_id%>" class="btn p-2 btn-dark rounded mt-4 ms-2"><i class="fa-solid fa-pencil "></i></a>
+                <a href="/user/deleteAddress?id=<%=_id%>" class="btn p-2 btn-danger rounded mt-4 ms-3"><i class="fa-regular fa-trash-can "></i></a>
                 </div>
               </form>
             <% }) %>

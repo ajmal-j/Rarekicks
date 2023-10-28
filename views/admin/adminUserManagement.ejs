@@ -1,5 +1,6 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/adminHome.css">
+<link rel="stylesheet" type="text/css" href="../../public/css/card.css">
 
 </head>
 <body>
@@ -48,7 +49,7 @@
               <% users.forEach(user=>{%>
    
                 <div class="col">
-                  <div class="card h-100" style="background-color: #ecd7ff; border: 1px solid rgb(209, 156, 232); border-radius: 10px;  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.538); padding: 20px;">
+                  <div class="card h-100" style="padding: 20px;">
                     <i class="fa-regular text-center fa-circle-user" style="font-size: 60px;"></i>
                     <div class="card-body">
                       <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Name : </span><%= user.name%></span>

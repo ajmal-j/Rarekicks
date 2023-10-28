@@ -9,8 +9,9 @@ const crypto = require('crypto');
 const mail =require('../public/jsFiles/mail')
 const moment = require('moment');
 const { error } = require('console');
+require('dotenv').config();  
   
-  
+
 async function sendCoupon(email){
    const randomDoc = await couponModel.aggregate([{ $sample: { size: 1 } }]);
    console.log(randomDoc);
@@ -29,7 +30,7 @@ function generateShortID() {
     const shortID = objectIdSuffix + timestampSuffix;
     return shortID;
 }
-
+// console.log(generateShortID())
 const success=(req,res)=>{
     try {
         res.render("confirm")
@@ -82,7 +83,7 @@ const placeOrderCOD=async (req,res)=>{
         const userId=req.session._id;
         req.session.checkOut=false;
         req.session.orderConfirmed=false
-        const {cart,email,wallet}=await userModel.findById(userId);
+        const {cart,email,wallet,orderedByReferral,referredBy}=await userModel.findById(userId);
         const total=cart.totalPrice;
         if(cart.totalPrice===0){
             return res.redirect('/user/home')
@@ -158,6 +159,14 @@ const placeOrderCOD=async (req,res)=>{
         newOrder.save()
             .then(async savedOrder => {
                 // console.log('Order saved successfully:', savedOrder);
+                if(orderedByReferral===false){
+                    const {referralsApplied}=await userModel.findById(referredBy);
+                    if(referralsApplied<=3){
+                        await userModel.findByIdAndUpdate(referredBy,
+                            {$inc:{'wallet.balance':500,'wallet.total':500,referralsApplied:1}}
+                        )
+                    }
+                }
                 for (const item of savedOrder.products.items) {
                     const productId = item.product._id;
                     const orderedQuantity = item.quantity;
@@ -165,7 +174,10 @@ const placeOrderCOD=async (req,res)=>{
                         $inc: { quantity: -orderedQuantity ,salesCount:orderedQuantity} 
                     });
                 }
-                await userModel.findByIdAndUpdate(userId, { $unset: { cart: 1 } });
+                await userModel.findByIdAndUpdate(userId, {
+                    $unset: { cart: 1 },
+                    $set: { orderedByReferral: true }
+                  });
                 req.session.orderConfirmed=true;
                 sendCoupon(email)
                 res.json({data:true,orderId:savedOrder._id})
@@ -206,7 +218,7 @@ const showConfirmOrder=async (req,res)=>{
 
 
 const placeOrderOnline=async (req,res)=>{
-    try {
+    try { 
         req.session.orderConfirmed=false
         const userId=req.session._id;
         const {cart,email,wallet}=await userModel.findById(userId);
@@ -230,8 +242,9 @@ const placeOrderOnline=async (req,res)=>{
         }
         const currentAddress=await addressModel.findOne({userId:userId,default:true})
         if(!currentAddress){
-            return res.redirect('/user/checkOut?message=Please Add A Address')
+            return res.json({address:true})
         }
+
         const walletUsed=req.query.wallet;
         if (walletUsed === "true") {
             const balance = parseInt(wallet.balance);
@@ -239,15 +252,17 @@ const placeOrderOnline=async (req,res)=>{
             const remainingWalletBalance = balance - deductionAmount;
             grandTotal -= deductionAmount;
         }
+       
         const payment={
             method:'online payment',
             amount:grandTotal.toFixed(2),
         }
    
-            var razorpay = new Razorpay({
+        var razorpay = new Razorpay({
             key_id: process.env.RAZOR_ID,
             key_secret: process.env.RAZOR_KEY_SECRET
-            })
+        })
+            console
             const razorpayorder = await razorpay.orders.create({
                 amount: payment.amount * 100,
                 currency: 'INR',
@@ -281,7 +296,7 @@ const confirmOrderOnline=async (req,res)=>{
         if (generated_signature == signature) {
             const userId=req.session._id;
             req.session.checkOut=false;
-            const {cart,email,wallet}=await userModel.findById(userId);
+            const {cart,email,wallet,orderedByReferral,referredBy}=await userModel.findById(userId);
             const total=cart.totalPrice;
             if(cart.totalPrice===0){
                 return res.redirect('/user/home')
@@ -366,6 +381,16 @@ const confirmOrderOnline=async (req,res)=>{
 
             onlineOrder.save()
             .then(async savedOrder => {
+
+                if(orderedByReferral===false){
+                    const {referralsApplied}=await userModel.findById(referredBy);
+                    if(referralsApplied<=3){
+                        await userModel.findByIdAndUpdate(referredBy,
+                            {$inc:{'wallet.balance':500,'wallet.total':500,referralsApplied:1}}
+                        )
+                    }
+                }
+
                 for (const item of savedOrder.products.items) {
                     const productId = item.product._id;
                     const orderedQuantity = item.quantity;
@@ -374,7 +399,10 @@ const confirmOrderOnline=async (req,res)=>{
                     });
                 }
 
-                await userModel.findByIdAndUpdate(userId, { $unset: { cart: 1 } });
+                await userModel.findByIdAndUpdate(userId, {
+                    $unset: { cart: 1 },
+                    $set: { orderedByReferral: true }
+                  });
                 req.session.orderConfirmed=true;
                 sendCoupon(email)
                 return res.json({backendResponse:true,orderId:savedOrder._id})
@@ -635,14 +663,19 @@ const addCoupon=async (req,res)=>{
         const code=req.query.code
         const id=req.session._id;
         const coupon=await couponModel.findOne({code})
+        const user=await userModel.findById(id)
+        const total=user.cart.totalPrice;
         if(!coupon){
             res.json({added:"not"})
         }else if(coupon.isActive===false){
             res.json({added:"expired"})
         }else if(!isCouponValid(coupon)){
             res.json({added:"expired"})
+        }else if((coupon.minimumAmount>0)&&(total<coupon.minimumAmount)){
+            res.json({added:"minimum",min:coupon.minimumAmount})
+        }else if((coupon.maximumAmount>0)&&(total>coupon.maximumAmount)){
+            res.json({added:"maximum",max:coupon.maximumAmount,min:coupon.minimumAmount})
         }else{
-            const user=await userModel.findById(id)
             let total=user.cart.totalPrice;
             const discount=total*(coupon.discountPercentage/100);
             const grandTotal=total-(total*(coupon.discountPercentage/100)).toFixed(2)
@@ -680,5 +713,6 @@ module.exports={
     confirmOrderOnline,
     addCoupon,
     returnOrder,
-    success
+    success,
+    generateShortID
 }

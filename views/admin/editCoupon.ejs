@@ -40,8 +40,22 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="validationCustom02" class="form-label">DiscountPercentage</label>
+                                <label for="validationCustom02" class="form-label">Discount Percentage</label>
                                 <input type="number" class="form-control rounded-pill" id="validationCustom02" name="discountPercentage" value="<%=discountPercentage%>" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="validationCustom02" class="form-label">Minimum Cart  Value</label>
+                                <input type="number" class="form-control rounded-pill" id="validationCustom02" name="minimumAmount" value="<%=minimumAmount||0%>" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="validationCustom02" class="form-label">Maximum Cart Value</label>
+                                <input type="number" class="form-control rounded-pill" id="validationCustom02" name="maximumAmount" value="<%=maximumAmount||0%>" required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
@@ -81,7 +95,11 @@
                 const codeValue = codeInput.value.trim();
                 const dateInput = form.querySelector('[name="discountExpiryDate"]');
                 const dateValue = dateInput.value;
-
+                const minimumInput = form.querySelector('[name="minimumAmount"]');
+                const minimumValue = minimumInput.value;
+                const maximumInput = form.querySelector('[name="maximumAmount"]');
+                const maximumValue = maximumInput.value;
+                
                 const id = "<%=id%>";
     
                 const discountInput = form.querySelector('[name="discountPercentage"]');
@@ -90,12 +108,14 @@
     
                 if (codeValue === '' || !isNaN(codeValue) || codeValue.length > 15 || codeValue.length < 4) {
                     showAlert('Please enter a valid code.');
-                    form.classList.add('was-validated'); // Add 'was-validated' class
                     return;
                 }
                 if (!isValidFutureDate(dateValue)) {
                     showAlert('Please enter a valid future date.');
-                    form.classList.add('was-validated'); // Add 'was-validated' class
+                    return;
+                }
+                if ((minimumValue||maximumValue)<0||(minimumValue>=maximumValue)||(!minimumValue||!maximumValue)) {
+                    showAlert('Please enter a valid Amount.');
                     return;
                 }
 
@@ -114,21 +134,20 @@
     
                 if (discountValue === '' || discount >= 80 || discount < 1) {
                     showAlert('Please enter a valid discount value.');
-                    form.classList.add('was-validated'); // Add 'was-validated' class
                     return;
                 }
     
                 if (!form.checkValidity()) {
-                    form.classList.add('was-validated'); // Add 'was-validated' class
                     return;
                 }
     
                 try {
-                    const response = await fetch(`/admin/editCoupon?code=${codeValue}&discount=${discountValue}&id=${id}&date=${dateValue}`);
+                    const response = await fetch(`/admin/editCoupon?code=${codeValue}&discount=${discountValue}&id=${id}&date=${dateValue}&min=${minimumValue}&max=${maximumValue}`);
                     const data = await response.json();
                     console.log(data);
                     if (data.added === true) {
                         showSuccess('Updating!');
+                        // form.classList.add('was-validated'); // Add 'was-validated' class
                         window.location.href = "/admin/couponManagement";
                     } else if (data.added === "exist") {
                         showAlert('Coupon already exists!');

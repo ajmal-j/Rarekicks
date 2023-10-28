@@ -3,9 +3,14 @@ const jwt=require("jsonwebtoken");
 const checkJwt=async (req,res,next)=>{
     const token=await req.cookies.userToken;
     try {
-        const user= jwt.verify(token,process.env.JWT_SECRET);
+        if(req.session._id){
+            const user= jwt.verify(token,process.env.JWT_SECRET);
         req.user=user;
-        next();
+        next(); 
+        }else{
+            res.clearCookie("userToken");
+            res.render("userLogin",{email:"",message:"Authorization Required!"});
+        }
     } catch (error) {
         res.clearCookie("userToken");
         res.render("userLogin",{email:"",message:"Authorization Required!"});
