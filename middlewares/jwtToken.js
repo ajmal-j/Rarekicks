@@ -25,6 +25,7 @@ const checkJwtAdmin=async (req,res,next)=>{
         next();
     } catch (error) {
         res.clearCookie("adminToken");
+        req.session.admin_id=false;
         res.render("adminLogin",{email:'',message:"Authorization Required!"});
     }
 }

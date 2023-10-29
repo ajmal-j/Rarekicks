@@ -2,7 +2,7 @@ const express=require("express")
 const app=express()
 require('dotenv').config();
 const bodyparser=require('body-parser');
-const connect=require("./config/dbConnect")
+const {connect}=require("./config/dbConnect")
 const PORT=process.env.PORT||5000
 const userRoutes=require('./routes/userRoutes')
 const adminRoutes=require('./routes/adminRoutes')
@@ -14,17 +14,34 @@ const  mongoose=require("mongoose")
 const fs = require('fs');
 const moment = require('moment');
 const orderModel=require("./models/orderModel")
+const userModel=require("./models/userModel")
+const chatModel=require("./models/chatModel")
 const pdf = require('html-pdf');
 const ejs = require('ejs');
 const path = require('path');
 const cron = require('node-cron');
+const cors=require('cors')
 const adminController=require('./controller/adminController');
 const salesModel = require("./models/salesModel");
+const adminModel = require("./models/adminModel");
 const excel=require("excel4node")
-connect()
+const ObjectId = mongoose.Types.ObjectId;
+const chat = mongoose.connection.collection('chats');
+const admin = mongoose.connection.collection('admins');
 app.use(bodyparser.urlencoded({extended:true}))
 app.use(bodyparser.json());
 app.use(cookieparser());
+
+
+
+app.use(cors({
+    origin: 'http://localhost:3000', // Update with the origin of your main app
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  }));
+  
+
+
 const secretKey=process.env.SESSION_SECRET;
 const server=process.env.CONNECT;
 app.use(session({
@@ -51,6 +68,68 @@ app.use('/public',express.static("public"));
 
 app.use("/user",userRoutes)
 app.use("/admin",adminRoutes)
+
+
+
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+connect()
+
+    app.use('/socket', createProxyMiddleware({ target: 'http://localhost:5000', changeOrigin: true }));
+
+    app.get('/chat',async (req, res) => {
+        try {
+            const id=req.session._id;
+            const user=await userModel.findById(id)
+            const cursor = chat.find({ userId: id }).sort({ createdAt: -1 }).limit(10);
+            const chats=await cursor.toArray()
+            // console.log(chats)
+            res.render('chat', { userId: user._id ,chats:chats.reverse() , moment});
+        } catch (error) {
+            console.log(error)
+        }
+    });
+
+
+    app.get('/chatAdmin', async (req, res) => {
+        try {
+            const cursor =await chatModel.aggregate([
+                {
+                    $group: {
+                        _id: "$userId",
+                        count:{$sum: 1}
+                    },
+                },
+            ]);
+            const id = req.session.admin_id;
+            let clients=[];
+            for(const user of cursor){
+                const id=new ObjectId(user._id)
+                const u=await userModel.findOne({_id:id});
+                clients.push({name:u?.name,userId:user._id,count:user.count})
+            }
+            const adminData =await adminModel.findById(id);
+            res.render('adminChat', { adminData, clients ,moment});
+        } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal Server Error');
+        }
+    });
+    
+    app.get('/openUserChat',async (req,res)=>{
+        try {
+            const userId=req.query.id;
+            const id = req.session.admin_id;
+            const adminData =await adminModel.findById(id);
+            const messages =  chat.find({ userId: userId }).sort({ createdAt: -1 }).limit(10);
+            const {name}=await userModel.findById(userId)
+            const chats=await messages.toArray()
+            // console.log(chats);
+            res.render('individualChat',{chats:chats.reverse(),userId:userId,adminData,name,moment})
+        } catch (error) {
+            console.log(error);
+        }
+    })
 
 
 app.get("/",(req,res)=>{

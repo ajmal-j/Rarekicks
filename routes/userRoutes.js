@@ -75,6 +75,7 @@ userRouter.get('/addCoupon',JWT.checkJwt,orderController.addCoupon)
 userRouter.get('/allCategories',JWT.checkJwt,productController.allCategories,userController.allProducts)
 
 userRouter.post('/addReview',JWT.checkJwt,productController.addReview)
+userRouter.get('/openChat',JWT.checkJwt,userController.openChat)
 
 
 

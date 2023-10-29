@@ -4,6 +4,7 @@ const jwt=require("jsonwebtoken");
 const productModel = require("../models/productModel");
 const addressModel = require("../models/addressModel");
 const bannerModel = require("../models/bannerModel");
+const chatModel = require("../models/chatModel");
 const mail=require('../public/jsFiles/mail');
 const storage=require("../public/jsFiles/storage")
 const moment=require("moment")
@@ -78,10 +79,10 @@ const createUser=async (req,res,next)=>{
   try {
     const check=await userModel.findOne({email:req.body.email.trim()})
     const contact=await userModel.findOne({contact:req.body.contact.trim()})
+    const ref=req.body.ref;
       if(!check){
         if(!contact){
           req.details=req.body
-          const ref=req.body.ref;
           const referredBy=await( ref!==''? userModel.findOne({referralCode:ref}):undefined);
           let walletTotal=0;
           let walletBalance=0;
@@ -113,14 +114,14 @@ const createUser=async (req,res,next)=>{
           next()
         }
         else{
-          res.render("userRegister",{message:req.body.contact+' '+"Contact Already Exists!"})
+          res.render("userRegister",{message:req.body.contact+' '+"Contact Already Exists!",ref})
         }
       }else{
         res.render("userLogin",{email:req.body.email.trim(),message:req.body.email+' '+"Already Exist!"})
       }
   }catch(err){
     console.log(err)
-    res.render("userRegister",{message:"Something went wrong!"})
+    res.render("userRegister",{message:"Something went wrong!",ref})
   }
       
 }
@@ -732,6 +733,27 @@ const checkOutShow = async (req, res) => {
 };
 
 
+
+const openChat=async (req,res)=>{
+  try {
+    res.redirect('http://localhost:5000/')
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const insertMessage = async (data) => {
+  try {
+    await chatModel.create({ message: data.message });
+    console.log("yes");
+    return true;
+  } catch (error) {
+    console.log("no");
+    console.log(error);
+    return false;
+  }
+};
+
 module.exports={
   createUser,
   register,
@@ -771,5 +793,7 @@ module.exports={
   editAddressShow,
   editAddress,
   deleteAddress,
-  checkOutShow
+  checkOutShow,
+  openChat,
+  insertMessage
 }

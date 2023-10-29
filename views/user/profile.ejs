@@ -184,7 +184,7 @@
     <%if(user.referralCode){%>
         <div class="referral-container card" style="padding: 20px !important;">
             <div class="text-success text-center mt-3 mb-3 fs-5 " >
-                <i class="fa-solid fa-gift fa-shake me-2 fs-4" style="color: #133c05;"></i> <b>Referral Offer</b>
+                <i class="fa-solid fa-gift fa-shake me-2 fs-4" style="color: #133c05;"></i> <b>Referral Offer (<%=3-user.referralsApplied%> left)</b>
             </div>
             <p>Invite a friend with this link and they'll receive <strong>₹500</strong> instantly!</p>
             <p>You'll also receive <strong>₹500</strong> when they place their first paid order.</p>
@@ -268,8 +268,11 @@
 
     <div class="container mt-2 d-flex" style="align-items: center;">
         <h3 class="mb-4 mt-2 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;"><i class="fa-solid fa-location-dot me-2" style="font-size: 20px;"></i>Address !</h3>
-        <a href="/user/addAddress/" style="text-decoration: none; color: black;">
-        <h3 class="ms-3 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;">+</h3></a></div>
+        <%if(addresses?.length<=3){%>
+            <a href="/user/addAddress/" style="text-decoration: none; color: black;">
+                <h3 class="ms-3 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;">+</h3></a>
+        <%}%>
+    </div>
 
         <div class="container containerForm mb-5 d-flex" style="justify-content: center; align-items: center; flex-wrap: wrap; row-gap: 10px; column-gap: 10px;">
             <%var length=addresses?.length%>

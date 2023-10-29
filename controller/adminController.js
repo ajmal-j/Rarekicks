@@ -46,6 +46,7 @@ const loginValidation=async (req,res)=>{
           httpOnly: true,
           expires: new Date(Date.now() + 10 * 60 * 60 * 1000),
         })
+        req.session.admin_id=check._id;
         res.redirect("/admin/dashBoard")
       }else{
           res.render("adminLogin",{email:req.body.email.trim(),message:"Incorrect Password"})
@@ -69,6 +70,7 @@ const loginValidation=async (req,res)=>{
 const logout=async (req,res)=>{
   try {
     res.clearCookie("adminToken");
+    req.session.admin_id=false;
     res.render("adminLogin",{email:"",message:"Successfully logged out"});
   } catch (error) {
     res.end("Error While LogIn",error)
