@@ -31,7 +31,7 @@
                 <div class="row" style="display: flex; justify-content: center;" >
                     <div class="col-md-4">
                         
-                        <form class="row g-3 needs-validation" action="" method="get" novalidate enctype="application/form-data">
+                        <form class="row g-3 needs-validation" novalidate enctype="application/form-data">
                             <div class="col-md-12">
                                 <label for="validationCustom01" class="form-label">Code</label>
                                 <input type="text" class="form-control rounded-pill" id="validationCustom01" name="code" value="<%=code%>" required>
@@ -47,15 +47,15 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="validationCustom02" class="form-label">Minimum Cart  Value</label>
-                                <input type="number" class="form-control rounded-pill" id="validationCustom02" name="minimumAmount" value="<%=minimumAmount||0%>" required>
+                                <label for="minimumAmount" class="form-label">Minimum Cart  Value</label>
+                                <input type="number" class="form-control rounded-pill" id="minimumAmount" name="minimumAmount" value="<%=minimumAmount||0%>" required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="validationCustom02" class="form-label">Maximum Cart Value</label>
-                                <input type="number" class="form-control rounded-pill" id="validationCustom02" name="maximumAmount" value="<%=maximumAmount||0%>" required>
+                                <label for="maximumAmount" class="form-label">Maximum Cart Value</label>
+                                <input type="number" class="form-control rounded-pill" id="maximumAmount" name="maximumAmount" value="<%=maximumAmount||0%>" required>
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
@@ -90,15 +90,14 @@
         Array.from(forms).forEach(form => {
             form.addEventListener('submit', async event => {
                 event.preventDefault();
-    
                 const codeInput = form.querySelector('[name="code"]');
                 const codeValue = codeInput.value.trim();
                 const dateInput = form.querySelector('[name="discountExpiryDate"]');
                 const dateValue = dateInput.value;
-                const minimumInput = form.querySelector('[name="minimumAmount"]');
-                const minimumValue = minimumInput.value;
-                const maximumInput = form.querySelector('[name="maximumAmount"]');
-                const maximumValue = maximumInput.value;
+                const minimumInput = document.getElementById("minimumAmount");
+                const maximumInput = document.getElementById("maximumAmount");
+                const minimumValue = parseFloat(minimumInput.value);
+                const maximumValue = parseFloat(maximumInput.value);
                 
                 const id = "<%=id%>";
     
@@ -110,11 +109,12 @@
                     showAlert('Please enter a valid code.');
                     return;
                 }
+
                 if (!isValidFutureDate(dateValue)) {
                     showAlert('Please enter a valid future date.');
                     return;
                 }
-                if ((minimumValue||maximumValue)<0||(minimumValue>=maximumValue)||(!minimumValue||!maximumValue)) {
+                if ((minimumValue < 0 || maximumValue < 0) || minimumValue >= maximumValue) {
                     showAlert('Please enter a valid Amount.');
                     return;
                 }
@@ -132,12 +132,13 @@
                     return !isNaN(dateObject.getTime()) && dateObject > new Date();
                 }
     
-                if (discountValue === '' || discount >= 80 || discount < 1) {
+                if (discountValue === '' || discount > 80 || discount < 1) {
                     showAlert('Please enter a valid discount value.');
                     return;
                 }
     
                 if (!form.checkValidity()) {
+                    showAlert("Not Valid")
                     return;
                 }
     
@@ -160,8 +161,6 @@
                     console.error("Error checking category:", error);
                 }
             });
-    
-            // Remove the 'was-validated' class from here
         });
     })();
     </script>

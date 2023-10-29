@@ -122,10 +122,10 @@
             const discount = parseInt(discountValue);
 
             const minimumInput = form.querySelector('[name="minimumAmount"]');
-            const minimumValue = minimumInput.value;
-
+            const minimumValue = parseFloat(minimumInput.value);
+            
             const maximumInput = form.querySelector('[name="maximumAmount"]');
-            const maximumValue = maximumInput.value;
+            const maximumValue = parseFloat(maximumInput.value);
 
             if (codeValue === '' || !isNaN(codeValue) || codeValue.length > 15 || codeValue.length < 4) {
                 showAlert('Please enter a valid code.');
@@ -136,11 +136,11 @@
                 showAlert('Please enter a valid future date.');
                 return;
             }
-
-            if (((minimumValue||maximumValue)<0)||(minimumValue>=maximumValue)||((minimumValue||maximumValue)==='')) {
-                    showAlert('Please enter a valid Amount.');
-                    return;
+            if ((minimumValue < 0 || maximumValue < 0) || minimumValue >= maximumValue) {
+                showAlert('Please enter a valid Amount.');
+                return;
             }
+
 
             function isValidFutureDate(dateString) {
                 // Check if the input is a non-empty string
@@ -161,6 +161,7 @@
             }
 
             if (!form.checkValidity()) {
+                showAlert("Validation Failed")
                 return;
             }
 
