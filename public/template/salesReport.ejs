@@ -13,10 +13,8 @@
       border-radius: 5px;
     }
     table {
-      border-collapse: collapse;
+      /* border-collapse: collapse; */
       width: 100%;
-      
-      padding: 80px;
     }
 
     th, td {
@@ -31,20 +29,21 @@
   </style>
 </head>
 <body>
-
-  <h2 style="text-align: center;">Sales Report</h2>
+  <img src="data:image/jpeg;base64,{<%=base64str%>}" alt="Company Logo" width="100" height="100" style="border-radius: 10px;">
+  <h3>Rare Kick's</h3>
+  <h2 style="text-align: center;"><u><b>Sales Report</b></u></h2>
 
   <!-- Overall sales summary table -->
   <h3>Overall Sales Summary</h3>
-  <table>
+  <table style="border: 1px solid rgb(56, 56, 56) !important; ">
     <thead>
       <tr>
-        <th>Date</th>
-        <th>Type</th>
-        <th>Total Orders</th>
-        <th>Successful Orders</th>
-        <th>Total Sales</th>
-        <th>Total Revenue</th>
+        <th style="background-color: #0c0c4b;  color: white;">Date</th>
+        <th style="background-color: #0c0c4b;  color: white;">Type</th>
+        <th style="background-color: #0c0c4b;  color: white;">Total Orders</th>
+        <th style="background-color: #0c0c4b;  color: white;">Successful Orders</th>
+        <th style="background-color: #0c0c4b;  color: white;">Total Sales</th>
+        <th style="background-color: #0c0c4b;  color: white;">Total Revenue</th>
       </tr>
     </thead>
     <tbody>
@@ -54,20 +53,20 @@
         <td><%= doc.totalOrders %></td>
         <td><%= doc.successfulOrders %></td>
         <td><%= doc.totalSales %></td>
-        <td><%= doc.totalRevenue %></td>
+        <td><%= doc.totalRevenue.toFixed(2) %></td>
       </tr>
     </tbody>
   </table>
 
   <!-- Product details table -->
   <h3>Product Details</h3>
-  <table>
+  <table style="border: 1px solid rgb(0, 0, 0) !important; ">
     <thead>
       <tr>
-        <th>Product ID</th>
-        <th>Product Sales</th>
-        <th>Product Count</th>
-        <th>Product Revenue</th>
+        <th style="background-color: #0c0c4b;  color: white;">Product ID</th>
+        <th style="background-color: #0c0c4b;  color: white;">Product Sales</th>
+        <th style="background-color: #0c0c4b;  color: white;">Product Count</th>
+        <th style="background-color: #0c0c4b;  color: white;">Product Revenue</th>
       </tr>
     </thead>
     <tbody>
@@ -76,7 +75,7 @@
           <td><%= product.id %></td>
           <td><%= product.sales %></td>
           <td><%= product.count %></td>
-          <td><%= product.revenue %></td>
+          <td><%= product.revenue.toFixed(2)  %></td>
         </tr>
       <% }); %>
     </tbody>
@@ -84,13 +83,13 @@
 
   <!-- Category details table -->
   <h3>Category Details</h3>
-  <table>
+  <table style="border: 1px solid rgb(0, 0, 0) !important; ">
     <thead>
       <tr>
-        <th>Category ID</th>
-        <th>Category Name</th>
-        <th>Category Sales</th>
-        <th>Category Count</th>
+        <th style="background-color: #0c0c4b;  color: white;">Category ID</th>
+        <th style="background-color: #0c0c4b;  color: white;">Category Name</th>
+        <th style="background-color: #0c0c4b;  color: white;">Category Sales</th>
+        <th style="background-color: #0c0c4b;  color: white;">Category Count</th>
       </tr>
     </thead>
     <tbody>
@@ -107,11 +106,11 @@
 
   <!-- Payment methods table -->
   <h3>Payment Methods</h3>
-  <table>
+  <table style="border: 1px solid rgb(0, 0, 0) !important; ">
     <thead>
       <tr>
-        <th>Payment Method</th>
-        <th>Count</th>
+        <th style="background-color: #0c0c4b;  color: white;">Payment Method</th>
+        <th style="background-color: #0c0c4b;  color: white;">Count</th>
       </tr>
     </thead>
     <tbody>

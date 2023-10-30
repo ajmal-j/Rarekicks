@@ -11,8 +11,8 @@
     border-bottom: 0.7px solid black;
     z-index: 10;
 }
-.RARE :hover{
-        color: red;
+.RARE,.RAREADMIN :hover{
+        color: red !important;
         transition: 0.25s;
 }
 
@@ -94,7 +94,7 @@ h5 {
   }
 
 .RAREADMIN{
-    padding-right: 40px;
+    padding-right: 10px;
 }
  .dropdown-menu li a:hover{
     color: red;
@@ -170,7 +170,7 @@ h5 {
         width: 100%;
     }
     .RAREADMIN{
-        padding-right: 20px;
+        /* padding-right: 20px; */
     }
     .Manga{
         margin-left: 50px;

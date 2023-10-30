@@ -196,9 +196,27 @@ const loginValidationOtp=async (req,res)=>{
 const allUsers=async (req,res)=>{
   try{
     const users= await userModel.find();
-    res.render("adminUserManagement",{users,search:false})
+    res.render("adminUserManagement",{users,search:false,moment})
   }catch(err){
-    res.end("oooooooops"+err)
+    console.log(err)
+  }
+}
+
+const detailedUser=async (req,res)=>{
+  try{
+    const id=req.query.id;
+    const user= await userModel.findById(id);
+    const orders=await orderModel.find({userId:id})
+    let ordersSuccess=0;
+    for (const order of orders){
+      if(order.status==="Delivered"){
+        ordersSuccess+=1;
+      }
+    }
+    const address=await addressModel.findOne({userId:id,default:true})
+    res.render("detailedUser",{user,search:false,moment,orders:orders.reverse(),address,ordersSuccess})
+  }catch(err){
+    console.log(err)
   }
 }
 
@@ -795,5 +813,6 @@ module.exports={
   deleteAddress,
   checkOutShow,
   openChat,
-  insertMessage
+  insertMessage,
+  detailedUser
 }

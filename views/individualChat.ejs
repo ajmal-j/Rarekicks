@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
     <link rel="stylesheet" href="../public/css/chatBot.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.css" integrity="sha512-KOWhIs2d8WrPgR4lTaFgxI35LLOp5PRki/DxQvb7mlP29YZ5iJ5v8tiLWF7JLk5nDBlgPP1gHzw96cZ77oD7zQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script> -->
 </head>
 <body>
   <%- include('./layout/adminHeader')-%>
@@ -18,8 +18,8 @@
   <div class="container mainFlex mb-5">
     <div class="container p-3 mainCont">
         <div class="messageCont" id="messageCont">
-          <a href="" class="profileButton">
-            <i class="fa-regular fa-user me-2"></i> view user
+          <a href="/admin/detailedUser?id=<%=userId%>" class="profileButton">
+            <i class="fa-regular fa-user fs-4"></i>
           </a>
                 <ul id="messages">
                   <%if(locals?.chats.length>0){%>
@@ -51,8 +51,8 @@
                 <span>Type here..!</span>
                 <i></i>
             </div>
-              <input type="hidden" class="form-control" id="id" value="<%=adminData._id%>">
-              <input type="hidden" class="form-control" id="userId" value="<%=userId%>">
+              <input type="hidden" class="form-control" id="adminId" value="<%=adminData._id%>">
+              <input type="hidden" class="form-control" id="id" value="<%=userId%>">
             </div>
             <div class="col-auto">
               <button type="submit" class="btn btn-warning mt-2" style="height: 45px;"><i class="fa-regular fa-paper-plane"></i></button>
@@ -63,8 +63,6 @@
 
 
 
-
-<%- include('./layout/footer')-%>
 
     <script src="../public/jsFiles/main.js"></script>
 </body>

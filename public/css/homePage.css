@@ -25,9 +25,13 @@
     .sideImage{
         display: none;
     }
+    
   }
   @media(min-width:992px){
-    
+    .firstImage{
+      margin-top: -70px;
+      margin-bottom: -70px;
+    }
   }
 
   
@@ -39,12 +43,13 @@
   .imageText {
     font-family: 'Michroma', sans-serif;
     position: absolute;
-    top: 50%;
+    top: 80%;
     left: 50%;
-    padding: 5px 10px;
-    background-color: rgba(255, 255, 255, 0.656);
+    padding: 10px 10px;
+    background-color: rgba(255, 255, 255, 0.634);
+    box-shadow: 0px 0px 17px rgba(0, 0, 0, 0.542);
     transform: translate(-50%, -50%);
-    border: 1px solid black;
+    border: 1px solid rgb(151, 149, 149);
     border-radius: 20px;
     color: rgb(0, 0, 0); /* Adjust text color */
     text-align: center;
@@ -69,7 +74,7 @@
       margin-bottom: -20px;
         position: static;
         transform: none;
-        text-align: left;
+        text-align: center;
     }
     .margineTop,.productContAll{
       margin-top: 20px;

@@ -28,7 +28,7 @@
             .section-heading {
                 color: #0a2644;
                 margin: 20px 20px 20px 10px;
-                border-bottom: 2px solid #000000;
+                border-bottom: 1px solid #000000;
                 padding-bottom: 5px;
                 margin-bottom: 15px;
                 font-family: 'Michroma', sans-serif;
@@ -38,7 +38,8 @@
 
     
         <div class="container mt-5 mb-5" style="border: 1px solid rgb(131, 131, 131); box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.419); border-radius: 20px; padding: 20px;">
-            <h3 class="text-center m-3" style="font-family: 'Michroma', sans-serif; padding: 10px;">RARE&nbsp; KICKS</h3>
+            <img src="../../public/images/kn (1).png" alt="Company Logo" width="100" height="100" style="margin-left: 15px; border-radius: 10px;">
+            <h3 class="text-start mb-3" style="font-family: 'Michroma', sans-serif; padding: 10px;">RARE&nbsp; KICKS</h3>
             <!-- Monthly Sales Report Heading -->
             <div class="report-heading text-center">
                 <h3><%=data.type%> Sales Report: <%= data.date %></h3>
@@ -51,7 +52,7 @@
                     <h4 class="datas">Total Orders: <%= data.totalOrders %></h4>
                     <h4 class="datas">Successful Orders: <%= data.successfulOrders %></h4>
                     <h4 class="datas">Total Sales: <%= data.totalSales %></h4>
-                    <h4 class="datas">Total Revenue: <%= data.totalRevenue %></h4>
+                    <h4 class="datas">Total Revenue: <%= data.totalRevenue.toFixed(2) %></h4>
                 </div>
     
                 <!-- Payment Methods Section -->
@@ -72,7 +73,7 @@
                     <% }); %>
                 </div>
     
-                <div class="col-12 mt-4">
+                <div class="col-12 mt-1">
                     <h3 class="section-heading">Products</h3>
                     <% data.products.forEach(function(product) { %>
                         <a href="/admin/productDetailed?id=<%=product.id._id%>" style="text-decoration: none; color: black;">

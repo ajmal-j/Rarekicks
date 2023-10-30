@@ -7,25 +7,26 @@ const messageContainer=document.getElementById('messageCont')
 const messageInput=document.getElementById('messageInput')
 const messages=document.getElementById('messages')
 const userId=document.getElementById('id')
-const user=document.getElementById('userId')
+const adminId=document.getElementById('adminId')
 
 document.addEventListener("DOMContentLoaded",()=>{
     const data={
-        id:userId.value,
-        user:user?.value||null
+        id: userId.value,
+        adminId: adminId?.value || null
     } 
-    socket.emit('getId',(data))
-    scrollToBottom()
-})
+    socket.emit('getId', data);
+    scrollToBottom();
+});
+
 
 // socket.on('totalChat',(data)=>{
 //     totalUsers.innerText=data
 //     console.log(data)
 // })
 
-socket.on('message',(data)=>{
-    console.log(data)
-})
+// socket.on('message',(data)=>{
+//     // console.log(data)
+// })
 
 socket.on('chatMessage',(data)=>{
     // console.log(data)
@@ -43,7 +44,7 @@ function sendMessage() {
     const data = {
         userId:userId.value,
         message: messageInput.value,
-        user:user?.value||null,
+        adminId:adminId?.value||null,
         dateTime: new Date(),
     }
     socket.emit('message', data);
@@ -52,7 +53,8 @@ function sendMessage() {
 }
 
 function addMessage(isOwn,data){
-    console.log(data)
+    try {
+        // console.log(data)
     const element = `
     <li class="${isOwn ? 'text-end ms-auto messageRight' : 'text-start me-auto messageLeft' } ">
           <p class="message">
@@ -63,6 +65,9 @@ function addMessage(isOwn,data){
         `
         messages.innerHTML+=element;
         scrollToBottom()
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 

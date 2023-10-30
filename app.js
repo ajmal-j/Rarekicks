@@ -10,7 +10,7 @@ const nodemailer = require('nodemailer');
 const cookieparser=require('cookie-parser')
 const MongoStore = require('connect-mongo');
 const session=require("express-session");
-const  mongoose=require("mongoose")
+const mongoose=require("mongoose")
 const fs = require('fs');
 const moment = require('moment');
 const orderModel=require("./models/orderModel")
@@ -35,7 +35,7 @@ app.use(cookieparser());
 
 
 app.use(cors({
-    origin: 'http://localhost:3000', // Update with the origin of your main app
+    origin: 'http://localhost:3000',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   }));
@@ -142,13 +142,24 @@ app.get("/admin",(req,res)=>{
     res.redirect("/admin/dashBoard")
 })
 
+
+function base64_encode(file) {
+    // read binary data
+    var bitmap = fs.readFileSync(file);
+    // convert binary data to base64 encoded string
+    return new Buffer.from(bitmap).toString('base64');
+}
+
+
+
 app.get('/downloadInvoice', async (req, res) => {
     try {
         const id = req.query.orderId;
         const order = await orderModel.findById(id).populate('products.items.product');
         const templatePath = path.resolve(__dirname, './public/template/invoice.ejs');
         const template = fs.readFileSync(templatePath).toString();
-        const ejsData = ejs.render(template, {order,moment});
+        var base64str = base64_encode(path.resolve(__dirname, './public/images/kn (1).png'));
+        const ejsData = ejs.render(template, {order,moment,base64str});
 
         const pdfOptions = {
             format: 'A3',
@@ -188,8 +199,9 @@ app.get('/downloadPdf', async (req, res) => {
         const id = req.query.id;
         const doc = await salesModel.findById(id)
         const templatePath = path.resolve(__dirname, './public/template/salesReport.ejs');
+        var base64str = base64_encode(path.resolve(__dirname, './public/images/kn (1).png'));
         const template = fs.readFileSync(templatePath).toString();
-        const ejsData = ejs.render(template, {doc,moment});
+        const ejsData = ejs.render(template, {doc,moment,base64str});
 
         const pdfOptions = {
             format: 'A3',

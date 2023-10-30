@@ -17,6 +17,8 @@ adminRouter.get('/getByDateRange',adminController.getByDateRange)
 adminRouter.post('/getByMonth',JWT.checkJwtAdmin,adminController.getByMonth)
 adminRouter.post('/getByYear',JWT.checkJwtAdmin,adminController.getByYear)
 adminRouter.get('/salesByCategory',adminController.salesByCategory)
+
+
 adminRouter.get('/productList',JWT.checkJwtAdmin,productController.getProductAdmin,adminController.homeList)
 adminRouter.get('/productDetailed',JWT.checkJwtAdmin,adminController.productDetailed)
 adminRouter.get('/adminLogin',adminController.login)
@@ -37,7 +39,8 @@ adminRouter.get('/searchProductList',JWT.checkJwtAdmin,productController.searchP
 adminRouter.get('/brandBased',JWT.checkJwtAdmin,productController.brandBasedAdmin);
 
 
-adminRouter.get('/viewUsers',JWT.checkJwtAdmin,JWT.checkJwtAdmin,userController.allUsers)
+adminRouter.get('/viewUsers',JWT.checkJwtAdmin,userController.allUsers)
+adminRouter.get('/detailedUser',JWT.checkJwtAdmin,userController.detailedUser)
 adminRouter.get('/deleteUser',JWT.checkJwtAdmin,userController.deleteUser)
 adminRouter.get('/editUser',JWT.checkJwtAdmin,userController.editUserShow)
 adminRouter.post('/editUser',JWT.checkJwtAdmin,userController.editUser)

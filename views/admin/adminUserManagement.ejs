@@ -39,7 +39,7 @@
                 </form>
               </div>
               
-            <div class="row row-cols-1 row-cols-xl-3 row-cols-md-2 g-4  d-flex" style="justify-content: center;">
+            <div class="row row-cols-1 row-cols-xl-3 row-cols-md-2 g-2 d-flex" style="justify-content: center;">
               <% if (users=='') { %>
                 <h2 class="text-center">No Users!</h2>
               <% } %>
@@ -47,8 +47,8 @@
               <% if (users) { %>
      
               <% users.forEach(user=>{%>
-   
-                <div class="col w-100">
+        <a href="/admin/detailedUser?id=<%=user._id%>" style="text-decoration: none; color: rgb(0, 0, 0);">
+                <div class="col w-100" style="    font-family: 'Roboto', sans-serif;">
                   <div class="card " style="padding: 20px; width: 100% !important; height: min-content; overflow-wrap: break-word !important; overflow-wrap: break-word; ">
                     <i class="fa-solid fa-person-walking-luggage " style="font-size: 30px; margin: 0px; padding: 0px;"></i>
                     <div class="card-body" style="display: flex; justify-content: space-around; gap: 10px; flex-wrap: wrap;">
@@ -57,16 +57,17 @@
                           <span style="font-size: 17px; font-weight: 700;">Email : </span><%= user.email%>
                       </span>
                       <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Contact : </span><%= user.contact%></span>
+                      <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Registered On : </span><%= moment(user.createdAt).fromNow()%></span>
                   </div>
-                    <div class=" d-flex align-item-center justify-content-end me-4">
-                        <a href="/admin/editUser?id=<%=user._id%>" class="btn btn-dark rounded-pill px-3"><i class="fa-solid fa-pencil "></i></a>
-                        <a href="/admin/deleteUser?id=<%=user._id%>" class="btn btn-danger ms-3 me-3 rounded-pill px-3"  id="button" onclick="handleButtonClick()" ><i class="fa-regular fa-trash-can "></i></a>
+                    <div class=" d-flex align-item-center justify-content-end me-4" style="flex-wrap: wrap; row-gap: 10px;">
+                        <a href="/admin/editUser?id=<%=user._id%>" class="btn btn-dark rounded-pill px-3 me-3"><i class="fa-solid fa-pencil "></i></a>
+                        <a href="/admin/deleteUser?id=<%=user._id%>" class="btn btn-danger  me-3 rounded-pill px-3"  id="button" onclick="handleButtonClick()" ><i class="fa-regular fa-trash-can "></i></a>
                         <a href="/admin/blockUser?id=<%=user._id%>" class="btn btn-warning rounded-pill px-3" id="button" onclick="handleButtonClick()" ><%=user.isBlocked?"Unblock":"Block"; %></a>
                       </div>
                     </div>
                   </div>
                   
-                  
+        </a>          
                   
                   <%})%>
               <% } else { %>

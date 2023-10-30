@@ -8,29 +8,28 @@ padding: 0;
 margin: 0; 
 }
 
+.messageLeft, .messageRight {
+  max-width: 70%;
+  width: fit-content;
+  margin-bottom: 10px;
+  padding: 5px;
+  border-radius: 20px;
+  overflow-wrap: break-word;
+  word-break: break-all; 
+}
+
 .messageLeft {
-max-width: 60%;
-overflow-wrap: break-word;
-width: min-content;
-margin-bottom: 10px;
-background-color: #000000;
-border-bottom-left-radius: 0px !important;
-border: 1px solid rgb(248, 248, 248);
-color: white;
-padding: 5px;
-border-radius: 20px;
+  background-color: #000000;
+  color: white;
+  border: 1px solid rgb(248, 248, 248);
+  border-bottom-left-radius: 0 !important;
 }
 
 .messageRight {
-max-width: 60%;
-overflow-wrap: break-word;
-width: min-content;
-margin-bottom: 10px;
-background-color: #cccccc;
-border-bottom-right-radius: 0px !important;
-padding: 5px;
-border-radius: 20px;
+  background-color: #cccccc;
+  border-bottom-right-radius: 0 !important;
 }
+
 
 .message{
     padding: 10px;
@@ -42,8 +41,8 @@ border-radius: 20px;
     box-shadow: 0px 0px 20px #4a4a4ab5;
     border-radius: 20px;
     overflow: hidden;
-    height: 80vh;
-    width: 600px !important;
+    height: 90vh;
+    width: 100% !important;
     transition: .3s;
 }
 .mainCont:hover{
@@ -53,18 +52,20 @@ border-radius: 20px;
 .profileButton{
   position: absolute;
   top: 10px;
-  align-self: center;
+  right: 10px;
+  align-self: flex-start;
   font-size: 20px;
-  padding: 15px;
+  font-family: 'Michroma', sans-serif;
+  padding: 10px 15px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #4b4b4b;
-  color: white;
-  border-radius: 20px;
+  background-color: #b6b6b6;
+  color: rgb(0, 0, 0);
+  border-radius: 15px;
   margin-bottom: 10px;  
-  border: 1px solid rgb(90, 90, 90);
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.27);
+  border: 1px solid rgb(160, 159, 159);
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.27);
   text-decoration: none !important;
 }
 .mainFlex {
@@ -75,7 +76,7 @@ border-radius: 20px;
    align-items: center;
 }
 .messageCont{
-    margin-top: 40px;
+    margin-top: 60px;
     display: flex;
     flex-direction: column;
     height: 90%;
@@ -92,15 +93,17 @@ border-radius: 20px;
   }
 
   #messageForm{
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: nowrap;
     margin-bottom: 20px;
     position: absolute;
-    bottom: 20px;
-    right: 20px;
+    bottom: -20px;
+    left: 0px;
+    right: 0px;
+    padding-bottom: 20px;
   }
   .dataAndTime{
     display: block;

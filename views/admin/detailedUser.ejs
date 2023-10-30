@@ -6,28 +6,64 @@
 <body>
     <%- include('../layout/adminHeader')-%>
 
-<div class="container" style="margin-top: 20px; margin-bottom: 200px;"> 
-        <div class="container mt-5 p-4" style=" border: 1px solid rgb(124, 124, 124); border-radius: 20px; padding: 20px; background-color: rgba(255, 255, 255, 0.635);">
+<div class="container" style="margin-top: 10px; margin-bottom: 200px;"> 
+       <div class="row">
+        <div class="container mt-3 p-4" style="  border-radius: 20px; padding: 20px; background-color: rgba(255, 255, 255, 0.635);">
             <div class="row row-cols-1 row-cols-xl-3 row-cols-md-2 g-4  d-flex" style="justify-content: center;">
-                <div class="col w-100">
-                  <div class="card " style="padding: 20px; width: 100% !important; height: min-content; overflow-wrap: break-word !important; overflow-wrap: break-word; ">
-                    <i class="fa-solid fa-person-walking-luggage " style="font-size: 30px; margin: 0px; padding: 0px;"></i>
-                    <div class="card-body" style="display: flex; justify-content: space-around; gap: 10px; flex-wrap: wrap;">
-                      <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Name : </span><%= user.name%></span>
-                      <span class="card-title d-block" style="overflow-wrap: break-word; word-break: break-all;">
-                          <span style="font-size: 17px; font-weight: 700;">Email : </span><%= user.email%>
-                      </span>
-                      <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Contact : </span><%= user.contact%></span>
+                <div class="col-12 w-100">
+                  <div class="d-flex justify-content-center">
+                    <h3 class="text-center d-inline-block" style=" border: 1px solid rgb(146, 146, 146); border-radius: 30px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.229); padding: 5px 20px 10px 20px; font-family: 'Michroma', sans-serif; margin-bottom: 10px; font-weight: 700; text-transform: capitalize;"><%= user.name%></h3>
                   </div>
+                    <div class="card " style="padding: 20px; width: 100% !important; height: min-content; overflow-wrap: break-word !important; overflow-wrap: break-word; ">
+                        <i class="fa-regular fa-circle-user" style=" font-size: 30px; margin: 0px; padding: 0px;"></i>
+                <div class="row">
+                    <div class="card-body col-sm-4 pe-3" style="display: flex; justify-content: start; gap: 10px; flex-wrap: wrap;">
+                     
+                      <span class="card-title d-block" style="overflow-wrap: break-word; word-break: break-all;">
+                          <span style="    font-family: 'Michroma', sans-serif; font-size: 17px; font-weight: 700;">Email : </span><%= user.email%>
+                      </span>
+                      <span class="card-title d-block"><span style="    font-family: 'Michroma', sans-serif; font-size: 17px; font-weight: 700;">Contact : </span><%= user.contact%></span>
+                      <span class="card-title d-block"><span style="    font-family: 'Michroma', sans-serif; font-size: 17px; font-weight: 700;">Products In Wishlist : </span><%= user.wishlist.length%></span>
+                      <span class="card-title d-block"><span style="    font-family: 'Michroma', sans-serif; font-size: 17px; font-weight: 700;">Successful Orders : </span><%=ordersSuccess%></span>
+                  </div>
+                    <div class="card-body col-sm-8" style="display: flex; justify-content: space-evenly; gap: 10px; flex-wrap: wrap;">
+                      <span class="card-title d-block"><span style="    font-family: 'Michroma', sans-serif; font-size: 17px; font-weight: 700;"><span>
+                        <i class="fa-solid fa-cubes"></i> Orders : 
+                      </span></span>
+                      <p style="margin-top: 10px;">
+                        <%orders.forEach(order=>{%>
+                            <a href="/admin/orderDetailed?id=<%=order._id%>" style=" color: black;">
+                                <p style="padding: 0px; margin: 0px;"><%=order.orderId%> (<%=moment(order.createdAt).format('YYY,MM,DD')%>)</p>
+                            </a>
+                            <%})%>
+                      </p>
+                    </span>
+                      <span class="card-title d-block" style="overflow-wrap: break-word; word-break: break-all;">
+                          <span style="    font-family: 'Michroma', sans-serif; font-size: 17px; font-weight: 700;"><i class="fa-solid fa-map-location-dot"></i> Address : </span>
+                          <p style="margin-top: 10px;">
+                            <%if(locals?.address){%>
+                                <b class="capitalize"><%= address.name %><br></b>
+                                    <%= address.address %><br>
+                                    <%= address.landmark %><br>
+                                    <%= address.city %>, <%= address.state %>, <%= address.pinCode %><br>
+                                    <%= address.country %><br>
+                                    Contact: <b><%= address.contact %></b>
+                                <%}else{%>
+                                    <span>No Address Have Been Added!</span>
+                                    <%}%>
+                            </p>
+                      </span>
+                  </div></div>
                     <div class=" d-flex align-item-center justify-content-end me-4">
                         <a href="/admin/editUser?id=<%=user._id%>" class="btn btn-dark rounded-pill px-3"><i class="fa-solid fa-pencil "></i></a>
                         <a href="/admin/deleteUser?id=<%=user._id%>" class="btn btn-danger ms-3 me-3 rounded-pill px-3"  id="button" onclick="handleButtonClick()" ><i class="fa-regular fa-trash-can "></i></a>
                         <a href="/admin/blockUser?id=<%=user._id%>" class="btn btn-warning rounded-pill px-3" id="button" onclick="handleButtonClick()" ><%=user.isBlocked?"Unblock":"Block"; %></a>
                       </div>
                     </div>
-                  </div>
+                  
               </div> 
         </div>
+       </div> </div>
 </div>
 <script src="../../public/jsFiles/searchVal.js"></script>
 <%- include('../layout/footer')-%>

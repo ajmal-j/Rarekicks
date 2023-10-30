@@ -31,13 +31,18 @@ io.on('connection',onConnection)
 async function onConnection(socket) {
     console.log('Socket Connected', socket.id);
     socket.on('getId',async (data)=>{
-        const check=await adminModel.findOne({_id:data.id})
+        try {
+            // console.log('yes',data);
+        const check=await adminModel.findOne({_id:data.adminId})
         if(check){
             console.log("ADMIN");
-            admin.push({socketId:socket.id,id:data.id,user:data.user})
+            admin.push({socketId:socket.id,id:data.adminId,user:data.id})
         }else{
             console.log("USER");
             sockets.push({socketId:socket.id,id:data.id});
+        }
+        } catch (error) {
+            console.log(error);
         }
     })
 
@@ -52,24 +57,27 @@ async function onConnection(socket) {
             if (admins !== -1) {
                 admin.splice(index, 1);
             }
-        io.emit('totalChat', sockets.length);
+        // io.emit('totalChat', sockets.length);
     });
 
     socket.on('message', async (data) => {
         // console.log(data);
+        // console.log(admin);
+        // console.log(sockets);
         try {
-            const isAdmin = admin.some(adminObj => adminObj.id === data.userId);
-            // console.log(isAdmin)
+            const isAdmin = admin.some(adminObj => adminObj.id === data.adminId);
+            console.log(isAdmin)
             if(isAdmin){
-                await chat.insertOne({userId:data.user,message:data.message,createdAt:new Date(),admin:true})
-                const users = sockets.find((user) => user.id === data.user);
+                await chat.insertOne({userId:data.userId,message:data.message,createdAt:new Date(),admin:true})
+                const users = sockets.find((user) => user.id === data.userId);
+                console.dir(users+"us")
                 if(users){
                     socket.to(users.socketId).emit('chatMessage', data);
                 }
             }else{
                 await chat.insertOne({userId:data.userId,message:data.message,createdAt:new Date(),admin:false})
                 const admins = admin.find((admin) => admin.user === data.userId);
-                // console.log(admins+"yayaya")
+                console.log(admins+"ad")
                 if(admins){
                     socket.to(admins.socketId).emit('chatMessage', data);
                 }
