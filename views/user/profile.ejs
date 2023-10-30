@@ -109,11 +109,11 @@
 <body>
     <%- include('../layout/header') %>
     <div class="container mt-5"><h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Hello <%=user.name%>!</h3></div>
-    <div class="container mt-2 mb-5" style="font-family: 'Michroma', sans-serif; border: 1px solid black; border-radius: 20px; padding: 10px;">
+    <div class="container mt-2 mb-5" style="font-family: 'Michroma', sans-serif; border: 1px solid rgb(196, 196, 196); border-radius: 20px; padding: 10px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);">
 
         <div class="row mt-4 ">
             <div class="col-12 col-sm-3 d-flex justify-content-center align-items-center">
-                <div style="border: 1px solid black; padding: 30px; border-radius: 20px;">
+                <div style=" padding: 30px; ">
                     <i class="bi bi-person-circle display-1"></i>
                 </div>
             </div>
@@ -140,7 +140,8 @@
 
     <style>
         .referral-container {
-            max-width: 400px;
+            max-width: 800px;
+            min-width: 200px;
             margin: 20px auto;
             text-align: center;
             font-family: 'Michroma', sans-serif;
@@ -182,14 +183,18 @@
     </style>
     
     <%if(user.referralCode){%>
+        <h3 class="mt-2 container text-start mb-3 text-dark" style="font-family: 'Michroma', sans-serif;"><i class=" ms-2 fas fa-tag me-2"></i> Offer  Zone. !</h3>
         <div class="referral-container card" style="padding: 20px !important;">
-            <div class="text-success text-center mt-3 mb-3 fs-5 " >
-                <i class="fa-solid fa-gift fa-shake me-2 fs-4" style="color: #133c05;"></i> <b>Referral Offer (<%=3-user.referralsApplied%> left)</b>
-            </div>
-            <p>Invite a friend with this link and they'll receive <strong>₹500</strong> instantly!</p>
-            <p>You'll also receive <strong>₹500</strong> when they place their first paid order.</p>
-            <p><strong>Your Referral Link:</strong></p>
+            <img src="../../public/images/designstripe-twitter-post.png" alt="Image" style="border-radius: 30px; margin-bottom: 20px; width: 100%;">
             <%if(user.referralsApplied<=3){%>
+                <span class="text-start ms-2 mb-1">
+                    <i class="fa-solid text-start fa-gift fa-shake ms-2 fs-4" style="color: #000000;"></i> <b class="text-start ms-2">Referral Link ( <%=3-user.referralsApplied%> claims left )</b>
+                </span>
+                <%}else {%>
+                    <div class="text-danger text-center mt-2 mb-3">
+                        <b>Your referrals are over. Thank you for participating!</b>
+                    </div>
+                <%}%>
                 <div class="container">
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" id="referralLink" value="http://localhost:3000/user/register?ref=<%=user.referralCode%>" readonly>
@@ -198,11 +203,6 @@
                         </div>
                     </div>
                 </div>
-            <%}else {%>
-                <div class="text-danger text-center mt-3 mb-3">
-                    <b>Your referrals are over. Thank you for participating!</b>
-                </div>
-            <%}%>
           </div>
     <%}%>
     
@@ -218,7 +218,7 @@
         // Copy the text inside the text field
         navigator.clipboard.writeText(referralLink.value)
             .then(() => {
-                showSuccess("Copied the referral link");
+                showSuccess("Referral link copied successfully");
             })
             .catch((err) => {
                 console.error('Unable to copy:', err);
@@ -231,7 +231,7 @@
 
 
     <div class="container mb-2" style="font-family: 'Michroma', sans-serif;">
-        <h3 class="mb-4 mt-2 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;"><i class="fa-solid fa-wallet me-2" style="font-size: 20px;"></i>Wallet</h3>
+        <h3 class="mb-4 mt-2 btn btn-dark rounded mb-3" style="font-family: 'Michroma', sans-serif;"><i class="fa-solid bi-wallet2 me-2" style="font-size: 20px;"></i>Wallet</h3>
         <div class="profile-container">
             <div class="profile-card">
                 <div class="headerC">

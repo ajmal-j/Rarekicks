@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-      <div class="container mt-1 p-4" style="background-color: #e9ddf3cd !important;  border: 1px solid rgb(27, 27, 27); border-radius: 10px;  padding: 20px;">
+      <div class="container mt-1 p-4" style="background-color: #e9ddf300 !important;  border: 1px solid rgba(166, 166, 166, 0); border-radius: 30px;  padding: 20px;">
             <h2 class="text-center" style="font-family: 'Michroma', sans-serif;">Products</h2>
             <div class="d-flex justify-content-center mt-2">
                 <form action="/admin/searchProductList" method="get" class="w-50 mt-2 mb-3 needs-validation" enctype="application/form-data">
@@ -46,7 +46,7 @@
      
               <% products.forEach(product=>{%>
    
-                <div class="card w-100 p-0" style="height: auto; font-family: 'Michroma', sans-serif; border: 1px solid rgb(121, 121, 121); border-radius: 20px; box-shadow: 0px 0px 3px rgb(191, 0, 255); color: rgb(0, 0, 0);"> 
+                <div class="card w-100 p-0" style="height: auto; font-family: 'Michroma', sans-serif; border: 1px solid rgb(177, 177, 177); border-radius: 20px; box-shadow: 0px 0px 10px rgb(202, 202, 202); color: rgb(0, 0, 0);"> 
                     <div class="row g-0 align-items-center">
                         <div class="col-lg-2 " >
                             <a href="/admin/productDetailed?id=<%=product._id%>">
@@ -62,7 +62,7 @@
                                 <p class="card-text"><span style="font-weight: 700;">Price:</span> <%= product.price %><%if(product?.discountPercentage&&product?.discountPercentage>0){%>
                                   || <b>
                                     Discount
-                                  </b> = <%=product.discountPercentage||0%> %
+                                  </b> : <%=product.discountPercentage||0%> %
                                 <%}%></p>
                             </div>
                             <div class="d-flex justify-content-end mt-auto pb-2" style="gap: 10px;">

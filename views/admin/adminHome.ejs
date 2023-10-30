@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-      <div class="container mt-5 border rounded p-4">
+      <div class="container mt-5  p-4">
             <h2 style="font-family: 'Michroma', sans-serif;">All Products</h2>
             
             <div class="d-flex justify-content-center text-center mt-2"> 
@@ -69,7 +69,7 @@
                       <span class="card-title d-block text-center mt-2"><span style="font-size: 17px; font-weight: 700;"><u>Description</u></span></span>
                       <p class="card-text ps-2 pe-2 pb-2"><%= product.description%></p>
                     </div>
-                    <div class="card-footer d-flex" style="justify-content: end; gap: 10px; background-color: #ebebebc0; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
+                    <div class="card-footer d-flex" style="justify-content: end; gap: 10px; background-color: #ebebeb00; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;">
                         <a href="/admin/editProduct?id=<%=product._id%>" class="btn btn-dark rounded-pill px-3"><i class="fa-solid fa-pencil"></i></a>
                         <a href="/admin/deleteProduct?id=<%=product._id%>" class="btn btn-warning rounded-pill px-3" id="button" onclick="handleButtonClick()" ><%=product.deleted?"Show":"Hide"; %></a>
                       </div>
