@@ -78,13 +78,14 @@ connect()
     app.use('/socket', createProxyMiddleware({ target: 'http://localhost:5000', changeOrigin: true }));
 
     app.get('/chat',async (req, res) => {
+        // console.log(req.url)
         try {
             const id=req.session._id;
             const user=await userModel.findById(id)
             const cursor = chat.find({ userId: id }).sort({ createdAt: -1 }).limit(10);
             const chats=await cursor.toArray()
             // console.log(chats)
-            res.render('chat', { userId: user._id ,chats:chats.reverse() , moment});
+            res.render('chat/chat', { userId: user._id ,chats:chats.reverse() , moment});
         } catch (error) {
             console.log(error)
         }
@@ -109,7 +110,7 @@ connect()
                 clients.push({name:u?.name,userId:user._id,count:user.count})
             }
             const adminData =await adminModel.findById(id);
-            res.render('adminChat', { adminData, clients ,moment});
+            res.render('chat/adminChat', { adminData, clients ,moment});
         } catch (error) {
             console.log(error);
             res.status(500).send('Internal Server Error');
@@ -125,7 +126,7 @@ connect()
             const {name}=await userModel.findById(userId)
             const chats=await messages.toArray()
             // console.log(chats);
-            res.render('individualChat',{chats:chats.reverse(),userId:userId,adminData,name,moment})
+            res.render('chat/individualChat',{chats:chats.reverse(),userId:userId,adminData,name,moment})
         } catch (error) {
             console.log(error);
         }
@@ -170,14 +171,14 @@ app.get('/downloadInvoice', async (req, res) => {
                 fs.mkdirSync(invoiceDirectory);
             }
             const pdfFilePath = path.resolve(invoiceDirectory, `${order.payment.method}.pdf`);
-            console.log(pdfFilePath);
-            console.log(invoiceDirectory);
+            // console.log(pdfFilePath);
+            // console.log(invoiceDirectory);
             pdf.create(ejsData, pdfOptions).toFile(pdfFilePath, (error, result) => {
             if (error) {
                 console.error(error);
                 return res.status(500).send(`PDF generation failed: ${error.message}`);
             }
-            console.log('PDF created successfully:', result);
+            // console.log('PDF created successfully:', result);
             res.download(pdfFilePath, 'invoice.pdf', (downloadError) => {
                 if (downloadError) {
                     console.error(downloadError);
@@ -212,14 +213,14 @@ app.get('/downloadPdf', async (req, res) => {
                 fs.mkdirSync(invoiceDirectory);
             }
             const pdfFilePath = path.resolve(invoiceDirectory, `Sales-${doc.type}-report-${doc.date}.pdf`);
-            console.log(pdfFilePath);
-            console.log(invoiceDirectory);
+            // console.log(pdfFilePath);
+            // console.log(invoiceDirectory);
             pdf.create(ejsData, pdfOptions).toFile(pdfFilePath, (error, result) => {
             if (error) {
                 console.error(error);
                 return res.status(500).send(`PDF generation failed: ${error.message}`);
             }
-            console.log('PDF created successfully:', result);
+            // console.log('PDF created successfully:', result);
             res.download(pdfFilePath, `salesReport-${doc.date}.pdf`, (downloadError) => {
                 if (downloadError) {
                     console.error(downloadError);
@@ -312,19 +313,9 @@ const createStocksExcel = async (id) => {
         worksheet.cell(rowIndex, 2).number(method.count);
     });
 
-    // Create a sales directory if it doesn't exist
-    const salesDirectory = path.join(__dirname, 'sales');
-    if (!fs.existsSync(salesDirectory)) {
-        fs.mkdirSync(salesDirectory);
-    }
-    
-    // Define the file path based on date and report type
-    const filePath = path.join(__dirname, 'sales', `${doc.type}-report-${doc.date}.xlsx`);
-
     try {
-        // Write the workbook to the specified file path
-        await workbook.write(filePath);
-        return filePath;
+        const buffer = await workbook.writeToBuffer();
+        return { buffer, date: doc.date };
     } catch (error) {
         console.log(error);
         throw error;
@@ -333,30 +324,25 @@ const createStocksExcel = async (id) => {
 
 
 
-
-  app.get('/downloadSalesExcel', async (req, res) => {
+app.get('/downloadSalesExcel', async (req, res) => {
     try {
         const fileId = req.query.id;
-        const filePath = await createStocksExcel(fileId);
 
-        res.download(filePath, (err) => {
-            if (err) {
-                console.error(err);
-                res.status(500).send('Internal Server Error');
-            } else {
-                // Use asynchronous operation to delete the file after the download is complete
-                fs.unlink(filePath, (deleteErr) => {
-                    if (deleteErr) {
-                        console.error(deleteErr);
-                    }
-                });
-            }
-        });
+        // Generate the Excel buffer
+        const { buffer, date } = await createStocksExcel(fileId);
+        const excelBuffer= buffer;
+        // Set response headers for the download
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', `attachment; filename=sales-report-${date}.xlsx`);
+
+        // Send the Excel buffer as the response
+        res.send(excelBuffer);
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
 });
+
 
 
 

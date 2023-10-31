@@ -77,8 +77,14 @@ margin: 0;
 }
 .messageCont{
     margin-top: 60px;
+    background-image: url('../images/administrator-working-on-computer.png');
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
+    height: fit-content;
     display: flex;
     flex-direction: column;
+    
     height: 90%;
     overflow-y: scroll;
     overflow-x: hidden;

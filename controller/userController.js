@@ -89,6 +89,7 @@ const createUser=async (req,res,next)=>{
           if(referredBy&&referredBy.referralsApplied<=3){
             walletBalance=500;
             walletTotal=500;
+            mail.sendReferralMessage(referredBy.email,req.body.name.trim())
           }
           wallet={
             total:walletTotal,
@@ -763,7 +764,7 @@ const openChat=async (req,res)=>{
 const insertMessage = async (data) => {
   try {
     await chatModel.create({ message: data.message });
-    console.log("yes");
+    // console.log("yes");
     return true;
   } catch (error) {
     console.log("no");

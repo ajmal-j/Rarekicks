@@ -67,11 +67,6 @@ const sendEmail = async (email) => {
      
       `,
   };
-  
-    
-  
-  
-  
     await transporter.sendMail(mailOptions);
   } catch (error) {
     console.log(error)
@@ -122,10 +117,76 @@ const sendCoupon = async (email, couponCode) => {
         <p>Best regards, <br>The RareKick's Team</p>
       `,
     };
-  
     await transporter.sendMail(mailOptions);
   } catch (error) {
     console.log(error);
+  }
+};
+
+
+const sendReferralMessage = async (referrerEmail, referredName) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: "RareKick's.com",
+      to: referrerEmail, 
+      subject: "You've Earned a Referral Reward! 💸",
+      html: `
+        <p>Hello there! 👋</p>
+        
+        <p>Great news! You've successfully referred ${referredName} to RareKick's, and they've registered.</p>
+        
+        <p>As a token of appreciation, you'll receive a ₹${ 500} reward on their first paid order.</p>
+        
+        <p>Thank you for being a valued member of the RareKick's community!</p>
+        
+        <p>Best regards, <br>The RareKick's Team</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const sendReferralReward = async (referrerEmail, name) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: "RareKick's.com",
+      to: referrerEmail,
+      subject: "You've Earned a Referral Reward! 💸",
+      html: `
+        <p>Hello there! 👋</p>
+        
+        <p>Great news! The person you referred to RareKick's, ${name}, has made their first paid order.</p>
+        
+        <p>As a token of appreciation, you've earned a ₹${ 500} reward!</p>
+        
+        <p>Thank you for being an awesome ambassador for RareKick's!</p>
+        
+        <p>Best regards, <br>The RareKick's Team</p>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -140,5 +201,7 @@ module.exports={
     sendOTPByEmail,
     verifyOTP,
     sendEmail,
-    sendCoupon
+    sendCoupon,
+    sendReferralMessage,
+    sendReferralReward
 }

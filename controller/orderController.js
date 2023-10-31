@@ -14,7 +14,7 @@ require('dotenv').config();
 
 async function sendCoupon(email){
    const randomDoc = await couponModel.aggregate([{ $sample: { size: 1 } }]);
-   console.log(randomDoc);
+//    console.log(randomDoc);
    if(randomDoc.length>0){
     const couponCode=randomDoc[0].code;
     mail.sendCoupon(email,couponCode)
@@ -41,7 +41,7 @@ const success=(req,res)=>{
 
 const testData = async (req, res) => {
     try {
-        console.log("yes");
+        // console.log("yes");
         // const orderId = req.query.id;
         // const order = await orderModel.findById(orderId)
         //     .populate({
@@ -50,7 +50,7 @@ const testData = async (req, res) => {
         //     console.log(order.products.items[0]);
             // sendCoupon("rarekicks0@gmail.com")
             const myShortID = generateShortID();
-            console.log(myShortID);
+            // console.log(myShortID);
             return res.json(myShortID)
         // const items = order.products.items.map(item => {
         //     const product = item.product;
@@ -288,7 +288,7 @@ const confirmOrderOnline=async (req,res)=>{
         if (generated_signature == signature) {
             const userId=req.session._id;
             req.session.checkOut=false;
-            const {cart,email,wallet,orderedByReferral,referredBy}=await userModel.findById(userId);
+            const {name,cart,email,wallet,orderedByReferral,referredBy}=await userModel.findById(userId);
             const total=cart.totalPrice;
             if(cart.totalPrice===0){
                 return res.redirect('/user/home')
@@ -377,9 +377,11 @@ const confirmOrderOnline=async (req,res)=>{
                 if(orderedByReferral===false){
                     const {referralsApplied}=await userModel.findById(referredBy);
                     if(referralsApplied<=3){
+                        const {email}=await userModel.findById(referredBy)
                         await userModel.findByIdAndUpdate(referredBy,
                             {$inc:{'wallet.balance':500,'wallet.total':500,referralsApplied:1}}
-                        )
+                            )
+                        mail.sendReferralReward(email,name)
                     }
                 }
 

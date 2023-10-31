@@ -22,7 +22,7 @@ const corsOptions = {
     optionsSuccessStatus: 204, // Return a successful status for OPTIONS requests
   };
   
-  app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 let sockets = [];
 let admin=[];
@@ -70,14 +70,14 @@ async function onConnection(socket) {
             if(isAdmin){
                 await chat.insertOne({userId:data.userId,message:data.message,createdAt:new Date(),admin:true})
                 const users = sockets.find((user) => user.id === data.userId);
-                console.dir(users+"us")
+                // console.dir(users+"us")
                 if(users){
                     socket.to(users.socketId).emit('chatMessage', data);
                 }
             }else{
                 await chat.insertOne({userId:data.userId,message:data.message,createdAt:new Date(),admin:false})
                 const admins = admin.find((admin) => admin.user === data.userId);
-                console.log(admins+"ad")
+                // console.log(admins+"ad")
                 if(admins){
                     socket.to(admins.socketId).emit('chatMessage', data);
                 }

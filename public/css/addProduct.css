@@ -1,13 +1,13 @@
 .mainCont{
-    margin-top: 60px;
+    margin-top: 10px;
     max-width: 600px;
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border: 1px solid black;
-    background: linear-gradient(to right, #46506f, #657f88);
+    background: linear-gradient(to right, #46506fa4, #657f8883);
     border-radius: 10px;
     min-width: 430px;
     max-width: 600px;

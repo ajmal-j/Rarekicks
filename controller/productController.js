@@ -42,7 +42,7 @@ const storage = multer.diskStorage({
       cb(null, './public/productImages');
     },
     filename: function (req, file, cb) {
-        console.log(file)
+        // console.log(file)
       cb(null, Date.now() + path.extname(file.originalname));
     },
   });
@@ -413,7 +413,6 @@ const checkCategory=async (req,res)=>{
             }
         }        
         const check = await categoryModel.findOne({ name: name, _id: { $ne: id } });
-        console.log("hahahahahahaah");
         if(check){
             return res.json({exists:true})
         }else{
@@ -881,7 +880,7 @@ const updateBanner=async (req,res)=>{
         if(imageD[0]!==undefined){
             deleteImages(imageD)
         }
-        console.log(images);
+        // console.log(images);
         await bannerModel.updateOne({images:lastImage})
         res.redirect('/admin/home?messageS=Updating Banner')
     } catch (error) {

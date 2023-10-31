@@ -80,7 +80,7 @@ const logout=async (req,res)=>{
 const bannerManagement=async(req,res)=>{
   try {
     const {images}=await bannerModel.findOne()
-    console.log(images);
+    // console.log(images);
     res.render('bannerManagement',{images:images})
   } catch (error) {
     console.log(error);
@@ -387,7 +387,7 @@ const getByYear=async(req,res)=>{
         },
       ]);
       
-      console.log(result)
+      // console.log(result)
       for (const data of result) {
         if(data.year===Number(year)){
           x.push(data.month);
@@ -572,7 +572,7 @@ const weeklySales = async () => {
   }
   const newSales= await salesModel.create(data)
   newSales.save()
-  console.log(newSales)
+  // console.log(newSales)
 
   } catch (error) {
     console.log(error);
@@ -673,7 +673,7 @@ const monthlySales = async () => {
   }
   const newSales= await salesModel.create(data)
   newSales.save()
-  console.log(newSales)
+  // console.log(newSales)
 
   } catch (error) {
     console.log(error);
