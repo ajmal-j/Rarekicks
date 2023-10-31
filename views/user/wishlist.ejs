@@ -5,7 +5,6 @@
 </head>
 <body>
     <%- include('../layout/header')-%>
-
     <div class="container d-flex" style="justify-content: space-between; align-items: center;">
         <h2 class="text mb-4" style="margin-top: 20px;  font-family: 'Michroma', sans-serif;"><u>Wishlist!</u></h2>
         <a href="/user/cart/" class="btn btn-dark rounded"><h4 style="margin-top: 5px;  font-family: 'Michroma', sans-serif;">Go To Cart</h4></a>
@@ -71,21 +70,12 @@
                                         <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-5"><b>Category :</b> </span><%=product?.category?.name%></p>
                                         <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-5"><b>Brand :</b> </span><%=product?.brand%></p>
                                     </div>
-                                    
-                                    
-                                    
-                                    
-                                    
                                     <% if (product?.deleted===false && product?.sizes.length>0 && product?.quantity>0) { %>
                                         <a  id="<%=product._id%>" class="addToCart btn btn-dark d-flex justify-content-center pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Add To Cart</h3></a>
                                     <% } else { %>
                                         <a class="text-danger btn btn-dark d-flex justify-content-center pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Not Available!</h3></a>
                                     <% } %>
-
-
-
                                 </div>
-           
                             </div>
                         </div>
                         </div>
@@ -96,9 +86,6 @@
                         </div>
                     <% } %> 
             </div>
-            
-            
-
 <div class="container Cont mt-5">
     <div class="responsive-container">
         <div class="card info-box  ">
@@ -150,9 +137,5 @@
         
 
 <script src="../../public/jsFiles/cart.js"></script>
-
-<!-- ... Rest of your HTML code ... -->
-
-        
 <%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>

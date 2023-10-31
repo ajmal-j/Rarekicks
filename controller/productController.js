@@ -174,6 +174,54 @@ const getProductByPage = async (req, res, next) => {
         res.json(err);
     }
 };
+const priceLowToHigh = async (req, res, next) => {
+    try {
+        const products = await Product.find({ deleted: false }).sort({price:1})
+        .populate({
+            path: 'category',
+            match: { deleted: false },
+        })
+        .exec();
+        const filteredProducts = products.filter(product => product.category !== null);
+        req.products = filteredProducts;
+        req.name="Price Low to High"
+        next();
+    } catch (err) {
+        res.json(err);
+    }
+};
+const priceHighToLow = async (req, res, next) => {
+    try {
+        const products = await Product.find({ deleted: false }).sort({price:-1})
+        .populate({
+            path: 'category',
+            match: { deleted: false },
+        })
+        .exec();
+        const filteredProducts = products.filter(product => product.category !== null);
+        req.products = filteredProducts;
+        req.name="Price High to Low"
+        next();
+    } catch (err) {
+        res.json(err);
+    }
+};
+const bestSeller = async (req, res, next) => {
+    try {
+        const products = await Product.find({ deleted: false }).sort({salesCount:-1})
+        .populate({
+            path: 'category',
+            match: { deleted: false },
+        })
+        .exec();
+        const filteredProducts = products.filter(product => product.category !== null&&product.salesCount>=1);
+        req.products = filteredProducts;
+        req.name="Best Sellers"
+        next();
+    } catch (err) {
+        res.json(err);
+    }
+};
 
 const getBrand=async(req,res,next)=>{
     try {
@@ -1009,5 +1057,8 @@ module.exports=
     allCategories,
     addReview,
     searchProductList,
-    checkDiscount
+    checkDiscount,
+    priceLowToHigh,
+    priceHighToLow,
+    bestSeller
 }  

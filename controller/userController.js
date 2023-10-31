@@ -422,10 +422,11 @@ const allProducts=async (req,res)=>{
   try {
     const brand=await req.brand;
     const page=await req.page;
+    const name=await req.name;
     const totalDocuments=await req.totalDocuments;
     const products=await req.products;
     const categories=await categoryModel.find({deleted:false})
-    res.render("allProducts",{products,brand,categories,page,totalDocuments})
+    res.render("allProducts",{products,brand,categories,page,totalDocuments,name:name?name:false})
   } catch (error) {
     console.log(error);
     res.end("Error")

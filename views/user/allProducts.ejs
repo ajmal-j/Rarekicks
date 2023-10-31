@@ -13,7 +13,7 @@
             <i class="fa-solid fa-filter me-3 " style="font-size: 20px;"></i>Filter
         </button>
         <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 4px 4px 8px rgba(255, 255, 255, 0.913);">
-            <li class="dropdown pb-4 ps-3 pe-3">
+            <li class="dropdown  ps-3 pe-3">
                 <div class="btn-group dropend">
                     <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         CATEGORIES
@@ -42,6 +42,22 @@
                         <li class="text-center hover  ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=converse">CONVERSE</a></li>
                     </ul>
                 </div>
+                <div class="btn-group dropend">
+                    <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        PRICE
+                    </button>
+                    <ul class="dropdown-menu bg-dark text-center p-4 " style="box-shadow: 4px 4px 8px rgba(255, 255, 255, 0.913);">
+                        <li class="text-center hover  pb-4 ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/priceLowToHigh">LOW-HIGH</a></li>
+                        <li class="text-center hover  ps-3 pe-3"><a style="text-decoration: none;" class="" href="/user/priceHighToLow">HIGH-LOW</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+               <a href="/user/bestSeller">
+                <button class="btn btn-dark px-3 py-2" type="button">
+                    BEST SELLING
+                </button>
+               </a>
             </li>
         </ul>
         <script>
@@ -54,7 +70,9 @@
     </div>
     
 
-    <h2 class="text-center mt-2 mb-3" style="font-family: 'Michroma', sans-serif;"><%= locals.brand ? brand : 'All Products' %></h2>
+    <h2 class="text-center mt-2 mb-3" style="font-family: 'Michroma', sans-serif;">
+        <%= locals.brand ? brand : name ? name : 'All Products' %>
+      </h2>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 d-flex mb-5" style="justify-content: center;">
         <% if (products && products.length > 0) { %>
             <% products.forEach(product => { %>

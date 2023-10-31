@@ -11,6 +11,9 @@ userRouter.set("views","./views/user")
 
 userRouter.get('/home',JWT.checkJwt,userController.homePage);
 userRouter.get('/allProducts',JWT.checkJwt,productController.getProductByPage,userController.allProducts);
+userRouter.get('/priceLowToHigh',JWT.checkJwt,productController.priceLowToHigh,userController.allProducts);
+userRouter.get('/priceHighToLow',JWT.checkJwt,productController.priceHighToLow,userController.allProducts);
+userRouter.get('/bestSeller',JWT.checkJwt,productController.bestSeller,userController.allProducts);
 userRouter.get('/brand',JWT.checkJwt,productController.getBrand,userController.allProducts);
 userRouter.get('/searchProduct',JWT.checkJwt,productController.searchProductUser);
 userRouter.get('/brandBased',JWT.checkJwt,productController.brandBased);
