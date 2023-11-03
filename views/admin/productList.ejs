@@ -79,43 +79,7 @@
               </div> 
         </div>
 </div>
-
-<div class="alertKey">
-  <% if(locals.message) { %>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-      data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-      <strong><%= message %></strong>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    
-    <script>
-      // Add this script to your page
-      setTimeout(function() {
-        document.getElementById('success-alert').style.display = 'none';
-      }, 2000); // Adjust the delay (in milliseconds) as needed
-    </script>
-  <% } %>      
-</div>
-<div class="alertKey">
-  <% if(locals.messageS) { %>
-    <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-      data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-      <strong><%= messageS %></strong>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-
-    <script>
-      // Add this script to your page
-      setTimeout(function() {
-        document.getElementById('success-alert').style.display = 'none';
-      }, 2000); // Adjust the delay (in milliseconds) as needed
-    </script>
-  <% } %>      
-</div>
-
-
+<%- include('../layout/alert')%>
 <script src="../../public/jsFiles/searchVal.js"></script>
-
-
 <%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>
