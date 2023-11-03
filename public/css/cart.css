@@ -1,0 +1,44 @@
+.mainContainer{
+    justify-content: space-between; align-items: center;
+}
+
+.mainContainer h2{
+    margin-top: 20px;
+}
+
+.productContInCart{
+    margin-top: 10px; border: none; background-color: #ffffff; 
+}
+
+.productRow{
+    border: 1px solid rgb(195, 194, 194); border-radius: 10px; 
+}
+
+.productImage{
+    background-color: #ffffff; border-radius: 20px;
+}
+
+* a{
+    text-decoration: none !important;
+}
+
+.productDetailsCont{
+    flex-wrap: wrap; justify-content: space-between;
+}.productDetailsCont a{
+    font-size: 30px; letter-spacing: 2px;
+}
+
+.sizeContainer{
+    justify-content: space-evenly; row-gap: 10px; column-gap: 20px; flex-wrap: wrap;
+}
+.totalPriceText{
+    color: red; letter-spacing: 2px;
+}
+
+.checkOutNowButton{
+    font-family: 'Michroma', sans-serif; margin: 0; border-top: 4px dashed rgb(205, 205, 205); 
+}
+
+
+
+
