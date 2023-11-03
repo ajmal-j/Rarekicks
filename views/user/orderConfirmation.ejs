@@ -50,7 +50,7 @@
 </div>
 </div>
 <script>
-    // Calculate expected delivery date
+
     const today = new Date();
     const deliveryDate = new Date(today);
     deliveryDate.setDate(today.getDate() + 6); // 5 days from the day after
@@ -61,5 +61,23 @@
 
     // Update the delivery date in the HTML
     document.getElementById('deliveryDate').textContent = formattedDate;
+    let timerInterval
+        Swal.fire({
+        title: 'Order Confirmed!',
+        icon:"success",
+        html: 'Thank you for shopping with us! Your order will be shipped soon.<br>',
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+                 Swal.getTimerLeft()
+            }, 2000)
+        },
+        willClose: () => {
+            clearInterval(timerInterval)
+        }
+        }).then((result) => {
+        })
 </script>
 <%- include('../layout/footerHTML')-%>

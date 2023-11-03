@@ -1,44 +1,6 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/checkOut.css">
-<style>
-    .walletCheck {
- display: inline-block;
-  text-align: center;
-}
-
-input[type="checkbox"] {
-  position: relative;
-  top: 8px;
-  width: 35px;
-  height: 35px;
-  -webkit-appearance: none;
-  outline: none;
-  transition: 0.5s;
-}
-
-input[type="checkbox"]:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 3px solid #ffffff;
-  box-sizing: border-box;
-  border-radius: 5px;
-  transition: 0.5s;
-}
-
-input:checked[type="checkbox"]:before {
-  border-left: none;
-  border-top: none;
-  width: 20px;
-  border-color: rgb(128, 0, 255);
-  border-radius: 0px;
-  transform: rotate(45deg) translate(5px, -10px);
-}
-</style>
 </head>
 <body>
     <%- include('../layout/header') %>
@@ -47,22 +9,22 @@ input:checked[type="checkbox"]:before {
     </div>
     <div class="container">
         <div class="d-flex" style="justify-content: space-between; align-items: center;">
-            <h2 class="text mb-4" style="margin-top: 20px;  font-family: 'Michroma', sans-serif;"><u>Check Out</u></h2>
-        <a href="/user/cart/" class="btn btn-dark rounded"><h4 style="  font-family: 'Michroma', sans-serif;">Go To Cart</h4></a>
+            <h2 class="text mb-4 mainFontFamily" style="margin-top: 20px;"><u>Check Out</u></h2>
+        <a href="/user/cart/" class="btn btn-dark rounded"><h4 class="mainFontFamily">Go To Cart</h4></a>
         </div>
        
     </div>
-    <div class="container mb-2" style="font-family: 'Michroma', sans-serif;">
+    <div class="container mb-2 mainFontFamily">
         <div class="row d-flex" style="justify-content: center;">
-            <div class="p-3 col-lg-6 col-12 rounded" style="border: 1px solid black;">
+            <div class="p-3 col-lg-6 col-12 mainContainer addressMainContainer">
                 <div class="row">
                     <h5 class="text-center pt-1 pb-3"><u><i class="fa-solid fa-location-dot me-2" style="font-size: 30px;"></i>Address</u></h3>
-                    <div class="col-12 col-md-3 mt-3 d-flex" style="justify-content: baseline; text-align: center; row-gap: 10px; column-gap: 10px; flex-direction: column; align-items: center;">
-                        <a href="/user/profile/" style="text-decoration: none; color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Change Address</span></a>
-                        <a href="/user/addAddress/" style="text-decoration: none; color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Add New Address</span></a>
+                    <div class="col-12 col-md-3 mt-3 d-flex addressContainer">
+                        <a href="/user/profile/" style="color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Change Address</span></a>
+                        <a href="/user/addAddress/" style="color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Add New Address</span></a>
                     </div>
                     <% if(!address){%>
-                        <div class="col-12 col-md-9 mt-3"><h5 class="mb-4 text-center mt-4" style="font-family: 'Michroma', sans-serif;">No addresses have been added yet. Please add an address.</h5></div>
+                        <div class="col-12 col-md-9 mt-3"><h5 class="mb-4 text-center mt-4 mainFontFamily">No addresses have been added yet. Please add an address.</h5></div>
                     <%} else {%>
                     <div class="col-12 col-md-9 mt-3">
                         <table>
@@ -87,16 +49,15 @@ input:checked[type="checkbox"]:before {
             </div>
         </div>
     </div>
-
 <script>
-    let grandTotal="<%=grandTotal%>"
+    let grandTotalString="<%=grandTotal%>";
+    let grandTotal=parseInt(grandTotalString);
     let discount=0;
     const walBal="<%=user.wallet.balance%>"
     let walletBalance=parseInt(walBal)
 </script>
-
-    <div class="container productCont" style="margin-top: 10px; border: none; background-color: #ffffff; ">
-        <h3 class="text-center pt-1 pb-3" style="font-family: 'Michroma', sans-serif; ">Products</h3>
+    <div class="container productCont">
+        <h3 class="text-center pt-1 pb-3 mainFontFamily">Products</h3>
         <div class="row row-cols-1 row-cols-lg-3  g-4 d-flex" style="justify-content: center;">
         <% if (locals?.products) { %>
             <% products?.forEach(item => { %>
@@ -112,79 +73,63 @@ input:checked[type="checkbox"]:before {
                         <% } %>
                         <div class="card-body d-flex" style="flex-direction: column; row-gap: 10px;">
                             <div class="d-flex" style="justify-content: space-between;">
-                                <p class="" style="font-family: 'Michroma', sans-serif; font-size: 15px;">
+                                <p class="mainFontFamily" style="font-size: 15px;">
                                     <span class="fs-5"><b>Brand :</b></span><%= product?.brand %>
                                 </p>
-                                <!-- <a href="" id="<%=_id%>" class="removeFromCart btn btn-dark rounded">
-                                    <h5 class="text-danger" style="font-family: 'Michroma', sans-serif;">remove</h5>
-                                </a> -->
                             </div>
-                            
-                                                            <a class="btn btn-dark rounded text-center text-danger" style=" letter-spacing: 2px; font-size: 30px;">&#x20B9 <%if(product?.discountPercentage&&product?.discountPercentage>0){%>
-                                                                <%= (product.price-((product?.price*product?.discountPercentage)/100)).toFixed(2)%>
-                                                            <%}else {%>
-                                                                <%= product?.price%>
-                                                            <%}%></a>
-                                                           
-                                                            
-                            
-                                                                <p class="btn btn-dark " style="font-family: 'Michroma', sans-serif; ">
-                                                                    <span class="">Size :</span><span class=" btn-dark sizeOfTheProduct"><%=size%></span>
-                                                                </p>
-                                                                <% if (product?.deleted===false) { %>
-                                                                    <p class=" btn rounded
-                                                                     btn-dark" id="<%=_id%>" style="font-family: 'Michroma', sans-serif;">
-                                                                        <!-- <button id="<%=_id%>" class="decreaseQuantity btn rounded btn-light ">-</button>  -->
-                                                                        <span class="">Quantity :</span>
-                                                                        <span id="<%=_id%>"><%=quantity%></span> 
-                                                                        <!-- <button class=" increaseQuantity btn rounded btn-light" id="<%=_id%>">+</button> -->
-                                                                    </p>
-                                                                <% } else { %>
-                                                                   
-                                                                <% } %>
-                            <a href="/user/productDetailed?id=<%=product?._id%>" style="text-decoration: none; color: black;">
+                            <a class="btn btn-dark rounded text-center text-danger" style="letter-spacing: 2px; font-size: 30px;">
+                                &#x20B9 <%if(product?.discountPercentage&&product?.discountPercentage>0){%>
+                                    <%= (product.price-((product?.price*product?.discountPercentage)/100)).toFixed(2)%>
+                                <%}else {%>
+                                    <%= product?.price%>
+                                <%}%>
+                            </a>
+                            <p class="btn btn-dark mainFontFamily">
+                                <span class="">Size :</span><span class=" btn-dark sizeOfTheProduct"><%=size%></span>
+                            </p>
+                            <% if (product?.deleted===false) { %>
+                                <p class="btn rounded
+                                    btn-dark mainFontFamily" id="<%=_id%>">
+                                    <span>Quantity :</span>
+                                    <span id="<%=_id%>"><%=quantity%></span> 
+                                </p>
+                            <% } else { %>
+                            <% } %>
+                            <a href="/user/productDetailed?id=<%=product?._id%>" style=" color: black;">
                                 <h4 class="card-title mb-1 mt-1 text-center" style="font-family: 'Michroma', sans-serif;"><u><%= product?.name %></u></h4></a>
                             </div>
                             <div class="card-footer d-flex justify-content-center align-items-center">
                                 <% if (product?.deleted===false) { %>
-                                    <a class="subTotal btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h4 style=" font-family: 'Michroma', sans-serif;"><span class="">&#x20B9</span><span class="" id="<%=_id%>subTotal"> <%if(product?.discountPercentage&&product?.discountPercentage>0){%>
+                                    <a class="subTotal btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h4 class="mainFontFamily"><span>&#x20B9;</span><span id="<%=_id%>subTotal"> <%if(product?.discountPercentage&&product?.discountPercentage>0){%>
                                         <%=((product.price-((product.price*product.discountPercentage)/100))*quantity).toFixed(2)%>
                                         <%}else{%>
                                             <%=product.price*quantity%>
                                             <%}%></span><span></span></h3></a> 
                                         <% } else { %>
-                                <a class="text-danger btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Not Available!</h3></a>
+                                <a class="text-danger btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 class="mainFontFamily">Not Available!</h3></a>
                             <% } %>
-                            
                         </div>
-                        
                       </div>
                     </div>
                     <% })} %>
                 </div>
-
-                
     <div class="container mt-5 mb-5">
         <div class="row" style="display: flex; justify-content: center;">
             <div class="col-12 col-lg-8">
                 <div class="expected-delivery">
-                    <div class="delivery-title">Expected Delivery</div>
-                    <div class="delivery-date" id="deliveryDate"></div>
+                        <div class="delivery-title">Expected Delivery</div>
+                        <div class="delivery-date" id="deliveryDate"></div>
                 </div>
-                
             </div>
         </div>
-
-
     <div class="container mt-2 mb-3" style="display: flex; justify-content: center;">
         <div class="row ">
             <div class="col-12 card">
                 <form class="row g-3 needs-validation" action="" method="get" novalidate enctype="application/form-data" style="width: 20vw; min-width: 300px;">
                     <div class="col-md-12">
-                        <i class="fa fa-gift me-2 ms-2  fa-bounce" style="font-size: 30px;  "></i><label for="validationCustom01" class="form-label ms-2" style="font-family: 'Michroma', sans-serif;">Select Coupon</label>
+                        <i class="fa fa-gift me-2 ms-2  fa-bounce" style="font-size: 30px;  "></i><label for="validationCustom01" class="form-label ms-2 mainFontFamily">Select Coupon</label>
                         <div class="input-group">
-                            <input type="text" class=" form-control codeInput" id="validationCustom01 codeInput" name="code" required style="border-top: 1px solid rgb(126, 126, 126); border-bottom: 1px solid rgb(126, 126, 126); border-left: 1px solid rgb(126, 126, 126);"
-                            >
+                            <input type="text" class="form-control codeInput couponInput" id="validationCustom01 codeInput" name="code" required>
                         <a class="btn btn-outline-dark " id="clearCouponButton"><i class="fa-solid fa-broom "></i></a>
                         </div>
                         <input type="hidden" name="appliedCoupon" id="appliedCoupon" class="appliedCoupon" value="">
@@ -192,283 +137,23 @@ input:checked[type="checkbox"]:before {
                             &nbsp;
                         </div>
                     </div>
-                    <style>
-                        .Btn {
-                            position: relative;
-                            display: flex;
-                            align-items: center;
-                            justify-content: flex-start;
-                            width: 100px;
-                            height: 40px;
-                            border: none;
-                            padding: 0px 20px;
-                            background-color: #a826ff;
-                            color: white;
-                            font-weight: 500;
-                            cursor: pointer;
-                            border-radius: 10px;
-                            box-shadow: 5px 5px 0px rgb(140, 32, 212);
-                            transition-duration: .2s;
-                            }
-
-                            .svg {
-                            width: 13px;
-                            position: absolute;
-                            right: 0;
-                            margin-right: 10px;
-                            margin-left: 100px;
-                            fill: white;
-                            transition-duration: .2s;
-                            }
-
-                            .Btn:hover {
-                            color: transparent;
-                            }
-
-                            .Btn:hover svg {
-                            right: 43%;
-                            margin: 0;
-                            padding: 0;
-                            border: none;
-                            transition-duration: .2s;
-                            }
-
-                            .Btn:active {
-                            transform: translate(3px , 3px);
-                            transition-duration: .3s;
-                            box-shadow: 2px 2px 0px rgb(140, 32, 212);
-                            }
-                    </style>
                     <div class="save" style="margin: 0 !important;">
                         <div class="d-flex mb-auto" style="justify-content: center; gap: 10px; margin-top: 3px;">
-
-                            <button class="Btn"  type="submit"><span id="applyCouponButton">Apply</span>
-                                <svg class="svg" viewBox="0 0 512 512">
+                            <button class="couponBtn" type="submit"><span id="applyCouponButton">Apply</span>
+                                <svg class="couponSvg" viewBox="0 0 512 512">
                                     <path d="M448 127.1c0 9.7-3.9 18.9-11 25.5l-236 236c-3.1 3.1-7.2 4.8-11.5 4.8s-8.4-1.7-11.5-4.8l-124-124c-6.2-6.2-6.2-16.4 0-22.6s16.4-6.2 22.6 0L180 360.6 425.9 114.7c6.2-6.2 16.4-6.2 22.6 0s6.1 16.4 0 22.4L237.1 402.5c-5.5 5.5-14.4 5.5-19.9 0L43.5 232.9c-5.5-5.5-5.5-14.4 0-19.9s14.4-5.5 19.9 0l157.6 157.5 236-236c6.1-6.1 15.2-8.3 24.3-5.6 9.1 2.8 16 9.7 18.8 18.8C448.1 112 448 119.1 448 127.1z"></path>
                                   </svg>
-                                  
                               </button>
-                              
-                            
                         </div>
                     </div>
-                    <script>
-                        const clearCouponButton = document.getElementById('clearCouponButton');
-                        
-                        clearCouponButton.addEventListener("click", () => {
-                            const totalAmount = document.getElementById("totalAmount"); 
-                            const totalPrice = document.querySelector(".totalPrice"); 
-                            const codeInput = document.querySelector(".codeInput"); 
-                            const appliedCoupon = document.querySelector('.appliedCoupon');
-                            const validSpan= document.getElementById('validSpan')
-                            if(appliedCoupon.value){
-                                const tableBody = document.querySelector('.table tbody');
-                                tableBody.removeChild(tableBody.children[2]);
-                            }
-                            validSpan.innerHTML='&nbsp;';
-                            applyCouponButton.textContent="Apply"
-                            totalAmount.textContent = '<%=grandTotal%>';
-                            totalPrice.textContent ='<%=grandTotal%>' ;
-                            codeInput.value = '';
-                            appliedCoupon.value = '';
-                            discount=0;
-                            couponTotal=0;
-                            handleWalletCheckbox()
-                        });
-
-                    </script>
                 </form>
-                <script>
-                    
-                    (() => {
-                        'use strict';
-                        
-                        const forms = document.querySelectorAll('.needs-validation');
-                        const validSpan=document.querySelector(".validSpan");
-                        let couponTotal;
-                        Array.from(forms).forEach(form => {
-                            form.addEventListener('submit', async event => {
-                                event.preventDefault();
-                                    const totalAmount=document.getElementById("totalAmount")
-                                    const totalPrice=document.getElementById("totalPrice")
-                                    const applyCouponButton=document.getElementById("applyCouponButton")
-                                    const codeInput = form.querySelector('[name="code"]');
-                                    const codeValue = codeInput.value.toUpperCase().trim();
-                                    const appliedCoupon=form.querySelector('[name="appliedCoupon"]');
-                                    const discountTable = document.getElementById('discountTable');
-                                    if (codeValue === '' || !isNaN(codeValue) || codeValue.length > 15 || codeValue.length < 4) {
-                                        showAlert('Please enter a valid code.');
-                                        return;
-                                    }
-
-                                    if (!form.checkValidity()) {
-                                        return;
-                                    }
-                                    // if(parseInt(totalAmount.innerText)<1){
-                                    //     showAlert("Cannot Apply Coupon!")
-                                    //     return;
-                                    // }
-                                    try {
-                                        const response = await fetch(`/user/addCoupon?code=${codeValue}`);
-                                        const data = await response.json();
-                                        if (data.added === "expired") {
-                                            couponTotal=0;
-                                            applyCouponButton.textContent="Apply"
-                                            couponTotal=0;
-                                            if(appliedCoupon.value){
-                                                const tableBody = document.querySelector('.table tbody');
-                                                tableBody.removeChild(tableBody.children[2]);
-                                            }
-                                            discount=0;
-                                            appliedCoupon.value=""
-                                            totalAmount.innerText="<%=grandTotal%>"
-                                            totalPrice.innerText="<%=grandTotal%>"
-                                            handleWalletCheckbox()
-                                            // showAlert('Coupon is expired!');
-                                            validSpan.innerHTML='<span class="text-danger">Coupon Expired!</span>';
-                                        } else if (data.added === "added") {
-                                            applyCouponButton.textContent="Applied"
-                                            discount=data.discount.toFixed(2)
-                                            if(appliedCoupon.value){
-                                                const tableBody = document.querySelector('.table tbody');
-                                                tableBody.removeChild(tableBody.children[2]);
-                                            }
-                                            // Create a new row
-                                            const newRow = document.createElement('tr');
-
-                                            // Create the first cell (Discount)
-                                            const discountCell1 = document.createElement('td');
-                                            discountCell1.textContent = 'Discount'+' (' +data.discountPercentage+"%)";
-                                            discountCell1.style.fontWeight = 'bold';
-
-                                            // Create the second cell (Discount value)
-                                            const discountCell2 = document.createElement('td');
-                                            discountCell2.classList.add('ps-2');
-                                            discountCell2.textContent = '-₹ '+discount;
-
-                                            // Append cells to the new row
-                                            newRow.appendChild(discountCell1);
-                                            newRow.appendChild(discountCell2);
-
-                                            // Append the new row to the table body
-                                            const tableBody = document.querySelector('.table tbody');
-                                            tableBody.insertBefore(newRow, tableBody.children[2]); // Insert before the 3rd row
-                                            couponTotal=data.grandTotal.toFixed(2);
-                                            totalAmount.innerText=data.grandTotal.toFixed(2);
-                                            totalPrice.innerText=data.grandTotal.toFixed(2);
-                                            appliedCoupon.value=codeValue;
-                                            
-                                            validSpan.innerHTML = '<span class="text-success">Coupon Applied!</span>';
-                                            // showSuccess('Coupon Applied!');
-                                            handleWalletCheckbox()
-                                        } else if (data.added === "not") {
-                                            applyCouponButton.textContent="Apply"
-                                            couponTotal=0;
-                                            if(appliedCoupon.value){
-                                                const tableBody = document.querySelector('.table tbody');
-                                                tableBody.removeChild(tableBody.children[2]);
-                                            }
-                                            discount=0;
-                                            appliedCoupon.value=""
-                                            totalAmount.innerText="<%=grandTotal%>"
-                                            totalPrice.innerText="<%=grandTotal%>"
-                                            validSpan.innerHTML='<span class="text-danger">Not A Valid Coupon!</span>';
-                                            // showAlert('Not A Valid Coupon!');
-                                            handleWalletCheckbox()
-                                        }else if (data.added === "minimum"){
-                                            applyCouponButton.textContent="Apply"
-                                            couponTotal=0;
-                                            if(appliedCoupon.value){
-                                                const tableBody = document.querySelector('.table tbody');
-                                                tableBody.removeChild(tableBody.children[2]);
-                                            }
-                                            discount=0;
-                                            appliedCoupon.value=""
-                                            totalAmount.innerText="<%=grandTotal%>"
-                                            totalPrice.innerText="<%=grandTotal%>"
-                                            validSpan.innerHTML=`<span class="text-danger">Coupon is valid for orders over ${data.min} !</span>`;
-                                            // showAlert('Not A Valid Coupon!');
-                                            handleWalletCheckbox()
-                                        }else if(data.added === "maximum"){
-                                            applyCouponButton.textContent="Apply"
-                                            couponTotal=0;
-                                            if(appliedCoupon.value){
-                                                const tableBody = document.querySelector('.table tbody');
-                                                tableBody.removeChild(tableBody.children[2]);
-                                            }
-                                            discount=0;
-                                            appliedCoupon.value=""
-                                            totalAmount.innerText="<%=grandTotal%>"
-                                            totalPrice.innerText="<%=grandTotal%>"
-                                            validSpan.innerHTML=`<span class="text-danger">Coupon is valid for orders between ${data.min} and ${data.max}!</span>`;
-                                            // showAlert('Not A Valid Coupon!');
-                                            handleWalletCheckbox()
-                                        }
-                                         else if (data.added === false) {
-                                            couponTotal=0;
-                                            validSpan.innerHTML='&nbsp;'
-                                            applyCouponButton.textContent="Apply"
-                                            showSuccess('Not Added');
-                                            handleWalletCheckbox()
-                                        }
-                                    } catch (error) {
-                                        console.error("Error checking category:", error);
-                                    }
-                                });
-
-                            });
-                        })();
-                        function handleWalletCheckbox() {
-                            var checkbox = document.getElementById("walletCheckbox");
-                            var amountElement = document.getElementById("walletAmount");
-                            var totalPrice=document.querySelector('.totalPrice')
-                            var usedWallet = document.getElementById("usedWallet");
-                            var totalAmount = document.getElementById("totalAmount");
-                            const payNowButton=document.querySelector('.payNowButton');
-                            const placeOrderCOD=document.querySelector('.placeOrderCOD');
-                            if (checkbox && amountElement && usedWallet && totalAmount) {
-                                let total = grandTotal-discount;
-
-                                if (checkbox.checked) {
-                                    const deductionAmount = total > walletBalance ? walletBalance : total;
-                                    const balance = walletBalance - deductionAmount;
-                                    amountElement.textContent = balance > 0 ? (balance).toFixed(2) : 0;
-                                    usedWallet.textContent = deductionAmount.toFixed(2);
-                                    totalAmount.textContent=(total-deductionAmount).toFixed(2);
-                                    totalPrice.textContent=(total-deductionAmount).toFixed(0);
-                                    if((total-deductionAmount)===0){
-                                        payNowButton.setAttribute('style', 'display: none !important;');
-                                        placeOrderCOD.setAttribute('style', 'display: none !important;');
-                                    }else{
-                                        payNowButton.style.display='block';
-                                        placeOrderCOD.style.display='block';
-                                    }
-                                } else {
-                                    amountElement.textContent = walletBalance.toFixed(2);
-                                    usedWallet.textContent = 0;
-                                    totalAmount.textContent=total.toFixed(2);
-                                    totalPrice.textContent=total.toFixed(2);
-                                    payNowButton.style.display='block';
-                                    placeOrderCOD.style.display='block';
-                                }
-                            } else {
-                                console.error("One or more elements not found.");
-                            }
-                        }
-
-                </script>
             </div>
         </div>
     </div>
-
-
-
-
-
     <div class="container">
         <div class="row" style="display: flex; justify-content: center;">
-            <div class="col-6 bg-dark" style="border: 1px solid black; border-radius: 10px;  min-width: 300px;">
-                <h4 class="text text-center mb-2 text-white" style="margin-top: 20px;  font-family: 'Michroma', sans-serif;">Order Summary</h4>
+            <div class="col-6 bg-dark orderSummeryContainer">
+                <h4 class="text text-center mb-2 text-white mainFontFamily" style="margin-top: 20px;">Order Summary</h4>
         <table  class="table table-dark table-striped" style="margin-top: 20px; ">
             <thead>
                 <tr>
@@ -495,7 +180,6 @@ input:checked[type="checkbox"]:before {
                                     type="checkbox"
                                     onclick="handleWalletCheckbox()"
                                     id="walletCheckbox"
-                                    
                                     />
                                 </div>
                                 <label class="form-check-label" for="deliveryCheckbox">
@@ -509,13 +193,12 @@ input:checked[type="checkbox"]:before {
                     </tr>
                 <%} else {%>
                     <input
-                    class="form-check-input bg-dark walletCheckbox"
+                    class="form-check-input bg-dark walletCheckbox walletCheckbox2"
                     type="checkbox"
                     id="walletCheckbox"
-                    style="display: none !important; font-size: 25px; margin-left: -9px; margin-top: 10px;"
                     />
                     <%}%>
-                <tr class="table-success" style="padding-top: 30px; font-size: 1.5em;">
+                <tr class="table-success totalAmount">
                     <th>Total Amount</th>
                     <th>₹ <span id="totalAmount"><%=grandTotal%></span></th>
                 </tr>
@@ -524,91 +207,24 @@ input:checked[type="checkbox"]:before {
         </table>
     </div>
 </div>
-
-
-
             <% if(locals.products.length!==0) { %>
                 <div class="container d-flex flex-wrap justify-content-center mt-5 mb-5" style="gap: 10px;">
                     <a  id="payNowButton" class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4 payNowButton" style="width: fit-content;">
-                        <h3 style="font-family: 'Michroma', sans-serif; margin-bottom: 5px;">Total : <span class="text-danger"> &#x20B9 </span><span class="totalPrice" id="totalPrice" style="color: red; letter-spacing: 2px;"><%=locals?.grandTotal%></span><span style="color: red; letter-spacing: 2px;"></span></h3>
-                        <h4 style="font-family: 'Michroma', sans-serif; margin: 0; border-top: 4px dashed rgb(205, 205, 205);">Pay Now</h4>
+                        <h3 class="mainFontFamily" style="margin-bottom: 5px;">Total : <span class="text-danger"> &#x20B9 </span><span class="totalPrice" id="totalPrice" style="color: red; letter-spacing: 2px;"><%=locals?.grandTotal%></span><span style="color: red; letter-spacing: 2px;"></span></h3>
+                        <h4  class="mainFontFamily dashedBorder">Pay Now</h4>
                     </a>
-                    <a  class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4 " style="width: fit-content; font-family: 'Michroma', sans-serif;" id="placeOrderCOD">
+                    <a  class="btn btn-dark d-flex flex-column justify-content-center mt-4 pt-3 pb-3 ps-4 pe-4 mainFontFamily" style="width: fit-content;" id="placeOrderCOD">
                         <h3 class="placeOrderCOD" style=" margin-bottom: 5px;">Cash On Delivery</h3>
-                        <h4 style="font-family: 'Michroma', sans-serif; margin: 0; border-top: 4px dashed rgb(205, 205, 205);">Place Order</h4>
+                        <h4  class="mainFontFamily dashedBorder placeOrderText">Place Order Now</h4>
                     </a>
                 </div>
-                
             <% } %>
-            
         </div>
-
 </div>
-
 </div>
-
 <div id="overlay"></div>
-
-<style>
-    #overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(255, 255, 255); /* Adjust the alpha (4th parameter) for transparency */
-  z-index: 1000; /* Make sure it's above other content */
-}
-
-</style>
 <script>
-
     const payNowButton=document.getElementById('payNowButton');
-    const placeOrderCOD=document.getElementById('placeOrderCOD');
-
-
-
-    placeOrderCOD.addEventListener('click',async (e)=>{
-        e.preventDefault()
-        Swal.fire({
-          title: 'Confirm  Order 😊',
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonColor: '#03C03C',
-          cancelButtonColor: '#D2122E',
-          confirmButtonText: 'Confirm'
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-                const appliedCoupon=document.getElementById('appliedCoupon');
-                const walletCheckbox=document.querySelector('.walletCheckbox')
-                let checked=false;
-                if(walletCheckbox.checked){
-                    checked=true;
-                }else{
-                    checked=false;
-                }
-                try {
-                    const response = await fetch(`/user/placeOrderCOD?code=${appliedCoupon.value}&wallet=${checked}`);
-                    const data = await response.json();
-                    if(data.data===true){
-                        showSuccess("Creating Order")
-                        window.location.href = '/user/showConfirmOrder?id='+data.orderId;
-                    }else{
-                        showAlert("Order Not Created!")
-                    }
-                } catch (error) {
-                    console.log(error);
-                    showAlert("Error While Check Out!")
-                    window.location.reload()
-                }
-          }
-        });
-
-    })
-    
-    
-    
     payNowButton.addEventListener('click',()=>{
         const appliedCoupon=document.getElementById('appliedCoupon');
         const walletCheckbox=document.querySelector('.walletCheckbox')
@@ -627,9 +243,6 @@ input:checked[type="checkbox"]:before {
                     "Content-Type": "application/json"
                 }
             };
-
-            
-            // Creates new orderId every time
             $.ajax(settings).done(function (response) {
                 if(response.address===true){
                     showAlert("Please Add A Address!")
@@ -651,7 +264,6 @@ input:checked[type="checkbox"]:before {
                 "handler": function (response) {
                         // Success
                         overlay.style.display = 'block';
-                        // Send data to the backend
                         var paymentData = {
                             paymentId: response.razorpay_payment_id,
                             orderId: response.razorpay_order_id,
@@ -680,24 +292,19 @@ input:checked[type="checkbox"]:before {
                             }
                         });
                     },
-
                 "prefill": {
                     "name": "<%= address?.name%>",
                     "email": "<%= email %>",
                     "contact": "<%= address?.contact %>"
                 },
-               
                 "theme": {
                     "color": "#000000" 
                 }
             };
-
             var rzp1 = new Razorpay(options);
-
             rzp1.on('payment.failed', function (response){
                 showAlert("Payment Cancelled")
             });
-
             rzp1.open();
             e.preventDefault();
                 } catch (error) {
@@ -705,61 +312,9 @@ input:checked[type="checkbox"]:before {
                 }
             });
     })
-
-
 </script>
 
-
-
-
-
-
-
-<script>
-    // Calculate expected delivery date
-    const today = new Date();
-    const deliveryDate = new Date(today);
-    deliveryDate.setDate(today.getDate() + 6); // 5 days from the day after
-
-    // Display the date in a readable format
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = deliveryDate.toLocaleDateString('en-US', options);
-
-    // Update the delivery date in the HTML
-    document.getElementById('deliveryDate').textContent = formattedDate;
-</script>
-<div class="alertKey">
-    <% if(locals.message) { %>
-      <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-        data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-        <strong><%= message %></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      
-      <script>
-        // Add this script to your page
-        setTimeout(function() {
-          document.getElementById('success-alert').style.display = 'none';
-        }, 2000); // Adjust the delay (in milliseconds) as needed
-      </script>
-    <% } %>      
-  </div>
-  <div class="alertKey">
-    <% if(locals.messageS) { %>
-      <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-        data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-        <strong><%= messageS %></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-  
-      <script>
-        // Add this script to your page
-        setTimeout(function() {
-          document.getElementById('success-alert').style.display = 'none';
-        }, 2000); // Adjust the delay (in milliseconds) as needed
-      </script>
-    <% } %>      
-  </div>
-  <script></script>
+<%- include('../layout/alert')-%>
+<script src="../../public/jsFiles/checkOutValidation.js"></script>
 <%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>

@@ -27,3 +27,144 @@
 .alert{
     text-align: center;
 }
+
+.walletCheck {
+    display: inline-block;
+     text-align: center;
+   }
+   
+   input[type="checkbox"] {
+     position: relative;
+     top: 8px;
+     width: 35px;
+     height: 35px;
+     -webkit-appearance: none;
+     outline: none;
+     transition: 0.5s;
+   }
+   
+   input[type="checkbox"]:before {
+     content: "";
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     border: 3px solid #ffffff;
+     box-sizing: border-box;
+     border-radius: 5px;
+     transition: 0.5s;
+   }
+   
+   input:checked[type="checkbox"]:before {
+     border-left: none;
+     border-top: none;
+     width: 20px;
+     border-color: rgb(128, 0, 255);
+     border-radius: 0px;
+     transform: rotate(45deg) translate(5px, -10px);
+   }
+
+   .addressMainContainer{
+    border: 1px solid rgb(161, 161, 161);
+    border-radius: 10px;
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.273) !important;
+   }
+
+
+.addressContainer{
+    justify-content: baseline; text-align: center; row-gap: 10px; column-gap: 10px; flex-direction: column; align-items: center;
+}
+
+* a{
+    text-decoration: none  !important;
+}
+
+.productCont{
+    margin-top: 10px; 
+    border: none;
+    
+}
+
+.couponBtn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100px;
+    height: 40px;
+    border: none;
+    padding: 0px 20px;
+    background-color: #a826ff;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 5px 5px 0px rgb(140, 32, 212);
+    transition-duration: .2s;
+    }
+
+    .couponSvg {
+    width: 13px;
+    position: absolute;
+    right: 0;
+    margin-right: 10px;
+    margin-left: 100px;
+    fill: white;
+    transition-duration: .2s;
+    }
+
+    .couponBtn:hover {
+    color: transparent;
+    }
+
+    .couponBtn:hover svg {
+    right: 43%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    transition-duration: .2s;
+    }
+
+    .couponBtn:active {
+    transform: translate(3px , 3px);
+    transition-duration: .3s;
+    box-shadow: 2px 2px 0px rgb(140, 32, 212);
+    }
+
+.couponInput{
+    border-top: 1px solid rgb(126, 126, 126) !important; border-bottom: 1px solid rgb(126, 126, 126) !important; border-left: 1px solid rgb(126, 126, 126) !important;
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(255, 255, 255);
+    z-index: 1000; 
+  }
+  
+
+.orderSummeryContainer{
+    border: 1px solid black; border-radius: 10px;  min-width: 300px;
+}
+
+.walletCheckbox2{
+    display: none !important; font-size: 25px; margin-left: -9px; margin-top: 10px;
+}
+
+.totalAmount{
+    padding-top: 30px; font-size: 1.5em;
+}
+
+.dashedBorder{
+    margin: 0; border-top: 4px dashed rgb(205, 205, 205);
+}
+
+
+
+
+   
