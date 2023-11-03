@@ -1,0 +1,31 @@
+.filterDropdown{
+    font-family: 'Michroma', sans-serif; font-size: large; 
+}
+.filterDropdownUl{
+    box-shadow: 4px 4px 8px rgba(255, 255, 255, 0.913);
+}
+
+.filterDropDownButton{
+    display: block; align-items: center; font-size: large; 
+}
+
+* a{
+    text-decoration: none !important;
+}
+.cardText{
+    position: absolute; top: 10px; right: 10px; font-size: 15px; background-color:#CC0C39!important; border-radius: 10px; font-weight: bold; padding:8px ;
+}
+
+.discountDiv{
+    flex-direction: column; align-items: center; font-family: 'Michroma', sans-serif;
+}
+
+.dark-pagination .page-link {
+    background-color: #000000;
+    color: #fff;
+}
+.dark-pagination .page-item.active .page-link {
+    background-color: #ffffff;
+    border-color: #000000;
+    color: rgb(0, 0, 0) !important;
+}

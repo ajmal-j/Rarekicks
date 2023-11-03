@@ -1,6 +1,7 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/card.css">
+<link rel="stylesheet" type="text/css" href="../../public/css/allProducts.css">
 
 </head>
 <body>
@@ -8,20 +9,20 @@
 
 <div class="container productCont productContAll">
 
-    <div class="btn-group dropdown" style="font-family: 'Michroma', sans-serif; font-size: large; ">
-        <button type="button " style="font-size: large;" class=" btn btn-dark rounded-pill dropdown-toggle px-3 py-2" data-bs-toggle="dropdown" aria-expanded="false" style="display: block; align-items: center;">
+    <div class="btn-group dropdown filterDropdown">
+        <button type="button" class="btn btn-dark rounded-pill dropdown-toggle px-3 py-2 filterDropDownButton" data-bs-toggle="dropdown" aria-expanded="false" >
             <i class="fa-solid fa-filter me-3 " style="font-size: 20px;"></i>Filter
         </button>
-        <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 4px 4px 8px rgba(255, 255, 255, 0.913);">
+        <ul class="dropdown-menu bg-dark text-center p-4 filterDropdownUl">
             <li class="dropdown  ps-3 pe-3">
                 <div class="btn-group dropend">
                     <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         CATEGORIES
                     </button>
-                    <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 4px 4px 8px rgba(255, 255, 255, 0.913);">
+                    <ul class="dropdown-menu bg-dark text-center p-4 filterDropdownUl">
                         <% if (locals?.categories) { %>
                             <% categories.forEach(category => { %>
-                                <li class="pb-4 ps-3 pe-3"><a style="text-decoration: none;" href="/user/allCategories?id=<%= category._id %>"><%= category.name.toUpperCase() %></a></li>
+                                <li class="pb-4 ps-3 pe-3"><a  href="/user/allCategories?id=<%= category._id %>"><%= category.name.toUpperCase() %></a></li>
                             <% }) %>
                         <% } else { %>
                             <li class="pb-4 ps-3 pe-3">NO CATEGORIES!</li>
@@ -32,23 +33,23 @@
                     <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         BRANDS
                     </button>
-                    <ul class="dropdown-menu bg-dark text-center p-4 " style="box-shadow: 4px 4px 8px rgba(255, 255, 255, 0.913);">
-                        <li class="text-center hover   pb-4 ps-3 pe-3"><a class="" style="text-decoration: none;" href="/user/brandBased/">All Brands</a></li>
-                        <li class="text-center hover  pb-4 ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=adidas">ADIDAS</a></li>
-                        <li class="text-center hover  pb-4 ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=reebok">REEBOK</a></li>
-                        <li class="text-center hover  pb-4 ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=jordan">JORDAN</a></li>
-                        <li class="text-center hover  pb-4 ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=asics">ASICS</a></li>
-                        <li class="text-center hover  pb-4 ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=crocs">CROCS</a></li>
-                        <li class="text-center hover  ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=converse">CONVERSE</a></li>
+                    <ul class="dropdown-menu bg-dark text-center p-4 filterDropdownUl">
+                        <li class="text-center hover   pb-4 ps-3 pe-3"><a  href="/user/brandBased/">All Brands</a></li>
+                        <li class="text-center hover  pb-4 ps-3 pe-3"><a href="/user/brand?brand=adidas">ADIDAS</a></li>
+                        <li class="text-center hover  pb-4 ps-3 pe-3"><a href="/user/brand?brand=reebok">REEBOK</a></li>
+                        <li class="text-center hover  pb-4 ps-3 pe-3"><a href="/user/brand?brand=jordan">JORDAN</a></li>
+                        <li class="text-center hover  pb-4 ps-3 pe-3"><a href="/user/brand?brand=asics">ASICS</a></li>
+                        <li class="text-center hover  pb-4 ps-3 pe-3"><a href="/user/brand?brand=crocs">CROCS</a></li>
+                        <li class="text-center hover  ps-3 pe-3"><a href="/user/brand?brand=converse">CONVERSE</a></li>
                     </ul>
                 </div>
                 <div class="btn-group dropend">
                     <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         PRICE
                     </button>
-                    <ul class="dropdown-menu bg-dark text-center p-4 " style="box-shadow: 4px 4px 8px rgba(255, 255, 255, 0.913);">
-                        <li class="text-center hover  pb-4 ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/priceLowToHigh">LOW-HIGH</a></li>
-                        <li class="text-center hover  ps-3 pe-3"><a style="text-decoration: none;" class="" href="/user/priceHighToLow">HIGH-LOW</a></li>
+                    <ul class="dropdown-menu bg-dark text-center p-4 filterDropdownUl">
+                        <li class="text-center hover  pb-4 ps-3 pe-3"><a href="/user/priceLowToHigh">LOW-HIGH</a></li>
+                        <li class="text-center hover  ps-3 pe-3"><a  class="" href="/user/priceHighToLow">HIGH-LOW</a></li>
                     </ul>
                 </div>
             </li>
@@ -77,7 +78,7 @@
     </div>
     
 
-    <h2 class="text-center mt-2 mb-3" style="font-family: 'Michroma', sans-serif;">
+    <h2 class="text-center mt-2 mb-3 mainFontFamily">
         <%= locals.brand ? brand : name ? name : 'All Products' %>
       </h2>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 d-flex mb-5" style="justify-content: center;">
@@ -85,12 +86,12 @@
             <% products.forEach(product => { %>
                 <div class="col">
                     <div class="card h-100">
-                        <a href="/user/productDetailed?id=<%= product._id %>" style="text-decoration: none; color: black;">
+                        <a href="/user/productDetailed?id=<%= product._id %>" style="color: black;">
                             <img src="<%= product.images[0]%>" class="card-img-top" alt="..." style="position: relative;">
                         <%if(product?.discountPercentage>0){%>
-                            <span class="text-white" style="position: absolute; top: 10px; right: 10px; font-size: 15px; background-color:#CC0C39!important; border-radius: 10px; font-weight: bold; padding:8px ;"><%=product.discountPercentage%>% off</span>
+                            <span class="text-white cardText"><%=product.discountPercentage%>% off</span>
                             <%}%>
-                            <div class="card-body d-flex justify-content-center" style="flex-direction: column; align-items: center; font-family: 'Michroma', sans-serif;">
+                            <div class="card-body d-flex justify-content-center discountDiv">
                                 <h5 class="card-title text-center mb-2"><%= product.name %></h5>
                                 <a href="/user/productDetailed?id=<%=product._id%>" class="btn btn-dark mt-auto rounded-pill"><%if(product?.discountPercentage&&product?.discountPercentage>0){%>
                                     <span class="text-danger"> &#x20B9 <%= (product.price-((product?.price*product?.discountPercentage)/100)).toFixed(0)%></span>
@@ -106,28 +107,14 @@
             <% }); %>
         <% } else { %>
             <div class="col">
-                <p class="text-center display-6" style="font-family: 'Michroma', sans-serif;"><u>No products.</u></p>
+                <p class="text-center display-6 mainFontFamily"><u>No products.</u></p>
             </div>
         <% } %>
     </div>
 </div>
-
-    
-<style>
-    .dark-pagination .page-link {
-        background-color: #000000;
-        color: #fff;
-    }
-    .dark-pagination .page-item.active .page-link {
-        background-color: #ffffff;
-        border-color: #000000;
-        color: rgb(0, 0, 0) !important;
-    }
-</style>
-
 <%if(locals?.totalDocuments){%>
-    <div class="container mt-2">
-        <nav aria-label="Page navigation example " style="font-family: 'Michroma', sans-serif;">
+    <div class="container mt-2 mainFontFamily">
+        <nav aria-label="Page navigation example mainFontFamily" >
             <ul class="pagination justify-content-center dark-pagination">
                 <li class="page-item <%= page === 0 ? 'disabled' : '' %>">
                     <a class="page-link" href="<%= page > 0 ? '/user/allProducts?page=' + (page-1) : '#' %>" aria-label="Previous">
@@ -148,24 +135,6 @@
         </nav>
     </div>
 <%}%>
-
-
-
-<div class="container Cont mt-5">
-    <div class="responsive-container">
-        <div class="card info-box  ">
-          <h2>Free Delivery</h2>
-          <p>Enjoy the ultimate convenience with our FREE delivery service!</p>
-        </div>
-        <div class="card info-box  " style="margin-top: 5px; margin-bottom: 5px;">
-          <h2>24/7 Support</h2>
-          <p>Our dedicated team is here for you 24/7, ready to assist with any questions or concerns.</p>
-        </div>
-        <div class="card info-box  ">
-          <h2>Return Policy</h2>
-          <p>Your satisfaction is our top priority!policy is designed for you.</p>
-        </div>
-    </div>
-</div>
+<%- include('../layout/adText')-%>
 <%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>
