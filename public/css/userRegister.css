@@ -1,35 +1,15 @@
 /* font-family: 'Michroma', sans-serif;
 font-family: 'Plus Jakarta Sans', sans-serif; */
 .welcome{
-    font-family: "Plus Jakarta Sans";
+    font-family: 'Michroma', sans-serif;
+    padding-bottom: 20px;
 }
 
 body{
-/* background-color: #ecd7ff; */
-
---s: 100px; /* control the size */
---c1: #f8b195;
---c2: #355c7d;
-
---_g: var(--c2) 6% 14%, var(--c1) 16% 24%, var(--c2) 26% 34%,
-  var(--c1) 36% 44%, var(--c2) 46% 54%, var(--c1) 56% 64%, var(--c2) 66% 74%,
-  var(--c1) 76% 84%, var(--c2) 86% 94%;
-background: radial-gradient(
-    100% 100% at 100% 0,
-    var(--c1) 4%,
-    var(--_g),
-    #0008 96%,
-    #0000
-  ),
-  radial-gradient(
-      100% 100% at 0 100%,
-      #0000,
-      #0008 4%,
-      var(--_g),
-      var(--c1) 96%
-    )
-    var(--c1);
-background-size: var(--s) var(--s);
+background-image: url('../images/vecteezy_minimalist-dark-gradient-wave-background-simple-design-for_7718309.jpg');
+    background-size: cover; 
+    background-position: center;
+    background-repeat: no-repeat;
 
 }
 
@@ -49,20 +29,21 @@ background-size: var(--s) var(--s);
 }
 .mainForm{
     display: flex;
-    background-color: rgba(246, 246, 246, 0.791);
+    border: 1px solid rgba(111, 111, 111, 0.633) !important;
+    background-color: rgba(255, 255, 255, 0.841);
     flex-direction: column;
     align-items: center;
     justify-content: center;
     border: 1px solid rgb(53, 53, 53);
-    box-shadow: 2px 2px 5px black;
-    border-radius: 15px;
+    box-shadow: 2px 2px 25px rgb(0, 0, 0);
+    border-radius: 30px;
     padding: 20px;
     min-width: 500px;
 }
 
 .mainForm input{
-    border: 1px solid black;
-    border-radius: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.435);
+    border-radius: 10px;
     padding-right: 20px;
     padding-left: 20px;
     width: 400px;
@@ -72,16 +53,16 @@ background-size: var(--s) var(--s);
 }
 
 .mainCont{
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.792);
-    background-color: rgba(255, 255, 255, 0.676);
+    box-shadow: 2px 2px 25px rgb(0, 0, 0);
+    background-color: rgba(250, 250, 250, 0.802);
     display: flex;
     flex-direction: row;
     width: 550px;
     justify-content: center;
     align-items: center;
-    border: 1px solid rgb(72, 72, 72);
+    border: 1px solid rgba(255, 255, 255, 0.268);
     padding: 20px;
-    border-radius: 20px;
+    border-radius: 30px;
 }
 .mainCont button{
     width: 200px;

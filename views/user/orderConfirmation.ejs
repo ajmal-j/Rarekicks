@@ -22,7 +22,7 @@
                         <p>Quantity : <%=product.quantity %></p>
                         <p>Price : <%= product.price %></p>
                     </div>
-                    <img src="../../public/productImages/<%= product.product.images[0] %>" alt="Product 1" class="product-image">
+                    <img src="<%= product.product.images[0] %>" alt="Product 1" class="product-image">
                 </div>
             <% }); %>
         </div>

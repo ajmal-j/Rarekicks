@@ -7,7 +7,7 @@ const orderController= require("../controller/orderController")
 const JWT=require("../middlewares/jwtToken")
 adminRouter.set("view engine","ejs")
 adminRouter.set("views","./views/admin")
-
+const cloudinary=require('../config/cloudinaryConfig')
 
 adminRouter.get('/home',JWT.checkJwtAdmin,productController.getProductAdmin,adminController.home)
 adminRouter.get('/dashBoard',JWT.checkJwtAdmin,adminController.dashBoard)
@@ -28,10 +28,10 @@ adminRouter.post('/adminLogin',adminController.loginValidation)
 
 
 adminRouter.get('/addProduct',JWT.checkJwtAdmin,productController.addProduct)
-adminRouter.post('/addProduct',JWT.checkJwtAdmin,productController.upload.array('images', 5),productController.insertProduct)
+adminRouter.post('/addProduct',JWT.checkJwtAdmin,cloudinary.upload.array('images', 5),productController.insertProduct)
 adminRouter.get('/editProduct',JWT.checkJwtAdmin,productController.editProductShow)
 adminRouter.get('/checkDiscount',JWT.checkJwtAdmin,productController.checkDiscount)
-adminRouter.post('/editProduct',JWT.checkJwtAdmin,productController.upload.array('images', 5),productController.editProduct)
+adminRouter.post('/editProduct',JWT.checkJwtAdmin,cloudinary.upload.array('images', 5),productController.editProduct)
 adminRouter.get('/deleteProduct',JWT.checkJwtAdmin,productController.deleteProduct)
 adminRouter.get('/deleteProductCompletely',JWT.checkJwtAdmin,productController.deleteProductCompletely)
 adminRouter.get('/searchProduct',JWT.checkJwtAdmin,productController.searchProduct)
@@ -69,7 +69,7 @@ adminRouter.get('/editOrder',JWT.checkJwtAdmin,orderController.editOrders)
 
 
 adminRouter.get('/bannerManagement',JWT.checkJwtAdmin,adminController.bannerManagement)
-adminRouter.post('/updateBanner',JWT.checkJwtAdmin,productController.upload.array('images',5),productController.updateBanner)
+adminRouter.post('/updateBanner',JWT.checkJwtAdmin,cloudinary.upload.array('images',5),productController.updateBanner)
 
 
 adminRouter.get('/couponManagement',JWT.checkJwtAdmin,adminController.couponManagement)

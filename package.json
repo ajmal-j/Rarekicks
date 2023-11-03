@@ -38,6 +38,7 @@
     "node-cron": "^3.0.2",
     "node-localstorage": "^3.0.5",
     "nodemailer": "^6.9.5",
-    "razorpay": "^2.9.2"
+    "razorpay": "^2.9.2",
+    "socket.io": "^4.7.2"
   }
 }

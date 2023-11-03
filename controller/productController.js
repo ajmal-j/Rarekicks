@@ -1,5 +1,4 @@
 const Product=require("../models/productModel")
-const multer=require("multer");
 const path=require("path")
 const fs = require('fs');
 const category=require("../models/categoryModel");
@@ -13,41 +12,8 @@ const bannerModel= require("../models/bannerModel");
 const { json } = require("express");
 const { type } = require("os");
 const orderModel = require("../models/orderModel");
-
-
-function deleteImage(filename) {
-    try{
-        const v=__dirname
-        const parentDir = path.dirname(v);
-        const imagePath = path.join(parentDir,'public','productImages', filename);
-        if (fs.existsSync(imagePath)) {
-            fs.unlinkSync(imagePath);
-            console.log(`Image ${filename} deleted successfully.`);
-        } else {
-            console.log(`Image ${filename} not found.`);
-        }
-    }catch(err){
-        console.log(err)
-    }
-}
-
-function deleteImages(deleteImg) {
-    deleteImg.forEach((image) => {
-      deleteImage(image);
-    });
-}
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, './public/productImages');
-    },
-    filename: function (req, file, cb) {
-        // console.log(file)
-      cb(null, Date.now() + path.extname(file.originalname));
-    },
-  });
-  
-const upload = multer({ storage: storage });
+const cloudinary = require('cloudinary').v2; 
+const cloudinaryConfig=require('../config/cloudinaryConfig')
 
 const addProduct= async (req,res)=>{
     try{
@@ -67,7 +33,10 @@ const addProduct= async (req,res)=>{
 }
 
 const insertProduct =async (req,res)=>{
-    const images =await req.files.map(file => file.filename);
+    const images = await Promise.all(req.files.map(async file => {
+        const result = await cloudinary.uploader.upload(file.path); 
+        return result.secure_url; 
+    }));
     const category=req.body.category.trim();
     const {discountPercentage}= await categoryModel.findById(category)
     const disc=req.body.discountPercentage.trim();
@@ -88,7 +57,7 @@ const insertProduct =async (req,res)=>{
         await productData.save();
         res.redirect("/admin/productList?messageS=Product Added")
     }catch(err){
-        deleteImages(images)
+        await cloudinaryConfig.deleteImagesFromCloudinary(images)
         console.log(err)
         res.redirect("/admin/addProduct?message=Product Already Found")
     }
@@ -97,9 +66,7 @@ const insertProduct =async (req,res)=>{
 const getProductAdmin=async(req,res,next)=>{
     try {
         const products=await Product.find().populate("category");
-        // console.log(products)
         req.products=products;
-        // console.log(products)
         next()
         }   
     catch(err){
@@ -117,7 +84,7 @@ const getProduct=async(req,res,next)=>{
             },
             {
               $lookup: {
-                from: 'categories',  // Assuming your category model is named 'category'
+                from: 'categories',  
                 localField: 'category',
                 foreignField: '_id',
                 as: 'category',
@@ -133,9 +100,7 @@ const getProduct=async(req,res,next)=>{
             },
           ]);
 
-        // console.log(products)
         req.products=products;
-        // console.log(products)
         next()
         }   
     catch(err){
@@ -156,16 +121,10 @@ const getProductByPage = async (req, res, next) => {
         .limit(6)
         .populate({
             path: 'category',
-            match: { deleted: false }, // Filter the populated documents
+            match: { deleted: false }, 
         })
         .exec();
-
-        // Filter out products with category.deleted set to false
         const filteredProducts = products.filter(product => product.category !== null);
-
-        // filteredProducts now contains the products with category.deleted set to false
-
-        // console.log(filteredProducts);
         req.products = filteredProducts;
         req.page = page;
         req.totalDocuments = totalDocuments;
@@ -222,6 +181,22 @@ const bestSeller = async (req, res, next) => {
         res.json(err);
     }
 };
+const sortByRating = async (req, res, next) => {
+    try {
+        const products = await Product.find({ deleted: false }).sort({'rating.averageRating':-1})
+        .populate({
+            path: 'category',
+            match: { deleted: false },
+        })
+        .exec();
+        const filteredProducts = products.filter(product => product.category !== null&&product.rating.averageRating>=1);
+        req.products = filteredProducts.reverse();
+        req.name="By Rating"
+        next();
+    } catch (err) {
+        res.json(err);
+    }
+};
 
 const getBrand=async(req,res,next)=>{
     try {
@@ -232,11 +207,8 @@ const getBrand=async(req,res,next)=>{
               { deleted: false }
             ]
           });
-          
-        // console.log(products)
         req.products=products;
         req.brand=branded
-        // console.log(products)
         next()
         }   
     catch(err){
@@ -250,7 +222,7 @@ const editProductShow=async (req,res)=>{
         const product=await Product.findOne({_id:id}).populate("category")
         const categories = await category.find({$and:[{deleted:false},{ _id: { $ne: "6537f0cec483201d20b35f83" } },{ name: { $ne:product?.category?.name  } }]})
         const {discountPercentage}= await categoryModel.findById(product.category)
-        res.render("editProduct",{product,categories,discountPercentage})
+        res.render("editProduct",{product,categories,discountPercentage:discountPercentage?discountPercentage:0})
     }catch(err){
         console.log(err)
     }
@@ -264,15 +236,17 @@ const editProduct=async (req,res)=>{
     const newDiscount=discount+discountPercentage;
     const imagesFull = product.images;
     const imageD = Array.isArray(req.body.selectedImages) ? req.body.selectedImages : [req.body.selectedImages];
-    const images = req.files ? req.files.map(file => file.filename) : [];
+    const images = await Promise.all(req.files.map(async file => {
+        const result = await cloudinary.uploader.upload(file.path);  
+        return result.secure_url; 
+    }));
     const lastImage = imagesFull.filter(value => !imageD.includes(value));
     const combinedArray = images.concat(lastImage);
     const sizes= Array.isArray(req.body.sizes) ? req.body.sizes : [req.body.sizes];
     const updateSize=sizes[0]===undefined?[]:sizes;
-    // console.log(discount,newDiscount,discountPercentage)
             try {
                 if(imageD[0]!==undefined){
-                    deleteImages(imageD)
+                    cloudinaryConfig.deleteImagesFromCloudinary(imageD)
                 }
                 if(images){
                     const details={
@@ -313,11 +287,11 @@ const editProduct=async (req,res)=>{
                 }
             }
             catch(err){
-                const id=await req.query.id.trim();
+                const id=await req.query.id;
                 console.log(err);
                 const product=await Product.findOne({_id:id}).populate("category")
                 const categories = await category.find({$and:[{deleted:false},{ _id: { $ne: "6537f0cec483201d20b35f83" } },{ name: { $ne:product?.category?.name  } }]})
-                res.render("editProduct",{product,categories,message:"Product Already Exist!"})
+                res.render("editProduct",{product,categories,message:"Product Already Exist!",discountPercentage:discountPercentage?discountPercentage:0})
             }
 
 }
@@ -330,10 +304,8 @@ const deleteProduct=async (req,res)=>{
     const {deleted}=await Product.findById(id);
     if(deleted===false){
         await Product.findByIdAndUpdate(id,{deleted:true})
-        // res.redirect("/admin/viewUsers")
       }else if(deleted===true){
         await Product.findByIdAndUpdate(id,{deleted:false})
-        // res.redirect("/admin/viewUsers")
       }
     }
     catch(err){
@@ -344,36 +316,26 @@ const deleteProduct=async (req,res)=>{
 const deleteProductCompletely = async (req, res) => {
     try {
         const productId = req.query.id;
-
-        // Find the product
         const product = await Product.findOne({ _id: productId });
-
-        // Check if the product exists
         if (!product) {
             return res.status(404).send("Product not found");
         }
-
-        // Find users with the product in their cart or wishlist
         const users = await userModel.find({
             $or: [
                 { 'cart.items.product': productId },
                 { wishlist: productId },
             ],
         });
-
-        // Remove the product from each user's cart and wishlist
         await Promise.all(users.map(async (user) => {
             user.cart.items = user.cart.items.filter(item => !item.product.equals(productId));
             user.wishlist = user.wishlist.filter(wishlistProductId => !wishlistProductId.equals(productId));
             await user.save();
         }));
 
-        // Delete the product
         const images = product.images;
-        deleteImages(images);
+        await cloudinaryConfig.deleteImagesFromCloudinary(images);
         await Product.findByIdAndDelete(productId);
 
-        // Redirect to admin home
         res.redirect("/admin/productList/");
     } catch (err) {
         res.status(500).send(err.message || "Internal Server Error");
@@ -407,7 +369,7 @@ const searchProductUser=async (req,res)=>{
     const search=await req.query.search||"";
     try{
         const products=await Product.find({$and:[{name:new RegExp(search.trim(),"i")},{deleted:false}]}).exec();
-        res.render("allProducts",{products,search})
+        res.render("allProducts",{products,search,brand:false,name:search})
     }
     catch(err){
         res.send("Error occurred")
@@ -428,14 +390,12 @@ const searchProductUser=async (req,res)=>{
                 discountPercentage:discountPercentage,
                 description:req.body.description});
             await newCategory.save();
-            // console.log(newCategory)
             res.json({category:"true"})
         }
     } catch (err) {
       if (err.code === 11000) {
         res.send("not added");
       } else {
-        // If some other error occurred
         res.status(500).json({ error: 'Internal server error' });
       }
     }
@@ -505,7 +465,6 @@ const editCategory = async (req, res) => {
         for (const product of products){
             const discountNew=product.discountPercentage-discountPercentage;
             const set=discountNew+discount;
-            // console.log(discountNew,set,discount)
             await productModel.findByIdAndUpdate(product._id,{$set:{discountPercentage:set}})
         }
         await categoryModel.findByIdAndUpdate(id, data);
@@ -523,14 +482,9 @@ const deleteCategory= async (req, res) => {
     const {deleted}=await categoryModel.findById(id)
     if(deleted===false){
         await categoryModel.findByIdAndUpdate(id,{deleted:true})
-        // res.redirect("/admin/viewUsers")
       }else if(deleted===true){
         await categoryModel.findByIdAndUpdate(id,{deleted:false})
-        // res.redirect("/admin/viewUsers")
       }
-    // await category.findByIdAndUpdate()
-    // const categories=await categoryModel.find()
-    // res.render('category',{categories});
 };
 
 const deleteCategoryCompletely= async (req, res) => {
@@ -545,8 +499,6 @@ const deleteCategoryCompletely= async (req, res) => {
         }
     );
     await category.findByIdAndDelete(id)
-    // const categories=await categoryModel.find()
-    // res.render('category',{categories});
     res.redirect("/admin/createCategory/")
     } catch (error) {
         console.log(error);
@@ -573,7 +525,6 @@ const brandBased=async (req,res)=>{
               }
             }
           ]);
-        //   res.json(aggregate)
         res.render("brandBased",{datas:aggregate});
     } catch (error) {
         console.log(error,+ " " + "aggregate")
@@ -640,7 +591,6 @@ const brandBasedAdmin=async (req,res)=>{
                 },
             },
         ]);
-        //   res.json(aggregate)
         res.render("brandBasedAdmin",{brandsData :aggregate });
     } catch (error) {
         console.log(error,+ " " + "aggregate")
@@ -653,7 +603,6 @@ const wishlist=async(req,res)=>{
     try {
         const userId=await req.session._id;
         const productId=req.query.id;
-        // console.log(productId);
         const user=await userModel.findById(userId);
         const userWishlist=user.wishlist
         if(user){
@@ -690,7 +639,6 @@ const wishlistShow=async(req,res)=>{
                     });
         if(user){
             const products=user.wishlist;
-            // console.log(products);
             res.render("wishlist",{products})
         }else{
             res.render("wishlist",{products:false,message:"Error while Loading wishlist!"})
@@ -717,7 +665,7 @@ const cartShow = async (req, res) => {
                 },
             });
 
-        // Use map with Promise.all to handle asynchronous operations
+
         const updatePromises = user.cart.items.map(async (item) => {
             if (item.product.quantity === 0) {
                 await userModel.findByIdAndUpdate(id, {
@@ -728,10 +676,8 @@ const cartShow = async (req, res) => {
             }
         });
 
-        // Wait for all promises to complete
         await Promise.all(updatePromises);
 
-        // Fetch the user again to get the updated cart
         const updatedUser = await userModel
             .findOne({ _id: id })
             .populate({
@@ -766,15 +712,10 @@ const removeFromCart=async(req,res)=>{
                     }
                 }
             },
-            { new: true } // Return the modified document
+            { new: true } 
         );
-        
-        // Call save to trigger pre save middleware
         updatedUser = await updatedUser.save();
-
-        // console.log(updatedUser)
         return res.json({removed:false,total:updatedUser.cart.totalPrice})
-        // res.render("cart",{products:updatedUser.cart.items})
     } catch (error) {
         res.send(error)
     }
@@ -798,7 +739,7 @@ const decreaseQuantity=async (req,res)=>{
             },
             { new: true } 
         );
-        await updatedUser.save(); // Save the changes
+        await updatedUser.save();
         const product = updatedUser.cart.items.find(item => item._id.toString() === productId);
         const {discountPercentage}=await productModel.findById(product.product)
         return res.json({updated:false,price:product.price,discount:discountPercentage,total:updatedUser.cart.totalPrice})
@@ -829,7 +770,7 @@ const increaseQuantity=async (req,res)=>{
             },
             { new: true }
         );
-        await updatedUser.save(); // Save the changes
+        await updatedUser.save(); 
         const product = updatedUser.cart.items.find(item => item._id.toString() === productId);
         const {discountPercentage}=await productModel.findById(product.product)
         return res.json({updated:false,price:product.price,discount:discountPercentage,total:updatedUser.cart.totalPrice})
@@ -864,11 +805,11 @@ const cart = async (req, res) => {
                     //             }
                     //         }
                     //     },
-                    //     { new: true } // Return the modified document
+                    //     { new: true } 
                     // );
                     return res.json({ added:"already" });
                 } else {
-                    // Add a new item to the cart
+
                     const product = await productModel.findById(productId);
 
                     if (!product) {
@@ -889,7 +830,7 @@ const cart = async (req, res) => {
                                 }
                             }
                         },
-                        { new: true } // Return the modified document
+                        { new: true }
                     );
                     await updatedUser.save();
                     return res.json({ added: true,total:updatedUser.cart.totalPrice });
@@ -917,25 +858,35 @@ const getCount=async(req,res)=>{
   }
 
 
-const updateBanner=async (req,res)=>{
+
+
+
+const updateBanner = async (req, res) => {
     try {
-        const image =await req.files.map(file => file.filename);
-        const banner=await bannerModel.findOne()
-        const existingImages=banner.images;
-        const images=existingImages.concat(image)
+        const images = await Promise.all(req.files.map(async file => {
+            const result = await cloudinary.uploader.upload(file.path); 
+            return result.secure_url;
+        }));
+
+        const banner = await bannerModel.findOne();
+        const existingImages = banner.images;
+        const updatedImages = existingImages.concat(images);
+
         const imageD = Array.isArray(req.body.selectedImages) ? req.body.selectedImages : [req.body.selectedImages];
-        const lastImage = images.filter(value => !imageD.includes(value));
-        if(imageD[0]!==undefined){
-            deleteImages(imageD)
+        const lastImage = updatedImages.filter(value => !imageD.includes(value));
+
+        if (imageD[0] !== undefined) {
+            await cloudinaryConfig.deleteImagesFromCloudinary(imageD);
         }
-        // console.log(images);
-        await bannerModel.updateOne({images:lastImage})
-        res.redirect('/admin/home?messageS=Updating Banner')
+        await bannerModel.updateOne({ images: lastImage });
+
+        res.redirect('/admin/home?messageS=Updating Banner');
     } catch (error) {
-        console.log(error);
-        res.send("error")
+        console.error(error);
+        res.send("error");
     }
-}
+};
+
 
 
 const allCategories=async (req,res,next)=>{
@@ -994,13 +945,12 @@ const addReview=async (req,res)=>{
 const isProductExist = (productId, orders) => {
     for (const order of orders) {
         if (order.products && order.products.items) {
-            // Check if the productId is present in the product field of any item
             if (order.products.items.some(item => item.product.equals(productId))) {
-                return true; // Product ID found in this order
+                return true; 
             }
         }
     }
-    return false; // Product ID not found in any order
+    return false; 
 };
 
 
@@ -1025,7 +975,6 @@ const checkDiscount=async(req,res)=>{
 module.exports=
     {addProduct,
     insertProduct,
-    upload,
     getProduct,
     editProductShow,
     getProductByPage,
@@ -1060,5 +1009,6 @@ module.exports=
     checkDiscount,
     priceLowToHigh,
     priceHighToLow,
-    bestSeller
+    bestSeller,
+    sortByRating
 }  

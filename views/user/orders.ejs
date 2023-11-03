@@ -32,7 +32,7 @@
                         <% if (index === 0) { %>
                           <td style="max-width: 150px; text-align: center; display: grid; ">
                             <a href="/user/orderDetailed?id=<%= order._id %>">
-                              <img style="border-radius: 20px; margin-top: 10px;" src="../../public/productImages/<%= item.product.images[0] %>" alt="Product Image" class="card-img-top">
+                              <img style="border-radius: 20px; margin-top: 10px;" src="<%= item.product.images[0] %>" alt="Product Image" class="card-img-top">
                             </a>
                            <%if(pros>0){%>
                             <span>+ <%=pros%> more</span>
@@ -42,7 +42,7 @@
                       <% }); %>
                       
                     <td class="align-middle" style="text-align: center;">&#x20B9  <%= order.payment.amount %></td>
-                    <td class="align-middle" style="text-align: center;"><%= moment(order.createdAt).format('YYYY-MM-DD') %></td>
+                    <td class="align-middle" style="text-align: center;"><%= moment(order.createdAt).fromNow() %></td>
                     <td class="align-middle" style="text-align: center;">
                       <a href="/user/orderDetailed?id=<%= order._id %>">
                         <% if (order.status === 'Processing') { %>

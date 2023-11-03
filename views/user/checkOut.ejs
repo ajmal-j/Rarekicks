@@ -108,7 +108,7 @@ input:checked[type="checkbox"]:before {
                       <div class="card h-100">
                         <% if (product?.images) { %>
                             <a href="/user/productDetailed?id=<%=product?._id%>">
-                        <img src="../../public/productImages/<%= product?.images[0] %>" class="card-img-top" alt="..."></a>
+                        <img src="<%= product?.images[0] %>" class="card-img-top" alt="..."></a>
                         <% } %>
                         <div class="card-body d-flex" style="flex-direction: column; row-gap: 10px;">
                             <div class="d-flex" style="justify-content: space-between;">
@@ -569,27 +569,42 @@ input:checked[type="checkbox"]:before {
 
 
 
-    placeOrderCOD.addEventListener('click',async ()=>{
-        const appliedCoupon=document.getElementById('appliedCoupon');
-        const walletCheckbox=document.querySelector('.walletCheckbox')
-        let checked=false;
-        if(walletCheckbox.checked){
-            checked=true;
-        }else{
-            checked=false;
-        }
-        try {
-            const response = await fetch(`/user/placeOrderCOD?code=${appliedCoupon.value}&wallet=${checked}`);
-            const data = await response.json();
-            if(data.data===true){
-                showSuccess("Creating Order")
-                window.location.href = '/user/showConfirmOrder?id='+data.orderId;
-            }else{
-                showAlert("Order Not Created!")
-            }
-        } catch (error) {
-            
-        }
+    placeOrderCOD.addEventListener('click',async (e)=>{
+        e.preventDefault()
+        Swal.fire({
+          title: 'Confirm  Order 😊',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#03C03C',
+          cancelButtonColor: '#D2122E',
+          confirmButtonText: 'Confirm'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+                const appliedCoupon=document.getElementById('appliedCoupon');
+                const walletCheckbox=document.querySelector('.walletCheckbox')
+                let checked=false;
+                if(walletCheckbox.checked){
+                    checked=true;
+                }else{
+                    checked=false;
+                }
+                try {
+                    const response = await fetch(`/user/placeOrderCOD?code=${appliedCoupon.value}&wallet=${checked}`);
+                    const data = await response.json();
+                    if(data.data===true){
+                        showSuccess("Creating Order")
+                        window.location.href = '/user/showConfirmOrder?id='+data.orderId;
+                    }else{
+                        showAlert("Order Not Created!")
+                    }
+                } catch (error) {
+                    console.log(error);
+                    showAlert("Error While Check Out!")
+                    window.location.reload()
+                }
+          }
+        });
+
     })
     
     

@@ -35,7 +35,7 @@
                         <% if (index === 0) { %>
                           <td style="max-width: 150px; text-align: center; display: grid; ">
                             <a href="/admin/orderDetailed?id=<%= order._id %>">
-                              <img style="border-radius: 20px; margin-top: 10px;" src="../../public/productImages/<%= item.product.images[0] %>" alt="Product Image" class="card-img-top">
+                              <img style="border-radius: 20px; margin-top: 10px;" src="<%= item.product.images[0] %>" alt="Product Image" class="card-img-top">
                             </a>
                            <%if(pros>0){%>
                             <span>+ <%=pros%> more</span>

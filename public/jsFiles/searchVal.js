@@ -1,13 +1,13 @@
 
 function clearA() {
-    const form = document.querySelector(".needs-validation");
+    const form = document.querySelector(".searchForm");
     form.reset();
     clearSearch.value = '';
 }
 
 (() => {
     'use strict';
-    const forms = document.querySelectorAll('.needs-validation');
+    const forms = document.querySelectorAll('.searchForm');
     Array.from(forms).forEach(form => {
         form.addEventListener('submit', event => {
             const searchInput = form.querySelector('[name="search"]');

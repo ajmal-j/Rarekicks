@@ -147,29 +147,42 @@ document.addEventListener('DOMContentLoaded', () => {
     removeCartButton.forEach(button => {
         button.addEventListener('click', (e) => {
             e.preventDefault();
-            const productId = button.id;
-            const encodedProductId = encodeURIComponent(productId);
-            fetch('/user/removeFromCart?id=' + encodedProductId)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.removed) {
-                        showSuccess("Added To Cart");
-                        button.firstElementChild.textContent = 'added';
-                    } else {
-                        button.firstElementChild.textContent = 'removed';
-                        showAlert("Removed from Cart");
-                        totalButton.innerText=data.total;
-                        let cartCountValue=parseInt(cartCount.textContent);
-                        cartCountValue--;
-                        cartCount.textContent=cartCountValue;
-                        location.reload()
-                    }
-                })
-                .catch(error => {
-                    console.error("Error checking category:", error);
-                });
+            Swal.fire({
+                title: 'Are you sure?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#D2122E',
+                cancelButtonColor: '#720e9e',
+                confirmButtonText: 'Remove!'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    const productId = button.id;
+                    const encodedProductId = encodeURIComponent(productId);
+                    fetch('/user/removeFromCart?id=' + encodedProductId)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.removed) {
+                                showSuccess("Added To Cart");
+                                button.firstElementChild.textContent = 'added';
+                            } else {
+                                button.firstElementChild.textContent = 'removed';
+                                showAlert("Removed from Cart");
+                                totalButton.innerText=data.total;
+                                let cartCountValue=parseInt(cartCount.textContent);
+                                cartCountValue--;
+                                cartCount.textContent=cartCountValue;
+                                location.reload()
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error checking category:", error);
+                        });
+                }
+              });
+            });
+            
         });
-    });
+
     increaseButton.forEach(button => {
         button.addEventListener('click', (e) => {
             e.preventDefault();

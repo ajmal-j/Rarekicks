@@ -59,6 +59,13 @@
                 </button>
                </a>
             </li>
+            <li>
+               <a href="/user/sortByRating">
+                <button class="btn btn-dark px-3 py-2" type="button">
+                    BY RATING
+                </button>
+               </a>
+            </li>
         </ul>
         <script>
             $('.dropdown-menu').on('click', function(e) {
@@ -79,7 +86,7 @@
                 <div class="col">
                     <div class="card h-100">
                         <a href="/user/productDetailed?id=<%= product._id %>" style="text-decoration: none; color: black;">
-                            <img src="../../public/productImages/<%= product.images[0]%>" class="card-img-top" alt="..." style="position: relative;">
+                            <img src="<%= product.images[0]%>" class="card-img-top" alt="..." style="position: relative;">
                         <%if(product?.discountPercentage>0){%>
                             <span class="text-white" style="position: absolute; top: 10px; right: 10px; font-size: 15px; background-color:#CC0C39!important; border-radius: 10px; font-weight: bold; padding:8px ;"><%=product.discountPercentage%>% off</span>
                             <%}%>

@@ -90,7 +90,7 @@
                     <% if (product?.images && product?.images.length === 1) { %>
                         <div class="col-12">
                             <div class="card position-relative">
-                                <img src="../../public/productImages/<%= product.images[0] %>" class="card-img-top" alt="..." style="width: 100%; height: auto;">
+                                <img src="<%= product.images[0] %>" class="card-img-top" alt="..." style="width: 100%; height: auto;">
                                 <div class="overlay">
                                     <i class="fa-solid fa-search-plus"></i>
                                 </div>
@@ -102,7 +102,7 @@
                             <div class="col-xl-6 col-lg-6 col-12">
                                 <div class="card">
                                     <!-- Add data-toggle and data-target attributes to the img element -->
-                                    <img src="../../public/productImages/<%= image %>" class="card-img-top" alt="..." data-toggle="modal" data-target="#imageModal<%= index %>">
+                                    <img src="<%= image %>" class="card-img-top" alt="..." data-toggle="modal" data-target="#imageModal<%= index %>">
                                     <div class="overlay">
                                         <i class="fa-solid fa-eye"></i>
                                     </div>
@@ -117,7 +117,7 @@
                                             <button type="button" class="btn btn-dark" data-dismiss="modal"><i class="fa-solid fa-xmark fs-3" style="color: #ffffff;"></i></button>
                                         </div>
                                         <div class="modal-body">
-                                            <img src="../../public/productImages/<%= image %>" class="img-fluid" alt="...">
+                                            <img src="<%= image %>" class="img-fluid" alt="...">
                                         </div>
                                         
                                     </div>

@@ -393,7 +393,7 @@
       <div class="col-md-5 col-12 pt-3 pb-3">
           <div class="card">
               <a href="/admin/productDetailed?id=<%=product._id%>" style="text-decoration: none; color: black;">
-                  <img src="../../public/productImages/<%= product.images[0]%>" class="card-img-top" alt="...">
+                  <img src="<%= product.images[0]%>" class="card-img-top" alt="...">
               </a>
               <h5 class="text-center mb-2 mt-4" style="  font-family: 'Michroma', sans-serif;">Sales Count : <%=product.salesCount%></h5>
           </div>

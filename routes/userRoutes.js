@@ -14,6 +14,7 @@ userRouter.get('/allProducts',JWT.checkJwt,productController.getProductByPage,us
 userRouter.get('/priceLowToHigh',JWT.checkJwt,productController.priceLowToHigh,userController.allProducts);
 userRouter.get('/priceHighToLow',JWT.checkJwt,productController.priceHighToLow,userController.allProducts);
 userRouter.get('/bestSeller',JWT.checkJwt,productController.bestSeller,userController.allProducts);
+userRouter.get('/sortByRating',JWT.checkJwt,productController.sortByRating,userController.allProducts);
 userRouter.get('/brand',JWT.checkJwt,productController.getBrand,userController.allProducts);
 userRouter.get('/searchProduct',JWT.checkJwt,productController.searchProductUser);
 userRouter.get('/brandBased',JWT.checkJwt,productController.brandBased);
@@ -79,33 +80,6 @@ userRouter.get('/allCategories',JWT.checkJwt,productController.allCategories,use
 
 userRouter.post('/addReview',JWT.checkJwt,productController.addReview)
 userRouter.get('/openChat',JWT.checkJwt,userController.openChat)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 module.exports=userRouter

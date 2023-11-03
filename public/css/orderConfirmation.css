@@ -12,7 +12,7 @@ body {
     max-width: 400px;
 }
 .containerMa {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 10px auto;
     background-image: url('../images/people-collaborating-with-tech-.jpg');
             background-size: cover; 
@@ -20,14 +20,15 @@ body {
             background-repeat: no-repeat;
             height: fit-content; 
     /* padding: 20px; */
-    border-radius: 10px;
-    border: 1px solid black;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    border: 1px solid rgb(165, 165, 165);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.447);
 }
 
 .cont{
     padding: 20px;
-    background-color: rgba(71, 66, 42, 0.344);
+    border-radius: 20px;
+    background-color: rgba(241, 227, 227, 0.532);
 }
 h3 {
     color: #000000;

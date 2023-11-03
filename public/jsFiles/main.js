@@ -1,4 +1,4 @@
-const socket = io('http://localhost:5000/', { transports: ['websocket', 'polling', 'flashsocket'] });
+const socket = io();
 
 
 // const totalUsers=document.getElementById('totalUsers')

@@ -56,7 +56,7 @@
                 <div class="col">
                   <div class="card h-100">
                   <a href="/admin/productDetailed?id=<%=product._id%>" style="padding-right: 10px; margin: 0px;">
-                    <img src="../../public/productImages/<%= product.images[0] %>" class="image-fluid" alt="..." style="border-radius: 20px; margin: 5px; max-width: 100%; height: auto; object-fit: contain;">
+                    <img src="<%= product.images[0] %>" class="image-fluid" alt="..." style="border-radius: 20px; margin: 5px; max-width: 100%; height: auto; object-fit: contain;">
                    </a> 
                     <div class="card-body">
                       <span class="card-title d-block"><span style="font-size: 17px; font-weight: 700;">Name : </span><%= product.name%></span>

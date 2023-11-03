@@ -19,7 +19,7 @@
                   <label for="images">Images :</label> <br>
                     <% images?.forEach(image => { %>
                         <div class="rounded" style="overflow: hidden; height: 140px; align-items: center; position: relative;">
-                            <img src="../../public/productImages/<%= image %>" class="rounded img-thumbnail" style="width: 200px; height: 140px; object-fit: cover;" alt="...">
+                            <img src="<%= image %>" class="rounded img-thumbnail" style="width: 200px; height: 140px; object-fit: cover;" alt="...">
                             <input type="checkbox" class="form-check-input bg-danger" name="selectedImages" value="<%= image %>" style="position: absolute; top: 5px; left: 5px; width: 25px; height: 25px;" id="flexCheckIndeterminate" onclick="confirmDelete(this)">
                         </div>
                     <% }) %>

@@ -1,13 +1,14 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/profile.css">
+<link rel="stylesheet" type="text/css" href="../../public/css/addAddress.css">
 
 </head>
 <body>
     <%- include('../layout/header') %>
 
-    <div class="container mt-5 mb-5" style="display: flex; justify-content: center;">
-        <div class="mainCont" style="max-width: 700px; border: 1px solid black; border-radius: 20px; padding: 20px;"><h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Add Address</h3>
+    <div class="container mt-5 mb-5 addAddressContainer">
+        <div class="mainCont addAddressDiv"><h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Add Address</h3>
             <form class="row g-3 needs-validation" action="/user/redirect/" method="get" novalidate enctype="application/form-data">
                 <div class="form-group col-md-12">
                     <label for="countrySelect">Select Country:</label>
