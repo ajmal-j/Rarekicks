@@ -30,7 +30,7 @@ background-image: url('../images/vecteezy_minimalist-dark-gradient-wave-backgrou
 .mainForm{
     display: flex;
     border: 1px solid rgba(111, 111, 111, 0.633) !important;
-    background-color: rgba(255, 255, 255, 0.841);
+    background-color: rgb(255, 255, 255);
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -39,22 +39,25 @@ background-image: url('../images/vecteezy_minimalist-dark-gradient-wave-backgrou
     border-radius: 30px;
     padding: 20px;
     min-width: 500px;
+    height: 400px !important;
 }
 
 .mainForm input{
-    border: 1px solid rgba(0, 0, 0, 0.435);
+    /* border: 1px solid rgba(0, 0, 0, 0.435); */
     border-radius: 10px;
-    padding-right: 20px;
-    padding-left: 20px;
+    padding: 12px;
     width: 400px;
 }
 .mainForm button{
-    width: 100px;
+    width: 100%;
+    height: 50px;
+    border-radius: 10px;
 }
 
 .mainCont{
     box-shadow: 2px 2px 25px rgb(0, 0, 0);
-    background-color: rgba(250, 250, 250, 0.802);
+    background-color: rgb(255, 255, 255);
+    font-weight: 500;
     display: flex;
     flex-direction: row;
     width: 550px;
@@ -65,7 +68,9 @@ background-image: url('../images/vecteezy_minimalist-dark-gradient-wave-backgrou
     border-radius: 30px;
 }
 .mainCont button{
-    width: 200px;
+    width: 14vw;
+    height: 40px;
+    min-width: 60px !important;
 }
 .save{
     display: flex;

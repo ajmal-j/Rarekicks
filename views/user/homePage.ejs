@@ -6,7 +6,6 @@
 <body>
     <%- include('../layout/header')-%>
     <div class="container margineTop">
-        <!-- <h2 class="text-center mb-4" style="  font-family: 'Michroma', sans-serif;">Hei there!</h2> -->
         <div class="row">
             <div class="col-12 imageContainer" id="imageContainer1">
                 <img src="../../public/images/people-collaborating-with-tech- (1).png" class="img-fluid firstImage" alt="..." style="border-radius: 20px; ">
@@ -23,7 +22,7 @@
             <div class="col-md-5 col-12 pt-3 pb-3">
                 <div class="card">
                     <a href="/user/productDetailed?id=<%=product._id%>" style="text-decoration: none; color: black;">
-                        <img src="<%= product.images[0]%>" class="card-img-top" alt="...">
+                        <img src="<%= product.images[0]%>" class="card-img-top productImageMain" alt="...">
                     </a>
                 </div>
             </div>
@@ -75,8 +74,8 @@
             <% products.forEach(product=>{%>
                 <div class="col">
                     <div class="card h-100">
-                        <a href="/user/productDetailed?id=<%=product._id%>" style="text-decoration: none; color: #000000;">
-                        <img src="<%=product.images[0]%>" class="card-img-top" alt="..." style="position: relative;">
+                        <a href="/user/productDetailed?id=<%=product._id%>" class="imageCont" style="text-decoration: none; color: #000000;">
+                        <img src="<%=product.images[0]%>" class="card-img-top productImageMain" alt="..." style="position: relative;">
                         <%if(product?.discountPercentage>0){%>
                             <span class="text-white" style="position: absolute; top: 10px; right: 10px; font-size: 15px; background-color:#CC0C39!important; border-radius: 10px; font-weight: bold; padding:8px ;"><%=product.discountPercentage%>% off</span>
                             <%}%>

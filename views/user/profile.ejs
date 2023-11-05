@@ -302,11 +302,13 @@
           <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const addressButtons = document.querySelectorAll('.currentSwitch');
-                const removeAddress = document.querySelector('.removeAddress');
-                const id=removeAddress.id;
+                const removeAddress = document.querySelectorAll('.removeAddress');
+                
 
-                removeAddress.addEventListener("click",(e)=>{
+                removeAddress.forEach((address)=>{
+                    address.addEventListener("click",(e)=>{
                     e.preventDefault()
+                    const id=address.id;
                     Swal.fire({
                         title: 'Are you sure?',
                         icon: 'warning',
@@ -319,6 +321,7 @@
                             window.location.href = `/user/deleteAddress?id=${id}`;
                         }
                         });
+                })
                 })
 
                 addressButtons.forEach(button => {

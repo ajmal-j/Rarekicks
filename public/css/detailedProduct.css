@@ -1,0 +1,6 @@
+#descriptionCont{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis !important;
+    cursor: pointer;
+}

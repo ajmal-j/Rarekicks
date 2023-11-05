@@ -348,7 +348,7 @@ const searchProduct=async (req,res)=>{
     const search=await req.query.search||"";
     try{
       const products=await Product.find({name:new RegExp(search.trim(),"i")}).exec();
-      products?res.render("adminHome",{products:products,search}):res.redirect("admin/home");
+      products?res.render("productList",{products:products,search}):res.redirect("admin/home");
       }
       catch(err){
       res.send("Error occurred")
@@ -919,6 +919,7 @@ const addReview=async (req,res)=>{
         }
         const product=await productModel.findById(productId)
         const userReviewCount = product.reviews.filter(review => review.userId.equals(id)).length;
+        console.log(userReviewCount)
         if(userReviewCount>=3){
             return res.json({added:"maximum"})
         }
@@ -956,7 +957,33 @@ const isProductExist = (productId, orders) => {
 
 const checkDiscount=async(req,res)=>{
     try {
-        const {discount,category}=req.query;
+        const {discount,category,name,id}=req.query;
+        let check;
+        if(id){
+            check = await productModel.findOne({
+                $and: [
+                    {
+                        $or: [
+                            { name: name },
+                            { name: name.toUpperCase() },
+                            { name: name.toLowerCase() }
+                        ]
+                    },
+                    { _id: { $ne: id } } 
+                ]
+            });
+        }else {
+            check = await productModel.findOne({
+                $or: [
+                    { name: name },
+                    { name: name.toUpperCase() },
+                    { name: name.toLowerCase() }
+                ]
+            });
+        }
+        if(check){
+            return res.json({name:'exist'})
+        }
         const {discountPercentage}=await categoryModel.findById(category)
         const discountValue=parseInt(discount)
         const value=discountValue+discountPercentage;

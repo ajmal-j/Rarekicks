@@ -14,7 +14,7 @@ const home= async(req,res)=>{
     try {
       const products=await req.products;
       const messageS=req.query.messageS
-        res.render("adminHome",{products:products,search:false,messageS});
+        res.render("productList",{products:products,search:false,messageS});
       } catch (error) {
         console.log(error.message);
       }

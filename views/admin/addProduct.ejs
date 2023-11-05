@@ -8,39 +8,38 @@
             <button class="btn btn-dark">Back</button>
         </a>
     </div>
-    <div class="container mainCont">
+    <div class="container mainCont" >
         <h3 class="mt-3 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Add Product</h3>
         <form action="/admin/addProduct" class="needs-validation" method="POST" enctype="multipart/form-data">
             
-            <div class="form-group">
-                <label for="images">Images:</label> <br>
-                <small>Max 4 Images!</small> <br>
-                <input class="inputFieldImage" type="file" class="form-control-file" id="images" name="images" accept="image/*" multiple required>
+            <div class="input-group">
+                <span class="input-group-text" style="height: auto !important;">Images:(4)</span>
+                <input class="inputFieldImage form-control inputSelect" type="file" class="form-control-file" id="images" name="images" accept="image/*" multiple required>
             </div>
 
-            <div class="form-group">
-                <label for="name">Product Name:</label> <br>
-                <input class="inputField" type="text" class="form-control" id="name" name="name" required>
+            <div class="input-group">
+                <span class="input-group-text">Name:</span>
+                <input class="inputField form-control" type="text" class="form-control" id="name" name="name" required>
             </div>
 
-            <div class="form-group">
-                <label for="price">Price:</label> <br>
-                <input class="inputField" type="number" class="form-control" id="price" name="price" required>
+            <div class="input-group">
+                <span class="input-group-text">Price:</span>
+                <input class="inputField form-control" type="number" class="form-control" id="price" name="price" required>
             </div>
-            <div class="form-group">
-                <label for="price">Discount % :</label> <br>
-                <input class="inputField" type="number" class="form-control" id="discountPercentage" name="discountPercentage" required>
-            </div>
-
-
-            <div class="form-group">
-                <label for="quantity">Quantity:</label> <br>
-                <input class="inputField" type="number" class="form-control" id="quantity" name="quantity" required>
+            <div class="input-group">
+                <span class="input-group-text">Discount % :</span>
+                <input class="inputField form-control" type="number" class="form-control" id="discountPercentage" name="discountPercentage" required>
             </div>
 
-            <div class="form-group">
-                <label for="brand">Brand:</label> <br>
-                <select class="form-control" id="brand" name="brand" required>
+
+            <div class="input-group">
+                <span class="input-group-text">Quantity:</span>
+                <input class="inputField form-control" type="number" class="form-control" id="quantity" name="quantity" required>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">Brand:</span>
+                <select class="form-control inputSelect" id="brand" name="brand" required>
                     <option value="nike">Nike</option>
                     <option value="reebok">Reebok</option>
                     <option value="converse">Converse</option>
@@ -51,23 +50,22 @@
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="category">Category:</label> <br>
-                <select class="form-control" id="category" name="category" required>
+            <div class="input-group">
+                <span class="input-group-text">Category:</span>
+                <select class="form-control inputSelect" id="category" name="category" required>
                     <% categories.forEach (category=>{%>
                         <option value="<%= category._id%>"><%= category.name%></option>
                     <%}) %>
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="description">Description:</label> <br>
-                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+            <div class="form-control ">
+                <label for="description text-center">Description :</label> <br>
+                <textarea class="form-control " id="description" name="description" required></textarea>
             </div>
-            
-
-            <div class="form-group" >
-                <label for="sizes">Available Sizes:</label> <br>
+       
+            <div class="form-control " >
+                <label for="sizes text-center">Available Sizes:</label> <br>
                 <div class="d-flex" style="justify-content: center;">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" style="height: 20px; width: 20px;" id="sizeSmall" name="sizes[]" value="6">
@@ -230,9 +228,12 @@
                     }
     
                     try {
-                        const response = await fetch(`/admin/checkDiscount?discount=${numericDiscountPercentage}&category=${categoryValue}`);
+                        const response = await fetch(`/admin/checkDiscount?discount=${numericDiscountPercentage}&category=${categoryValue}&name=${nameInput.value}`);
                         const data = await response.json();
-                        if (data.discount === "true") {
+                        if(data.name==='exist'){
+                            showAlert("Product Already Exist.!")
+                        }
+                        else if (data.discount === "true") {
                             event.target.submit()
                         } else if (data.discount==="false"){
                             showAlert("Total Discount is More than 80. Max("+data.select+")");
@@ -242,10 +243,6 @@
                     } catch (error) {
                         console.log(error);
                     }
-
-                    
-
-
                     form.classList.add('was-validated');
                 }, false);
             });

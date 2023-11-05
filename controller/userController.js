@@ -118,7 +118,7 @@ const createUser=async (req,res,next)=>{
           res.render("userRegister",{message:req.body.contact+' '+"Contact Already Exists!",ref})
         }
       }else{
-        res.render("userLogin",{email:req.body.email.trim(),message:req.body.email+' '+"Already Exist!"})
+        res.render("userLogin",{email:req.body.email.trim(),messageS:"Welcome Back"})
       }
   }catch(err){
     console.log(err)
@@ -305,7 +305,7 @@ const searchUser=async(req,res)=>{
     if(users.length===0){
       users=await userModel.find({_id:search});
     }
-    users?res.render("adminUserManagement",{users,search}):res.redirect("admin/viewUsers");
+    users?res.render("adminUserManagement",{users,search,moment}):res.redirect("admin/viewUsers");
     }
     catch(err){
       console.log(err)

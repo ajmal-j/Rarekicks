@@ -14,7 +14,7 @@
                         <div class="col">
                             <div class="card h-100">
                                 <a href="/user/productDetailed?id=<%= product._id %>" style="color: black;">
-                                    <img src="<%= product.images[0]%>" class="card-img-top" alt="..." style="position: relative;">
+                                    <img src="<%= product.images[0]%>" class="card-img-top productImageMain" alt="..." style="position: relative;">
                                 <%if(product?.discountPercentage>0){%>
                                     <span class="text-white discountText"><%=product.discountPercentage%>% off</span>
                                     <%}%>
