@@ -1,13 +1,8 @@
-
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/orderConfirmation.css">
-
 </head>
 <body>
     <%- include('../layout/header')-%>
-    
-
-
 <div class="container">
         <%let i=1%>
     <div class="card-header mt-4 mb-3">
@@ -34,8 +29,6 @@
     </div>
     <% }) %>
     </div>
-    
-
     <div class="d-flex mt-3" style="justify-content: center;">
       <% if (locals?.order?.status === 'Processing') { %>
         <p > <span class="btn py-2 px-3 btn-warning rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
@@ -48,8 +41,6 @@
     <% }else { %>
       <p><span  class="btn py-2 px-3 btn-danger rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
     <% } %></div>
-
-
     <div class="container mb-4 mt-2" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 370px;">
         <table class="table table-hover table-dark">
             <h4 class="text-center text-light" style="font-family: 'Michroma', sans-serif;">Order Details</h4>
@@ -61,53 +52,53 @@
             </thead>
             <tbody>
               <tr>
-                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Order ID:</h6></th>
+                <th scope="row"><h6 class="mainFontFamily">Order ID:</h6></th>
                 <td><%= order.orderId %></td>
               </tr>
               <tr>
-                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Payment Method:</h6></th>
+                <th scope="row"><h6 class="mainFontFamily">Payment Method:</h6></th>
                 <td><%= order.payment.method %></td>
               </tr>
               <tr>
-                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Offer Applied:</h6></th>
+                <th scope="row"><h6 class="mainFontFamily">Offer Applied:</h6></th>
                 <td><%= order.offer %></td>
               </tr>
               <%if(order?.offer!=="none"){%>
                 <tr>
-                  <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Coupon Applied:</h6></th>
+                  <th scope="row"><h6 class="mainFontFamily">Coupon Applied:</h6></th>
                   <td><%= order?.couponApplied %></td>
                 </tr>
                 <%}%>
               <tr>
-                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Order Date:</h6></th>
+                <th scope="row"><h6 class="mainFontFamily">Order Date:</h6></th>
                 <td><%= moment(order.createdAt).format('YYYY-MM-DD') %></td>
               </tr>
               <%if(order.isCancelled){%>
                 <tr>
-                  <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Cancelled On:</h6></th>
+                  <th scope="row"><h6 class="mainFontFamily">Cancelled On:</h6></th>
                   <td><%=moment(order.cancelledDate).format('YYYY-MM-DD')%></td>
                 </tr>
                 <tr>
-                  <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Reason For cancellation:</h6></th>
+                  <th scope="row"><h6 class="mainFontFamily">Reason For cancellation:</h6></th>
                   <td><%=order.reasonForCancellation%></td>
                 </tr>
                 <%}else if (order.status==='Delivered'){%>
                   <tr>
-                    <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Delivered On:</h6></th>
+                    <th scope="row"><h6 class="mainFontFamily">Delivered On:</h6></th>
                     <td><%=moment(order.deliveredDate).format('YYYY-MM-DD')%></td>
                   </tr>
                   <%}else if(order.status==="Returned") {%>
                     <tr>
-                      <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Returned On:</h6></th>
+                      <th scope="row"><h6 class="mainFontFamily">Returned On:</h6></th>
                       <td><%= moment(order.returnedDate).format('YYYY-MM-DD')||"Orderer Returned"%></td>
                     </tr>
                     <tr>
-                      <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Reason For Return:</h6></th>
+                      <th scope="row"><h6 class="mainFontFamily">Reason For Return:</h6></th>
                       <td><%=order?.reasonForReturn%></td>
                     </tr>
                     <%}else {%>
                       <tr>
-                        <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Expected Delivery:</h6></th>
+                        <th scope="row"><h6 class="mainFontFamily">Expected Delivery:</h6></th>
                         <td><%=moment( new Date(order.createdAt.getTime() + 5*24*60*60*1000) ).format('YYYY-MM-DD') %></td>
                       </tr>
                       <%}%>
@@ -144,12 +135,9 @@
                   <%}%>
             </tbody>
           </table>
-
   <div class="d-flex me-2" style="justify-content: end;">
     <a class="link link-warning" href="/downloads/downloadInvoice?orderId=<%= order._id %>" target="_blank" style="font-family: 'Michroma', sans-serif;"><i class="fa-solid fa-download me-2"></i>Invoice</a></div>
-
     </div>
-
     <div class="container mb-1" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 400px;">
         <table class="table table-dark">
             <h4 class="text-center text-light" style="font-family: 'Michroma', sans-serif;">Delivery Address</h4>
@@ -172,18 +160,17 @@
                    </td>
               </tr>
               <tr>
-                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Contact : </h6></th>
+                <th scope="row"><h6 class="mainFontFamily">Contact : </h6></th>
                 <td><b><%= order.address.contact %></b></td>
               </tr>
               <tr>
-                <th scope="row"><h6 style="font-family: 'Michroma', sans-serif;">Email : </h6></th>
+                <th scope="row"><h6 class="mainFontFamily">Email : </h6></th>
                 <td><b><%= order.address.email %></b></td>
               </tr>
             </tbody>
           </table>
     </div>
 </div>
-
 <div class="container">
   <%if(order.isCancelled&&order.status!=="Delivered"){%>
     <div class="d-flex mb-5" style="justify-content: end;">
@@ -196,7 +183,6 @@
             Return Order
           </button>
         </div>
-        <!-- <a id="<%=order._id%>"  class="btn btn-dark py-2 px-3 me-3 returnButton">Return Order</a> -->
         <a id="<%=order._id%>"  class="btn btn-danger py-2 px-3 cancelButton" style="display: none !important;" >Cancel Order</a>
     </div>
         <%}else if(order.status!=="Returned"&&order.isCancelled===false) {%>
@@ -204,7 +190,6 @@
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
               Cancel Order
             </button>
-            <!-- <a id="<%=order._id%>"  class="btn btn-danger py-2 px-3 cancelButton">Cancel Order</a> -->
           </div>
         <%}else{%>
           <div class="d-flex mb-5" style="justify-content: end;">
@@ -212,10 +197,6 @@
           </div>
           <%}%>
 </div>
-
-
-
-
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content" style="color: white; background-color: black; border: 1px solid rgba(255, 255, 255, 0.884); box-shadow: 0px 0px 5px white;">
@@ -240,21 +221,11 @@
         </form>
       </div>
       <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
         <button type="button" id="<%=order._id%>" class="btn btn-warning cancelButton">Confirm Cancel</button>
       </div>
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
 <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content" style="color: white; background-color: black; border: 1px solid rgba(255, 255, 255, 0.884); box-shadow: 0px 0px 5px white;">
@@ -284,100 +255,6 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-<script>
-  document.addEventListener('DOMContentLoaded',()=>{
-    const cancelButton=document.querySelector('.cancelButton');
-    const select=document.getElementById('exampleFormControlSelect1')
-    const orderId=cancelButton.id;
-    cancelButton.addEventListener('click',(e)=>{
-      e.preventDefault()
-        Swal.fire({
-          title: 'Confirm  Cancel!',
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonColor: '#03C03C',
-          cancelButtonColor: '#D2122E',
-          confirmButtonText: 'Confirm'
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            fetch('/user/cancelOrder?id='+orderId+"&option="+select.value).then(response=>response.json()).then(
-              data=>{
-                if(data.cancelled==='shipped'){
-                  showAlert("Product Is Already Shipped")
-                }else if(data.cancelled==='Out of Delivery'){
-                  showAlert("Product Is Out Of Delivery")
-                }
-                else if(data.cancelled==='already'){
-                  showAlert("Already Cancelled!")
-                }else if (data.cancelled===true){
-                  cancelButton.textContent="Order Cancelled"
-                  window.location.href="/user/orders"
-                  showSuccess("Order Cancelled")
-                }else{
-                  showAlert("Not Cancelled Error Ocurred")
-                }
-              }
-            ).catch(err=>{
-              console.log("Order cancellation error"+err);
-            })
-          }
-        })
-     
-    })
-  })
-  document.addEventListener('DOMContentLoaded',()=>{
-    const returnButton=document.querySelector('.returnButton');
-    const option=document.getElementById('returnReasonSelect')
-    const orderId=returnButton.id;
-    returnButton.addEventListener('click',(e)=>{
-      e.preventDefault()
-        Swal.fire({
-          title: 'Confirm  Return!',
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonColor: '#D2122E',
-          cancelButtonColor: '#03C03C',
-          confirmButtonText: 'Confirm'
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            fetch('/user/returnOrder?id='+orderId+"&reason="+option.value).then(response=>response.json()).then(
-              data=>{
-                if(data.returned==='not'){
-                  showAlert("Product Not Returned")
-                }else if(data.returned==='Out of Delivery'){
-                  showAlert("Product Is Out Of Delivery")
-                }
-                else if(data.returned==='already'){
-                  showAlert("Already returned!")
-                }else if (data.returned==="yes"){
-                  returnButton.textContent="Order Returned"
-                  window.location.href="/user/orders"
-                  showSuccess("Order Returned")
-                }else{
-                  showAlert("Not Returned Error Ocurred")
-                }
-              }
-            ).catch(err=>{
-              console.log("Order cancellation error"+err);
-            })
-          }
-        })
-    })
-  })
-
-
-</script>
-
-
+<script src="../../public/jsFiles/orderDetailed.js"></script>
 <%- include('../layout/footer')-%>
-    <%- include('../layout/footerHTML')-%>
+<%- include('../layout/footerHTML')-%>
