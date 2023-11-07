@@ -7,9 +7,6 @@
         <h2 class="text-center mb-4" style="  font-family: 'Michroma', sans-serif;"><u>RARE KICK'S</u></h2>
         <img src="../../public/images/1065313-200.png" alt="Success Logo" class="success-logo">
         <h4 class="text-end">Order Confirmed!</h4>
-
-      
-
         <div class="order-details">
             <h3>Order Details</h3>
             <div class="confirmation-message">
@@ -26,7 +23,6 @@
                 </div>
             <% }); %>
         </div>
-
         <div class="order-total">
             <p class="btn btn-dark">Total Amount: <%= total %></p>
         </div>
@@ -49,35 +45,5 @@
     </div>
 </div>
 </div>
-<script>
-
-    const today = new Date();
-    const deliveryDate = new Date(today);
-    deliveryDate.setDate(today.getDate() + 6); // 5 days from the day after
-
-    // Display the date in a readable format
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = deliveryDate.toLocaleDateString('en-US', options);
-
-    // Update the delivery date in the HTML
-    document.getElementById('deliveryDate').textContent = formattedDate;
-    let timerInterval
-        Swal.fire({
-        title: 'Order Confirmed!',
-        icon:"success",
-        html: 'Thank you for shopping with us! Your order will be shipped soon.<br>',
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: () => {
-            Swal.showLoading()
-            timerInterval = setInterval(() => {
-                 Swal.getTimerLeft()
-            }, 2000)
-        },
-        willClose: () => {
-            clearInterval(timerInterval)
-        }
-        }).then((result) => {
-        })
-</script>
+<script src="../../public/jsFiles/orderConfirmation.js"></script>
 <%- include('../layout/footerHTML')-%>
