@@ -86,56 +86,9 @@
                         </div>
                     <% } %> 
             </div>
-<div class="container Cont mt-5">
-    <div class="responsive-container">
-        <div class="card info-box  ">
-          <h2>Free Delivery</h2>
-          <p>Enjoy the ultimate convenience with our FREE delivery service!</p>
-        </div>
-        <div class="card info-box  " style="margin-top: 5px; margin-bottom: 5px;">
-          <h2>24/7 Support</h2>
-          <p>Our dedicated team is here for you 24/7, ready to assist with any questions or concerns.</p>
-        </div>
-        <div class="card info-box  ">
-          <h2>Return Policy</h2>
-          <p>Your satisfaction is our top priority!policy is designed for you.</p>
-        </div>
-    </div>
-</div>
-<div class="alertKey">
-    <% if(locals.message) { %>
-      <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-        data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-        <strong><%= message %></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      
-      <script>
-        // Add this script to your page
-        setTimeout(function() {
-          document.getElementById('success-alert').style.display = 'none';
-        }, 2000); // Adjust the delay (in milliseconds) as needed
-      </script>
-    <% } %>      
-  </div>
-  <div class="alertKey">
-    <% if(locals.messageS) { %>
-      <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-        data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-        <strong><%= messageS %></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-  
-      <script>
-        // Add this script to your page
-        setTimeout(function() {
-          document.getElementById('success-alert').style.display = 'none';
-        }, 2000); // Adjust the delay (in milliseconds) as needed
-      </script>
-    <% } %>      
-  </div>
-        
 
+<%- include('../layout/adText')-%>
+<%- include('../layout/alert')-%>
 <script src="../../public/jsFiles/cart.js"></script>
 <%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>

@@ -36,6 +36,7 @@ const userSchema = mongoose.Schema(
       referredBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
+        default:null
       },
       orderedByReferral:{
         type:Boolean,

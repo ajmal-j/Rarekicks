@@ -83,7 +83,7 @@ const createUser=async (req,res,next)=>{
       if(!check){
         if(!contact){
           req.details=req.body
-          const referredBy=await( ref!==''? userModel.findOne({referralCode:ref}):undefined);
+          const referredBy=await( ref?userModel.findOne({referralCode:ref}):undefined);
           let walletTotal=0;
           let walletBalance=0;
           if(referredBy&&referredBy.referralsApplied<=3){
@@ -105,7 +105,7 @@ const createUser=async (req,res,next)=>{
             password: passwordBcrypt,
             contact :req.body.contact.trim(),
             referralCode,
-            referredBy:referredBy?referredBy:'',
+            referredBy:referredBy?referredBy:null,
             referralStatus:referredBy?true:false,
             wallet
           }
@@ -122,7 +122,8 @@ const createUser=async (req,res,next)=>{
       }
   }catch(err){
     console.log(err)
-    res.render("userRegister",{message:"Something went wrong!",ref})
+    const ref=req.body.ref;
+    res.render("userRegister",{message:"Something went wrong!",ref:ref||''})
   }
       
 }
@@ -323,6 +324,20 @@ const sendOtp=async (req,res,next)=>{
     req.user=req.user;
     next()
     // res.render('verifyOtp',{email});
+}
+const resentOtp=async (req,res)=>{
+    try {
+      const email=req.query.email;
+      const user=await userModel.findOne({email:email})
+      const generatedOTP = mail.generateOTP();
+      await mail.sendOTPByEmail(email, generatedOTP);
+      await userModel.findByIdAndUpdate(user._id,{otp:generatedOTP});
+      res.json({sended:"true"})
+    } catch (error) {
+      console.log(error);
+      res.json({sended:false})
+    }
+    
 }
 
 const sendOtpAgain=async (req,res,next)=>{
@@ -815,5 +830,6 @@ module.exports={
   checkOutShow,
   openChat,
   insertMessage,
-  detailedUser
+  detailedUser,
+  resentOtp
 }

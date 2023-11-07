@@ -33,7 +33,7 @@ userRouter.post("/login",userController.loginValidation);
 userRouter.get("/register",userController.register);
 userRouter.post("/register",userController.createUser,userController.sendOtp,userController.verifyEmailShow);
 userRouter.post("/verifyEmail",userController.verifyEmail);
-userRouter.get("/resendOtp",userController.sendOtp,userController.verifyEmailShowAgain);
+userRouter.get("/resendOtp",userController.resentOtp);
 userRouter.get('/productDetailed',JWT.checkJwt,productController.getProduct,userController.productDetailed)
 
 

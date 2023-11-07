@@ -6,7 +6,7 @@
 <div class="containerfluid d-flex mainContainer"> 
 <div class="mainCont">
     <form class="row g-3 needs-validation" action="/user/register" method="post" novalidate enctype="application/form-data">
-        <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Welcome !</h3>
+        <h3 class="mb-4 text-center mt-5" style="font-family: 'Michroma', sans-serif;">Welcome !</h3>
         <div class="col-md-12">
           <label for="validationCustom01" class="form-label">Name</label>
           <input type="text" class="form-control" id="validationCustom01" name="name" required>
@@ -50,58 +50,12 @@
             <button class="btn btn-dark rounded-pill mt-2" id="startCountdownButton" type="submit">Get Otp</button>
             </div>
         </div>
-        <div class="text-center mt-5" style="font-size: 15px;">Do you have an account ?<a href="/user/login/" style="color: rgb(238, 0, 255);"> Sign-In</a></div>
+        <div class="text-center mt-5" style="font-size: 15px;">Do you have an account ?<a href="/user/login/" style="color: rgb(255, 0, 212); font-weight: 700;"> Sign-In</a></div>
       </form>
-    <script src="../../public/jsFiles/userForm.js"></script>
-</div>
-<div class="alertKey">
-  <% if(locals.message) { %>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-      data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-      <strong><%= message %></strong>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    
-    <script>
-      // Add this script to your page
-      setTimeout(function() {
-        document.getElementById('success-alert').style.display = 'none';
-      }, 2000); // Adjust the delay (in milliseconds) as needed
-    </script>
-  <% } %>      
-</div>
-<div class="alertKey">
-  <% if(locals.messageS) { %>
-    <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-      data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-      <strong><%= messageS %></strong>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-
-    <script>
-      // Add this script to your page
-      setTimeout(function() {
-        document.getElementById('success-alert').style.display = 'none';
-      }, 2000); // Adjust the delay (in milliseconds) as needed
-    </script>
-  <% } %>      
 </div>
 </div>
-
-<script>
-   function togglePassword() {
-    let passwordField = document.getElementById("validationPassword");
-    let toggleSpan =document.getElementById("passKey");
-  
-    if (passwordField.type === "password") {
-        passwordField.type = "text";
-        toggleSpan.innerHTML = '<i class="bi bi-eye-fill"></i>';
-    } else {
-        passwordField.type = "password";
-        toggleSpan.innerHTML = '<i class="bi bi-eye-slash-fill"></i>';
-    }
-  }
-</script>
-
-<script type="module" src="../../public/jsFiles/first.js"></script>
+<%- include('../layout/alert')-%>
+</div>
+<script src="../../public/jsFiles/userForm.js"></script>
+<script type="module" src="../../public/jsFiles/setOtpRegister.js"></script>
 <%- include('../layout/footerHTML')-%>

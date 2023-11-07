@@ -1,5 +1,5 @@
 
-function clearA() {
+function clearSearchInput() {
     const form = document.querySelector(".searchForm");
     form.reset();
     clearSearch.value = '';
@@ -17,8 +17,6 @@ function clearA() {
                 event.preventDefault();
                 event.stopPropagation();
                 searchInput.value = '';
-                // const alertMessage = 'Search cannot be empty.';
-                // showAlert(alertMessage);
                 return;
             }
 

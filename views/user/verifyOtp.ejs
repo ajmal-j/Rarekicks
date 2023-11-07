@@ -19,12 +19,12 @@
           <h6 class="text ">Expires In : </h6>
           <div id="timer" class="display-8 text-danger mb-1" style="width: 30px;">0</div>
         </div>
-        <a href="/user/resendOtp" class="btn btn-dark mb-2 rounded-pill" id="startCountdownButton2">Resent Otp</a>
+        <a class="btn btn-dark mb-2 rounded-pill resentOTP" id="startCountdownButton">Resent Otp</a>
         <div class="input-group">
             <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-key"></i></span>
             <input type="password" class="form-control" name="otp" required>
             <input type="hidden" name="counter" id="counterInput">
-            <input type="hidden" name="email" value="<%= email ? email : ' ' %>">
+            <input type="hidden" id="emailInput" name="email" value="<%= email ? email : ' ' %>">
         </div>
     </div>
     <div class="save">
@@ -34,85 +34,9 @@
     </div>
 </form>
 </div>
-<div class="alertKey">
-    <% if(locals.message) { %>
-      <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-        data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-        <strong><%= message %></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      
-      <script>
-        // Add this script to your page
-        setTimeout(function() {
-          document.getElementById('success-alert').style.display = 'none';
-        }, 2000); // Adjust the delay (in milliseconds) as needed
-      </script>
-    <% } %>      
-  </div>
-  <div class="alertKey">
-    <% if(locals.messageS) { %>
-      <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-        data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-        <strong><%= messageS %></strong>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-  
-      <script>
-        // Add this script to your page
-        setTimeout(function() {
-          document.getElementById('success-alert').style.display = 'none';
-        }, 2000); // Adjust the delay (in milliseconds) as needed
-      </script>
-    <% } %>      
-  </div>
-    </div>
-    <script>
-        const OtpButton=document.querySelector('#startCountdownButton2');
-        OtpButton.addEventListener('click', function () {
-            const alertMessage='Otp Sended!';
-            showAlert(alertMessage);
-        });
-        document.getElementById('submit').addEventListener('click', function() {
-        document.getElementById('counterInput').value = localStorage.getItem('countdownTime');
-        });
-            (() => {
-                        'use strict'
-            const forms = document.querySelectorAll('.needs-validation')
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                const passwordInput = form.querySelector('[name="otp"]');
-                const passwordValue = passwordInput.value;
-                if (passwordValue.length < 6) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    const alertMessage='Enter a Valid Otp';
-                    showAlert(alertMessage);
-                    return;
-                }
-                if (/^\s*$/.test(passwordValue)) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        const alertMessage='Otp cannot be just spaces.';
-                        showAlert(alertMessage);
-                        return;
-                    }
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
+<%- include('../layout/alert')-%>
+</div>
 
-                form.classList.add('was-validated')
-                }, false)
-            })
-            })()
-            form.addEventListener('keydown', event => {
-            if (event.key === 'Enter') {
-                form.dispatchEvent(new Event('submit'));
-            }
-        });
-</script>
-
-<script type="module" src="../../public/jsFiles/second.js"></script>
-<script type="module" src="../../public/jsFiles/first.js"></script>
+<script type="module" src="../../public/jsFiles/startCountdown.js"></script>
+<script src="../../public/jsFiles/verifyOtp.js"></script>
 <%- include('../layout/footerHTML')-%>
