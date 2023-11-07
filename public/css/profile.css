@@ -40,3 +40,145 @@ fieldset {
   border: 0.5px solid #8c8c8cc5;
   box-shadow: 0px 0px 6px #0000003f;
 }
+
+  
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.profile-card {
+    /* border: 1px solid rgb(146, 146, 146); */
+    background-color: white;
+    border-radius: 30px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.02), 0 10px 10px rgba(0, 0, 0, 0.0);
+    overflow: hidden;
+    width: 80%;
+    max-width: 400px;
+}
+
+.headerC {
+    background-color: #000000;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    color: white;
+}
+
+.headerC::before,
+.headerC::after {
+    content: "";
+    background-color: #424242;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 2;
+}
+
+.headerC::before {
+    height: 200px;
+    width: 200px;
+    top: -60px;
+    left: -100px;
+}
+
+.headerC::after {
+    height: 100px;
+    width: 100px;
+    right: -20px;
+    bottom: -30px;
+}
+
+.header-summary {
+    display: flex;
+    flex-direction: column;
+    z-index: 3;
+    margin-left: 20px;
+}
+
+.summary-text {
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+}
+
+.summary-balance {
+    font-size: 1.5rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.8rem;
+}
+
+.content {
+    z-index: 4;
+    margin-top: 20px;
+}
+
+.card-item {
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-item span:first-child {
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-item span:last-child {
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.dollar {
+    color: #FFC168;
+}
+
+.transaction:hover {
+    box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.referral-container {
+    max-width: 800px;
+    min-width: 200px;
+    margin: 20px auto;
+    text-align: center;
+    font-family: 'Michroma', sans-serif;
+}
+.referral-container p {
+    font-size: 16px;
+    color: #333;
+}
+.referral-container strong {
+    color: #140656;
+}
+.referral-container .input-group {
+    justify-content: center;
+}
+.referral-container button {
+    background-color: #000000;
+    color: #fff;
+}
+.border-design {
+position: relative;
+}
+
+.border-design::before {
+content: '';
+position: absolute;
+width: 100%;
+height: 0.5px;
+bottom: 0;
+left: 0;
+background-color: rgb(74, 74, 74);
+transition: width 0.3s ease-in-out; /* Adjust the duration and easing as needed */
+}
+
+.border-design:hover::before {
+width: 0; /* Change this value to adjust the "moving" effect */
+}
