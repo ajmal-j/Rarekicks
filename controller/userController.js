@@ -669,7 +669,6 @@ const editAddress = async (req, res) => {
     const contactNew = req.query.contact;
     const addressNew = req.query.address;
     const addressId = req.query.addressId;
-    // console.log(req.query.country);
     const id = req.session._id;
     const user = await userModel.findOne({ _id: id });
     const anyUserByContact = await userModel.findOne({ contact: contactNew });

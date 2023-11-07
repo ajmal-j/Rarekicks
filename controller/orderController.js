@@ -30,54 +30,6 @@ function generateShortID() {
     const shortID = objectIdSuffix + timestampSuffix;
     return shortID;
 }
-// console.log(generateShortID())
-const success=(req,res)=>{
-    try {
-        res.render("confirm")
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-const testData = async (req, res) => {
-    try {
-        // console.log("yes");
-        // const orderId = req.query.id;
-        // const order = await orderModel.findById(orderId)
-        //     .populate({
-        //         path: 'products.items.product',
-        //     });
-        //     console.log(order.products.items[0]);
-            // sendCoupon("rarekicks0@gmail.com")
-            const myShortID = generateShortID();
-            // console.log(myShortID);
-            return res.json(myShortID)
-        // const items = order.products.items.map(item => {
-        //     const product = item.product;
-        //     return {
-        //         product: {
-        //             "$oid": product._id.toString(),
-        //             name: product.name, // Replace with the actual field name in your product schema
-        //             images: product.images, // Replace with the actual field name in your product schema
-        //         },
-        //         quantity: item.quantity,
-        //         size: item.size,
-        //         price: item.price,
-        //         _id: {
-        //             "$oid": item._id.toString(),
-        //         },
-        //     };
-        // });
-
-        res.json({ products:order.products.items });
-    } catch (err) {
-        console.log(err);
-        res.send(err);
-    }
-};
-
-
-
 const placeOrderCOD=async (req,res)=>{
     try {
         const userId=req.session._id;
@@ -692,7 +644,6 @@ function isCouponValid(coupon) {
 
 module.exports={
     placeOrderCOD,
-    testData,
     orderShow,
     orderDetailed,
     allOrders,
@@ -707,6 +658,5 @@ module.exports={
     confirmOrderOnline,
     addCoupon,
     returnOrder,
-    success,
     generateShortID
 }

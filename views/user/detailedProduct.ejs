@@ -2,97 +2,8 @@
 <link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/card.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/detailedProduct.css">
-<style>
-    .card {
-    position: relative;
-    overflow: hidden;
-}
+<link rel="stylesheet" type="text/css" href="../../public/css/productReview.css">
 
-.overlay  {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.card:hover .overlay {
-    opacity: 1;
-    padding: 10px ;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.861); /* Adjust the background color and opacity as needed */
-}
-
-.overlay i {
-    color: #000000a4; /* Icon color */
-    font-size: 2rem; /* Icon size */
-    cursor: pointer;
-}
-.bookmarkBtn {
-  width: 180px;
-  height: 40px;
-  border-radius: 40px;
-  border: none;
-  background-color: rgb(255, 255, 255);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition-duration: .3s;
-  overflow: hidden;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.348);
-}
-
-.IconContainer {
-  width: 30px;
-  height: 30px;
-  background-color: rgb(103, 74, 228);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  z-index: 2;
-  transition-duration: .3s;
-}
-
-.icon {
-  border-radius: 1px;
-}
-
-.text {
-  height: 100%;
-  width: 130px;
-  display: flex;
-  margin-bottom: -2px !important;
-  align-items: center;
-  justify-content: center;
-  color: rgb(26, 26, 26);
-  z-index: 1;
-  transition-duration: .3s;
-  font-size: 1.04em;
-  font-weight: 600;
-}
-
-.bookmarkBtn:hover .IconContainer {
-  width: 180px;
-  border-radius: 40px;
-  transition-duration: .3s;
-}
-
-.bookmarkBtn:hover .text {
-  transform: translate(10px);
-  width: 0;
-  font-size: 0;
-  transition-duration: .3s;
-}
-
-.bookmarkBtn:active {
-  transform: scale(0.95);
-  transition-duration: .3s;
-}
-</style>
 </head>
 <body>
     <%- include('../layout/header')-%>
@@ -150,7 +61,7 @@
                         <%= product?.price%>.00
                     <%}%>
                 </a>
-                <a id="addToWishlist" style="color: rgb(0, 0, 0); text-decoration: none;">
+                <a id="<%=product._id%>" class="addToWishlistButton" style="color: rgb(0, 0, 0); text-decoration: none;">
                     <% if (wishlist) { %>
                         <i class="bi bi-heart-fill ms-2" style="font-size: 40px;"></i>
                     <% } else { %>
@@ -171,13 +82,15 @@
                 <% const rating = averageRating; %>
                 <span style="font-size: 10px;"><%=rating%> / 5</span>
     
-                <% for (let i = 0; i < 5; i++) { %>
-                <% if (i < rating) { %>
-                    <i class="fa-solid fa-star fs-6" style="color: gold;"></i>
-                <% } else { %>
-                    <i class="fa-regular fa-star fs-6" style="color: rgba(255, 217, 0, 0.787);"></i>
-                <% } %>
-                <% } %>
+                <a href="#reviewCont" style="text-decoration: none;">
+                    <% for (let i = 0; i < 5; i++) { %>
+                        <% if (i < rating) { %>
+                            <i class="fa-solid fa-star fs-6" style="color: gold;"></i>
+                        <% } else { %>
+                            <i class="fa-regular fa-star fs-6" style="color: rgba(255, 217, 0, 0.787);"></i>
+                        <% } %>
+                        <% } %>
+                </a>
                 <span style="font-size: 10px;">  <%=product.reviews.length%> ratings</span>
             </div>
             <div class="container ">
@@ -211,69 +124,12 @@
                     <%=product?.description%>
                 </p>
             </div>
-            <script>
-                            const descriptionCont = document.getElementById('descriptionCont');
-
-                            descriptionCont.addEventListener('click', () => {
-                                descriptionCont.style.whiteSpace = descriptionCont.style.whiteSpace === 'normal' ? 'nowrap' : 'normal';
-                            });
-
-                        const addToWishlist = document.getElementById('addToWishlist');
-                        const wishCount = document.getElementById('wishCount');
-
-                        addToWishlist.addEventListener('click', (e) => {
-                            e.preventDefault();
-                            productId="<%=product?._id%>"
-                            const encodedProductId = encodeURIComponent(productId);
-                            fetch('/user/addToWishlist?id='+encodedProductId)
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.added) {
-                                        showSuccess("Added To Wishlist");
-                                        addToWishlist.innerHTML='<i class="bi bi-heart-fill ms-2" style="font-size:40px;"></i>';
-                                        let count=parseInt(wishCount.innerText)
-                                        count++;
-                                        wishCount.innerText=count
-                                    } else {
-                                        addToWishlist.innerHTML='<i class="bi bi-heart ms-2" style="font-size:40px;"></i>';
-                                        showAlert("Removed from Wishlist");
-                                        let count=parseInt(wishCount.innerText)
-                                        count--;
-                                        wishCount.innerText=count
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error("Error checking category:", error);
-                                });
-                        });
-            </script>
+           
             
         </div>
     </div>
     </div>
-
-
-    
-    
-    
-
-    <div class="container Cont mt-5">
-        <div class="responsive-container">
-            <div class="card info-box  ">
-              <h2>Free Delivery</h2>
-              <p>Enjoy the ultimate convenience with our FREE delivery service!</p>
-            </div>
-            <div class="card info-box  " style="margin-top: 5px; margin-bottom: 5px;">
-              <h2>24/7 Support</h2>
-              <p>Our dedicated team is here for you 24/7, ready to assist with any questions or concerns.</p>
-            </div>
-            <div class="card info-box  ">
-              <h2>Return Policy</h2>
-              <p>Your satisfaction is our top priority!policy is designed for you.</p>
-            </div>
-        </div>
-    </div>
-
+    <%- include('../layout/adText')-%>
 
 <div class="container" style="margin-top: 70px;">
     <h2 style="  font-family: 'Michroma', sans-serif;">You May Also Like </h2>
@@ -314,97 +170,39 @@ products?.forEach(productA => {
 </div>
 </div>
 
-
-
-
-<div class="container mt-3 mb-5" style=" padding: 20px; font-family: 'Michroma', sans-serif; ">
-    <%if(product.reviews&&product.reviews.length>0){%>
-        <%product.reviews.forEach(review=>{%>
-            <style>
-              .product-card {
-                    border: 1px solid rgb(109, 108, 108);
-                    background-color: rgba(255, 255, 255, 0.804);
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 20px;
-                    padding: 20px;
-                    box-sizing: border-box;
-                    border-radius: 20px;
-                    transition: 0.5s ease-out;
-                }
-
-                .product-card:hover {
-                    box-shadow: 0px 0px 7px rgb(192, 115, 255);
-                    border-radius: 30px;
-                }
-
-            
-                .product-info {
-                    flex: 1 1 100%;
-                    max-width: 400px; /* Adjust the max-width based on your design */
-                }
-            
-                .product-info h5 {
-                    margin-bottom: 5px;
-                }
-            
-                .product-info p {
-                    margin: 5px 0;
-                }
-            
-                .rating-container {
-                    min-width: 240px;
-                    margin-left: 20px;
-                    flex: 1 1 100%;
-                    display: flex;
-                    align-items: center;
-                }
-            
-                .rating-container i {
-                    color: rgba(255, 217, 0, 0.787);
-                    font-size: 1.5rem; /* Adjust the font size based on your design */
-                }
-            
-                @media only screen and (min-width: 768px) {
-                    .product-info {
-                        flex: 1 1 calc(70% - 20px);
-                        max-width: calc(70% - 20px);
-                    }
-            
-                    .rating-container {
-                        flex: 1 1 30%;
-                    }
-                }
-            </style>
-            
-            <div class="product-card">
-                <div class="product-info">
-                    <h5><i class="fa-regular fa-circle-user fs-1 me-2"></i> <%=review.userName.toUpperCase()%></h5>
-                    <p><b>Posted On : </b><%=moment(review.postedOn).format('YYYY-MM-DD')%></p>
-                    <p style="margin-top: -10px;"><b>Review : <%=review.rating%>/5 </b><%=review.review%></p>
-                </div>
-                <div class="rating-container">
-                    <% const rating = review.rating; %>
-                    <% for (let i = 0; i < 5; i++) { %>
-                        <% if (i < rating) { %>
-                            <i class="fa-solid fa-star fs-3" style="color: gold;"></i>
-                        <% } else { %>
-                            <i class="fa-regular fa-star fs-3"></i>
+<div class="container mt-3 mb-5" style=" padding: 20px; font-family: 'Michroma', sans-serif; " id="reviewCont">
+    <h4 class="mb-2" style="font-family: 'Michroma', sans-serif;">Reviews : </h4>
+    <div class="reviewContainerMain">
+        <%if(product.reviews&&product.reviews.length>0){%>
+            <%product.reviews.forEach(review=>{%>
+                <div class="product-card">
+                    <div class="product-info">
+                        <h5><i class="fa-regular fa-circle-user fs-1 me-2"></i> <%=review.userName.toUpperCase()%></h5>
+                        <p><b>Posted On : </b><%=moment(review.postedOn).format('YYYY-MM-DD')%></p>
+                        <p style="margin-top: -10px;"><b>Review : <%=review.rating%>/5 </b><%=review.review%></p>
+                    </div>
+                    <div class="rating-container">
+                        <% const rating = review.rating; %>
+                        <% for (let i = 0; i < 5; i++) { %>
+                            <% if (i < rating) { %>
+                                <i class="fa-solid fa-star fs-3" style="color: gold;"></i>
+                            <% } else { %>
+                                <i class="fa-regular fa-star fs-3"></i>
+                            <% } %>
                         <% } %>
-                    <% } %>
+                    </div>
                 </div>
-            </div>
-            
-            <%})%>
-        <%} else {%>
-            <div class="product-card" style="border: 1px solid rgb(68, 67, 67); background-color: rgba(255, 255, 255, 0.804);">
-                <div class="product-info">
-                    <h5 class="text-center">No review's</h5>
-            </div>
-            <%}%>
+                <%})%>
+            <%} else {%>
+                <div class="product-card" style="border: 1px solid rgb(68, 67, 67); background-color: rgba(255, 255, 255, 0.804);">
+                    <div class="product-info ">
+                        <h5 class="text-center" style="white-space: nowrap;">No review's</h5>
+                    </div>
+                <%}%>
+        </div>
 
     <!-- Button to Open Review Modal -->
-    <button type="button" class="bookmarkBtn" data-toggle="modal" data-target="#reviewModal">
+    <button type="button" class="bookmarkBtn ms-auto my-auto" data-toggle="modal" data-target="#reviewModal">
         <span class="IconContainer"> 
          <svg fill="white" viewBox="0 0 512 512" height="1em"><path d="M123.6 391.3c12.9-9.4 29.6-11.8 44.6-6.4c26.5 9.6 56.2 15.1 87.8 15.1c124.7 0 208-80.5 208-160s-83.3-160-208-160S48 160.5 48 240c0 32 12.4 62.8 35.7 89.2c8.6 9.7 12.8 22.5 11.8 35.5c-1.4 18.1-5.7 34.7-11.3 49.4c17-7.9 31.1-16.7 39.4-22.7zM21.2 431.9c1.8-2.7 3.5-5.4 5.1-8.1c10-16.6 19.5-38.4 21.4-62.9C17.7 326.8 0 285.1 0 240C0 125.1 114.6 32 256 32s256 93.1 256 208s-114.6 208-256 208c-37.1 0-72.3-6.4-104.1-17.9c-11.9 8.7-31.3 20.6-54.3 30.6c-15.1 6.6-32.3 12.6-50.1 16.1c-.8 .2-1.6 .3-2.4 .5c-4.4 .8-8.7 1.5-13.2 1.9c-.2 0-.5 .1-.7 .1c-5.1 .5-10.2 .8-15.3 .8c-6.5 0-12.3-3.9-14.8-9.9c-2.5-6-1.1-12.8 3.4-17.4c4.1-4.2 7.8-8.7 11.3-13.5c1.7-2.3 3.3-4.6 4.8-6.9c.1-.2 .2-.3 .3-.5z"></path></svg>
         </span>
@@ -424,35 +222,6 @@ products?.forEach(productA => {
                 <div class="modal-body">
                     <!-- Review Form -->
                     <form id="reviewForm">
-                        <style>
-                            .rating {
-                            display: inline-block;
-                            }
-
-                            .rating input {
-                            display: none;
-                            }
-
-                            .rating label {
-                            float: right;
-                            cursor: pointer;
-                            color: #ccc;
-                            transition: color 0.3s;
-                            }
-
-                            .rating label:before {
-                            content: '\2605';
-                            font-size: 30px;
-                            }
-
-                            .rating input:checked ~ label,
-                            .rating label:hover,
-                            .rating label:hover ~ label {
-                            color: #6f00ff;
-                            transition: color 0.3s;
-                            }
-
-                        </style>
                         <div class="form-group rating">
                             <input value="5" name="userReviewRating" id="star5" type="radio">
                             <label for="star5"></label>
@@ -481,51 +250,7 @@ products?.forEach(productA => {
 </div>
 
 
-<script>
-document.getElementById('reviewForm').addEventListener('submit', function (event) {
-    event.preventDefault();
-    const rating= document.querySelector('input[name="userReviewRating"]:checked');
-    if(!rating){
-        showAlert("Select A Rating")
-        return 
-    }
-    const formData = {
-        rating: document.querySelector('input[name="userReviewRating"]:checked').value,
-        review: document.getElementById('userReview').value,
-        productId:"<%=product._id%>"
-    };
-    
-    fetch('/user/addReview', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.added==="notABuyer"){
-            console.log(formData)
-            showAlert("You Are Not A Buyer To Add Review!")
-        }
-        else if(data.added===true){
-            document.getElementById('reviewForm').reset();
-            showSuccess("Review Posted")
-            window.location.reload()
-        }else if(data.added==="maximum"){
-            showAlert("Maximum Limit Over")
-        }else{
-            showAlert("Not Added")
-        }
-
-
-    })
-    .catch(error => {
-        // Handle errors
-        console.error('Error:', error);
-    });
-});
-</script>
+<script src="../../public/jsFiles/productDetailed.js"></script>
 <script src="../../public/jsFiles/cart.js"></script>
 <%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>
