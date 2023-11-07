@@ -17,8 +17,8 @@
 .sideImage {
     border: 1px solid rgb(0, 0, 0);
     border-radius: 20px;
-    width: 100%; /* Ensure images take up 100% of the width of their container */
-    margin-bottom: 10px; /* Adjust the margin as needed for spacing between images */
+    width: 100%;
+    margin-bottom: 10px; 
   }
 
   @media(max-width:991px){
@@ -35,7 +35,7 @@
   }
   .firstImage:hover {
     transform: scale(1.05) rotate(1deg);
-    filter: drop-shadow(0px 0px 15px #0000004d);
+    filter: drop-shadow(0px 0px 15px #5353534d);
   }
   
   .firstImage {
@@ -193,4 +193,19 @@
   
 }
 
-
+.productImageMain2{
+  position: relative;
+  z-index: 10;
+  transition: 0.4s;
+}
+.productImageMain3{
+  transition: 0.4s;
+  padding: 15px;
+  z-index: 5;
+  border-radius: 30px !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

@@ -39,6 +39,10 @@
      transform: scale(1.08);
 
     }
+   .card:hover .productImageMain2 {
+     transform: scale(1.08);
+        opacity: 0;
+    }
     .productImageMain{
         border-radius: 30px !important;
         transition: transform 0.3s ease-in-out; 

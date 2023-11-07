@@ -5,7 +5,9 @@ clearCouponButton.addEventListener("click", () => {
     const totalPrice = document.querySelector(".totalPrice"); 
     const codeInput = document.querySelector(".codeInput"); 
     const appliedCoupon = document.querySelector('.appliedCoupon');
-    const validSpan= document.getElementById('validSpan')
+    const validSpan= document.getElementById('validSpan');
+    const value=appliedCoupon.value;
+    console.log(value);
     if(appliedCoupon.value){
         const tableBody = document.querySelector('.table tbody');
         tableBody.removeChild(tableBody.children[2]);
