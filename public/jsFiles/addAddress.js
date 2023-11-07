@@ -145,7 +145,6 @@
                         try {
                             const response = await fetch(`/user/insertAddress?country=${countryValue}&state=${stateValue}&name=${nameValue}&contact=${contactValue}&pinCode=${pinCodeValue}&address=${addressValue}&landmark=${landmarkValue}&city=${cityValue}`);
                             const data = await response.json();
-                            console.log(data)
                             if (data.added === "added") {
                                 showSuccess('Updating!');
                                 form.submit();

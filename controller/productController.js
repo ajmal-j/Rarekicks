@@ -525,7 +525,8 @@ const brandBased=async (req,res)=>{
               }
             }
           ]);
-        res.render("brandBased",{datas:aggregate});
+          const categories=await categoryModel.find({deleted:false})
+        res.render("brandBased",{datas:aggregate,name:"All Brands",categories});
     } catch (error) {
         console.log(error,+ " " + "aggregate")
         res.end(error+"While Aggregate")
@@ -919,7 +920,6 @@ const addReview=async (req,res)=>{
         }
         const product=await productModel.findById(productId)
         const userReviewCount = product.reviews.filter(review => review.userId.equals(id)).length;
-        console.log(userReviewCount)
         if(userReviewCount>=3){
             return res.json({added:"maximum"})
         }

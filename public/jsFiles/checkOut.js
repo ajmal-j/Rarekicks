@@ -7,7 +7,6 @@ clearCouponButton.addEventListener("click", () => {
     const appliedCoupon = document.querySelector('.appliedCoupon');
     const validSpan= document.getElementById('validSpan');
     const value=appliedCoupon.value;
-    console.log(value);
     if(appliedCoupon.value){
         const tableBody = document.querySelector('.table tbody');
         tableBody.removeChild(tableBody.children[2]);
@@ -40,7 +39,6 @@ let discount;
                 const codeValue = codeInput.value.toUpperCase().trim();
                 const appliedCoupon=form.querySelector('[name="appliedCoupon"]');
                 const discountTable = document.getElementById('discountTable');
-                console.log(appliedCoupon.value)
                 if (codeValue === '' || !isNaN(codeValue) || codeValue.length > 15 || codeValue.length < 4) {
                     showAlert('Please enter a valid code.');
                     form.classList.add('was-validated'); // Add 'was-validated' class

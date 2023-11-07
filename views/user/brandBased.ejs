@@ -6,6 +6,77 @@
 <body>
     <%- include('../layout/header') %>
     <div class="container productCont">
+        <div class="container  filterDropdown">
+            <ul class="p-4 filterDropdownUl">
+                <h3 class="text-center text-light mt-2 mb-3 mainFontFamily w-100">
+                    <%= locals.brand ? brand : name ? name : 'All Products' %>
+                  </h3>
+                <li class="dropdown">
+                    <div class="btn-group dropdown">
+                        <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            CATEGORIES
+                        </button>
+                        <ul class="dropdown-menu bg-dark text-center p-4 filterDropdownUl">
+                            <% if (locals?.categories) { %>
+                                <% categories.forEach(category => { %>
+                                    <li class="pb-4 ps-3 pe-3"><a  href="/user/allCategories?id=<%= category._id %>"><%= category.name.toUpperCase() %></a></li>
+                                <% }) %>
+                            <% } else { %>
+                                <li class="pb-4 ps-3 pe-3">NO CATEGORIES!</li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <div class="btn-group dropdown">
+                        <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            BRANDS
+                        </button>
+                        <ul class="dropdown-menu bg-dark text-center p-4 filterDropdownUl">
+                            <li class="text-center hover   pb-4 ps-3 pe-3"><a  href="/user/brandBased/">All Brands</a></li>
+                            <li class="text-center hover  pb-4 ps-3 pe-3"><a href="/user/brand?brand=adidas">ADIDAS</a></li>
+                            <li class="text-center hover  pb-4 ps-3 pe-3"><a href="/user/brand?brand=reebok">REEBOK</a></li>
+                            <li class="text-center hover  pb-4 ps-3 pe-3"><a href="/user/brand?brand=jordan">JORDAN</a></li>
+                            <li class="text-center hover  pb-4 ps-3 pe-3"><a href="/user/brand?brand=asics">ASICS</a></li>
+                            <li class="text-center hover  pb-4 ps-3 pe-3"><a href="/user/brand?brand=crocs">CROCS</a></li>
+                            <li class="text-center hover  ps-3 pe-3"><a href="/user/brand?brand=converse">CONVERSE</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <div class="btn-group dropdown">
+                        <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            PRICE
+                        </button>
+                        <ul class="dropdown-menu bg-dark text-center p-4 filterDropdownUl">
+                            <li class="text-center hover  pb-4 ps-3 pe-3"><a href="/user/priceLowToHigh">LOW-HIGH</a></li>
+                            <li class="text-center hover  ps-3 pe-3"><a  class="" href="/user/priceHighToLow">HIGH-LOW</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                   <a href="/user/bestSeller">
+                    <button class="btn btn-dark px-3 py-2" type="button">
+                        BEST SELLING
+                    </button>
+                   </a>
+                </li>
+                <li>
+                   <a href="/user/sortByRating">
+                    <button class="btn btn-dark px-3 py-2" type="button">
+                        BY RATING
+                    </button>
+                   </a>
+                </li>
+            </ul>
+            <script>
+                $('.dropdown-menu').on('click', function(e) {
+                if ($(this).hasClass('dropdown-menu')) {
+                    e.stopPropagation();
+                }
+                });
+            </script>
+        </div>
         <% datas?.forEach(brand => { %>
             <h2 class="text mt-2 mainFontFamily"><%= brand._id %> : </h2>
             <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-4 d-flex mb-5" style="justify-content: center;">

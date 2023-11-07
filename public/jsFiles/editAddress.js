@@ -119,7 +119,6 @@ if (selectedCountry in countryToStates) {
             try {
                 const response = await fetch(`/user/editAddress?country=${countryValue}&state=${stateValue}&name=${nameValue}&contact=${contactValue}&pinCode=${pinCodeValue}&address=${addressValue}&landmark=${landmarkValue}&city=${cityValue}&addressId=${addressId}`);
                 const data = await response.json();
-                console.log(data)
                 if (data.added === "added") {
                     showSuccess('Updating!');
                     form.submit();

@@ -415,7 +415,7 @@ const homePage=async (req,res)=>{
     const products=await productModel.find({deleted:false}).limit(9);
     const products2 = await productModel
                           .find({ deleted: false })
-                          .sort({ _id: -1 }) 
+                          .sort({ salesCount: -1 }) 
                           .limit(2);
 
     const {images}=await bannerModel.findOne()

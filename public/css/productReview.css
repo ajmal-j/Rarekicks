@@ -3,14 +3,25 @@
       background-color: rgba(255, 255, 255, 0.804);
       display: flex;
       width: min-content;
-      flex-wrap: wrap;
+      max-width: 100%;
+      flex-wrap: wrap !important;
       gap: 20px;
       padding: 20px;
       box-sizing: border-box;
       border-radius: 20px;
       transition: 0.3s ease-out;
   }
-
+  .productReview {
+    word-wrap: break-word; 
+    overflow-wrap: break-word; 
+  }
+  
+  @media only screen and (max-width: 600px) {
+    .productReview {
+      font-size: 14px !important;
+    }
+  }
+  
   .product-card:hover {
       box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.28);
       border-radius: 25px;
@@ -19,7 +30,7 @@
 
   .product-info {
       flex: 1 1 100%;
-      max-width: 400px; /* Adjust the max-width based on your design */
+      max-width: 100%; /* Adjust the max-width based on your design */
   }
 
   .product-info h5 {
@@ -40,13 +51,12 @@
 
   .rating-container i {
       color: rgba(255, 217, 0, 0.787);
-      font-size: 1.5rem; /* Adjust the font size based on your design */
+      font-size: 20px !important; 
   }
 
-  @media only screen and (min-width: 768px) {
+  @media only screen and (max-width: 768px) {
       .product-info {
           flex: 1 1 calc(70% - 20px);
-          max-width: calc(70% - 20px);
       }
 
       .rating-container {
@@ -57,7 +67,9 @@
   .reviewContainerMain{
     display: flex;
     justify-content: center;
+    flex-wrap: wrap !important;
     gap: 10px;
+    margin-bottom: 20px;
   }
 
   .rating {

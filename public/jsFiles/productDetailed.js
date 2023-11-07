@@ -1,7 +1,14 @@
 const descriptionCont = document.getElementById('descriptionCont');
+const showMore = document.getElementById('showMore');
 
-descriptionCont.addEventListener('click', () => {
-    descriptionCont.style.whiteSpace = descriptionCont.style.whiteSpace === 'normal' ? 'nowrap' : 'normal';
+showMore.addEventListener('click', () => {
+    if (descriptionCont.style.whiteSpace === 'normal') {
+        showMore.innerText="show more."
+        descriptionCont.style.whiteSpace = 'nowrap';
+    } else {
+        showMore.innerText="show less."
+        descriptionCont.style.whiteSpace = 'normal';
+    }
 });
 
 const addToWishlist = document.querySelector('.addToWishlistButton');
@@ -56,7 +63,6 @@ document.getElementById('reviewForm').addEventListener('submit', function (event
     .then(response => response.json())
     .then(data => {
         if(data.added==="notABuyer"){
-            console.log(formData)
             showAlert("You Are Not A Buyer To Add Review!")
         }
         else if(data.added===true){

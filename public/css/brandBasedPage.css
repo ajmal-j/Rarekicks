@@ -10,15 +10,17 @@
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+.filterDropdown{
+    font-family: 'Michroma', sans-serif; font-size: large;
+}
+.filterDropdownUl{
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.609);
+    white-space: nowrap;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background: #050505e4;
+    border-radius: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
