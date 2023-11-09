@@ -372,9 +372,9 @@ const searchProductUser=async (req,res)=>{
         res.render("allProducts",{products,search,brand:false,name:search})
     }
     catch(err){
-        res.send("Error occurred")
-        }
+        console.log(err)
     }
+}
 
 
   const  createCategory = async (req, res) => {
@@ -797,17 +797,17 @@ const cart = async (req, res) => {
                     item.product.toString() === productId && item.size === addSize
                 );
                 if (isProductInCart) {
-                    // const updatedUser = await userModel.findOneAndUpdate(
-                    //     { _id: userId },
-                    //     {
-                    //         $pull: {
-                    //             'cart.items': {
-                    //                 product: productId
-                    //             }
-                    //         }
-                    //     },
-                    //     { new: true } 
-                    // );
+                    const updatedUser = await userModel.findOneAndUpdate(
+                        { _id: userId },
+                        {
+                            $pull: {
+                                'cart.items': {
+                                    product: productId
+                                }
+                            }
+                        },
+                        { new: true } 
+                    );
                     return res.json({ added:"already" });
                 } else {
 

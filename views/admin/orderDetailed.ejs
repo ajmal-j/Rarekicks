@@ -2,12 +2,9 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/orderConfirmation.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/card.css">
-
 </head>
 <body>
-    <%- include('../layout/adminHeader')-%>
-   
-
+<%- include('../layout/adminHeader')-%>
 <div class="container">
         <%let i=1%>
     <div class="card-header mt-4 mb-3">
@@ -34,8 +31,6 @@
     </div>
     <% }); %>
     </div>
-    
-
     <%if(order.status==="Delivered"||order.status==="Cancelled"||order.status==="Returned"){%>
         <div class="d-flex mt-3" style="justify-content: center;">
           <% if (locals?.order?.status === 'Processing') { %>
@@ -115,9 +110,6 @@
               <%}%>
               </div>
         <%}%>
-  
-
-
     <div class="container mb-3 mt-2" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 370px;">
         <table class="table table-hover table-dark">
             <h4 class="text-center text-light" style="font-family: 'Michroma', sans-serif;">Order Details</h4>
@@ -231,7 +223,6 @@
           <div class="d-flex justify-content-end"><a class="btn btn-danger rounded-pill me-2" href="/admin/editOrders?id=<%=order._id%>">edit</a>
             <a id="<%=order._id%>"  class="btn btn-danger rounded-pill py-2 px-3 deleteButton">Delete Order</a></div>
         </div>
-
     <div class="container mb-3" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 400px;">
         <table class="table table-dark">
             <h4 class="text-center text-light" style="font-family: 'Michroma', sans-serif;">Delivery Address</h4>
@@ -264,10 +255,7 @@
             </tbody>
           </table>
     </div>
-
-
     <% if (locals?.user){%>
-      
     <div class="container mb-1" style="background-color: #212529; padding: 10px; border-radius: 20px; min-width: 400px;">
       <table class="table table-dark">
           <h4 class="text-center text-light" style="font-family: 'Michroma', sans-serif;">Purchaser Details</h4>
@@ -313,97 +301,7 @@
         <h4 class="text-center text-dark" style="font-family: 'Michroma', sans-serif;">User Not Found!</h4>
         <%}%>
 </div>
-
-<!-- <div class="container">
-  <%if(order.isCancelled&&order.status!=="Delivered"){%>
-    <div class="d-flex mb-5" style="justify-content: end;">
-      <button class="btn btn-danger cancelButton py-2 px-3" disabled hidden>Order Cancelled</button>
-  </div>
-    <%}else if(order.status==="Delivered"){%>
-      <div class="d-flex mb-5" style="justify-content: end;">
-        <a id="<%=order._id%>"  class="btn btn-danger py-2 px-3 cancelButton" style="display: none !important;" >Cancel Order</a>
-    </div>
-        <%}else if(order.status!=="Returned"&&order.isCancelled===false) {%>
-          <div class="d-flex mb-5" style="justify-content: end;">
-            <a id="<%=order._id%>"  class="btn btn-danger py-2 px-3 cancelButton">Cancel Order</a>
-          </div>
-        <%}else{%>
-          <div class="d-flex mb-5" style="justify-content: end;">
-            <a id="<%=order._id%>"  class="btn btn-danger py-2 px-3 cancelButton" style="display: none !important;" >Cancel Order</a>
-          </div>
-          <%}%>
-</div> -->
-
-<script>
-    const statusButton=document.querySelector('.statusButton');
-  
-  function changeStatus(newStatus) {
-      const id='<%=order._id%>';
-      fetch('/admin/change?id='+id+'&status='+newStatus)
-      .then(response => response.json())
-      .then(data => {
-          if(data.changed){
-            showSuccess("Status Changed To "+newStatus)
-            statusButton.textContent=newStatus;
-            location.reload();
-          }else{
-            showAlert("no")
-          }
-      })
-      .catch(error => {
-        console.error('Error updating status:', error);
-      });
-    }
-
-  document.addEventListener('DOMContentLoaded',()=>{
-    // const cancelButton=document.querySelector('.cancelButton');
-    const deleteButton=document.querySelector('.deleteButton');
-    // const orderId=cancelButton.id;
-    const id=deleteButton.id;
-    // cancelButton.addEventListener('click',()=>{
-    //   fetch('/user/cancelOrder?id='+orderId).then(response=>response.json()).then(
-    //     data=>{
-    //       if(data.cancelled==='shipped'){
-    //         showAlert("Product Is Already Shipped")
-    //       }else if(data.cancelled==='already'){
-    //         showAlert("Already Cancelled!")
-    //       }else if(data.cancelled==='Out of Delivery'){
-    //         showAlert("Product Is Out Of Delivery")
-    //       }
-    //       else if (data.cancelled===true){
-    //         cancelButton.textContent="Order Cancelled"
-    //         showSuccess("Order Cancelled")
-    //         window.location.href="/admin/allOrders"
-    //       }else{
-    //         showAlert("Not Cancelled Error Ocurred")
-    //       }
-    //     }
-    //   ).catch(err=>{
-    //     console.log("Order cancellation error"+err);
-    //   })
-    // })
-    deleteButton.addEventListener('click',()=>{
-      fetch('/admin/deleteOrder?id='+id).then(response=>response.json()).then(
-        data=>{
-          if(data.deleted===true){
-            showAlert("Deleting Order")
-            window.location.href = '/admin/allOrders';
-          }else{
-            showAlert("Not deleted Error Ocurred")
-          }
-        }
-      ).catch(err=>{
-        console.log("Order cancellation error"+err);
-      })
-    })
-
-
-  })
-  
-
-</script>
-
-
-
+<script>const id='<%=order._id%>';</script>
+<script src="../../public/jsFiles/orderDetailedAdmin.js"></script>
 <%- include('../layout/footer')-%>
-    <%- include('../layout/footerHTML')-%>
+<%- include('../layout/footerHTML')-%>

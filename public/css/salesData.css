@@ -1,0 +1,27 @@
+   /* Add custom styles here if needed */
+   body {
+    background-color: #f8f9fa;
+}
+
+.report-heading {
+    background-color: #061d35;
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.647);
+    font-family: 'Michroma', sans-serif;
+    margin-bottom: 20px;
+
+}
+.datas{
+    margin: 10px 20px;
+}
+.section-heading {
+    color: #0a2644;
+    margin: 20px 20px 20px 10px;
+    border-bottom: 1px solid #000000;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    font-family: 'Michroma', sans-serif;
+    
+}

@@ -1,9 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const chatRouter = express();
-const userModel = require('../models/userModel'); // Replace with the actual path
-const chatModel = require('../models/chatModel'); // Replace with the actual path
-const adminModel = require('../models/adminModel'); // Replace with the actual path
+const userModel = require('../models/userModel'); 
+const chatModel = require('../models/chatModel'); 
+const adminModel = require('../models/adminModel'); 
 const moment = require('moment');
 chatRouter.set("view engine","ejs")
 chatRouter.set("views","./views/chat")
@@ -11,7 +11,7 @@ const JWT=require("../middlewares/jwtToken")
 const ObjectId = mongoose.Types.ObjectId;
 
 
-chatRouter.get('/chat',JWT.checkJwt,async (req, res) => {
+chatRouter.get('/chat',JWT.checkJwt,async (req, res, next) => {
     // console.log(req.url)
     try {
         const id=req.session._id;
@@ -20,12 +20,13 @@ chatRouter.get('/chat',JWT.checkJwt,async (req, res) => {
         const chats =await chatModel.find({ userId:userId }).sort({ createdAt: -1 }).limit(10).exec();
         res.render('chat', { userId: user._id ,chats:chats.reverse() , moment});
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        next(error)
     }
 });
 
 
-chatRouter.get('/chatAdmin',JWT.checkJwtAdmin, async (req, res) => {
+chatRouter.get('/chatAdmin',JWT.checkJwtAdmin, async (req, res, next) => {
     try {
         const cursor =await chatModel.aggregate([
             {
@@ -46,11 +47,11 @@ chatRouter.get('/chatAdmin',JWT.checkJwtAdmin, async (req, res) => {
         res.render('adminChat', { adminData, clients ,moment});
     } catch (error) {
         console.log(error);
-        res.status(500).send('Internal Server Error');
+        next(error)
     }
 });
 
-chatRouter.get('/openUserChat',JWT.checkJwtAdmin,async (req,res)=>{
+chatRouter.get('/openUserChat',JWT.checkJwtAdmin,async (req,res, next)=>{
     try {
         const userId=req.query.id;
         const id = req.session.admin_id;
@@ -60,6 +61,7 @@ chatRouter.get('/openUserChat',JWT.checkJwtAdmin,async (req,res)=>{
         res.render('individualChat',{chats:chats.reverse(),userId:userId,adminData,name,moment})
     } catch (error) {
         console.log(error);
+        next(error)
     }
 })
 

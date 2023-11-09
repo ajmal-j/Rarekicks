@@ -1,0 +1,26 @@
+.card {
+    position: relative;
+    overflow: hidden;
+}
+
+.overlay  {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover .overlay {
+    opacity: 1;
+    padding: 10px ;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.861); /* Adjust the background color and opacity as needed */
+}
+
+.overlay i {
+    color: #000000a4; /* Icon color */
+    font-size: 2rem; /* Icon size */
+    cursor: pointer;
+}

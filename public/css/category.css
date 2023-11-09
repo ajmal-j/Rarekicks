@@ -1,0 +1,105 @@
+.mainCont {
+    margin-top: 30px;
+    color: rgb(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center; /* This might not be necessary */
+    align-items: center;
+    border: 1px solid rgb(172, 172, 172);
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.428);
+    background-color: rgb(247, 243, 243);
+    border-radius: 30px;
+    width: 100%;
+
+}
+
+.submitButton {
+    margin: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.mainCont select,
+.mainCont textarea {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    box-sizing: border-box; 
+}
+.input-group-text {
+    width: 120px;
+    height: 60px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(110, 110, 137);
+    border: 2px solid rgb(125, 125, 125);
+}
+
+.inputField {
+    display: flex;
+    align-items: center;
+    height: 60px;
+    border-radius: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    box-sizing: border-box; 
+}
+
+.inputFieldImage {
+    background-color: rgb(255, 255, 255);
+    color: black;
+    padding: 5px 0px 5px 5px;
+    border-radius: 10px;
+}
+
+label {
+    font-weight: 500;
+}
+
+.mainCont select,
+.mainCont  {
+    border-radius: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.mainCont button {
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    border: none !important;
+    background-color: rgb(0, 0, 0) !important;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.backButton {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+}
+
+.needs-validation{
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-control textarea{
+    width: 100%;
+}
+
+.inputField,
+.inputSelect{
+    border: 1px solid rgb(151, 151, 151) ;
+}
+.input-group,
+.form-control{
+    width: 100%;
+}

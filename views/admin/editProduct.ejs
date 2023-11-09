@@ -46,16 +46,16 @@
             
 
             <div class="input-group">
-                <span class="input-group-text">Name:</span>
+                <span class="input-group-text">Name <span class="ms-auto" style="font-weight: 700;">:</span></span>
                 <input class="inputField form-control" type="text" class="form-control" id="name" name="name" value="<%=product.name%>" required>
             </div>
 
             <div class="input-group">
-                <span class="input-group-text">Price:</span>
+                <span class="input-group-text">Price <span class="ms-auto" style="font-weight: 700;">:</span></span>
                 <input class="inputField form-control" type="number" class="form-control" id="price" name="price" value="<%=product.price%>"  required>
             </div>
             <div class="input-group">
-                <span class="input-group-text">Discount % :</span>
+                <span class="input-group-text">Discount %  <span class="ms-auto" style="font-weight: 700;">:</span></span>
                 <input class="inputField form-control" type="number" class="form-control" id="discountPercentage" name="discountPercentage" value="<%=product.discountPercentage-(discountPercentage||0)%>"  required>
             </div>
             <script>
@@ -63,12 +63,12 @@
             </script>
 
             <div class="input-group">
-                <span class="input-group-text">Quantity:</span>
+                <span class="input-group-text">Quantity <span class="ms-auto" style="font-weight: 700;">:</span></span>
                 <input class="inputField form-control" type="number" class="form-control" id="quantity" name="quantity" value="<%=product.quantity%>"  required>
             </div>
 
             <div class="input-group">
-                <span class="input-group-text">Brand:</span>
+                <span class="input-group-text">Brand <span class="ms-auto" style="font-weight: 700;">:</span></span>
                 <select class="form-control inputSelect" id="brand" name="brand" required>
                     <option value="<%=product.brand%>"><%= product.brand.charAt(0).toUpperCase() + product.brand.slice(1) %></option>
                     <option value="nike">Nike</option>
@@ -82,7 +82,7 @@
             </div>
 
             <div class="input-group">
-                <span class="input-group-text">Category:</span>
+                <span class="input-group-text">Category <span class="ms-auto" style="font-weight: 700;">:</span></span>
                 <select class="form-control inputSelect" id="category" name="category" required>
                     <option value="<%=product.category?._id%>"><%=product.category?.name%></option>
                     <% categories.forEach (category=>{%>
@@ -91,13 +91,13 @@
                 </select>
             </div>
             <div class="form-control ">
-                <label for="description">Description:</label> <br>
+                <label for="description">Description <span class="ms-auto" style="font-weight: 700;">:</span></label> <br>
                 <textarea class="form-control" id="description" name="description" rows="4" required><%=product.description%></textarea>
             </div>
 
 
             <div class="form-control  ">
-                <label for="sizes">Available Sizes:</label> <br>
+                <label for="sizes">Available Sizes <span class="ms-auto" style="font-weight: 700;">:</span></label> <br>
                 <div class="d-flex" style="justify-content: center;">
                     <% const selectedSizes = product?.sizes %>
                     <% for (let size = 6; size <= 11; size++) { %>

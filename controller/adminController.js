@@ -10,96 +10,98 @@ const jwt=require("jsonwebtoken");
 const moment=require("moment")
 const categoryModel = require("../models/categoryModel")
 
-const home= async(req,res)=>{
+const home= async(req,res,next)=>{
     try {
       const products=await req.products;
       const messageS=req.query.messageS
         res.render("productList",{products:products,search:false,messageS});
       } catch (error) {
-        console.log(error.message);
+        next(error)
       }
 }
-const homeList= async(req,res)=>{
+const homeList= async(req,res,next)=>{
     try {
       const products=await req.products;
       const messageS=req.query.messageS
         res.render("productList",{products:products,search:false,messageS});
       } catch (error) {
-        console.log(error.message);
+        next(error)
       }
 }
-const login= async(req,res)=>{
+const login= async(req,res,next)=>{
     try {
         res.render("adminLogin",{email:""});
       } catch (error) {
-        console.log(error.message);
+        next(error)
       }
 }
 
-const loginValidation=async (req,res)=>{
+const loginValidation=async(req,res,next)=>{
     try{
       const check=await adminModel.findOne({email:req.body.email.trim()})
-      const password = await check.password;
-      if(password===req.body.password.trim()){
-        const token = jwt.sign({ name: check.email }, process.env.JWT_SECRET, { expiresIn: "1d" });
-        res.cookie("adminToken",token,{
-          httpOnly: true,
-          expires: new Date(Date.now() + 10 * 60 * 60 * 1000),
-        })
-        req.session.admin_id=check._id;
-        res.redirect("/admin/dashBoard")
+      if(check){
+        const password = await check.password;
+        if(password===req.body.password.trim()){
+          const token = jwt.sign({ name: check.email }, process.env.JWT_SECRET, { expiresIn: "1d" });
+          res.cookie("adminToken",token,{
+            httpOnly: true,
+            expires: new Date(Date.now() + 10 * 60 * 60 * 1000),
+          })
+          req.session.admin_id=check._id;
+          res.redirect("/admin/dashBoard")
+        }else{
+            res.render("adminLogin",{email:req.body.email.trim(),message:"Incorrect Password"})
+        }
       }else{
-          res.render("adminLogin",{email:req.body.email.trim(),message:"Incorrect Password"})
+        res.render("adminLogin",{email:req.body.email.trim(),message:"Invalid Admin"})
       }
       }
       catch(err){
-        res.render("adminLogin",{email:req.body.email.trim(),message:"Invalid Admin"})
+        next(err)
       }
   }
 
-  const loginToken= async(req,res)=>{
+  const loginToken= async(req,res,next)=>{
     try {
         res.render("adminLogin",{email:"",message:"Authorization Required!"});
       } catch (error) {
-        console.log(error.message);
+        next(error)
       }
 }
 
 
 
-const logout=async (req,res)=>{
+const logout=async(req,res,next)=>{
   try {
     res.clearCookie("adminToken");
     req.session.admin_id=false;
     res.render("adminLogin",{email:"",message:"Successfully logged out"});
   } catch (error) {
-    res.end("Error While LogIn",error)
+    next(error)
   }
 }
 
-const bannerManagement=async(req,res)=>{
+const bannerManagement=async(req,res,next)=>{
   try {
     const {images}=await bannerModel.findOne()
     // console.log(images);
     res.render('bannerManagement',{images:images})
   } catch (error) {
-    console.log(error);
-    res.send("banner")
+    next(error)
   }
 }
 
 
-const couponManagement=async(req,res)=>{
+const couponManagement=async(req,res,next)=>{
   try {
     const coupons=await couponModel.find()
     res.render('coupon',{coupons})
   } catch (error) {
-    console.log(error);
-    res.send("Error")
+    next(error)
   }
 }
 
-const addCoupon=async(req,res)=>{
+const addCoupon=async(req,res,next)=>{
   try {
     const {code,discount,date,min,max}=req.query;
     const cod=code.toUpperCase().trim()
@@ -109,8 +111,8 @@ const addCoupon=async(req,res)=>{
     if(exist){
       return res.json({added:"exist"})
     }
-    const minimumAmount=parseInt(min)
-    const maximumAmount=parseInt(max)
+    const minimumAmount=parseInt(min)||0;
+    const maximumAmount=parseInt(max)||0;
     const data={
       code:code,
       discountPercentage:discount,
@@ -118,8 +120,7 @@ const addCoupon=async(req,res)=>{
       minimumAmount,
       maximumAmount
     }
-    const newCoupon = await couponModel.create(data);
-    // console.log(newCoupon);
+    await couponModel.create(data);
     res.json({added:true})
   } catch (error) {
     console.log(error);
@@ -128,19 +129,18 @@ const addCoupon=async(req,res)=>{
 }
 
 
-const deleteCoupon=async(req,res)=>{
+const deleteCoupon=async(req,res,next)=>{
   try {
     const id=req.query.id;
     await couponModel.findByIdAndDelete(id)
     res.redirect("/admin/couponManagement/")
   } catch (error) {
-    console.log(error);
-    res.send("Error")
+    next(error)
   }
 }
 
 
-const hideCoupon=async (req,res)=>{
+const hideCoupon=async(req,res,next)=>{
   try {
     const id=req.query.id;
     const {isActive}=await couponModel.findById(id)
@@ -151,13 +151,12 @@ const hideCoupon=async (req,res)=>{
     }
     res.redirect("/admin/couponManagement/")
   } catch (error) {
-    console.log(error);
-    res.send("error")
+    next(error)
   }
 }
 
 
-const editCouponShow=async (req,res)=>{
+const editCouponShow=async(req,res,next)=>{
   try {
     const id=req.query.id;
     const check=await couponModel.findById(id)
@@ -168,12 +167,12 @@ const editCouponShow=async (req,res)=>{
       res.render('editCoupon',{code,discountPercentage,id,validUpTo,minimumAmount,maximumAmount})
     }
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 }
                 
 
-const editCoupon = async (req, res) => {
+const editCoupon = async(req,res,next) => {
   try {
     const { code, discount, id ,date,min,max} = req.query;
     const cod=code.toUpperCase().trim()
@@ -186,8 +185,6 @@ const editCoupon = async (req, res) => {
     }
     const minimumAmount=parseInt(min)
     const maximumAmount=parseInt(max)
-    // console.log(minimumAmount,maximumAmount)
-
     await couponModel.findByIdAndUpdate(id, { code, discountPercentage: discount,validUpTo: new Date(date),minimumAmount,maximumAmount});
     res.json({ added: true });
   } catch (error) {
@@ -197,7 +194,7 @@ const editCoupon = async (req, res) => {
 };
 
 
-const dashBoard=async(req,res)=>{
+const dashBoard=async(req,res,next)=>{
   try {
     const orders=await orderModel.find({status:"Delivered"})
     const totalUsers=await userModel.countDocuments({})
@@ -241,8 +238,6 @@ const dashBoard=async(req,res)=>{
           },
         },
       ]);
-      
-      
       result.map(item => {
         xValues.push(item._id);
         let count=0;
@@ -256,7 +251,6 @@ const dashBoard=async(req,res)=>{
         })()
         yValues.push(total)
       });
-      // console.log(xValues,description,yValues);
       
   } catch (error) {
       console.error("Error in aggregation:", error);
@@ -270,23 +264,23 @@ const dashBoard=async(req,res)=>{
   .sort({ _id: -1 })
   res.render("dashBoard",{totalOrders,orderPending,totalUsers,orderCompleted,totalSales,total,xValues,yValues,topProducts,data:description,salesWeekly,salesMonthly})
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 }
 
 
-const productDetailed=async(req,res)=>{
+const productDetailed=async(req,res,next)=>{
   try {
     const  id=req.query.id;
     const product=await productModel.findOne({_id:id}).populate("category")
     res.render("productDetailed",{product,moment})
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 }
 
 
-const getByMonth=async(req,res)=>{
+const getByMonth=async(req,res,next)=>{
   try {
     const {month}=req.body;
     let x=[];
@@ -324,10 +318,6 @@ const getByMonth=async(req,res)=>{
           $sort: {month: 1 },
         },
       ]);
-      
-      // console.log(result);
-    
-      
       for (const data of result) {
         if(data.month===month){
           x.push(data.status)
@@ -339,12 +329,12 @@ const getByMonth=async(req,res)=>{
     }
     res.send({get:true,x,y})
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 }
 
 
-const getByYear=async(req,res)=>{
+const getByYear=async(req,res,next)=>{
   try {
     const {year}=req.body;
     let x=[];
@@ -401,14 +391,11 @@ const getByYear=async(req,res)=>{
     
     res.send({get:true,x,y})
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 }
 
-
-
-
-const getByDateRange = async (req, res) => {
+const getByDateRange = async(req,res,next) => {
   try {
     const { startDate, endDate } = req.query;
     let x=[];
@@ -441,15 +428,11 @@ const getByDateRange = async (req, res) => {
     
     res.send({ get: true, x,y });
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 };
 
-
-
-
-
-const salesByCategory=async (req,res)=>{
+const salesByCategory=async(req,res,next)=>{
   try {
     let x=[];
     let y=[];
@@ -457,7 +440,7 @@ const salesByCategory=async (req,res)=>{
       { $unwind: "$products.items" },
       {
         $lookup: {
-          from: 'products',  // Assuming your product model is named 'products'
+          from: 'products',  
           localField: 'products.items.product',
           foreignField: '_id',
           as: 'productDetails',
@@ -502,12 +485,6 @@ const weeklySales = async () => {
       status: "Delivered"
     }).populate('products.items.product');
     
-
-  // orders.forEach(order=>{
-  //   order.products.items.forEach(product=>{
-  //   // console.log(product);
-  //   })
-  // })
   const totalOrders=orders.length;
   const successfulOrders=sales.length;
   let totalSales=0;
@@ -602,13 +579,7 @@ const monthlySales = async () => {
       },
       status: "Delivered"
     }).populate('products.items.product');
-    
 
-  // orders.forEach(order=>{
-  //   order.products.items.forEach(product=>{
-  //   // console.log(product);
-  //   })
-  // })
   const totalOrders=orders.length;
   const successfulOrders=sales.length;
   let totalSales=0;
@@ -681,7 +652,7 @@ const monthlySales = async () => {
 };
 
 
-const customDates = async (req,res) => {
+const customDates = async(req,res,next) => {
   try {
     const inputDates=await req.body
     function convertToISOString(dateString) {
@@ -709,13 +680,7 @@ const customDates = async (req,res) => {
       },
       status: "Delivered"
     }).populate('products.items.product');
-    
 
-  // orders.forEach(order=>{
-  //   order.products.items.forEach(product=>{
-  //   // console.log(product);
-  //   })
-  // })
   const totalOrders=orders.length;
   const successfulOrders=sales.length;
   let totalSales=0;
@@ -785,17 +750,17 @@ const customDates = async (req,res) => {
 
   res.render("salesData",{data:newSales})
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 };
 
-const renderPage=async (req,res)=>{
+const renderPage=async(req,res,next)=>{
   try {
     const id=await req.query.id;
     const data=await salesModel.findById(id).populate("products.id")
     res.render('salesData',{data})
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 }
 

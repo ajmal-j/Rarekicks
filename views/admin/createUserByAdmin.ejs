@@ -1,6 +1,5 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/userRegister.css">
-
 </head>
 <div class="containerfluid d-flex mainContainer"> 
     <div class="backButton">
@@ -50,99 +49,9 @@
             <button class="btn btn-success rounded-pill mt-2" type="submit">Save</button>
             </div>
         </div>
-        <!-- <div class="text-center mt-5" style="font-size: 15px;">Do you have an account ?<a href="/user/login/" style="color: rgb(238, 0, 255);"> Sign-In</a></div> -->
       </form>
-
-      <script>
-        (() => {
-            'use strict';
-            const forms = document.querySelectorAll('.needs-validation');
-        
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit', event => {
-                    const contactInput = form.querySelector('[name="contact"]');
-                    const contactValue = contactInput.value;
-                    const nameInput = form.querySelector('[name="name"]');
-                    const nameValue = nameInput.value;
-                    const passwordInput = form.querySelector('[name="password"]');
-                    const passwordValue = passwordInput.value;
-
-                    if (/^\s*$/.test(nameValue)) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        alert('Name cannot be just spaces.');
-                        return;
-                    }
-                    if (/^\s*$/.test(passwordValue)) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        alert('Password cannot be just spaces.');
-                        return;
-                    }
-
-                    if (contactValue.length < 10) {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      alert('Contact number must be at least 10 digits.');
-                      return
-                    }
-                    if (passwordValue.length < 8) {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      alert('Password must be at least 8 characters.');
-                      return
-                    }
-        
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-        
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        })();
-        form.addEventListener('keydown', event => {
-            if (event.key === 'Enter') {
-                form.dispatchEvent(new Event('submit'));
-            }
-        });
-        </script>
-
 </div>
-<div class="alertKey">
-  <% if(locals.message) { %>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-      data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-      <strong><%= message %></strong>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    
-    <script>
-      // Add this script to your page
-      setTimeout(function() {
-        document.getElementById('success-alert').style.display = 'none';
-      }, 2000); // Adjust the delay (in milliseconds) as needed
-    </script>
-  <% } %>      
+<%- include('../layout/alert')-%>
 </div>
-<div class="alertKey">
-  <% if(locals.messageS) { %>
-    <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-      data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-      <strong><%= messageS %></strong>
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-
-    <script>
-      // Add this script to your page
-      setTimeout(function() {
-        document.getElementById('success-alert').style.display = 'none';
-      }, 2000); // Adjust the delay (in milliseconds) as needed
-    </script>
-  <% } %>      
-</div>
-</div>
-
+<script src="../../public/jsFiles/createUserByAdmin.js"></script>
 <%- include('../layout/footerHTML')-%>
-

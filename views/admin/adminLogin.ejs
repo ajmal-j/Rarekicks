@@ -20,90 +20,9 @@
             <button type="submit" class="btn btn-dark mt-2">Sign-In</button>
         </form> 
     </div>
-    <div class="alertKey">
-        <% if(locals.message) { %>
-          <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-            data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-            <strong><%= message %></strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-          
-          <script>
-            // Add this script to your page
-            setTimeout(function() {
-              document.getElementById('success-alert').style.display = 'none';
-            }, 2000); // Adjust the delay (in milliseconds) as needed
-          </script>
-        <% } %>      
-      </div>
-      <div class="alertKey">
-        <% if(locals.messageS) { %>
-          <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-            data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-            <strong><%= messageS %></strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-      
-          <script>
-            // Add this script to your page
-            setTimeout(function() {
-              document.getElementById('success-alert').style.display = 'none';
-            }, 2000); // Adjust the delay (in milliseconds) as needed
-          </script>
-        <% } %>      
-      </div>
+
+<%- include('../layout/alert')-%>
+
 </div>
-<script>
-    (() => {
-        'use strict';
-        const forms = document.querySelectorAll('.needs-validation');
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                const passwordInput = form.querySelector('[name="password"]');
-                const passwordValue = passwordInput.value;
-                const emailInput = form.querySelector('[name="email"]');
-                const emailValue = emailInput.value;
-
-                // Check if the password contains only spaces
-                if (/^\s*$/.test(passwordValue)) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    const alertMessage='Password cannot be just spaces.';
-                    showAlert(alertMessage);
-                    return;
-                }
-                // Check if the password contains only spaces
-                if (/^\s*$/.test(emailValue)) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    const alertMessage='Email cannot be just spaces.';
-                    showAlert(alertMessage);
-                    return;
-                }
-
-                // Check the length of the password
-                if (passwordValue.length < 8) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    const alertMessage='Password must be at least 8 characters.';
-                    showAlert(alertMessage);
-                    return;
-                }
-
-
-                if (!form.checkValidity()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-
-                form.classList.add('was-validated');
-            }, false);
-        });
-    })();
-    form.addEventListener('keydown', event => {
-        if (event.key === 'Enter') {
-            form.dispatchEvent(new Event('submit'));
-        }
-    });
-</script>
+<script src="../../public/jsFiles/adminLogin.js"></script>
 <%- include('../layout/footerHTML')-%>

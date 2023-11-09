@@ -1,51 +1,17 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/adminHome.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/card.css">
+<link rel="stylesheet" type="text/css" href="../../public/css/salesData.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 </head>
 <body>
     <%- include('../layout/adminHeader')-%>
-
-        <style>
-            /* Add custom styles here if needed */
-            body {
-                background-color: #f8f9fa;
-            }
-    
-            .report-heading {
-                background-color: #061d35;
-                color: #ffffff;
-                padding: 10px;
-                border-radius: 15px;
-                box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.647);
-                font-family: 'Michroma', sans-serif;
-                margin-bottom: 20px;
-
-            }
-            .datas{
-                margin: 10px 20px;
-            }
-            .section-heading {
-                color: #0a2644;
-                margin: 20px 20px 20px 10px;
-                border-bottom: 1px solid #000000;
-                padding-bottom: 5px;
-                margin-bottom: 15px;
-                font-family: 'Michroma', sans-serif;
-                
-            }
-        </style>
-
-    
         <div class="container mt-5 mb-5" style="border: 1px solid rgb(131, 131, 131); box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.419); border-radius: 20px; padding: 20px;">
             <img src="../../public/images/kn (1).png" alt="Company Logo" width="100" height="100" style="margin-left: 15px; border-radius: 10px;">
             <h3 class="text-start mb-3" style="font-family: 'Michroma', sans-serif; padding: 10px;">RARE&nbsp; KICKS</h3>
-            <!-- Monthly Sales Report Heading -->
             <div class="report-heading text-center">
                 <h3><%=data.type%> Sales Report: <%= data.date %></h3>
             </div>
-    
-            <!-- Summary Section -->
             <div class="row">
                 <div class="col-12">
                     <h3 class="section-heading">Summary</h3>
@@ -54,8 +20,6 @@
                     <h4 class="datas">Total Sales: <%= data.totalSales %></h4>
                     <h4 class="datas">Total Revenue: <%= data.totalRevenue.toFixed(2) %></h4>
                 </div>
-    
-                <!-- Payment Methods Section -->
                 <div class="col-12">
                     <h3 class="section-heading">Payment Methods</h3>
                     <% data.paymentMethods.forEach(function(method) { %>
@@ -63,8 +27,6 @@
                     <% }); %>
                 </div>
             </div>
-    
-            <!-- Categories and Products Section -->
             <div class="row">
                 <div class="col-12">
                     <h3 class="section-heading">Categories</h3>
@@ -72,7 +34,6 @@
                         <h5 class="datas"><b><%= category.category %></b> : <%= category.sales %> sales, <%= category.count %> count</h5>
                     <% }); %>
                 </div>
-    
                 <div class="col-12 mt-1">
                     <h3 class="section-heading">Products</h3>
                     <% data.products.forEach(function(product) { %>
@@ -95,8 +56,5 @@
                 </div>
             </div>
         </div>
-    
-  
-
 <%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>

@@ -1,35 +1,7 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/homePage.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/card.css">
-<style>
-    .card {
-    position: relative;
-    overflow: hidden;
-}
-
-.overlay  {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.card:hover .overlay {
-    opacity: 1;
-    padding: 10px ;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.861); /* Adjust the background color and opacity as needed */
-}
-
-.overlay i {
-    color: #000000a4; /* Icon color */
-    font-size: 2rem; /* Icon size */
-    cursor: pointer;
-}
-
-</style>
+<link rel="stylesheet" type="text/css" href="../../public/css/productDetailedAdmin.css">
 </head>
 <body>
     <%- include('../layout/adminHeader')-%>
@@ -63,8 +35,6 @@
                     <% } %>
                     
                 </div>
-
-
                 <h3 class="mt-2" style="font-family: 'Michroma', sans-serif; font-weight: bolder;">Description : </h3>
                 <p class="" style="font-family: 'Michroma', sans-serif; font-size: 16px;" ><%=product?.description%></p>
                <div class="d-flex detailsContainer" style="flex-wrap: wrap; row-gap: 10px; column-gap: 30px;">
@@ -101,7 +71,6 @@
                         <% product?.images?.forEach((image, index) => { %>
                             <div class="col-xl-6 col-lg-6 col-12">
                                 <div class="card">
-                                    <!-- Add data-toggle and data-target attributes to the img element -->
                                     <img src="<%= image %>" class="card-img-top" alt="..." data-toggle="modal" data-target="#imageModal<%= index %>">
                                     <div class="overlay">
                                         <i class="fa-solid fa-eye"></i>

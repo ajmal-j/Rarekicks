@@ -18,27 +18,27 @@
             </div>
 
             <div class="input-group">
-                <span class="input-group-text">Name:</span>
+                <span class="input-group-text">Name  <span class="ms-auto" style="font-weight: 700;">:</span></span>
                 <input class="inputField form-control" type="text" class="form-control" id="name" name="name" required>
             </div>
 
             <div class="input-group">
-                <span class="input-group-text">Price:</span>
+                <span class="input-group-text">Price  <span class="ms-auto" style="font-weight: 700;">:</span></span>
                 <input class="inputField form-control" type="number" class="form-control" id="price" name="price" required>
             </div>
             <div class="input-group">
-                <span class="input-group-text">Discount % :</span>
+                <span class="input-group-text">Discount %  <span class="ms-auto" style="font-weight: 700;">:</span></span>
                 <input class="inputField form-control" type="number" class="form-control" id="discountPercentage" name="discountPercentage" required>
             </div>
 
 
             <div class="input-group">
-                <span class="input-group-text">Quantity:</span>
+                <span class="input-group-text">Quantity <span class="ms-auto" style="font-weight: 700;">:</span></span>
                 <input class="inputField form-control" type="number" class="form-control" id="quantity" name="quantity" required>
             </div>
 
             <div class="input-group">
-                <span class="input-group-text">Brand:</span>
+                <span class="input-group-text">Brand <span class="ms-auto" style="font-weight: 700;">:</span></span>
                 <select class="form-control inputSelect" id="brand" name="brand" required>
                     <option value="nike">Nike</option>
                     <option value="reebok">Reebok</option>
@@ -51,7 +51,7 @@
             </div>
 
             <div class="input-group">
-                <span class="input-group-text">Category:</span>
+                <span class="input-group-text">Category <span class="ms-auto" style="font-weight: 700;">:</span></span>
                 <select class="form-control inputSelect" id="category" name="category" required>
                     <% categories.forEach (category=>{%>
                         <option value="<%= category._id%>"><%= category.name%></option>
@@ -60,12 +60,12 @@
             </div>
 
             <div class="form-control ">
-                <label for="description text-center">Description :</label> <br>
+                <label for="description text-center">Description  <span class="ms-auto" style="font-weight: 700;">:</span></label> <br>
                 <textarea class="form-control " id="description" name="description" required></textarea>
             </div>
        
             <div class="form-control " >
-                <label for="sizes text-center">Available Sizes:</label> <br>
+                <label for="sizes text-center">Available Sizes <span class="ms-auto" style="font-weight: 700;">:</span></label> <br>
                 <div class="d-flex" style="justify-content: center;">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" style="height: 20px; width: 20px;" id="sizeSmall" name="sizes[]" value="6">
@@ -99,160 +99,7 @@
         </form>
     </div>
 
-    <div class="alertKey">
-        <% if(locals.message) { %>
-          <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-            data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-            <strong><%= message %></strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-          
-          <script>
-            // Add this script to your page
-            setTimeout(function() {
-              document.getElementById('success-alert').style.display = 'none';
-            }, 2000); // Adjust the delay (in milliseconds) as needed
-          </script>
-        <% } %>      
-      </div>
-      <div class="alertKey">
-        <% if(locals.messageS) { %>
-          <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: absolute; right: 20px; bottom: 30px;"
-            data-bs-autohide="true" data-bs-delay="2000" id="success-alert"> 
-            <strong><%= messageS %></strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-      
-          <script>
-            // Add this script to your page
-            setTimeout(function() {
-              document.getElementById('success-alert').style.display = 'none';
-            }, 2000); // Adjust the delay (in milliseconds) as needed
-          </script>
-        <% } %>      
-      </div>
+    <%- include('../layout/alert')-%>
 
-      <script>
-        (() => {
-            'use strict';
-            const forms = document.querySelectorAll('.needs-validation');
-            Array.from(forms).forEach(form => {
-                form.addEventListener('submit',async event => {
-                    event.preventDefault();
-                    const nameInput = form.querySelector('[name="name"]');
-                    const nameValue = nameInput.value;
-                    const categoryInput = form.querySelector('[name="category"]');
-                    const categoryValue = categoryInput.value;
-                    const priceInput = form.querySelector('[name="price"]');
-                    const priceValue = priceInput.value;
-                    const quantityInput = form.querySelector('[name="quantity"]');
-                    const quantityValue = quantityInput.value;
-                    const descriptionInput = form.querySelector('[name="description"]');
-                    const descriptionValue = descriptionInput.value;
-                    const discountPercentageInput = form.querySelector('[name="discountPercentage"]');
-                    const discountPercentageValue = discountPercentageInput.value;
-                    
-
-                    if (/^\s*$/.test(nameValue)) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        nameInput.value='';
-                        const alertMessage='Name cannot be just spaces.';
-                        showAlert(alertMessage);
-                        return;
-                    }
-                    if (/^\s*$/.test(quantityValue)) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        quantityInput.value='';
-                        const alertMessage='Quantity cannot be just spaces.';
-                        showAlert(alertMessage);
-                        return;
-                    }
-
-                    if (/^\s*$/.test(descriptionValue)) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        quantityInput.value='';
-                        const alertMessage='Description cannot be just spaces.';
-                        showAlert(alertMessage);
-                        return;
-                    }
-
-                    if (/^\s*$/.test(priceValue) || isNaN(priceValue)) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        priceInput.value='';
-                        const alertMessage='Price cannot be just spaces, and it must be a valid number.';
-                        showAlert(alertMessage);
-                        return;
-                    }
-                    if (/^\s*$/.test(discountPercentageValue) || isNaN(discountPercentageValue)) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        const alertMessage='Discount cannot be just spaces, and it must be a valid number.';
-                        showAlert(alertMessage);
-                        return;
-                    }
-
-                    const numericPrice = parseFloat(priceValue);
-                    if (numericPrice < 500 || numericPrice > 100000) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        const alertMessage = 'Price must be between 500 and 100,000.';
-                        showAlert(alertMessage);
-                        return;
-                    }
-                    const numericDiscountPercentage= parseFloat(discountPercentageValue);
-                    if (numericDiscountPercentage < 0 || numericDiscountPercentage > 80) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        const alertMessage = 'Discount must be between 0 and 80.';
-                        showAlert(alertMessage);
-                        return;
-                    }
-
-                    const quantityParse = parseFloat(quantityValue);
-                    if (quantityParse < 0 || quantityParse > 100000) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        const alertMessage='Quantity must be between 1 and 100,000.';
-                        showAlert(alertMessage);
-                        return;
-                    }
-    
-
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-    
-                    try {
-                        const response = await fetch(`/admin/checkDiscount?discount=${numericDiscountPercentage}&category=${categoryValue}&name=${nameInput.value}`);
-                        const data = await response.json();
-                        if(data.name==='exist'){
-                            showAlert("Product Already Exist.!")
-                        }
-                        else if (data.discount === "true") {
-                            event.target.submit()
-                        } else if (data.discount==="false"){
-                            showAlert("Total Discount is More than 80. Max("+data.select+")");
-                        }else{
-                            showAlert("Error")
-                        }
-                    } catch (error) {
-                        console.log(error);
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        })();
-        form.addEventListener('keydown', event => {
-            if (event.key === 'Enter') {
-                event.preventDefault();  // Add this line
-                form.dispatchEvent(new Event('submit'));
-            }
-        });
-
-</script>
+<script src="../../public/jsFiles/addProduct.js"></script>
 <%- include('../layout/footerHTML')-%>
