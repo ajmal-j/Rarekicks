@@ -15,7 +15,7 @@ const orderModel = require("../models/orderModel");
 const cloudinary = require('cloudinary').v2; 
 const cloudinaryConfig=require('../config/cloudinaryConfig')
 
-const addProduct= async (req,res)=>{
+const addProduct= async (req,res,next)=>{
     try{
         if(req.query.message){
             const categories = await category.find({$and:[{deleted:false},{ _id: { $ne: "6537f0cec483201d20b35f83" } }]})
@@ -28,11 +28,11 @@ const addProduct= async (req,res)=>{
             res.render("addProduct",{categories:categories,message:''})
         }
     }catch(err){
-        res.send("error")
+        next(err)
     }
 }
 
-const insertProduct =async (req,res)=>{
+const insertProduct =async (req,res,next)=>{
     const images = await Promise.all(req.files.map(async file => {
         const result = await cloudinary.uploader.upload(file.path); 
         return result.secure_url; 
@@ -70,7 +70,7 @@ const getProductAdmin=async(req,res,next)=>{
         next()
         }   
     catch(err){
-        res.json(err)
+        next(err)
     }
 }
 
@@ -104,10 +104,10 @@ const getProduct=async(req,res,next)=>{
         next()
         }   
     catch(err){
-        console.log(err);
-        res.json(err)
+        next(err)
     }
 }
+
 const getProductByPage = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page) || 0;
@@ -130,7 +130,7 @@ const getProductByPage = async (req, res, next) => {
         req.totalDocuments = totalDocuments;
         next();
     } catch (err) {
-        res.json(err);
+        next(err)
     }
 };
 const priceLowToHigh = async (req, res, next) => {
@@ -146,7 +146,7 @@ const priceLowToHigh = async (req, res, next) => {
         req.name="Price Low to High"
         next();
     } catch (err) {
-        res.json(err);
+        next(err)
     }
 };
 const priceHighToLow = async (req, res, next) => {
@@ -162,7 +162,7 @@ const priceHighToLow = async (req, res, next) => {
         req.name="Price High to Low"
         next();
     } catch (err) {
-        res.json(err);
+        next(err)
     }
 };
 const bestSeller = async (req, res, next) => {
@@ -178,7 +178,7 @@ const bestSeller = async (req, res, next) => {
         req.name="Best Sellers"
         next();
     } catch (err) {
-        res.json(err);
+        next(err)
     }
 };
 const sortByRating = async (req, res, next) => {
@@ -194,7 +194,7 @@ const sortByRating = async (req, res, next) => {
         req.name="By Rating"
         next();
     } catch (err) {
-        res.json(err);
+        next(err)
     }
 };
 
@@ -211,24 +211,24 @@ const getBrand=async(req,res,next)=>{
         req.brand=branded
         next()
         }   
-    catch(err){
-        res.json(err)
+    catch(error){
+        next(error)
     }
 }
 
-const editProductShow=async (req,res)=>{
+const editProductShow=async (req,res,next)=>{
     try{
         const id=await req.query.id.trim();
         const product=await Product.findOne({_id:id}).populate("category")
         const categories = await category.find({$and:[{deleted:false},{ _id: { $ne: "6537f0cec483201d20b35f83" } },{ name: { $ne:product?.category?.name  } }]})
         const {discountPercentage}= await categoryModel.findById(product.category)
         res.render("editProduct",{product,categories,discountPercentage:discountPercentage?discountPercentage:0})
-    }catch(err){
-        console.log(err)
+    }catch(error){
+        next(error)
     }
 }
 
-const editProduct=async (req,res)=>{
+const editProduct=async (req,res,next)=>{
     const id=await req.query.id
     const product=await Product.findById(id)
     const {discountPercentage}= await categoryModel.findById(req.body.category)
@@ -298,7 +298,7 @@ const editProduct=async (req,res)=>{
 
 
 
-const deleteProduct=async (req,res)=>{
+const deleteProduct=async (req,res,next)=>{
     try{
     const id=req.query.id;
     const {deleted}=await Product.findById(id);
@@ -308,12 +308,12 @@ const deleteProduct=async (req,res)=>{
         await Product.findByIdAndUpdate(id,{deleted:false})
       }
     }
-    catch(err){
-        res.send(err)
+    catch(error){
+        next(error)
     }
 }
 
-const deleteProductCompletely = async (req, res) => {
+const deleteProductCompletely = async (req, res,next) => {
     try {
         const productId = req.query.id;
         const product = await Product.findOne({ _id: productId });
@@ -337,47 +337,47 @@ const deleteProductCompletely = async (req, res) => {
         await Product.findByIdAndDelete(productId);
 
         res.redirect("/admin/productList/");
-    } catch (err) {
-        res.status(500).send(err.message || "Internal Server Error");
+    } catch (error) {
+        next(error)
     }
 };
 
 
 
-const searchProduct=async (req,res)=>{
+const searchProduct=async (req,res,next)=>{
     const search=await req.query.search||"";
     try{
       const products=await Product.find({name:new RegExp(search.trim(),"i")}).exec();
       products?res.render("productList",{products:products,search}):res.redirect("admin/home");
       }
-      catch(err){
-      res.send("Error occurred")
+      catch(error){
+      next(error)
       }
 }
-const searchProductList=async (req,res)=>{
+const searchProductList=async (req,res,next)=>{
     const search=await req.query.search||"";
     try{
       const products=await Product.find({name:new RegExp(search.trim(),"i")}).exec();
       products?res.render("productList",{products:products,search}):res.redirect("admin/home");
       }
-      catch(err){
-      res.send("Error occurred")
+      catch(error){
+      next(error)
       }
 }
 
-const searchProductUser=async (req,res)=>{
+const searchProductUser=async (req,res,next)=>{
     const search=await req.query.search||"";
     try{
         const products=await Product.find({$and:[{name:new RegExp(search.trim(),"i")},{deleted:false}]}).exec();
         res.render("allProducts",{products,search,brand:false,name:search})
     }
-    catch(err){
-        console.log(err)
+    catch(error){
+        next(error)
     }
 }
 
 
-  const  createCategory = async (req, res) => {
+  const  createCategory = async (req, res,next) => {
     try {
         const checkName= req.body.name.toLowerCase().trim();
         const discountPercentage= req.body.discountPercentage;
@@ -406,7 +406,7 @@ const searchProductUser=async (req,res)=>{
 
 
   
-const checkCategory=async (req,res)=>{
+const checkCategory=async (req,res,next)=>{
     try {
         const id=req.query.id;
         const name=req.query.name;
@@ -427,67 +427,72 @@ const checkCategory=async (req,res)=>{
             return res.json({exists:false})
         }
     } catch (error) {
-     console.log(error)   
+     console.log(error)
+     res.json({error})
     }
 }
 
 
 
-const createCategoryShow = async (req, res) => {
+const createCategoryShow = async (req, res,next) => {
     const categories = await category.find({ _id: { $ne: "6537f0cec483201d20b35f83" } });
     res.render('category',{categories});
 };
 
 
-const editCategoryShow = async (req, res) => {
+const editCategoryShow = async (req, res,next) => {
     try {
         const id= await req.query.id
         const categories=await category.findOne({_id:id})
         res.render('editCategory',{categories});
     } catch (error) {
-        console.log(error)
+        next(error)
     }
 };
 
-const editCategory = async (req, res) => {
-    const id = req.query.id;
-    const name = req.body.name.toLowerCase().trim();
-    const discount=parseInt(req.body.discountPercentage);
-    const check = await categoryModel.findOne({ name: name, _id: { $ne: id } });
-    const {discountPercentage}=await categoryModel.findById(id);
-    const products=await productModel.find({category:id})
-    if (!check) {
-        const data = {
-            name: req.body.name.trim(),
-            discountPercentage:discount,
-            description: req.body.description.trim()
-        };
-        for (const product of products){
-            const discountNew=product.discountPercentage-discountPercentage;
-            const set=discountNew+discount;
-            await productModel.findByIdAndUpdate(product._id,{$set:{discountPercentage:set}})
+const editCategory = async (req, res,next) => {
+    try {
+        const id = req.query.id;
+        const name = req.body.name.toLowerCase().trim();
+        const discount=parseInt(req.body.discountPercentage);
+        const check = await categoryModel.findOne({ name: name, _id: { $ne: id } });
+        const {discountPercentage}=await categoryModel.findById(id);
+        const products=await productModel.find({category:id})
+        if (!check) {
+            const data = {
+                name: req.body.name.trim(),
+                discountPercentage:discount,
+                description: req.body.description.trim()
+            };
+            for (const product of products){
+                const discountNew=product.discountPercentage-discountPercentage;
+                const set=discountNew+discount;
+                await productModel.findByIdAndUpdate(product._id,{$set:{discountPercentage:set}})
+            }
+            await categoryModel.findByIdAndUpdate(id, data);
+            res.redirect("/admin/createCategory");
+        } else {
+            const categories = await categoryModel.findOne({ _id: id });
+            res.render('editCategory', { categories, message: "Category Already Exist!" });
         }
-        await categoryModel.findByIdAndUpdate(id, data);
-        res.redirect("/admin/createCategory");
-    } else {
-        const categories = await categoryModel.findOne({ _id: id });
-        res.render('editCategory', { categories, message: "Category Already Exist!" });
+    } catch (error) {
+        next(error)
     }
 };
 
 
 
-const deleteCategory= async (req, res) => {
+const deleteCategory= async (req, res,next) => {
     const id= await req.query.id
     const {deleted}=await categoryModel.findById(id)
     if(deleted===false){
         await categoryModel.findByIdAndUpdate(id,{deleted:true})
-      }else if(deleted===true){
+    }else if(deleted===true){
         await categoryModel.findByIdAndUpdate(id,{deleted:false})
-      }
+    }
 };
 
-const deleteCategoryCompletely= async (req, res) => {
+const deleteCategoryCompletely= async (req, res,next) => {
     try {
     const id= await req.query.id
     const {discountPercentage}=await categoryModel.findById(id)
@@ -501,13 +506,13 @@ const deleteCategoryCompletely= async (req, res) => {
     await category.findByIdAndDelete(id)
     res.redirect("/admin/createCategory/")
     } catch (error) {
-        console.log(error);
+        next(error)
     }
 };
 
 
 
-const brandBased=async (req,res)=>{
+const brandBased=async (req,res,next)=>{
     try {
         const aggregate = await productModel.aggregate([
             {
@@ -528,12 +533,11 @@ const brandBased=async (req,res)=>{
           const categories=await categoryModel.find({deleted:false})
         res.render("brandBased",{datas:aggregate,name:"All Brands",categories});
     } catch (error) {
-        console.log(error,+ " " + "aggregate")
-        res.end(error+"While Aggregate")
+        next(error)
     }
 }
 
-const brandBasedAdmin=async (req,res)=>{
+const brandBasedAdmin=async (req,res,next)=>{
     try {
         const aggregate = await productModel.aggregate([
             {
@@ -594,13 +598,12 @@ const brandBasedAdmin=async (req,res)=>{
         ]);
         res.render("brandBasedAdmin",{brandsData :aggregate });
     } catch (error) {
-        console.log(error,+ " " + "aggregate")
-        res.end(error+"While Aggregate")
+        next(error)
     }
 }
 
 
-const wishlist=async(req,res)=>{
+const wishlist=async(req,res,next)=>{
     try {
         const userId=await req.session._id;
         const productId=req.query.id;
@@ -623,11 +626,11 @@ const wishlist=async(req,res)=>{
             return res.json({added:false,message:true})
         }
     } catch (error) {
-        res.send(error)
+        res.json(error)
     }
 }
 
-const wishlistShow=async(req,res)=>{
+const wishlistShow=async(req,res,next)=>{
     try {
         req.session.orderConfirmed=false;
         const id=await req.session._id;
@@ -645,13 +648,13 @@ const wishlistShow=async(req,res)=>{
             res.render("wishlist",{products:false,message:"Error while Loading wishlist!"})
         }
     } catch (error) {
-        res.send(error)
+        next(error)
     }
 }
 
 
 
-const cartShow = async (req, res) => {
+const cartShow = async (req, res,next) => {
     try {
         const id = await req.session._id;
         req.session.orderConfirmed=false;
@@ -695,12 +698,12 @@ const cartShow = async (req, res) => {
         res.render("cart", { products: updatedUser.cart.items, total: updatedUser.cart.totalPrice });
     } catch (error) {
         console.error(error);
-        res.send(error);
+        next(error)
     }
 };
 
 
-const removeFromCart=async(req,res)=>{
+const removeFromCart=async(req,res,next)=>{
     try {
         const userId = await req.session._id;
         const productId=await req.query.id;
@@ -718,11 +721,11 @@ const removeFromCart=async(req,res)=>{
         updatedUser = await updatedUser.save();
         return res.json({removed:false,total:updatedUser.cart.totalPrice})
     } catch (error) {
-        res.send(error)
+        res.json({error})
     }
 }
 
-const decreaseQuantity=async (req,res)=>{
+const decreaseQuantity=async (req,res,next)=>{
     try {
         const userId = await req.session._id;
         const productId=await req.query.id;
@@ -745,11 +748,11 @@ const decreaseQuantity=async (req,res)=>{
         const {discountPercentage}=await productModel.findById(product.product)
         return res.json({updated:false,price:product.price,discount:discountPercentage,total:updatedUser.cart.totalPrice})
     } catch (error) {
-        res.send(error)
+        res.json({error})
     }
 }
 
-const increaseQuantity=async (req,res)=>{
+const increaseQuantity=async (req,res,next)=>{
     try {
         const userId = await req.session._id;
         const productId=await req.query.id;
@@ -776,11 +779,11 @@ const increaseQuantity=async (req,res)=>{
         const {discountPercentage}=await productModel.findById(product.product)
         return res.json({updated:false,price:product.price,discount:discountPercentage,total:updatedUser.cart.totalPrice})
     } catch (error) {
-        res.send(error)
+        res.json({error})
     }
 }
 
-const cart = async (req, res) => {
+const cart = async (req, res,next) => {
     try {
         const userId = await req.session._id;
         const productId = req.query.id;
@@ -842,11 +845,11 @@ const cart = async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send(error.message);
+        res.status(500).json({error});
     }
 };
 
-const getCount=async(req,res)=>{
+const getCount=async(req,res,next)=>{
     try {
       const user=await userModel.findOne({_id:req.session._id})
       const userName=user.name;
@@ -862,7 +865,7 @@ const getCount=async(req,res)=>{
 
 
 
-const updateBanner = async (req, res) => {
+const updateBanner = async (req, res,next) => {
     try {
         const images = await Promise.all(req.files.map(async file => {
             const result = await cloudinary.uploader.upload(file.path); 
@@ -884,7 +887,7 @@ const updateBanner = async (req, res) => {
         res.redirect('/admin/home?messageS=Updating Banner');
     } catch (error) {
         console.error(error);
-        res.send("error");
+        next(error)
     }
 };
 
@@ -903,12 +906,12 @@ const allCategories=async (req,res,next)=>{
             return res.redirect('back')
         }
     } catch (error) {
-        console.log(error);
+        next(error)
     }
 }
 
 
-const addReview=async (req,res)=>{
+const addReview=async (req,res,next)=>{
     try {
         const {rating,review,productId}=req.body;
         const id=req.session._id;
@@ -955,7 +958,7 @@ const isProductExist = (productId, orders) => {
 };
 
 
-const checkDiscount=async(req,res)=>{
+const checkDiscount=async(req,res,next)=>{
     try {
         const {discount,category,name,id}=req.query;
         let check;
