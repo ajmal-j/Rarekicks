@@ -12,9 +12,6 @@
         })
     });
 
-
-
-
     document.getElementById('submit').addEventListener('click', function() {
        document.getElementById('counterInput').value = localStorage.getItem('countdownTime2');
      });

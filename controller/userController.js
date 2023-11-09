@@ -6,15 +6,13 @@ const addressModel = require("../models/addressModel");
 const bannerModel = require("../models/bannerModel");
 const chatModel = require("../models/chatModel");
 const mail=require('../public/jsFiles/mail');
-const storage=require("../public/jsFiles/storage")
 const moment=require("moment")
 const orderController=require('./orderController')
-
 const { json } = require("express");
 const categoryModel = require("../models/categoryModel");
 const orderModel = require("../models/orderModel");
 
-const register= async(req,res)=>{
+const register= async(req,res,next)=>{
     try {
       if(req.session.user){
         res.redirect("/user/home/")
@@ -27,11 +25,11 @@ const register= async(req,res)=>{
         }
       }
       } catch (error) {
-        console.log(error.message);
+        next(error)
       }
 }
 
-const login= async(req,res)=>{
+const login= async(req,res,next)=>{
     try {
       if(req.session.user){
         res.redirect("/user/home/")
@@ -39,39 +37,39 @@ const login= async(req,res)=>{
         res.render("userLogin",{email:""});
       }
       } catch (error) {
-        res.end("Error While LogIn",error)
+        next(error)
       }
 }
 
 
-const loginWithOtp=async(req,res)=>{
+const loginWithOtp=async(req,res,next)=>{
   try {
     const email=await req.query.email;
     res.render("otpLogin",{email:email||""});
   } catch (error) {
-    res.end("Error While LogIn",error)
+    next(error)
   }
 }
 
 
 
-const logout=async (req,res)=>{
+const logout=async (req,res,next)=>{
   try {
     req.session.user=false;
     req.session._id=false;
     res.clearCookie("userToken");
     res.render("userLogin",{email:"",message:"Successfully logged out"});
   } catch (error) {
-    res.end("Error While LogIn",error)
+    next(error)
   }
 }
 
 
-const loginToken= async(req,res)=>{
+const loginToken= async(req,res,next)=>{
     try {
         res.render("userLogin",{email:"",message:"Authorization Required!"});
       } catch (error) {
-        console.log(error.message);
+        next(error)
       }
 }
 
@@ -128,7 +126,7 @@ const createUser=async (req,res,next)=>{
       
 }
 
-const loginValidation=async (req,res)=>{
+const loginValidation=async (req,res,next)=>{
   try{
     const email=req.body.email.trim()
     const user=await userModel.findOne({email:email})
@@ -165,12 +163,10 @@ catch(err){
 }
 }
 
-const loginValidationOtp=async (req,res)=>{
+const loginValidationOtp=async (req,res,next)=>{
     try {
       const {otp,email}=await userModel.findOne({email:req.body.email})
-      // console.log(otp)
       const enteredOtp=await req.body.otp.trim();
-      // console.log(enteredOtp)
           if(req.body.counter){
                 if(otp===enteredOtp){
                   const user=await userModel.findOne({email:req.body.email})
@@ -183,28 +179,28 @@ const loginValidationOtp=async (req,res)=>{
                         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), 
                       })
                       mail.sendEmail(req.body.email);
-                      res.redirect("/user/home/")
+                      res.redirect("/user/home")
                 }else{
-                  res.render('verifyOtpLogin',{email:req.body.email,message:"Invalid Otp!!"});
+                  res.render('verifyOtpLogin',{email:req.body.email,message:"Invalid Otp!"});
                 }
             }else {
               res.render('verifyOtpLogin',{email:email,message:"Otp Expired!!"});
             }
     } catch (error) {
-      console.log(error);
+      next(error)
     }
   }
 
-const allUsers=async (req,res)=>{
+const allUsers=async (req,res,next)=>{
   try{
     const users= await userModel.find();
     res.render("adminUserManagement",{users,search:false,moment})
-  }catch(err){
-    console.log(err)
+  }catch(error){
+    next(error)
   }
 }
 
-const detailedUser=async (req,res)=>{
+const detailedUser=async (req,res,next)=>{
   try{
     const id=req.query.id;
     const user= await userModel.findById(id);
@@ -217,48 +213,52 @@ const detailedUser=async (req,res)=>{
     }
     const address=await addressModel.findOne({userId:id,default:true})
     res.render("detailedUser",{user,search:false,moment,orders:orders.reverse(),address,ordersSuccess})
-  }catch(err){
-    console.log(err)
+  }catch(error){
+    next(error)
   }
 }
 
-const deleteUser=async (req,res)=>{
+const deleteUser=async (req,res,next)=>{
   try{
     const id=req.query.id.trim();
     await userModel.findByIdAndDelete(id);
     // res.redirect("/admin/viewUsers")
     }
     catch(err){
-        res.end(err)
+      next(err)
     }
 }
 
 
-const editUserShow=async (req,res)=>{
+const editUserShow=async (req,res,next)=>{
+ try {
   const id=await req.query.id.trim();
   const user=await userModel.findOne({_id:id})
   res.render("adminEditUser",{user}) 
+ } catch (error) {
+  next(error)
+ }
 }
 
-const editUser=async (req,res)=>{
+const editUser=async (req,res,next)=>{
   try{
     const id=await req.query.id.trim();
     await userModel.findByIdAndUpdate(id,req.body)
     res.redirect('/admin/viewUsers')
   }catch(err){
-    res.end(err)
+    next(err)
   }
 }
 
-const createUserByAdminShow=async (req,res)=>{
+const createUserByAdminShow=async (req,res,next)=>{
   try{
     res.render("createUserByAdmin")
   }catch(err){
-    res.end("error")
+    next(err)
   }
 }
 
-const createUserByAdmin=async (req,res)=>{
+const createUserByAdmin=async (req,res,next)=>{
   try {
     const check=await userModel.findOne({email:req.body.email.trim()})
     const contact=await userModel.findOne({contact:req.body.contact.trim()})
@@ -283,23 +283,27 @@ const createUserByAdmin=async (req,res)=>{
       }
       }catch(err){
         console.log(err)
-        res.render("createUserByAdmin",{message:"Something went wrong!"})
+        next(err)
       }
 }
 
-const blockUser=async (req,res)=>{
-    const id=await req.query.id.trim();
-    const {isBlocked}=await userModel.findOne({_id:id});
-    if(isBlocked===false){
-      await userModel.findByIdAndUpdate(id,{isBlocked:true})
-      // res.redirect("/admin/viewUsers")
-    }else if(isBlocked===true){
-      await userModel.findByIdAndUpdate(id,{isBlocked:false})
-      // res.redirect("/admin/viewUsers")
+const blockUser=async (req,res,next)=>{
+    try {
+      const id=await req.query.id.trim();
+      const {isBlocked}=await userModel.findOne({_id:id});
+      if(isBlocked===false){
+        await userModel.findByIdAndUpdate(id,{isBlocked:true})
+        // res.redirect("/admin/viewUsers")
+      }else if(isBlocked===true){
+        await userModel.findByIdAndUpdate(id,{isBlocked:false})
+        // res.redirect("/admin/viewUsers")
+      }
+    } catch (error) {
+      next(error)
     }
 }
 
-const searchUser=async(req,res)=>{
+const searchUser=async(req,res,next)=>{
   const search=await req.query.search||"";
   try{
     let users=await userModel.find({name:new RegExp(search.trim(),"i")}).exec();
@@ -308,9 +312,8 @@ const searchUser=async(req,res)=>{
     }
     users?res.render("adminUserManagement",{users,search,moment}):res.redirect("admin/viewUsers");
     }
-    catch(err){
-      console.log(err)
-    res.send("Error occurred")
+    catch(error){
+      next(error)
     }
 }
 
@@ -320,12 +323,10 @@ const sendOtp=async (req,res,next)=>{
     const generatedOTP = mail.generateOTP();
     await mail.sendOTPByEmail(email, generatedOTP);
     await userModel.findByIdAndUpdate(req.user._id,{otp:generatedOTP});
-    // console.log("Done");
     req.user=req.user;
     next()
-    // res.render('verifyOtp',{email});
 }
-const resentOtp=async (req,res)=>{
+const resentOtp=async (req,res,next)=>{
     try {
       const email=req.query.email;
       const user=await userModel.findOne({email:email})
@@ -341,36 +342,44 @@ const resentOtp=async (req,res)=>{
 }
 
 const sendOtpAgain=async (req,res,next)=>{
-  const user=await userModel.findOne({email:req.query.email.trim()})
-  if(user){
-    if(user.isBlocked){
-      res.render("otpLogin",{email:req.query.email,message:"You Are Blocked By The Admin!"});
+  try {
+    const user=await userModel.findOne({email:req.query.email.trim()})
+    if(user){
+      if(user.isBlocked){
+        res.render("otpLogin",{email:req.query.email,message:"You Are Blocked By The Admin!"});
+      }else{
+        const email = req.query.email.trim();
+        const generatedOTP = mail.generateOTP();
+        await mail.sendOTPByEmail(email, generatedOTP);
+        await userModel.findByIdAndUpdate(user._id,{otp:generatedOTP})
+        res.render('verifyOtpLogin',{email});
+      }
     }else{
-      const email = req.query.email.trim();
-      const generatedOTP = mail.generateOTP();
-      await mail.sendOTPByEmail(email, generatedOTP);
-      await userModel.findByIdAndUpdate(user._id,{otp:generatedOTP})
-      res.render('verifyOtpLogin',{email});
+      res.render("otpLogin",{email:req.query.email,message:"Invalid User"});
     }
-  }else{
-    res.render("otpLogin",{email:req.query.email,message:"Invalid User"});
+  } catch (error) {
+    next(error)
   }
 }
 
 const sendOtpForLogIn=async (req,res,next)=>{
-  const user=await userModel.findOne({email:req.body.email.trim()})
-  if(user){
-    if(user.isBlocked){
-      res.render("otpLogin",{email:req.body.email,message:"You Are Blocked By The Admin!"});
+  try {
+    const user=await userModel.findOne({email:req.body.email.trim()})
+    if(user){
+      if(user.isBlocked){
+        res.render("otpLogin",{email:req.body.email,message:"You Are Blocked By The Admin!"});
+      }else{
+        const email = req.body.email.trim();
+        const generatedOTP = mail.generateOTP();
+        await mail.sendOTPByEmail(email, generatedOTP);
+        await userModel.findByIdAndUpdate(user._id,{otp:generatedOTP})
+        res.render('verifyOtpLogin',{email});
+      }
     }else{
-      const email = req.body.email.trim();
-      const generatedOTP = mail.generateOTP();
-      await mail.sendOTPByEmail(email, generatedOTP);
-      await userModel.findByIdAndUpdate(user._id,{otp:generatedOTP})
-      res.render('verifyOtpLogin',{email});
+      res.render("otpLogin",{email:req.body.email,message:"Invalid User"});
     }
-  }else{
-    res.render("otpLogin",{email:req.body.email,message:"Invalid User"});
+  } catch (error) {
+    next(error)
   }
 }
   
@@ -378,15 +387,12 @@ const verifyEmailShow=async (req, res) => {
   res.render('verifyOtp',{email:req.user.email});
 };
 const verifyEmailShowAgain=async (req, res) => {
-  res.render('verifyOtp',{email:req.user.email,message:"Verify Your Email!"});
+  res.render('verifyOtp',{email:req.user.email,messageS:"Verify Your Email!"});
 };
 
-
-
-const verifyEmail=async (req,res)=>{
+const verifyEmail=async (req,res,next)=>{
     try{
         const {_id,otp,email}=await userModel.findOne({email:req.body.email});
-          // console.log("reg")
           const enteredOtp=await req.body.otp.trim();
             if(req.body.counter){
               if(otp===enteredOtp){
@@ -402,13 +408,13 @@ const verifyEmail=async (req,res)=>{
               await userModel.findByIdAndUpdate(_id,{ otp:'' });
               res.render('verifyOtp',{email:email,message:"Otp Expired"});
             }
-    }catch(err){
-          res.send(err+" "+"Error!! While Verifying Otp")
+    }catch(error){
+      next(error)
     }
   } 
 
 
-const homePage=async (req,res)=>{
+const homePage=async (req,res,next)=>{
   try{
     req.session.checkOut=false;
     req.session.orderConfirmed=false;
@@ -426,14 +432,13 @@ const homePage=async (req,res)=>{
       res.render('homePage',{products,products2,banners:images})
     }
   }catch(err){
-    console.log(err)
-    res.end(err)
+    next(err)
   }
 }
 
 
 
-const allProducts=async (req,res)=>{
+const allProducts=async (req,res,next)=>{
   try {
     const brand=await req.brand;
     const page=await req.page;
@@ -443,13 +448,12 @@ const allProducts=async (req,res)=>{
     const categories=await categoryModel.find({deleted:false})
     res.render("allProducts",{products,brand,categories,page,totalDocuments,name:name?name:false})
   } catch (error) {
-    console.log(error);
-    res.end("Error")
+    next(error)
   }
 }
 
 
-const productDetailed = async (req, res) => {
+const productDetailed = async (req, res,next) => {
   try {
     const id = req.query.id;
     const userId=req.session._id;
@@ -470,13 +474,13 @@ const productDetailed = async (req, res) => {
     } else {
       res.render("detailedProduct", { products: req.products, product: null, wishlist: wish ,moment,averageRating});
     }
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    next(error)
   }
 };
 
 
-const profile=async(req,res)=>{
+const profile=async(req,res,next)=>{
   try {
     req.session.checkOut=false;
     const id=req.session._id
@@ -484,7 +488,7 @@ const profile=async(req,res)=>{
     const user=await userModel.findOne({_id:id})
     res.render('profile',{user,addresses})
   } catch (error) {
-    
+    next(error)
   }
 }
 
@@ -497,13 +501,13 @@ const redirect=async(req,res)=>{
   res.redirect("/user/profile")
 }
 
-const editProfileShow=async(req,res)=>{
+const editProfileShow=async(req,res,next)=>{
   try {
     const id=req.session._id
     const user=await userModel.findOne({_id:id})
     res.render('editProfile',{user})
   } catch (error) {
-    
+    next(error)
   }
 }
 const editProfile=async (req,res,next)=>{
@@ -518,11 +522,10 @@ const editProfile=async (req,res,next)=>{
     await userModel.findByIdAndUpdate(id,details)
     res.redirect('/user/profile')
   } catch (error) {
-    console.log(error);
+    next(error)
   }
       
 }
-
 
 const checkPassword = async (req, res) => {
   try {
@@ -558,15 +561,15 @@ const checkPassword = async (req, res) => {
 };
 
 
-const changePasswordShow=async(req,res)=>{
+const changePasswordShow=async(req,res,next)=>{
   try {
     res.render("changePassword")
   } catch (error) {
     console.log(error);
-    res.send("Error while changing password"+error)
+    next(error)
   }
 }
-const checkPasswordNewPassword=async(req,res)=>{
+const checkPasswordNewPassword=async(req,res,next)=>{
   try {
     const currentPassword=await req.query.currentPassword
     const id=req.session._id;
@@ -591,12 +594,11 @@ const checkPasswordNewPassword=async(req,res)=>{
   }
 }
 
-const addAddressShow=async(req,res)=>{
+const addAddressShow=async(req,res,next)=>{
   try {
     res.render('addAddress');
   } catch (error) {
-    console.log(error);
-    res.send("Error while adding new address"+error)
+    next(error)
   }
 }
 
@@ -647,7 +649,7 @@ const addAddress = async (req, res) => {
 };
 
 
-const updateDefaultAddress=async (req,res)=>{
+const updateDefaultAddress=async (req,res,next)=>{
   try {
     const id=req.query.id;
     const  userId=await req.session._id;
@@ -660,7 +662,7 @@ const updateDefaultAddress=async (req,res)=>{
   }
 }
 
-const editAddressShow = async (req, res) => {
+const editAddressShow = async (req, res,next) => {
   try {
     const id = req.query.id; 
     const countryToStates = {
@@ -673,7 +675,7 @@ const editAddressShow = async (req, res) => {
     const address = await addressModel.findOne({ _id: id });
     res.render('editAddress', { address ,countryToStates});
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 };
 
@@ -723,7 +725,7 @@ const editAddress = async (req, res) => {
 };
 
 
-const deleteAddress=async (req,res)=>{
+const deleteAddress=async (req,res,next)=>{
   try {
     const id=req.query.id;
     const userId=req.session._id;
@@ -735,18 +737,16 @@ const deleteAddress=async (req,res)=>{
     }
     res.redirect('/user/redirect');
   } catch (error) {
-    console.log(error);
-    res.send("Error While Deleting Address!")
+    next(error)
   }
 }
 
 
-const checkOutShow = async (req, res) => {
+const checkOutShow = async (req, res,next) => {
   try {
     if (req.session.orderConfirmed) {
       return res.redirect('/user/cart/');
     }
-
     const id = req.session._id;
     req.session.checkOut = id;
     const address = await addressModel.findOne({ userId: id, default: true });
@@ -762,27 +762,15 @@ const checkOutShow = async (req, res) => {
       res.render('checkOut', { address, email, products: user.cart.items, total, grandTotal: total, user });
     }
   } catch (error) {
-    console.log(error);
+    next(error)
   }
 };
-
-
-
-const openChat=async (req,res)=>{
-  try {
-    res.redirect('http://localhost:5000/')
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 const insertMessage = async (data) => {
   try {
     await chatModel.create({ message: data.message });
-    // console.log("yes");
     return true;
   } catch (error) {
-    console.log("no");
     console.log(error);
     return false;
   }
@@ -828,7 +816,6 @@ module.exports={
   editAddress,
   deleteAddress,
   checkOutShow,
-  openChat,
   insertMessage,
   detailedUser,
   resentOtp
