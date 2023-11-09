@@ -19,15 +19,15 @@ let admin=[];
 
 async function onConnection(socket) {
     try {
-        console.log('Socket Connected', socket.id);
+        // console.log('Socket Connected', socket.id);
     socket.on('getId',async (data)=>{
         try {
         const check=await adminModel.findOne({_id:data.adminId})
         if(check){
-            console.log("ADMIN");
+            // console.log("ADMIN");
             admin.push({socketId:socket.id,id:data.adminId,user:data.id})
         }else{
-            console.log("USER");
+            // console.log("USER");
             sockets.push({socketId:socket.id,id:data.id});
         }
         } catch (error) {
@@ -36,7 +36,7 @@ async function onConnection(socket) {
     })
 
     socket.on('disconnect', () => {
-        console.log('Socket disconnected', socket.id);
+        // console.log('Socket disconnected', socket.id);
         const index = sockets.findIndex((item) => item.socketId === socket.id);
             if (index !== -1) {
                 sockets.splice(index, 1);
@@ -50,7 +50,7 @@ async function onConnection(socket) {
     socket.on('message', async (data) => {
         try {
             const isAdmin = admin.some(adminObj => adminObj.id === data.adminId);
-            console.log(isAdmin)
+            // console.log(isAdmin)
             if(isAdmin){
                 let chat = new chatModel ({userId:data.userId,message:data.message,createdAt:new Date(),admin:true}); 
                 chat.save();

@@ -1,0 +1,35 @@
+  .dataTables_length select{
+    color: #ffffff !important;
+    border-radius: 10px !important;
+  }
+  .dataTables_length select option{
+    color: #ffffff !important;
+    border-radius: 10px !important;
+    background: #000 !important;
+  }
+  .dataTables_filter label input[type="search"]{
+    caret-color: rgb(186, 186, 186) !important;
+    color: white !important;
+    border: 1px solid grey !important;
+    border-radius: 20px !important;
+    padding: 5px 16px !important;
+  }
+  
+  .dataTables_info,
+  .dataTables_paginate,
+  .dataTables_filter,
+  .dataTables_length {
+    font-family: 'Michroma', sans-serif !important;
+    color: white !important;
+
+  }
+  .paginate_button.previous,
+  .paginate_button.next,
+  .paginate_button.current,
+  .paginate_button{
+    font-family: 'Michroma', sans-serif !important;
+    border-radius: 10px !important;
+    background-color: rgb(255, 255, 255) !important;
+    color: rgb(0, 0, 0) !important;
+    border: 1px solid grey !important;
+  }

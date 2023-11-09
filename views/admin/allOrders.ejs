@@ -1,17 +1,20 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/orderConfirmation.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+<link rel="stylesheet" href="../../public/css/table.css">
 </head>
 <body>
     <%- include('../layout/adminHeader')-%>
     <%if(allOrders.length>0){%>
       
-        <div class="text-center text-dark mt-4" style=" font-family: 'Michroma', sans-serif;">
-            <h3>All Orders</h3>
-            <span style="font-size: 17px;" class="btn btn-dark py-2 px-3">Total Orders : <%= allOrders.length%></h3>
-        </div>
-    <div class="container mt-2" style="border: 1px solid black ; padding: 10px; background-color: #212529; border-radius: 20px; min-width: 600px;">
-        
-        <table class="table table-dark table-striped" style=" font-family: 'Michroma', sans-serif;">
+      
+    <div class="container mt-4" style="border: 1px solid black ; padding: 10px; background-color: #212529; border-radius: 20px;">
+      <div class="text-center text-white mt-2" style=" font-family: 'Michroma', sans-serif;">
+        <h3>All Orders</h3>
+        <span style="font-size: 17px;" class="btn btn-dark py-2 px-3">Total Orders : <%= allOrders.length%></h3>
+    </div>
+    <div class="table-responsive">
+        <table class="table mt-2 table-dark table-striped"  id="ordersTable" style=" font-family: 'Michroma', sans-serif;">
             <thead class="" style="height: 60px;text-align: center; align-items: center;">
               <tr>
                 <th scope="col">No :</th>
@@ -32,9 +35,9 @@
                     <%var pros=order.products.items.length-1%>
                     <% order.products.items.forEach((item, index) => { %>
                         <% if (index === 0) { %>
-                          <td style="max-width: 150px; text-align: center; display: grid; ">
+                          <td style="width: 100%; text-align: center; display: grid; ">
                             <a href="/admin/orderDetailed?id=<%= order._id %>">
-                              <img style="border-radius: 20px; margin-top: 10px;" src="<%= item.product.images[0] %>" alt="Product Image" class="card-img-top">
+                              <img style="border-radius: 20px; max-width: 150px; margin-top: 10px;" src="<%= item.product.images[0] %>" alt="Product Image" class="card-img-top">
                             </a>
                            <%if(pros>0){%>
                             <span>+ <%=pros%> more</span>
@@ -67,6 +70,7 @@
             <% }); %>
             </tbody>
           </table>
+        </div>
     </div><%}else {%>
       <div class="text-center text-dark mt-4" style=" font-family: 'Michroma', sans-serif;">
         <h3>No Orders!</h3>
@@ -76,6 +80,12 @@
             <p>&copy; 2023 Rare Kicks. All rights reserved.</p>
             <h2 class="text-center mb-4" style="font-family: 'Michroma', sans-serif;"><u>RARE KICK'S</u></h2>
         </div>
+        <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <script>
+      jQuery(document).ready(function($) {
+          $('#ordersTable').DataTable();
+      });
+    </script>
     <%- include('../layout/footer')-%>
     <%- include('../layout/footerHTML')-%>
 
