@@ -14,7 +14,6 @@ require('dotenv').config();
 
 async function sendCoupon(email){
    const randomDoc = await couponModel.aggregate([{ $sample: { size: 1 } }]);
-//    console.log(randomDoc);
    if(randomDoc.length>0){
     const couponCode=randomDoc[0].code;
     mail.sendCoupon(email,couponCode)
@@ -30,7 +29,7 @@ function generateShortID() {
     const shortID = objectIdSuffix + timestampSuffix;
     return shortID;
 }
-const placeOrderCOD=async (req,res)=>{
+const placeOrderCOD=async (req,res,next)=>{
     try {
         const userId=req.session._id;
         req.session.checkOut=false;
@@ -133,13 +132,13 @@ const placeOrderCOD=async (req,res)=>{
         });
 
     } catch (error) {
-        console.log(error);
+        next(error)
     }
 }
 
 
 
-const showConfirmOrder=async (req,res)=>{
+const showConfirmOrder=async (req,res,next)=>{
     try {
         const id=req.query.id;
         const order = await orderModel.findById(id)
@@ -153,15 +152,14 @@ const showConfirmOrder=async (req,res)=>{
                     throw new Error("Order not found");
                 }
     } catch (error) {
-        console.log(error);
-        res.status(500)
+        next(error)
     }
 }
 
 
 
 
-const placeOrderOnline=async (req,res)=>{
+const placeOrderOnline=async (req,res,next)=>{
     try { 
         req.session.orderConfirmed=false
         const userId=req.session._id;
@@ -222,13 +220,14 @@ const placeOrderOnline=async (req,res)=>{
 
     } catch (error) {
         console.log(error);
+        res.json({error})
     }
 }
 
 
 
 
-const confirmOrderOnline=async (req,res)=>{
+const confirmOrderOnline=async (req,res,next)=>{
     try {
         if(req.session.orderConfirmed){
             return res.redirect('/user/cart/')
@@ -369,7 +368,7 @@ const confirmOrderOnline=async (req,res)=>{
 
 
 
-const orderShow = async (req, res) => {
+const orderShow = async (req, res,next) => {
     try {
         const id = req.session._id;
         const orders = await orderModel.find({ userId: id });
@@ -386,11 +385,11 @@ const orderShow = async (req, res) => {
         const allOrders=populatedOrders.reverse()
         res.render("orders", { orders: allOrders ,moment});
     } catch (error) {
-        console.log(error);
+        next(error)
     }
 };
 
-const orderDetailed = async (req, res) => {
+const orderDetailed = async (req, res,next) => {
     try {
         const id = req.session._id;
         const orderId=req.query.id;
@@ -399,11 +398,11 @@ const orderDetailed = async (req, res) => {
         });
         res.render("orderDetailed", { order,moment });
     } catch (error) {
-        console.log(error);
+        next(error)
     }
 };
 
-const allOrders = async (req, res) => {
+const allOrders = async (req, res,next) => {
     try {
         const allOrders = await orderModel.find();
         const orders = await Promise.all(
@@ -419,11 +418,11 @@ const allOrders = async (req, res) => {
         res.render("allOrders",{allOrders:completeOrders ,moment})
     } catch (error) {
         res.json({ error });
-        console.log(error);
+        next(error)
     }
 };
 
-const orderDetailedAdmin = async (req, res) => {
+const orderDetailedAdmin = async (req, res,next) => {
     try {
         const orderId=req.query.id;
         const order=await orderModel.findById(orderId).populate({
@@ -438,13 +437,12 @@ const orderDetailedAdmin = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error);
-        res.redirect('/admin/allOrders')
+        next(error)
     }
 };
 
 
-const cancelOrder=async (req,res)=>{
+const cancelOrder=async (req,res,next)=>{
     try {
         const orderId=await req.query.id;
         const id=req.session._id;
@@ -486,7 +484,7 @@ const cancelOrder=async (req,res)=>{
 
 
 
-const returnOrder = async (req, res) => {
+const returnOrder = async (req, res,next) => {
     try {
     const orderId = await req.query.id;
     const order = await orderModel.findById({ _id: orderId });
@@ -525,7 +523,7 @@ const returnOrder = async (req, res) => {
 
 
 
-const changeStatus=async (req,res)=>{
+const changeStatus=async (req,res,next)=>{
     try {
         const id=req.query.id;
         const status=req.query.status;
@@ -548,7 +546,7 @@ const changeStatus=async (req,res)=>{
     }
 }
 
-const deleteOrder=async (req,res)=>{
+const deleteOrder=async (req,res,next)=>{
     try {
         const id=req.query.id;
         await orderModel.findByIdAndDelete(id);
@@ -560,17 +558,17 @@ const deleteOrder=async (req,res)=>{
 }
 
 
-const editOrdersShow=async (req,res)=>{
+const editOrdersShow=async (req,res,next)=>{
     try {
         const orderId=req.query.id;
         const order=await orderModel.findOne({_id:orderId})
         res.render("editOrders",{order})
     } catch (error) {
-        console.log(error);
+        next(error)
     }
 }
 
-const editOrders=async(req,res)=>{
+const editOrders=async(req,res,next)=>{
     try {
         const orderId=req.query.orderId;
         const address = {
@@ -604,7 +602,7 @@ const editOrders=async(req,res)=>{
     }
 }
 
-const addCoupon=async (req,res)=>{
+const addCoupon=async (req,res,next)=>{
     try {
         const code=req.query.code
         const id=req.session._id;
