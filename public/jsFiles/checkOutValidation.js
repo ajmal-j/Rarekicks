@@ -33,6 +33,10 @@ clearCouponButton.addEventListener("click", () => {
 
     placeOrderCOD.addEventListener('click',async (e)=>{
         e.preventDefault()
+        if(!addressLength){
+            showAlert("Please Add A Address")
+            return
+        }
         Swal.fire({
           title: 'Confirm  Order 😊',
           icon: 'question',

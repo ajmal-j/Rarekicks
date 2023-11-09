@@ -19,6 +19,7 @@
             <div class="p-3 col-lg-6 col-12 mainContainer addressMainContainer">
                 <div class="row">
                     <h5 class="text-center pt-1 pb-3"><u><i class="fa-solid fa-location-dot me-2" style="font-size: 30px;"></i>Address</u></h3>
+                    <script>let addressLength=undefined;</script>
                     <div class="col-12 col-md-3 mt-3 d-flex addressContainer">
                         <a href="/user/profile/#addresses" style="color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Change Address</span></a>
                         <a href="/user/addAddress/" style="color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Add New Address</span></a>
@@ -39,7 +40,7 @@
                                 </td>
                             </tr>
                         </table>
-                        
+                        <script> addressLength='<%=address.default%>';</script>
                         <div class="d-flex" style="justify-content: end;">
                         <a href="/user/editAddressShow?id=<%=address._id%>" class="btn p-2 btn-dark rounded mt-4 ms-2">Edit</a>
                         </div>
@@ -54,7 +55,7 @@
     let grandTotal=parseInt(grandTotalString);
     let discount=0;
     const walBal="<%=user.wallet.balance%>"
-    let walletBalance=parseInt(walBal)
+    let walletBalance=parseInt(walBal);
 </script>
     <div class="container productCont">
         <h3 class="text-center pt-1 pb-3 mainFontFamily">Products</h3>

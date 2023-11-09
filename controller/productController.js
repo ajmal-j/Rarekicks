@@ -754,8 +754,8 @@ const decreaseQuantity=async (req,res,next)=>{
 
 const increaseQuantity=async (req,res,next)=>{
     try {
-        const userId = await req.session._id;
-        const productId=await req.query.id;
+        const userId =req.session._id;
+        const productId=req.query.id;
         const user=await userModel.findOne({_id:userId})
         const updatedQuantity = user.cart.items.find(item => item._id.equals(productId));
         const {quantity}= await productModel.findById(updatedQuantity.product)

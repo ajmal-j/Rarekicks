@@ -166,6 +166,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const encodedProductId = encodeURIComponent(productId);
             const subTotal=document.getElementById(productId+'subTotal')
             const quantityDisplay = button.previousElementSibling;
+            let currentQuantity = parseInt(quantityDisplay.textContent);
+            if(currentQuantity===5){
+                showAlert("Maximum 5 Product!")
+                return
+            }
             fetch('/user/increaseQuantity?id=' + encodedProductId)
                 .then(response => response.json())
                 .then(data => {
@@ -200,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const quantityDisplay = button.nextElementSibling.nextElementSibling;
             let currentQuantity = parseInt(quantityDisplay.textContent);
             if(currentQuantity===1){
-                showAlert("Minimum 1 Product!")
+                // showAlert("Minimum 1 Product!")
                 return
             }
             fetch('/user/decreaseQuantity?id=' + encodedProductId)
