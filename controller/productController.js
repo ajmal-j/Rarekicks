@@ -304,8 +304,10 @@ const deleteProduct=async (req,res,next)=>{
     const {deleted}=await Product.findById(id);
     if(deleted===false){
         await Product.findByIdAndUpdate(id,{deleted:true})
-      }else if(deleted===true){
+        res.json({product:'hidden'})
+    }else if(deleted===true){
         await Product.findByIdAndUpdate(id,{deleted:false})
+        res.json({product:'show'})
       }
     }
     catch(error){
@@ -487,8 +489,10 @@ const deleteCategory= async (req, res,next) => {
     const {deleted}=await categoryModel.findById(id)
     if(deleted===false){
         await categoryModel.findByIdAndUpdate(id,{deleted:true})
+        res.json({category:'hidden'})
     }else if(deleted===true){
         await categoryModel.findByIdAndUpdate(id,{deleted:false})
+        res.json({category:'show'})
     }
 };
 

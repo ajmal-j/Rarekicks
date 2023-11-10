@@ -34,7 +34,6 @@ userRouter.get("/register",userController.register);
 userRouter.post("/register",userController.createUser,userController.sendOtp,userController.verifyEmailShow);
 userRouter.post("/verifyEmail",userController.verifyEmail);
 userRouter.get("/resendOtp",userController.resentOtp);
-userRouter.get('/productDetailed',JWT.checkJwt,productController.getProduct,userController.productDetailed)
 
 
 userRouter.get('/wishlist',JWT.checkJwt,productController.wishlistShow)
@@ -54,6 +53,7 @@ userRouter.get('/checkPassword',JWT.checkJwt,userController.checkPassword)
 userRouter.get('/changePassword',JWT.checkJwt,userController.changePasswordShow)
 userRouter.get('/checkPasswordNewPassword',JWT.checkJwt,userController.checkPasswordNewPassword)
 userRouter.post('/editProfile',JWT.checkJwt,userController.editProfile)
+userRouter.get('/productDetailed',JWT.checkJwt,productController.getProduct,userController.productDetailed)
 
 
 userRouter.get('/addAddress',JWT.checkJwt,userController.addAddressShow)

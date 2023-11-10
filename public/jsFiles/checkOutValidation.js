@@ -232,3 +232,11 @@ clearCouponButton.addEventListener("click", () => {
             console.error("One or more elements not found.");
         }
     }
+
+
+document.addEventListener('DOMContentLoaded',()=>{
+    if(!productAvailability){
+        showAlert('Some Product Is Not Available!');
+        window.location.href='/user/cart'
+    }
+})

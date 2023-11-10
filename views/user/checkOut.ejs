@@ -19,7 +19,7 @@
             <div class="p-3 col-lg-6 col-12 mainContainer addressMainContainer">
                 <div class="row">
                     <h5 class="text-center pt-1 pb-3"><u><i class="fa-solid fa-location-dot me-2" style="font-size: 30px;"></i>Address</u></h3>
-                    <script>let addressLength=undefined;</script>
+                    <script>let addressLength=undefined; let productAvailability=true;</script>
                     <div class="col-12 col-md-3 mt-3 d-flex addressContainer">
                         <a href="/user/profile/#addresses" style="color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Change Address</span></a>
                         <a href="/user/addAddress/" style="color: black;"><span class="btn btn-dark p-2" style="font-size: 13px;">Add New Address</span></a>
@@ -100,13 +100,14 @@
                                 <h4 class="card-title mb-1 mt-1 text-center" style="font-family: 'Michroma', sans-serif;"><u><%= product?.name %></u></h4></a>
                             </div>
                             <div class="card-footer d-flex justify-content-center align-items-center">
-                                <% if (product?.deleted===false) { %>
+                                <% if (product?.deleted===false&&product.quantity>0) { %>
                                     <a class="subTotal btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h4 class="mainFontFamily"><span>&#x20B9;</span><span id="<%=_id%>subTotal"> <%if(product?.discountPercentage&&product?.discountPercentage>0){%>
                                         <%=((product.price-((product.price*product.discountPercentage)/100))*quantity).toFixed(2)%>
                                         <%}else{%>
                                             <%=product.price*quantity%>
                                             <%}%></span><span></span></h3></a> 
                                         <% } else { %>
+                                            <script>productAvailability=false;</script>
                                 <a class="text-danger btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 class="mainFontFamily">Not Available!</h3></a>
                             <% } %>
                         </div>

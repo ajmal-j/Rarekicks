@@ -461,7 +461,6 @@ const productDetailed = async (req, res,next) => {
     const product = await productModel.findOne({
       $and: [
         { _id: id },
-        { deleted: false }
       ]
     }).populate("category");
     let averageRating = null;

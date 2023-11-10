@@ -146,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 }else{
                                     const product=document.getElementById(`product${productId}`)
                                     product.remove();
+                                    window.location.reload();
                                 }
                                 
                             }

@@ -6,7 +6,6 @@
     chatDiv.style.display='none'
   }
 
-    // Simulate content loading
     document.addEventListener("DOMContentLoaded", function() {
         document.querySelector(".loading-screen").style.display = "none";
     });
