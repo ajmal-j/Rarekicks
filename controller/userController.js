@@ -190,7 +190,6 @@ const loginValidationOtp=async (req,res,next)=>{
       next(error)
     }
   }
-
 const allUsers=async (req,res,next)=>{
   try{
     const users= await userModel.find();
