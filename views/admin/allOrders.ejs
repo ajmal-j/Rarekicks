@@ -17,12 +17,12 @@
         <table class="table mt-2 table-dark table-striped"  id="ordersTable" style=" font-family: 'Michroma', sans-serif;">
             <thead class="" style="height: 60px;text-align: center; align-items: center;">
               <tr>
-                <th scope="col">No :</th>
-                <th scope="col" style="width: 150px;">Items</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Order ID</th>
-                <th scope="col">Ordered On</th>
-                <th scope="col">Status</th>
+                <th scope="col" class="text-center ">No :</th>
+                <th scope="col" class="text-center " style="width: 150px;">Items</th>
+                <th scope="col" class="text-center ">Amount</th>
+                <th scope="col" class="text-center ">Order ID</th>
+                <th scope="col" class="text-center ">Ordered On</th>
+                <th scope="col" class="text-center ">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -31,7 +31,7 @@
             <%var order=[orders]%>
                 <% order.forEach(order => { %>
                 <tr>
-                    <th scope="row" style="text-align: center;"><%=i%></th>
+                    <th scope="row" style="text-align: center; vertical-align: middle;"><%=i%></th>
                     <%var pros=order.products.items.length-1%>
                     <% order.products.items.forEach((item, index) => { %>
                         <% if (index === 0) { %>

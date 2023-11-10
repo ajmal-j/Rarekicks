@@ -16,12 +16,10 @@
   }
   
   .dataTables_info,
-  .dataTables_paginate,
   .dataTables_filter,
   .dataTables_length {
     font-family: 'Michroma', sans-serif !important;
     color: white !important;
-
   }
   .paginate_button.previous,
   .paginate_button.next,

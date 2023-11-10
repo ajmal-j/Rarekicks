@@ -53,7 +53,7 @@ width: 100%;
     justify-content: center;
     border: 1px solid rgb(53, 53, 53);
     box-shadow: 2px 2px 25px rgb(0, 0, 0);
-    border-radius: 30px;
+    border-radius: 10px;
     padding: 20px;
     min-width: 500px;
     height: 400px !important;

@@ -12,8 +12,6 @@
 <% if(product){%>
     <div class="container mainCont mb-5">
         <h3 class="mb-3 w-100 text-center" style="font-family: 'Michroma', sans-serif;">Edit Product</h3>
-        
-        <a href="/admin/deleteProductCompletely?id=<%=product._id%>" class="btn btn-danger ms-auto mb-3"  id="button" >Delete</a>
 
         <form action="/admin/editProduct?id=<%=product._id%>" class="needs-validation" method="POST" enctype="multipart/form-data">
             

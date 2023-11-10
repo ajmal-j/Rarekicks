@@ -27,13 +27,11 @@
                         <% product.sizes.forEach((size) => { %>
                             <div class="btn btn-dark size-button rounded-pill" data-size="<%= size %>" data-product-id="<%= product._id %>"><%= size %></div>
                         <% }) %>
-                 
                     <% } else { %>
                         <p class="text-danger btn rounded-pill btn-dark pb-2" style="font-family: 'Michroma', sans-serif; font-size: 20px;">
                             <span class="fs-4">Out Of Stock!! </span>
                         </p>
                     <% } %>
-                    
                 </div>
                 <h3 class="mt-2" style="font-family: 'Michroma', sans-serif; font-weight: bolder;">Description : </h3>
                 <p class="" style="font-family: 'Michroma', sans-serif; font-size: 16px;" ><%=product?.description%></p>
