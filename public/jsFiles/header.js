@@ -2,7 +2,9 @@
   const logOutButton=document.querySelectorAll('.logOutButton')
   const currentUrl = window.location.href;
   const url=currentUrl.split('/')
-  if(url[url.length-1]==='chat'){
+  if((url[url.length-1])==='chat'){
+    chatDiv.style.display='none'
+  }else if((url[url.length-1])==='checkOut'){
     chatDiv.style.display='none'
   }
 
@@ -13,8 +15,6 @@
         const wishCount = document.querySelector(".wishlistCount");
         const cartCount = document.querySelector(".cartCount");
         const userName = document.querySelector(".userName");
-
-    // Wrap the fetch operation in a function
             const fetchData = async () => {
                 try {
                     const response = await fetch('/user/getCount');
@@ -22,10 +22,7 @@
                     if (!response.ok) {
                         throw new Error(`Network response was not ok: ${response.status}`);
                     }
-
                     const data = await response.json();
-
-                    // Update the UI with the fetched data
                     wishCount.textContent = data.wishCount;
                     cartCount.textContent = data.cartCount;
                     userName.textContent = data.userName;
@@ -34,9 +31,7 @@
                 }
             };
 
-            // Call the function
             fetchData();
-    
     });
 
        document.addEventListener("DOMContentLoaded", function () {

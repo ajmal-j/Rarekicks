@@ -134,10 +134,13 @@
 <%
 let counter = 0;
 products?.forEach(productA => {
-    if (counter >= 6 && counter <= 14) {
+    if (productA._id.toString()===product._id.toString()) {
+        return;
+    }
+    if (counter < 9) {
 %>
 <div class="col">
-    <div class="card h-100">
+    <div class="card h-100 hoverCard">
         <a href="/user/productDetailed?id=<%=productA._id%>" style="text-decoration: none; color: black;">
         <img src="<%= productA.images[0]%>" class="card-img-top productImageMain" alt="..." style="position: relative;">
         <%if(productA?.discountPercentage>0){%>
@@ -151,7 +154,15 @@ products?.forEach(productA => {
             &#x20B9 <%= productA?.price%>
         <%}%>
         </a>
-    </div></a>
+        <button id="<%=productA._id%>" class="wishlistToggle btn">
+            <% if (productA?.wish) { %>
+                <i class="bi bi-heart-fill" style="font-size: 40px;"></i>
+            <% } else { %>
+                <i class="bi bi-heart" style="font-size: 40px;"></i>
+            <% } %>
+        </button>
+    </div>
+    </a>
 </div>
 </div>
 <%
@@ -241,6 +252,7 @@ products?.forEach(productA => {
 </div>
 </div>
 <script src="../../public/jsFiles/productDetailed.js"></script>
+<script src="../../public/jsFiles/addToWishlist.js"></script>
 <script src="../../public/jsFiles/cart.js"></script>
 <%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>

@@ -417,8 +417,36 @@ const homePage=async (req,res,next)=>{
   try{
     req.session.checkOut=false;
     req.session.orderConfirmed=false;
-    const products=await productModel.find({deleted:false}).limit(9);
-    const products2 = await productModel
+    const {wishlist}=await userModel.findById(req.session._id)
+    const allProducts=await productModel.find({deleted:false}).limit(9);
+    let products=[];
+    for(const product of allProducts){
+      const includes=wishlist.includes(product._id);
+      if(includes){
+        products.push(
+          {
+            _id:product._id,
+            name:product.name,
+            images:product.images,
+            discountPercentage:product.discountPercentage,
+            wish:true,
+            price:product.price,
+          }
+        )
+      }else{
+        products.push(
+          {
+            _id:product._id,
+            name:product.name,
+            images:product.images,
+            discountPercentage:product.discountPercentage,
+            wish:false,
+            price:product.price,
+          }
+        )
+      }
+    }
+    const products2=await productModel
                           .find({ deleted: false })
                           .sort({ salesCount: -1 }) 
                           .limit(2);
@@ -468,9 +496,9 @@ const productDetailed = async (req, res,next) => {
       averageRating = product.rating.averageRating;
     }
     if (product) {
-      res.render("detailedProduct", { products: req.products, product, wishlist: wish ,moment,averageRating});
+      res.render("detailedProduct", { products: req.products.reverse(), product, wishlist: wish ,moment,averageRating});
     } else {
-      res.render("detailedProduct", { products: req.products, product: null, wishlist: wish ,moment,averageRating});
+      res.render("detailedProduct", { products: req.products.reverse(), product: null, wishlist: wish ,moment,averageRating});
     }
   } catch (error) {
     next(error)

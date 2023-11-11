@@ -11,7 +11,7 @@
           <label for="validationCustomUsername" class="form-label">Email</label>
           <div class="input-group has-validation">
             <span class="input-group-text" id="inputGroupPrepend">@</span>
-            <input type="email" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email" value="<%= email?email:''%>" required>
+            <input type="email" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email" value="<%= email?email:''%>" required   placeholder="Enter your email.">
             <div class="invalid-feedback">
               Enter A Valid Email !
             </div>
@@ -22,7 +22,7 @@
             <button class="btn btn-dark rounded-pill mt-2" id="startCountdownButton2" type="submit">Send Otp</button>
             </div>
         </div>
-        <div class="text-center mt-5" style="font-size: 15px;">Don’t you have account? <a href="/user/register/" style="color: rgb(238, 0, 255);"> Sign-Up</a></div>
+        <div class="text-center mt-5" style="font-size: 15px;">Don’t you have account? <a href="/user/register/" style="color: rgb(255, 0, 179); font-weight: 700;"> Sign-Up</a></div>
       </form>
       <script>
             (() => {

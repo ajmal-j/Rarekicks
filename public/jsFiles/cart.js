@@ -67,6 +67,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         let count=parseInt(wishCount.innerText)
                                         count--;
                                         wishCount.innerText=count
+                                        const currentUrl = window.location.href;
+                                        const url=currentUrl.split('/')
+                                        if(url[url.length-1]==='wishlist'){
+                                            const wishlistCont=document.getElementById(`wishlistCont${encodedProductId}`);
+                                            wishlistCont.classList.add('removed');
+                                            const wishlistContainerAll = document.querySelectorAll(".wishlistContainerAll");
+                                            if(wishlistContainerAll.length===1){
+                                                window.location.reload()
+                                            }else{
+                                                setTimeout(function() {
+                                                    wishlistCont.remove();
+                                                }, 500);
+                                            }
+                                        }
                     }
                 })
                 .catch(error => {
@@ -81,8 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const productId = button.id;
             const encodedProductId = encodeURIComponent(productId);
-
-            // Send the selected size along with the product ID to the backend
             fetch('/user/addToCart?id=' + encodedProductId + '&size=' + selectedSizes[productId]?.size)
                 .then(response => response.json())
                 .then(data => {

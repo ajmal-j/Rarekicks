@@ -18,6 +18,7 @@ userRouter.get('/sortByRating',JWT.checkJwt,productController.sortByRating,userC
 userRouter.get('/brand',JWT.checkJwt,productController.getBrand,userController.allProducts);
 userRouter.get('/searchProduct',JWT.checkJwt,productController.searchProductUser);
 userRouter.get('/brandBased',JWT.checkJwt,productController.brandBased);
+userRouter.get('/productDetailed',JWT.checkJwt,productController.getProduct,userController.productDetailed)
 userRouter.get("/login",userController.login);
 
 
@@ -53,7 +54,6 @@ userRouter.get('/checkPassword',JWT.checkJwt,userController.checkPassword)
 userRouter.get('/changePassword',JWT.checkJwt,userController.changePasswordShow)
 userRouter.get('/checkPasswordNewPassword',JWT.checkJwt,userController.checkPasswordNewPassword)
 userRouter.post('/editProfile',JWT.checkJwt,userController.editProfile)
-userRouter.get('/productDetailed',JWT.checkJwt,productController.getProduct,userController.productDetailed)
 
 
 userRouter.get('/addAddress',JWT.checkJwt,userController.addAddressShow)
