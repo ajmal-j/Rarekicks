@@ -76,7 +76,7 @@ const getProductAdmin=async(req,res,next)=>{
 
 const getProduct=async(req,res,next)=>{
     try {
-        const products = await Product.aggregate([
+        const allProducts = await Product.aggregate([
             {
               $match: {
                 deleted: false,
@@ -99,7 +99,34 @@ const getProduct=async(req,res,next)=>{
               },
             },
           ]);
-
+          let products=[];
+          const {wishlist}=await userModel.findById(req.session._id)
+          for(const product of allProducts){
+            const includes=wishlist.includes(product._id);
+            if(includes){
+              products.push(
+                {
+                  _id:product._id,
+                  name:product.name,
+                  images:product.images,
+                  discountPercentage:product.discountPercentage,
+                  wish:true,
+                  price:product.price,
+                }
+              )
+            }else{
+              products.push(
+                {
+                  _id:product._id,
+                  name:product.name,
+                  images:product.images,
+                  discountPercentage:product.discountPercentage,
+                  wish:false,
+                  price:product.price,
+                }
+              )
+            }
+          }
         req.products=products;
         next()
         }   
@@ -116,7 +143,7 @@ const getProductByPage = async (req, res, next) => {
         }
         const total = await Product.countDocuments({});
         const totalDocuments = Math.ceil(total / 6); 
-        const products = await Product.find({ deleted: false })
+        const allProducts = await Product.find({ deleted: false })
         .skip(page * 6)
         .limit(6)
         .populate({
@@ -124,6 +151,34 @@ const getProductByPage = async (req, res, next) => {
             match: { deleted: false }, 
         })
         .exec();
+        const {wishlist}=await userModel.findById(req.session._id)
+        let products=[];
+        for(const product of allProducts){
+            const includes=wishlist.includes(product._id);
+            if(includes){
+                products.push(
+                {
+                    _id:product._id,
+                    name:product.name,
+                    images:product.images,
+                    discountPercentage:product.discountPercentage,
+                    wish:true,
+                    price:product.price,
+                }
+                )
+            }else{
+                products.push(
+                {
+                    _id:product._id,
+                    name:product.name,
+                    images:product.images,
+                    discountPercentage:product.discountPercentage,
+                    wish:false,
+                    price:product.price,
+                }
+                )
+            }
+        }
         const filteredProducts = products.filter(product => product.category !== null);
         req.products = filteredProducts;
         req.page = page;
@@ -135,14 +190,44 @@ const getProductByPage = async (req, res, next) => {
 };
 const priceLowToHigh = async (req, res, next) => {
     try {
-        const products = await Product.find({ deleted: false }).sort({price:1})
+        const allProducts = await Product.find({ deleted: false }).sort({price:1})
         .populate({
             path: 'category',
             match: { deleted: false },
         })
         .exec();
-        const filteredProducts = products.filter(product => product.category !== null);
-        req.products = filteredProducts;
+        const {wishlist}=await userModel.findById(req.session._id)
+        let products=[];
+        for(const product of allProducts){
+            if(product.category === null){
+                return;
+            }
+            const includes=wishlist.includes(product._id);
+            if(includes){
+                products.push(
+                {
+                    _id:product._id,
+                    name:product.name,
+                    images:product.images,
+                    discountPercentage:product.discountPercentage,
+                    wish:true,
+                    price:product.price,
+                }
+                )
+            }else{
+                products.push(
+                {
+                    _id:product._id,
+                    name:product.name,
+                    images:product.images,
+                    discountPercentage:product.discountPercentage,
+                    wish:false,
+                    price:product.price,
+                }
+                )
+            }
+        }
+        req.products = products;
         req.name="Price Low to High"
         next();
     } catch (err) {
@@ -151,14 +236,44 @@ const priceLowToHigh = async (req, res, next) => {
 };
 const priceHighToLow = async (req, res, next) => {
     try {
-        const products = await Product.find({ deleted: false }).sort({price:-1})
+        const allProducts = await Product.find({ deleted: false }).sort({price:-1})
         .populate({
             path: 'category',
             match: { deleted: false },
         })
         .exec();
-        const filteredProducts = products.filter(product => product.category !== null);
-        req.products = filteredProducts;
+        const {wishlist}=await userModel.findById(req.session._id)
+        let products=[];
+        for(const product of allProducts){
+            if(product.category === null){
+                return;
+            }
+            const includes=wishlist.includes(product._id);
+            if(includes){
+                products.push(
+                {
+                    _id:product._id,
+                    name:product.name,
+                    images:product.images,
+                    discountPercentage:product.discountPercentage,
+                    wish:true,
+                    price:product.price,
+                }
+                )
+            }else{
+                products.push(
+                {
+                    _id:product._id,
+                    name:product.name,
+                    images:product.images,
+                    discountPercentage:product.discountPercentage,
+                    wish:false,
+                    price:product.price,
+                }
+                )
+            }
+        }
+        req.products = products;
         req.name="Price High to Low"
         next();
     } catch (err) {
@@ -167,14 +282,45 @@ const priceHighToLow = async (req, res, next) => {
 };
 const bestSeller = async (req, res, next) => {
     try {
-        const products = await Product.find({ deleted: false }).sort({salesCount:-1})
+        const allProducts = await Product.find({ deleted: false }).sort({salesCount:-1})
         .populate({
             path: 'category',
             match: { deleted: false },
         })
         .exec();
-        const filteredProducts = products.filter(product => product.category !== null&&product.salesCount>=1);
-        req.products = filteredProducts;
+        const filteredProducts = allProducts.filter(product => product.category !== null&&product.salesCount>=1);
+        const {wishlist}=await userModel.findById(req.session._id)
+        let products=[];
+        for(const product of filteredProducts){
+            if(product.category === null){
+                return;
+            }
+            const includes=wishlist.includes(product._id);
+            if(includes){
+                products.push(
+                {
+                    _id:product._id,
+                    name:product.name,
+                    images:product.images,
+                    discountPercentage:product.discountPercentage,
+                    wish:true,
+                    price:product.price,
+                }
+                )
+            }else{
+                products.push(
+                {
+                    _id:product._id,
+                    name:product.name,
+                    images:product.images,
+                    discountPercentage:product.discountPercentage,
+                    wish:false,
+                    price:product.price,
+                }
+                )
+            }
+        }
+        req.products = products;
         req.name="Best Sellers"
         next();
     } catch (err) {
@@ -183,14 +329,45 @@ const bestSeller = async (req, res, next) => {
 };
 const sortByRating = async (req, res, next) => {
     try {
-        const products = await Product.find({ deleted: false }).sort({'rating.averageRating':-1})
+        const allProducts = await Product.find({ deleted: false }).sort({'rating.averageRating':-1})
         .populate({
             path: 'category',
             match: { deleted: false },
         })
         .exec();
-        const filteredProducts = products.filter(product => product.category !== null&&product.rating.averageRating>=1);
-        req.products = filteredProducts.reverse();
+        const filteredProducts = allProducts.filter(product => product.category !== null&&product.rating.averageRating>=1);
+        const {wishlist}=await userModel.findById(req.session._id)
+        let products=[];
+        for(const product of filteredProducts){
+            if(product.category === null){
+                return;
+            }
+            const includes=wishlist.includes(product._id);
+            if(includes){
+                products.push(
+                {
+                    _id:product._id,
+                    name:product.name,
+                    images:product.images,
+                    discountPercentage:product.discountPercentage,
+                    wish:true,
+                    price:product.price,
+                }
+                )
+            }else{
+                products.push(
+                {
+                    _id:product._id,
+                    name:product.name,
+                    images:product.images,
+                    discountPercentage:product.discountPercentage,
+                    wish:false,
+                    price:product.price,
+                }
+                )
+            }
+        }
+        req.products = products.reverse();
         req.name="By Rating"
         next();
     } catch (err) {
@@ -201,13 +378,44 @@ const sortByRating = async (req, res, next) => {
 const getBrand=async(req,res,next)=>{
     try {
         const branded=await req.query.brand;
-        const products = await Product.find({
+        const allProducts = await Product.find({
             $and: [
               { brand: branded },
               { deleted: false }
             ]
           });
-        req.products=products;
+        const {wishlist}=await userModel.findById(req.session._id)
+        let products=[];
+        for(const product of allProducts){
+            if(product.category === null){
+                return;
+            }
+            const includes=wishlist.includes(product._id);
+            if(includes){
+                products.push(
+                {
+                    _id:product._id,
+                    name:product.name,
+                    images:product.images,
+                    discountPercentage:product.discountPercentage,
+                    wish:true,
+                    price:product.price,
+                }
+                )
+            }else{
+                products.push(
+                {
+                    _id:product._id,
+                    name:product.name,
+                    images:product.images,
+                    discountPercentage:product.discountPercentage,
+                    wish:false,
+                    price:product.price,
+                }
+                )
+            }
+        }
+        req.products = products;
         req.brand=branded
         next()
         }   
@@ -304,8 +512,10 @@ const deleteProduct=async (req,res,next)=>{
     const {deleted}=await Product.findById(id);
     if(deleted===false){
         await Product.findByIdAndUpdate(id,{deleted:true})
-      }else if(deleted===true){
+        res.json({product:'hidden'})
+    }else if(deleted===true){
         await Product.findByIdAndUpdate(id,{deleted:false})
+        res.json({product:'show'})
       }
     }
     catch(error){
@@ -487,8 +697,10 @@ const deleteCategory= async (req, res,next) => {
     const {deleted}=await categoryModel.findById(id)
     if(deleted===false){
         await categoryModel.findByIdAndUpdate(id,{deleted:true})
+        res.json({category:'hidden'})
     }else if(deleted===true){
         await categoryModel.findByIdAndUpdate(id,{deleted:false})
+        res.json({category:'show'})
     }
 };
 

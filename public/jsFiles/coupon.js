@@ -78,3 +78,26 @@
             });
         });
     })();
+
+
+
+const showHideButton=document.querySelectorAll('.showHideButton');
+
+showHideButton.forEach(button=>{
+  button.addEventListener('click',()=>{
+    const id=button.id;
+    fetch('/admin/hideCoupon?id='+id).then(response=>response.json()).then(data=>{
+      if(data.coupon==='hidden'){
+        showAlert('Coupon Hidden')
+        button.innerHTML='<i class="bi bi-eye-slash"></i>';
+      }else if(data.coupon==='show'){
+        showSuccess('Coupon Visible')
+        button.innerHTML='<i class="bi bi-eye"></i>';
+      }else{
+        showAlert("Internal Server Error")
+      }
+    }).catch(error=>{
+      console.log(error)
+    })
+  })
+})
