@@ -30,8 +30,10 @@ downloads.get('/downloadInvoice', async (req, res) => {
         const ejsData = ejs.render(template, { order, moment, base64str });
         const inlinedHtml = juice(ejsData);
         const browser = await puppeteer.launch({
-            headless: 'new', // Explicitly specify the new headless mode
+            headless: 'new', 
+            args: ['--no-sandbox'],
         });
+        
         const page = await browser.newPage();
 
         // Set the content of the page with your HTML data

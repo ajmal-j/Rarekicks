@@ -329,12 +329,19 @@ const bestSeller = async (req, res, next) => {
 };
 const sortByRating = async (req, res, next) => {
     try {
-        const allProducts = await Product.find({ deleted: false }).sort({'rating.averageRating':-1})
+        const allProductsAll = await Product.find({ deleted: false })
+        .sort({ 'rating.averageRating': 1 })
         .populate({
             path: 'category',
             match: { deleted: false },
         })
         .exec();
+        const allProducts = allProductsAll.sort((a, b) => b.rating.averageRating - a.rating.averageRating);
+
+            for (const product of allProducts) {
+            console.log(product.rating.averageRating);
+            }
+
         const filteredProducts = allProducts.filter(product => product.category !== null&&product.rating.averageRating>=1);
         const {wishlist}=await userModel.findById(req.session._id)
         let products=[];
@@ -367,7 +374,7 @@ const sortByRating = async (req, res, next) => {
                 )
             }
         }
-        req.products = products.reverse();
+        req.products = products;
         req.name="By Rating"
         next();
     } catch (err) {

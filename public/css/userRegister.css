@@ -40,7 +40,9 @@ background-position: center;
     box-shadow: 0px 0px 25px rgb(0, 0, 0);
     border-radius: 20px;
     padding: 20px;
-    min-width: 500px;
+    width: 100%;
+    max-width: 550px;
+    margin: 30px;
     transition: all 0.1s ease-out;
     height: 400px !important;
 }
@@ -108,7 +110,8 @@ background-position: center;
     color: white !important;
     display: flex;
     flex-direction: row;
-    width: 550px;
+    max-width: 550px;
+    margin: 30px !important;
     justify-content: center;
     align-items: center;
     transition: all 0.1s ease-out;
@@ -119,7 +122,8 @@ background-position: center;
 .mainCont button{
     width: 14vw;
     height: 40px;
-    min-width: 60px !important;
+    white-space: nowrap;
+    min-width: 100px !important;
 }
 .save{
     display: flex;
