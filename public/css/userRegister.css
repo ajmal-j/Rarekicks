@@ -7,27 +7,11 @@ font-family: 'Plus Jakarta Sans', sans-serif; */
 
 body{
 width: 100%;
-  height: 100%;
-  --s: 250px; /* control the size */
-  --c1: rgb(0, 0, 0);
-  --c2: #ffffff;
-
-  --_g: #0000 25%, #0008 47%, var(--c1) 53% 147%, var(--c2) 153% 247%,
-    var(--c1) 253% 347%, var(--c2) 353% 447%, var(--c1) 453% 547%, #0008 553%,
-    #0000 575%;
-  --_s: calc(25% / 3) calc(25% / 4) at 50%;
-  background: radial-gradient(var(--_s) 100%, var(--_g)),
-    radial-gradient(var(--_s) 100%, var(--_g)) calc(var(--s) / 2)
-      calc(3 * var(--s) / 4),
-    radial-gradient(var(--_s) 0, var(--_g)) calc(var(--s) / 2) 0,
-    radial-gradient(var(--_s) 0, var(--_g)) 0 calc(3 * var(--s) / 4),
-    repeating-linear-gradient(
-      90deg,
-      #accec0 calc(25% / -6) calc(25% / 6),
-      #61a6ab 0 calc(25% / 2)
-    );
-  background-size: var(--s) calc(3 * var(--s) / 2);
-
+height: 100%;
+background:url('../../public/images/blob-scene-haikei.svg');
+background-repeat: no-repeat;
+background-size: cover; 
+background-position: center;
 }
 
   
@@ -44,43 +28,91 @@ width: 100%;
     align-items: center;
     justify-content: center; 
 }
-.mainForm{
+.mainForm {
     display: flex;
-    border: 1px solid rgba(111, 111, 111, 0.633) !important;
-    background-color: rgb(255, 255, 255);
+    border: 8px solid rgba(116, 116, 116, 0.268) !important;
+    background-color: rgb(0, 0, 0);
+    color: white !important;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     border: 1px solid rgb(53, 53, 53);
-    box-shadow: 2px 2px 25px rgb(0, 0, 0);
-    border-radius: 10px;
+    box-shadow: 0px 0px 25px rgb(0, 0, 0);
+    border-radius: 20px;
     padding: 20px;
     min-width: 500px;
+    transition: all 0.1s ease-out;
     height: 400px !important;
 }
 
 .mainForm input{
-    /* border: 1px solid rgba(0, 0, 0, 0.435); */
     border-radius: 10px;
+    background-color: #212529;
+    color: white !important;
+    border: none;
     padding: 12px;
     width: 400px;
 }
-.mainForm button{
+
+.mainCont input{
+    background-color: #212529;
+    color: white !important;
+    border: none;
+}
+
+.mainForm span,
+.mainCont span {
+    border:none;
+    background-color: #212529;
+    color: white !important;
+}
+.mainForm input::placeholder,
+.mainCont input::placeholder {
+   color: rgb(139, 139, 139);
+}
+.mainForm input:active,
+.mainCont input:active {
+   background-color: #212529;
+}
+.mainForm input:focus,
+.mainCont input:focus {
+   background-color: #212529;
+}
+
+
+.mainForm button {
     width: 100%;
-    height: 50px;
+    height: 70px;
+    font-size: larger;
+    font-weight: bolder;
     border-radius: 10px;
+    margin-bottom: -10px !important;
+}
+
+.mainForm:hover,
+.mainForm:focus-within ,
+.mainCont:hover,
+.mainCont:focus-within {
+    transform: scale(1.02);
+}
+
+.mainForm:active ,
+.mainCont:active {
+    transform: scale(1.02);
 }
 
 .mainCont{
-    box-shadow: 2px 2px 25px rgb(0, 0, 0);
-    background-color: rgb(255, 255, 255);
+    box-shadow: 0px 0px 25px rgb(0, 0, 0);
+    background-color: rgb(0, 0, 0);
     font-weight: 500;
+    color: white !important;
     display: flex;
     flex-direction: row;
     width: 550px;
     justify-content: center;
     align-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.268);
+    transition: all 0.1s ease-out;
+    border: 8px solid rgba(116, 116, 116, 0.268);
     padding: 20px;
     border-radius: 30px;
 }

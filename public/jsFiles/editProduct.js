@@ -78,10 +78,10 @@
             }
 
             const quantityParse = parseFloat(quantityValue);
-            if (quantityParse < 0) {
+            if (quantityParse < 0 || quantityParse > 100000) {
                 event.preventDefault();
                 event.stopPropagation();
-                const alertMessage='Quantity must be greater than 0.';
+                const alertMessage='Quantity must be between 1 and 100,000.';
                 showAlert(alertMessage);
                 return;
             }
@@ -90,11 +90,10 @@
             if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
-                showAlert("Fill Correctly.")
             }
 
             try {
-                const response = await fetch(`/admin/checkDiscount?discount=${numericDiscountPercentage}&category=${categoryValue}&name=${nameInput.value}`);
+                const response = await fetch(`/admin/checkDiscount?discount=${numericDiscountPercentage}&id=${id}&category=${categoryValue}&name=${nameValue}`);
                 const data = await response.json();
                 if(data.name==='exist'){
                     showAlert("Product Already Exist.!")
@@ -103,7 +102,7 @@
                     document.querySelector(".loading-screen").style.display = "flex";
                     event.target.submit()
                 } else if (data.discount==="false"){
-                    showAlert("Total Discount is More than 80. Max("+data.select+")");
+                    showAlert("Total Discount is More than 80 Max("+data.select+")");
                 }else{
                     showAlert("Error")
                 }

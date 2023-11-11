@@ -38,8 +38,8 @@ clearCouponButton.addEventListener("click", () => {
             return
         }
         Swal.fire({
+        html: '<i class="fa-solid fa-truck-fast" style="font-size: 60px;"></i>',
           title: 'Confirm  Order 😊',
-          icon: 'question',
           showCancelButton: true,
           confirmButtonColor: '#03C03C',
           cancelButtonColor: '#D2122E',
@@ -232,3 +232,11 @@ clearCouponButton.addEventListener("click", () => {
             console.error("One or more elements not found.");
         }
     }
+
+
+document.addEventListener('DOMContentLoaded',()=>{
+    if(!productAvailability){
+        showAlert('Some Product Is Not Available!');
+        window.location.href='/user/cart'
+    }
+})

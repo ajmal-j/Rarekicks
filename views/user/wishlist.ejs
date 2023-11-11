@@ -9,10 +9,10 @@
         <h2 class="text mb-4" style="margin-top: 20px;  font-family: 'Michroma', sans-serif;"><u>Wishlist!</u></h2>
         <a href="/user/cart/" class="btn btn-dark rounded"><h4 style="margin-top: 5px;  font-family: 'Michroma', sans-serif;">Go To Cart</h4></a>
     </div>
-    <div class="container productCont" style="margin-top: 0px; background-color: white; border: none;">
+    <div class="container productCont " style="margin-top: 0px; background-color: white; border: none;">
                 <% if (locals?.products) { %>
                     <% products?.forEach(product => { %>
-                        <div class="container" style="margin-top: 20px; margin-bottom: 10px; border: 1px solid rgb(166, 165, 165); border-radius: 20px;">
+                        <div class="container wishlistContainerAll fade-out" id="wishlistCont<%=product._id%>" style="margin-top: 20px; margin-bottom: 10px; border: 1px solid rgb(166, 165, 165); border-radius: 20px;">
                             <div class="row" style=" border-radius: 20px; row-gap: 10px;">
                                 <div class="col-12 col-lg-4 p-2 d-flex align-items-center" >
                                     <div class="row">

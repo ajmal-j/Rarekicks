@@ -1,10 +1,21 @@
 * a{
   text-decoration: none;
 }
-/* body.modal-open {
-  overflow: hidden;
-} */
 
+.wishlistToggle {
+  display: none;
+  border: none !important;
+  position: absolute;
+  top: 1.5rem;
+  left: 4rem;
+  transform: translateX(-50%);
+  transition: opacity 0.5s ease-in-out !important;
+  opacity: 0; 
+}
+
+.hoverCard:hover .wishlistToggle {
+  opacity: 1; 
+}
 .product-card {
   border-radius: 10px;
   margin-bottom: 10px;
@@ -12,7 +23,6 @@
   display: flex;
   justify-content: space-between;
 }
-
 
 .sideImage {
     border: 1px solid rgb(0, 0, 0);
@@ -171,7 +181,7 @@
 
 .slider {
     display: flex;
-    transition: transform 0.5s ease; /* Adjust the duration and easing as needed */
+    transition: transform 0.5s ease; 
 }
 
 .slider img {
@@ -186,7 +196,15 @@
   padding: 10px;
   border-radius: 20px;
 }
+.fade-out {
+  opacity: 1 !important;
+  transition: opacity 0.5s ease-out;
+}
 
+.removed {
+  opacity: 0 !important;
+  pointer-events: none; /* Disable pointer events on removed element */
+}
 
 .sideMain {
   

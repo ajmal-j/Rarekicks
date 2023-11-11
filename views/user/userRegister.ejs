@@ -9,24 +9,30 @@
         <h3 class="mb-4 text-center mt-5" style="font-family: 'Michroma', sans-serif;">Welcome !</h3>
         <div class="col-md-12">
           <label for="validationCustom01" class="form-label">Name</label>
-          <input type="text" class="form-control" id="validationCustom01" name="name" required>
+          <div class="input-group  has-validation">
+            <span class="input-group-text" id="inputGroupPrepend"><i class="fa-solid fa-signature"></i></span>
+            <input type="text" class="form-control" id="validationCustom01" name="name" required  placeholder="Enter your name.">
           <div class="valid-feedback">
             Looks good!
+          </div>
           </div>
         </div>
         <input type="hidden" name="ref" value="<%= ref||'' %>">
         <div class="col-md-12">
           <label for="validationCustom02" class="form-label">Contact</label>
-          <input type="number" class="form-control" id="validationCustom02" name="contact"  required>
-          <div class="valid-feedback">
-            Looks good!
+          <div class="input-group  has-validation">
+            <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-telephone"></i></span>
+            <input type="number" class="form-control" id="validationCustom02" name="contact"  required  placeholder="Enter your contact.">
+              <div class="valid-feedback">
+                Looks good!
+              </div>
           </div>
         </div>
         <div class="col-md-12">
           <label for="validationCustomUsername" class="form-label">Email</label>
           <div class="input-group has-validation">
-            <span class="input-group-text" id="inputGroupPrepend">@</span>
-            <input type="email" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email"  required>
+            <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-envelope-open"></i></span>
+            <input type="email" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email"  required  placeholder="Enter your email.">
             <div class="invalid-feedback">
               Enter A Valid Email !
             </div>
@@ -35,11 +41,10 @@
         <div class="col-md-12">
           <label for="validationPassword" class="form-label">Password</label>
           <div class="input-group has-validation">
-            <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-key"></i></span>
-            <input type="password" class="form-control" id="validationPassword" aria-describedby="inputGroupPrepend" name="password"  required>
+            <span class="input-group-text" id="inputGroupPrepend"><i class="fa-solid fa-fingerprint"></i></span>
+            <input type="password" class="form-control" id="validationPassword" aria-describedby="inputGroupPrepend" name="password"  required    placeholder="Enter your password.">
             <span class="input-group-text" onclick="togglePassword()" id="passKey" style="font-size: 20px; border-top-right-radius: 6px; border-bottom-right-radius: 6px;"><i class="bi bi-eye-slash-fill"></i>
             </span>
-            <span class="error-span">&nbsp;</span>
             <div class="invalid-feedback">
               Enter A Valid Password !
             </div>
@@ -50,7 +55,7 @@
             <button class="btn btn-dark rounded-pill mt-2" id="startCountdownButton" type="submit">Get Otp</button>
             </div>
         </div>
-        <div class="text-center mt-5" style="font-size: 15px;">Do you have an account ?<a href="/user/login/" style="color: rgb(255, 0, 212); font-weight: 700;"> Sign-In</a></div>
+        <div class="text-center mt-5" style="font-size: 15px;">Do you have an account ?<a href="/user/login/" style="color: rgb(255, 0, 191); font-weight: 700;"> Sign-In</a></div>
       </form>
 </div>
 </div>

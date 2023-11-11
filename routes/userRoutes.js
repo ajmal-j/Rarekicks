@@ -18,6 +18,7 @@ userRouter.get('/sortByRating',JWT.checkJwt,productController.sortByRating,userC
 userRouter.get('/brand',JWT.checkJwt,productController.getBrand,userController.allProducts);
 userRouter.get('/searchProduct',JWT.checkJwt,productController.searchProductUser);
 userRouter.get('/brandBased',JWT.checkJwt,productController.brandBased);
+userRouter.get('/productDetailed',JWT.checkJwt,productController.getProduct,userController.productDetailed)
 userRouter.get("/login",userController.login);
 
 
@@ -34,7 +35,6 @@ userRouter.get("/register",userController.register);
 userRouter.post("/register",userController.createUser,userController.sendOtp,userController.verifyEmailShow);
 userRouter.post("/verifyEmail",userController.verifyEmail);
 userRouter.get("/resendOtp",userController.resentOtp);
-userRouter.get('/productDetailed',JWT.checkJwt,productController.getProduct,userController.productDetailed)
 
 
 userRouter.get('/wishlist',JWT.checkJwt,productController.wishlistShow)

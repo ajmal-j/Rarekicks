@@ -145,10 +145,11 @@ const hideCoupon=async(req,res,next)=>{
     const {isActive}=await couponModel.findById(id)
     if(isActive){
       await couponModel.findByIdAndUpdate(id,{isActive:false})
+      res.json({coupon:'hidden'})
     }else{
       await couponModel.findByIdAndUpdate(id,{isActive:true})
+      res.json({coupon:'show'})
     }
-    res.redirect("/admin/couponManagement/")
   } catch (error) {
     next(error)
   }

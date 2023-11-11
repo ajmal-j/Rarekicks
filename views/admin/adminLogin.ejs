@@ -8,16 +8,16 @@
         <form action="/admin/adminLogin" method="POST" class="pt-1 mainForm needs-validation" style="height: 350px;">
             <div class="text-center mb-3 mt-3 mainFontFamily" style="font-size: 30px;">Log In</div>
             <label for="basic-url" class="form-label mb-1 mt-2" style="align-self: flex-start; font-weight: 500;">Email</label>
-            <div class="input-group mb-3">
-              <span class="input-group-text"><i class="fa-solid fa-at"></i></span>
+            <div class="input-group mb-2">
+              <span class="input-group-text"><i class="fa-solid fa-at text-light "></i></span>
                 <input type="email" class="form-control" placeholder="Enter your email." name="email" value="<%= locals?.email?email:''%>"  required>
             </div> 
-            <label for="basic-url" class="form-label mb-1 mt-2" style="align-self: flex-start; font-weight: 500;">Password</label>
+            <label for="basic-url" class="form-label " style="align-self: flex-start; font-weight: 500;">Password</label>
             <div class="input-group mb-3">
-              <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+              <span class="input-group-text"><i class="fa-solid fa-key text-light "></i></span>
                 <input type="password" class="form-control" placeholder="Enter your password." name="password" required>
             </div> 
-            <button type="submit" class="btn btn-dark mt-2">Sign-In</button>
+            <button type="submit" class="btn btn-dark mt-4">Login</button>
         </form> 
     </div>
 
