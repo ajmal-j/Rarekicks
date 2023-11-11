@@ -1,17 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 const ejs = require('ejs');
-const pdf = require('html-pdf');
 const moment = require('moment');
 const excel = require('excel4node');
-const orderModel = require('../models/orderModel'); // Replace with the actual path
-const salesModel = require('../models/salesModel'); // Replace with the actual path
-// const JWT = require('./middleware/JWT'); // Replace with the actual path
-// const userController = require('./controllers/userController'); // Replace with the actual path
-// const productController = require('./controllers/productController'); // Replace with the actual path
+const orderModel = require('../models/orderModel'); 
+const salesModel = require('../models/salesModel'); 
 const express=require("express");
 const downloads=express();
-
+const puppeteer = require('puppeteer');
+const juice = require('juice');
 
 
 
@@ -23,41 +20,48 @@ function base64_encode(file) {
 }
 
 
-
 downloads.get('/downloadInvoice', async (req, res) => {
     try {
         const id = req.query.orderId;
         const order = await orderModel.findById(id).populate('products.items.product');
         const templatePath = path.resolve(__dirname, '../public/template/invoice.ejs');
         const template = fs.readFileSync(templatePath).toString();
-        var base64str = base64_encode(path.resolve(__dirname, '../public/images/kn (1).png'));
-        const ejsData = ejs.render(template, {order,moment,base64str});
+        const base64str = base64_encode(path.resolve(__dirname, '../public/images/kn (1).png'));
+        const ejsData = ejs.render(template, { order, moment, base64str });
+        const inlinedHtml = juice(ejsData);
+        const browser = await puppeteer.launch({
+            headless: 'new', // Explicitly specify the new headless mode
+        });
+        const page = await browser.newPage();
+
+        // Set the content of the page with your HTML data
+        await page.setContent(inlinedHtml);
 
         const pdfOptions = {
             format: 'A3',
-            border: '10mm',
+            margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
         };
-        const invoiceDirectory = path.resolve(__dirname, '/invoice/');
-            if (!fs.existsSync(invoiceDirectory)) {
-                fs.mkdirSync(invoiceDirectory);
-            }
-            const pdfFilePath = path.resolve(invoiceDirectory, `${order.payment.method}.pdf`);
-            // console.log(pdfFilePath);
-            // console.log(invoiceDirectory);
-            pdf.create(ejsData, pdfOptions).toFile(pdfFilePath, (error, result) => {
-            if (error) {
-                console.error(error);
-                return res.status(500).send(`PDF generation failed: ${error.message}`);
-            }
-            // console.log('PDF created successfully:', result);
-            res.download(pdfFilePath, 'invoice.pdf', (downloadError) => {
-                if (downloadError) {
-                    console.error(downloadError);
-                    return res.status(500).send(`Download failed: ${downloadError.message}`);
-                }
 
-                fs.unlinkSync(pdfFilePath);
-            });
+        const pdfFilePath = path.resolve(__dirname, `/invoice/${order.payment.method}.pdf`);
+
+        // Generate PDF using puppeteer
+        await page.pdf({
+            path: pdfFilePath,
+            format: pdfOptions.format,
+            margin: pdfOptions.margin,
+        });
+
+        await browser.close();
+
+        // Send the generated PDF as a download
+        res.download(pdfFilePath, 'invoice.pdf', (downloadError) => {
+            if (downloadError) {
+                console.error(downloadError);
+                return res.status(500).send(`Download failed: ${downloadError.message}`);
+            }
+
+            // Remove the generated PDF file after download
+            fs.unlinkSync(pdfFilePath);
         });
     } catch (error) {
         console.error(error);
@@ -69,37 +73,44 @@ downloads.get('/downloadInvoice', async (req, res) => {
 downloads.get('/downloadPdf', async (req, res) => {
     try {
         const id = req.query.id;
-        const doc = await salesModel.findById(id)
+        const doc = await salesModel.findById(id);
         const templatePath = path.resolve(__dirname, '../public/template/salesReport.ejs');
-        var base64str = base64_encode(path.resolve(__dirname, '../public/images/kn (1).png'));
+        const base64str = base64_encode(path.resolve(__dirname, '../public/images/kn (1).png'));
         const template = fs.readFileSync(templatePath).toString();
-        const ejsData = ejs.render(template, {doc,moment,base64str});
+        const ejsData = ejs.render(template, { doc, moment, base64str });
+
+        const browser = await puppeteer.launch({
+            headless: 'new', // Explicitly specify the new headless mode
+        });
+        const page = await browser.newPage();
+        
+        // Set the content of the page with your HTML data
+        await page.setContent(ejsData);
 
         const pdfOptions = {
             format: 'A3',
-            border: '10mm',
         };
-        const invoiceDirectory = path.resolve(__dirname, '/invoice/');
-            if (!fs.existsSync(invoiceDirectory)) {
-                fs.mkdirSync(invoiceDirectory);
-            }
-            const pdfFilePath = path.resolve(invoiceDirectory, `Sales-${doc.type}-report-${doc.date}.pdf`);
-            // console.log(pdfFilePath);
-            // console.log(invoiceDirectory);
-            pdf.create(ejsData, pdfOptions).toFile(pdfFilePath, (error, result) => {
-            if (error) {
-                console.error(error);
-                return res.status(500).send(`PDF generation failed: ${error.message}`);
-            }
-            // console.log('PDF created successfully:', result);
-            res.download(pdfFilePath, `salesReport-${doc.date}.pdf`, (downloadError) => {
-                if (downloadError) {
-                    console.error(downloadError);
-                    return res.status(500).send(`Download failed: ${downloadError.message}`);
-                }
 
-                fs.unlinkSync(pdfFilePath);
-            });
+        const pdfFilePath = path.resolve(__dirname, `Sales-${doc.type}-report-${doc.date}.pdf`);
+
+        // Generate PDF using puppeteer
+        await page.pdf({
+            path: pdfFilePath,
+            format: pdfOptions.format,
+            margin: pdfOptions.border,
+        });
+
+        await browser.close();
+
+        // Send the generated PDF as a download
+        res.download(pdfFilePath, `salesReport-${doc.date}.pdf`, (downloadError) => {
+            if (downloadError) {
+                console.error(downloadError);
+                return res.status(500).send(`Download failed: ${downloadError.message}`);
+            }
+
+            // Remove the generated PDF file after download
+            fs.unlinkSync(pdfFilePath);
         });
     } catch (error) {
         console.error(error);
