@@ -181,3 +181,22 @@ transition: width 0.3s ease-in-out; /* Adjust the duration and easing as needed 
 .border-design:hover::before {
 width: 0; /* Change this value to adjust the "moving" effect */
 }
+
+.formInputField{
+    border-bottom-right-radius: 5px !important;
+    border-top-right-radius: 5px !important;
+}
+.input-group-text {
+    background-color: rgba(0, 0, 0, 0.74) !important;
+    color: white !important;
+    width: 50px;
+}
+
+.input-group-text::after {
+    content: ':';
+    margin-left: auto;
+    font-weight: bolder;
+    padding-left: 7px;
+    color: #ffffff;
+}
+

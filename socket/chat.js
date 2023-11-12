@@ -1,18 +1,5 @@
-const express=require("express")
-const app=express()
-const path = require('path')
-const cors = require('cors'); 
 const chatModel=require("../models/chatModel")
 const adminModel = require("../models/adminModel");
-app.use(express.static(path.join(__dirname,'public')))
-const corsOptions = {
-    origin: 'http://localhost:3000', 
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
-    optionsSuccessStatus: 204,
-  };
-  
-app.use(cors(corsOptions));
 
 let sockets = [];
 let admin=[];

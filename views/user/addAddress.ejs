@@ -5,8 +5,9 @@
 </head>
 <body>
     <%- include('../layout/header') %>
-    <div class="container mt-5 mb-5 addAddressContainer">
-        <div class="mainCont addAddressDiv"><h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Add Address</h3>
+    <div class="container mt-5 mb-5 p-3 addAddressContainer">
+        <div class="mainCont addAddressDiv" style="box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.641); border: 5px solid rgb(163, 163, 163) !important;">
+            <h3 class="mb-4 text-center mb-3 p-3" style="font-family: 'Michroma', sans-serif; ">Add Address</h3>
             <form class="row g-3 needs-validation" action="/user/redirect/" method="get" novalidate enctype="application/form-data">
                 <div class="form-group col-md-12">
                     <label for="countrySelect">Select Country:</label>
@@ -23,53 +24,57 @@
                     <label for="stateSelect">Select State:</label>
                     <select class="form-control" id="stateSelect" required>
                         <option value="" selected disabled>Select a state</option>
-                        <!-- States will be dynamically populated here -->
                     </select>
                 </div>
-                <div class="col-md-12">
-                    <label for="validationCustom01" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="validationCustom01" name="name" pattern="[A-Za-z\s]+" required>
+                <label for="validationCustom01" class="form-label addressId1">Name</label>
+                <div class="col-md-12 input-group ">
+                    <span class="input-group-text "><i class="fa-solid fa-signature"></i></span>
+                    <input type="text" class="form-control formInputField" id="validationCustom01" name="name" pattern="[A-Za-z\s]+" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <label for="validationCustom02" class="form-label">Contact</label>
-                    <input type="tel" class="form-control" id="validationCustom02" name="contact" pattern="[0-9]{10}" required>
+                <label for="validationCustom02" class="form-label">Contact</label>
+                <div class="col-md-12 input-group ">
+                    <span class="input-group-text "><i class="fa-solid fa-phone"></i></span>
+                    <input type="tel" class="form-control formInputField" id="validationCustom02" name="contact" pattern="[0-9]{10}"  required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <label for="validationCustom02" class="form-label">Pin code</label>
-                    <input type="text" class="form-control" id="validationCustom02" name="pinCode" pattern="[0-9]{5,10}" title="Please enter a valid pin code (5-10 digits)" required>
+                <label for="validationCustom02" class="form-label">Pin code</label>
+                <div class="col-md-12 input-group ">
+                    <span class="input-group-text "><i class="fa-solid fa-barcode"></i></i></span>
+                    <input type="text" class="form-control formInputField" id="validationCustom02" name="pinCode" pattern="[0-9]{5,10}" title="Please enter a valid pin code (5-10 digits)" required>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <label for="validationCustomUsername" class="form-label">Address</label>
+                <label for="validationCustomUsername" class="form-label">Address</label>
+                <div class="col-md-12 ">
                     <div class="input-group has-validation">
-                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="address" required>
+                        <span class="input-group-text "><i class="fa-solid fa-map-location"></i></span>
+                        <input type="text" class="form-control formInputField" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="address" required>
                         <div class="invalid-feedback">
                             Enter A Valid Address!
                         </div>
                     </div>
                 </div>
-               
-                <div class="col-md-12">
-                    <label for="validationCustomUsername" class="form-label">Landmark</label>
+                <label for="validationCustomUsername" class="form-label">Landmark</label>
+                <div class="col-md-12 ">
                     <div class="input-group has-validation">
-                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="landmark" required>
+                        <span class="input-group-text "><i class="fa-solid fa-landmark-flag"></i></span>
+                        <input type="text" class="form-control formInputField" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="landmark" required>
                         <div class="invalid-feedback">
                             Enter A Valid Address!
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <label for="validationCustomUsername" class="form-label">Town/City</label>
+                <label for="validationCustomUsername" class="form-label">Town/City</label>
+                <div class="col-md-12 ">
                     <div class="input-group has-validation">
-                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="city" required>
+                        <span class="input-group-text "><i class="fa-solid fa-city"></i></span>
+                        <input type="text" class="form-control formInputField" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="city" required >
                         <div class="invalid-feedback">
                             Enter A Valid Address!
                         </div>

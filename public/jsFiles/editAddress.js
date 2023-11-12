@@ -33,6 +33,8 @@ if (selectedCountry in countryToStates) {
     Array.from(forms).forEach(form => {
         form.addEventListener('submit', async event => {
             event.preventDefault();
+            form.classList.add('was-validated');
+
             const nameId = document.querySelector('.addressId1');
 
             const contactInput = form.querySelector('[name="contact"]');
@@ -139,7 +141,5 @@ if (selectedCountry in countryToStates) {
                 console.error("Error checking category:", error);
             }
         });
-
-        form.classList.add('was-validated');
     }, false);
 })();

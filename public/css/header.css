@@ -19,6 +19,10 @@
     color: white;
     transition: 0.5s;
 }
+.clearSearchButtonHeader:hover{
+    color: rgb(249, 32, 32) !important;
+    transition: 0.5s;
+}
 h3 {
     overflow-wrap: break-word;
 }

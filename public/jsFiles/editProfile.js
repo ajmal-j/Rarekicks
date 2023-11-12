@@ -21,25 +21,21 @@
 
             if (/^\s*$/.test(nameValue)) {
                 showAlert('Name cannot be just spaces.');
-                form.classList.add('was-validated');
                 return;
             }
 
-            if (contactValue.length < 10||contactValue.length>12) {
-                showAlert('Contact number must be at least 10 digits And not more than 12 digits.');
-                form.classList.add('was-validated');
+            if (contactValue.length < 10) {
+                showAlert('Contact number must be at least 10 digits.');
                 return;
             }
 
             if (/^\s*$/.test(passwordValue)) {
                 showAlert('Password cannot be just spaces.');
-                form.classList.add('was-validated');
                 return;
             }
 
             if (passwordValue.length < 8) {
                 showAlert('Password must be at least 8 characters.');
-                form.classList.add('was-validated');
                 return;
             }
 
@@ -64,14 +60,14 @@
                     showAlert('Error');
                     emailInput.focus();
                 } else {
-                    showAlert('Updating');
+                    showSuccess('Updating');
+                    form.classList.add('was-validated');
                     form.submit(); // Manually submit the form
                 }
             } catch (error) {
                 console.error("Error checking category:", error);
             }
         });
-
     }, false);
 })();
 function togglePassword() {

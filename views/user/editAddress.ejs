@@ -6,11 +6,12 @@
 <body>
     <%- include('../layout/header') %>
     <div class="container mt-5 mb-5" style="display: flex; justify-content: center;">
-        <div class="mainCont" style="max-width: 700px; border: 1px solid black; border-radius: 20px; padding: 20px;">
+        <div class="mainCont" style="max-width: 700px; border: 4px solid rgb(155, 155, 155); box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.563); border-radius: 20px; padding: 20px;">
             <h3 class="mb-4 text-center mb-3" style="font-family: 'Michroma', sans-serif;">Edit Address!</h3>
             <form class="row g-3 needs-validation" action="/user/redirect/" method="get" novalidate enctype="application/form-data">
-                <div class="form-group col-md-12">
-                    <label for="countrySelect">Select Country:</label>
+                <label for="countrySelect">Select Country:</label>
+                <div class="input-group col-md-12">
+                    <span class="input-group-text "><i class="fa-solid fa-earth-americas"></i></span>
                     <select class="form-control" id="countrySelect" required onchange="updateStates()">
                         <option value="" disabled>Select a country</option>
                         <option value="india" <%=address.country === 'india' ? 'selected' : '' %>>India</option>
@@ -20,8 +21,9 @@
                         <option value="australia" <%=address.country === 'australia' ? 'selected' : '' %>>Australia</option>
                     </select>
                 </div>
-                <div class="form-group" id="stateFormGroup">
-                    <label for="stateSelect">Select State:</label>
+                <label for="stateSelect">Select State:</label>
+                <div class="input-group" id="stateFormGroup">
+                    <span class="input-group-text "><i class="fa-solid fa-flag-usa"></i></span>
                     <select class="form-control" id="stateSelect" required>
                         <option value="" disabled>Select a state</option>
                         <% countryToStates[address.country.toLowerCase()].forEach(function (state) { %>
@@ -31,50 +33,56 @@
                         <% }); %>
                     </select>
                 </div>
-                <div class="col-md-12">
-                    <label for="validationCustom01" id="<%=address._id%>" class="form-label addressId1">Name</label>
-                    <input type="text" class="form-control" id="validationCustom01" name="name" pattern="[A-Za-z\s]+" required value="<%= address.name%>">
+                <label for="validationCustom01" id="<%=address._id%>" class="form-label addressId1">Name</label>
+                <div class="col-md-12 input-group ">
+                    <span class="input-group-text "><i class="fa-solid fa-signature"></i></span>
+                    <input type="text" class="form-control formInputField" id="validationCustom01" name="name" pattern="[A-Za-z\s]+" required value="<%= address.name%>">
                     <%var addressId=address._id%>
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <label for="validationCustom02" class="form-label">Contact</label>
-                    <input type="tel" class="form-control" id="validationCustom02" name="contact" pattern="[0-9]{10}" required value="<%= address.contact %>">
+                <label for="validationCustom02" class="form-label">Contact</label>
+                <div class="col-md-12 input-group ">
+                    <span class="input-group-text "><i class="fa-solid fa-phone"></i></span>
+                    <input type="tel" class="form-control formInputField" id="validationCustom02" name="contact" pattern="[0-9]{10}" required value="<%= address.contact %>">
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <label for="validationCustom02" class="form-label">Pin code</label>
-                    <input type="text" class="form-control" id="validationCustom02" name="pinCode" pattern="[0-9]{5,10}" title="Please enter a valid pin code (5-10 digits)" required value="<%= address.pinCode %>">
+                <label for="validationCustom02" class="form-label">Pin code</label>
+                <div class="col-md-12 input-group ">
+                    <span class="input-group-text "><i class="fa-solid fa-barcode"></i></i></span>
+                    <input type="text" class="form-control formInputField" id="validationCustom02" name="pinCode" pattern="[0-9]{5,10}" title="Please enter a valid pin code (5-10 digits)" required value="<%= address.pinCode %>">
                     <div class="valid-feedback">
                         Looks good!
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <label for="validationCustomUsername" class="form-label">Address</label>
+                <label for="validationCustomUsername" class="form-label">Address</label>
+                <div class="col-md-12 ">
                     <div class="input-group has-validation">
-                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="address" required value="<%= address.address %>">
+                        <span class="input-group-text "><i class="fa-solid fa-map-location"></i></span>
+                        <input type="text" class="form-control formInputField" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="address" required value="<%= address.address %>">
                         <div class="invalid-feedback">
                             Enter A Valid Address!
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <label for="validationCustomUsername" class="form-label">Landmark</label>
+                <label for="validationCustomUsername" class="form-label">Landmark</label>
+                <div class="col-md-12 ">
                     <div class="input-group has-validation">
-                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="landmark" required value="<%= address.landmark %>">
+                        <span class="input-group-text "><i class="fa-solid fa-landmark-flag"></i></span>
+                        <input type="text" class="form-control formInputField" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="landmark" required value="<%= address.landmark %>">
                         <div class="invalid-feedback">
                             Enter A Valid Address!
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <label for="validationCustomUsername" class="form-label">Town/City</label>
+                <label for="validationCustomUsername" class="form-label">Town/City</label>
+                <div class="col-md-12 ">
                     <div class="input-group has-validation">
-                        <input type="text" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="city" required value="<%= address.city %>">
+                        <span class="input-group-text "><i class="fa-solid fa-city"></i></span>
+                        <input type="text" class="form-control formInputField" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="city" required value="<%= address.city %>">
                         <div class="invalid-feedback">
                             Enter A Valid Address!
                         </div>
@@ -82,7 +90,7 @@
                 </div>
                 <div class="save">
                     <div class="d-flex" style="justify-content: center;">
-                        <button class="btn btn-dark rounded-pill mt-2" id="startCountdownButton" type="submit">Save</button>
+                        <button class="btn btn-dark rounded-pill mt-2" id="startCountdownButton" type="submit" style="min-width: 100px; white-space: nowrap;">Save changes</button>
                     </div>
                 </div>
             </form>
