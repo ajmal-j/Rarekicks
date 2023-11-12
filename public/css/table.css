@@ -1,12 +1,4 @@
-  .dataTables_length select{
-    color: #ffffff !important;
-    border-radius: 10px !important;
-  }
-  .dataTables_length select option{
-    color: #ffffff !important;
-    border-radius: 10px !important;
-    background: #000 !important;
-  }
+
   .dataTables_filter label input[type="search"]{
     caret-color: rgb(186, 186, 186) !important;
     color: white !important;
@@ -16,8 +8,7 @@
   }
   
   .dataTables_info,
-  .dataTables_filter,
-  .dataTables_length {
+  .dataTables_filter{
     font-family: 'Michroma', sans-serif !important;
     color: white !important;
   }
@@ -37,4 +28,7 @@
     #imageTableRow{
       display: none !important;
     }
+  }
+  .dataTables_length{
+    display: none !important;
   }

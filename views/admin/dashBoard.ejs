@@ -16,12 +16,12 @@
         <button type="button" style="font-size: large;" class="btn btn-dark rounded-pill dropdown-toggle px-3 py-2 ms-3" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fa-solid fa-chart-simple me-3" style="font-size: 20px;"></i>Browse
         </button>
-        <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 4px 4px 8px rgba(255, 255, 255, 0.913);">
+        <ul class="dropdown-menu bg-dark text-center p-4" style="box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.913);">
             <li class="dropdown pb-4 ps-3 pe-3">
-              <div class="btn-group dropend">
+              <div class="btn-group dropdown">
                 <a class="btn btn-dark  px-3 py-2" id="customDatesBtn2" style="text-decoration: none; color:white !important;" >Select Period</a>
             </div>
-                <div class="btn-group dropend">
+                <div class="btn-group dropdown">
                     <button class="btn btn-dark dropdown-toggle px-3 py-3" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 16px;">
                         Monthly
                     </button>
@@ -35,7 +35,7 @@
                         <% }); %>
                     </ul>
                 </div>
-                <div class="btn-group dropend">
+                <div class="btn-group dropdown">
                     <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Yearly
                     </button>
@@ -50,7 +50,7 @@
                         <% } %>
                     </ul>
                 </div>
-                <div class="btn-group dropend">
+                <div class="btn-group dropdown">
                     <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Sales Report <i class="ms-1 fa-regular fa-file-lines"></i>
                     </button>
@@ -59,7 +59,7 @@
                             <a class="btn btn-dark" id="customDatesBtn" style="text-decoration: none; color:white !important;" >Select Period</a>
                           </li>
                           <%if(locals?.salesWeekly.length>0){%>
-                            <div class="btn-group dropend">
+                            <div class="btn-group dropdown">
                               <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                   Weekly
                               </button>
@@ -73,7 +73,7 @@
                           </div>
                           <%}%>
                           <%if(locals?.salesMonthly.length>0){%>
-                            <div class="btn-group dropend">
+                            <div class="btn-group dropdown">
                               <button class="btn btn-dark dropdown-toggle px-3 py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                   Monthly
                               </button>

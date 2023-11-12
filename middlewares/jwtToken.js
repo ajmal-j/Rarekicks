@@ -1,12 +1,17 @@
 const jwt=require("jsonwebtoken");
-
+const userModel=require("../models/userModel")
 const checkJwt=async (req,res,next)=>{
     const token=await req.cookies.userToken;
+    const {isBlocked}=await userModel.findById(req.session._id);
     try {
-        if(req.session._id){
+        if(isBlocked){
+            res.clearCookie("userToken");
+            res.render("userLogin",{email:"",message:"You'r Blocked By The Admin.!"});
+        }
+        else if(req.session._id){
             const user= jwt.verify(token,process.env.JWT_SECRET);
-        req.user=user;
-        next(); 
+            req.user=user;
+            next(); 
         }else{
             res.clearCookie("userToken");
             res.render("userLogin",{email:"",message:"Authorization Required!"});
