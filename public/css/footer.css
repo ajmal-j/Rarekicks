@@ -28,7 +28,7 @@ ul {
   margin-bottom: 2px;
 }
 .cta-text span {
-  color: #757575;
+  color: #000000;
   font-size: 15px;
 }
 .footer-content {
@@ -53,7 +53,7 @@ ul {
 .footer-text p {
   margin-bottom: 14px;
   font-size: 14px;
-      color: #7e7e7e;
+      color: #0a0a0a;
   line-height: 28px;
 }
 .footer-social-icon span {
@@ -111,7 +111,7 @@ ul {
   color: #000000;
 }
 .footer-widget ul li a {
-  color: #878787;
+  color: #7a7a7a;
   text-transform: capitalize;
 }
 .subscribe-form {

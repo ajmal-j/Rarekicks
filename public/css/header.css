@@ -65,7 +65,7 @@ h5 {
     
     .header{
         height: 300px;
-        padding-bottom: 250px;
+        padding-bottom: 240px;
     }
     .header2{
         height: 300px;
@@ -78,6 +78,18 @@ h5 {
     }
   }
 @media(max-width:443px){
+    
+    .header,.header2{
+        height: 360px !important;
+    }
+    .coverdiv{
+        height: 20px;
+    }
+    .bottomCover{
+        height: 130px;
+    }
+  }
+@media(max-width:330px){
     
     .header,.header2{
         height: 400px !important;
@@ -169,7 +181,7 @@ h5 {
         padding-left: 30px;
     }
     .header,.header2{
-        height: 370px;
+        height: 330px;
     }
     .left, .right {
         padding-left: 0px;
@@ -443,6 +455,10 @@ h5 {
   background-color: #212529!important;
   color: white !important;
 }
-.searchInputField::placeholder,.clearSearchButtonHeader{
+.searchInputField::placeholder{
+  color: rgb(200, 200, 200) !important;
+}
+.clearSearchButtonHeader{
+  font-size: larger;
   color: white !important;
 }
