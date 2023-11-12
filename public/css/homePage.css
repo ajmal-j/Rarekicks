@@ -49,7 +49,7 @@
   }
   
   .firstImage {
-    transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
   }
   
   .imageContainer {
@@ -92,7 +92,7 @@
         transform: none;
         text-align: center;
     }
-    .margineTop,.productContAll{
+    .homeMarginTop{
       margin-top: -30px;
     }
 }

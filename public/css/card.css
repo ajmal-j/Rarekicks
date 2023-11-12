@@ -41,7 +41,7 @@
     }
    .card:hover .productImageMain2 {
        border-radius: 30px !important;
-     transform: scale(1.08);
+        transform: scale(1.08);
         opacity: 0;
     }
     .productImageMain{
