@@ -11,7 +11,7 @@
                 <img src="../../public/images/people-collaborating-with-tech- (1).png" class="img-fluid firstImage" alt="..." style="border-radius: 20px; ">
                 <div class="imageText">
               <h1 class="text-center">New Collections</h1>
-              <p>" Step into style with our latest arrivals! Explore our shoe store's freshest collection, featuring trendy designs, comfort, and quality that will keep you walking in confidence. Discover the perfect pair to elevate your every step ”</p>
+              <p>" Step into style with our latest arrivals! Explore our shoe store's freshest collection, featuring trendy designs, comfort, and quality. ”</p>
             </div>
         </div>
         <h3 class="text-center mb-2 mt-4" style="  font-family: 'Michroma', sans-serif;">Best Sellers</h3>
@@ -96,39 +96,7 @@
             <% }) %>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const productImageMain2 = document.querySelectorAll('.productImageMain2');
-        const firstImage = document.querySelector('.firstImage');
-        let isMouseOver = false;
-
-        productImageMain2.forEach((element) => {
-            element.addEventListener('mouseenter', () => {
-                isMouseOver = true;
-            });
-
-            element.addEventListener('mouseleave', () => {
-                isMouseOver = false;
-            });
-        });
-      
-        setInterval(() => {
-            var currentOpacity = window.getComputedStyle(firstImage).getPropertyValue('opacity');
-            if (currentOpacity === '1') {
-                firstImage.style.opacity = '0.9999';
-                firstImage.style.transform = 'scale(1.08)';
-            } else {
-                firstImage.style.opacity = '1';
-                firstImage.style.transform = 'scale(1)';
-            }
-            if (!isMouseOver) {
-                productImageMain2.forEach((element) => {
-                    element.style.opacity = (element.style.opacity === '1') ? '0' : '1';
-                });
-            }
-        }, 1500);
-    });
-</script>
+<script src="../../public/jsFiles/homePage.js"></script>
 <script src="../../public/jsFiles/addToWishlist.js"></script>
 <%-include("../layout/adText")%>
 <%-include("../layout/alert")%>
