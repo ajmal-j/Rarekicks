@@ -1,18 +1,40 @@
-    function copyReferralLink() {
-        var referralLink = document.getElementById("referralLink");
-        referralLink.select();
-        referralLink.setSelectionRange(0, 99999); 
+function copyReferralLink() {
+    var referralLink = document.getElementById("referralLink");
+
+    if (navigator.clipboard) {
         navigator.clipboard.writeText(referralLink.value)
             .then(() => {
                 showSuccess("Link copied successfully");
             })
-            .catch((err) => {
-                showAlert("Unable to copy");
-                console.error('Unable to copy:', err);
+            .catch(() => {
+                fallbackCopyTextToClipboard();
             });
+    } else {
+        fallbackCopyTextToClipboard();
     }
+}
 
 
+    function fallbackCopyTextToClipboard() {
+        var referralLink = document.getElementById("referralLink");
+        referralLink.select();
+        referralLink.setSelectionRange(0, 99999);
+    
+        try {
+            var successful = document.execCommand('copy');
+            var msg = successful ? 'successful' : 'unsuccessful';
+            if (successful) {
+                showSuccess("Link copied successfully");
+            } else {
+                showAlert("Unable to copy. Please try again.");
+            }
+            console.log('Fallback: Copying text command was ' + msg);
+        } catch (err) {
+            showAlert("Unable to copy. Please try again.");
+            console.error('Fallback: Unable to copy text', err);
+        }
+    }
+    
     document.addEventListener('DOMContentLoaded', () => {
         const addressButtons = document.querySelectorAll('.currentSwitch');
         const removeAddress = document.querySelectorAll('.removeAddress');

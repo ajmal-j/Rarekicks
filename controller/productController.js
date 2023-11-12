@@ -595,7 +595,8 @@ const searchProductUser=async (req,res,next)=>{
     const search=await req.query.search||"";
     try{
         const products=await Product.find({$and:[{name:new RegExp(search.trim(),"i")},{deleted:false}]}).exec();
-        res.render("allProducts",{products,search,brand:false,name:search})
+        const categories=await categoryModel.find({deleted:false})
+        res.render("allProducts",{products,search,brand:false,name:search,categories})
     }
     catch(error){
         next(error)

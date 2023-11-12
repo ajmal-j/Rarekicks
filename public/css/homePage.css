@@ -85,16 +85,15 @@
 }
 
 @media (max-width: 991.98px) {
-    /* Styles for screens smaller than LG */
     .imageText {
-      margin-top: 20px;
-      margin-bottom: -20px;
+      margin-top: -40px;
+      margin-bottom: -10px;
         position: static;
         transform: none;
         text-align: center;
     }
     .margineTop,.productContAll{
-      margin-top: 20px;
+      margin-top: -30px;
     }
 }
 

@@ -89,15 +89,15 @@
                         <% if (locals?.search) { %>
                             <% var value = search?search:''; %>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="search" placeholder="Search Product" style="min-width: 100px;" id="searchInput">
-                                <button type="reset" class="btn border-dark-subtle" id="clearSearch" onclick="clearSearchInput()" style="background: white;">
-                                    <i class="bi bi-x-lg"></i>
+                                <input type="text" class="form-control searchInputField" name="search" placeholder="Search Product" style="min-width: 100px;" id="searchInput">
+                                <button type="reset" class="btn" id="clearSearch" onclick="clearSearchInput()" style="background: white;">
+                                    <i class="bi bi-x-lg clearSearchButtonHeader"></i>
                                 </button>
                             </div>
                                     <% } else { %>
                             <div class="input-group">
-                              <input type="text" class="form-control border-dark" name="search" placeholder="Search Product" style="min-width: 100px;" id="searchInput">
-                              <button type="reset" class="btn border-dark-subtle" id="clearSearch" onclick="clearSearchInput()" style="background: white;">
+                              <input type="text" class="form-control searchInputField" name="search" placeholder="Search Product" style="min-width: 100px;" id="searchInput">
+                              <button type="reset" class="btn" id="clearSearch" onclick="clearSearchInput()" style="background: white;">
                                   <i class="bi bi-x-lg clearSearchButtonHeader"></i>
                               </button>
                             </div>

@@ -9,18 +9,16 @@
     padding: 20px;
 }
 
-/* body {
-    background: linear-gradient(to bottom, #a8c0ff, #3f2b96);
-} */
-
 .tableHead{
     background-color: black;
     color: white;
 }
+
 .adminProfile button{
     width: 100%;
     max-width: 300px;
 }
+
 .adminCenter{
     background-color: rgba(0, 0, 0, 0.926);
     border-radius: 30px;
