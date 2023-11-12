@@ -11,7 +11,7 @@
     <div class="header2">
         <div class="topHeader">
             <div><a class="left text-danger logOutButton"  title="logout" style="display:flex; justify-content: center;"><i class="bi bi-box-arrow-left"></i></a></div>
-            <div class="center text-center RARE" style="text-shadow: 1px 1px 5px rgb(0, 0, 0);">
+            <div class="center text-center RARE">
                 <a href="/user/home/" class="RAREHEAD">RARE KICK'S</a>
             </div>
             <div class="right">
@@ -26,16 +26,15 @@
             </div>
         </div>
         <div class="bottomHeader container mb-3">
-            <a class="" href="/user/home/"><h3 class="text-danger"><u>Home</u></h3></a>
-            
-            <div class="d-flex" style="column-gap: 10px;">
+            <a class="btn btn-dark text-danger " href="/user/home">Home Page</a>
+            <div class="d-flex" style="column-gap: 6px;">
             <div class="btn-group dropdown">
                 <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    PRODUCTS
+                    Product's
                 </button>
                 <ul class="dropdown-menu bg-dark text-center p-4 ">
-                  <li class="text-center hover  pb-4 ps-3 pe-3"><a class="" href="/user/allProducts/">ALL PRODUCTS</a></li>
-                  <li class="text-center hover  pb-4 ps-3 pe-3"><a class="" href="/user/brandBased/">All Brands</a></li>
+                  <li class="text-center hover  pb-4 ps-3 pe-3"><a class="" href="/user/allProducts">ALL PRODUCTS</a></li>
+                  <li class="text-center hover  pb-4 ps-3 pe-3"><a class="" href="/user/brandBased">All Brands</a></li>
                   <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=adidas">ADIDAS</a></li>
                   <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=reebok">REEBOK</a></li>
                   <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=nike">NIKE</a></li>
@@ -84,25 +83,25 @@
                 </div>
               </div>
             </div>
-                  <form action="/user/searchProduct/" method="get" class="searchForm" enctype="application/form-data">
+                  <form action="/user/searchProduct" method="get" class="searchForm" enctype="application/form-data">
                      <div class="d-flex align-items-center">
                         <% if (locals?.search) { %>
                             <% var value = search?search:''; %>
                             <div class="input-group">
-                                <input type="text" class="form-control searchInputField" name="search" placeholder="Search Product" style="min-width: 100px;" id="searchInput">
-                                <button type="reset" class="btn" id="clearSearch" onclick="clearSearchInput()" style="background: white;">
+                                <input type="text" class="form-control searchInputField" name="search" placeholder="Search product's..." style="min-width: 100px;" id="searchInput">
+                                <button type="reset" class="btn" id="clearSearch" onclick="clearSearchInput()" style="background: #212529;">
                                     <i class="bi bi-x-lg clearSearchButtonHeader"></i>
                                 </button>
                             </div>
                                     <% } else { %>
                             <div class="input-group">
-                              <input type="text" class="form-control searchInputField" name="search" placeholder="Search Product" style="min-width: 100px;" id="searchInput">
-                              <button type="reset" class="btn" id="clearSearch" onclick="clearSearchInput()" style="background: white;">
+                              <input type="text" class="form-control searchInputField" name="search" placeholder="Search product's..." style="min-width: 100px;" id="searchInput">
+                              <button type="reset" class="btn" id="clearSearch" onclick="clearSearchInput()" style="background: #212529;">
                                   <i class="bi bi-x-lg clearSearchButtonHeader"></i>
                               </button>
                             </div>
                         <% } %>
-                        <button class="btn btn-dark text-center rounded" type="submit" style="width: 50px; margin-left: 10px;"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <button class="btn btn-dark text-center rounded" type="submit" style="width: 50px; margin-left: 5px;"><i class="fa-solid fa-magnifying-glass text-light  "></i></button>
                     </div>
                 </form>
                </div>

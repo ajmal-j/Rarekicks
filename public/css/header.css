@@ -1,13 +1,11 @@
 .header{
     position: sticky;
-    background: linear-gradient(#212324,#2d2f31) ;
-    border-top: 0.7px solid black;
-    /* border-bottom-left-radius:30px ;
-    border-bottom-right-radius:30px ; */
+    /* background: linear-gradient(#212324,#2d2f31) ; */
+    background-color: #ededed;
     height: 160px;
     padding-bottom: 70px;
-    box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.691);
-    border-bottom: 0.7px solid black;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.544);
+    border-bottom: 5px solid rgb(224, 224, 224);
     z-index: 10;
 }
 .RARE :hover{
@@ -16,11 +14,11 @@
 }
 
 .header i:hover{
-    color: white;
+    color: rgb(255, 0, 0);
     transition: 0.5s;
 }
-.clearSearchButtonHeader:hover{
-    color: rgb(249, 32, 32) !important;
+.profileIcon:hover{
+    color: rgb(0, 0, 0) !important;
     transition: 0.5s;
 }
 h3 {
@@ -48,8 +46,9 @@ h5 {
     display: flex;
     font-size: 17px;
     text-wrap: nowrap;
-    column-gap: 30px;
-    row-gap: 15px;
+    column-gap: 10px;
+    row-gap: 10px;
+    flex-wrap: wrap;
     flex-direction: row;
     font-family: 'Michroma', sans-serif;
     align-items: center;
@@ -63,14 +62,10 @@ h5 {
     text-decoration: none;
 }
 @media(max-width:991px){
-    .bottomHeader{
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
+    
     .header{
         height: 300px;
-        padding-bottom: 300px;
+        padding-bottom: 250px;
     }
     .header2{
         height: 300px;
@@ -83,13 +78,9 @@ h5 {
     }
   }
 @media(max-width:443px){
-    .bottomHeader{
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
+    
     .header,.header2{
-        height: 420px !important;
+        height: 400px !important;
     }
     .coverdiv{
         height: 20px;
@@ -156,7 +147,8 @@ h5 {
 }
 .RARE a{
     transition: 0.3s;
-    color: rgba(255, 255, 255, 0.866)
+    color: rgba(0, 0, 0, 0.866);
+    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.464);
 }
 
 
@@ -302,8 +294,7 @@ h5 {
 
 .profileIcon{
     border-radius: 100%;
-    color: #ffffffe4;
-    text-shadow: 0px 0px 15px rgb(0, 0, 0);
+    color: #000000e4;
     font-size: 50px !important;
     padding: auto;
 }
@@ -448,5 +439,10 @@ h5 {
 }
 
 .searchInputField{
-  border: 1px solid rgb(255, 255, 255) !important;
+  border: 1px solid #212529 !important;
+  background-color: #212529!important;
+  color: white !important;
+}
+.searchInputField::placeholder,.clearSearchButtonHeader{
+  color: white !important;
 }
