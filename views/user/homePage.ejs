@@ -22,8 +22,8 @@
             <div class="col-md-5 col-12 pt-3 pb-3">
                 <div class="card">
                     <a href="/user/productDetailed?id=<%=product._id%>" style="text-decoration: none; color: black;">
-                        <img src="<%= product.images[0]%>" class="card-img-top productImageMain2" alt="...">
-                        <img src="<%= product.images[1]%>" class="card-img-top productImageMain3" alt="...">
+                        <img src="<%= product.images[0]%>" class="card-img-top productImageMain2" alt="..." style="z-index: 1;">
+                        <img src="<%= product.images[1]%>" class="card-img-top productImageMain3" alt="..." style="z-index: 0;">
                     </a>
                 </div>
             </div>

@@ -337,11 +337,6 @@ const sortByRating = async (req, res, next) => {
         })
         .exec();
         const allProducts = allProductsAll.sort((a, b) => b.rating.averageRating - a.rating.averageRating);
-
-            for (const product of allProducts) {
-            console.log(product.rating.averageRating);
-            }
-
         const filteredProducts = allProducts.filter(product => product.category !== null&&product.rating.averageRating>=1);
         const {wishlist}=await userModel.findById(req.session._id)
         let products=[];
