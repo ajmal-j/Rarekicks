@@ -9,9 +9,13 @@
       <script>
         // Add this script to your page
         setTimeout(function() {
-          document.getElementById('success-alert').style.display = 'none';
+          var successAlert = document.getElementById('success-alert');
+          if (successAlert) {
+            successAlert.style.display = 'none';
+          }
         }, 2000); // Adjust the delay (in milliseconds) as needed
       </script>
+      
     <% } %>      
   </div>
   <div class="alertKey">
@@ -23,10 +27,12 @@
       </div>
   
       <script>
-        // Add this script to your page
         setTimeout(function() {
-          document.getElementById('success-alert').style.display = 'none';
-        }, 2000); // Adjust the delay (in milliseconds) as needed
+          var successAlert = document.getElementById('success-alert');
+          if (successAlert) {
+            successAlert.style.display = 'none';
+          }
+        }, 2000);
       </script>
     <% } %>      
   </div>

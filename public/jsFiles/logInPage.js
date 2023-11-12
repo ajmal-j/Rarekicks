@@ -5,24 +5,52 @@
          form.addEventListener('submit', event => {
              const passwordInput = form.querySelector('[name="password"]');
              const passwordValue = passwordInput.value;
-             if (/^\s*$/.test(passwordValue)) {
+             const emailInput = form.querySelector('[name="email"]');
+             const emailValue = emailInput.value;
+
+             function addValidation(input){
+                input.classList.add('is-invalid');
+                input.classList.remove('is-valid');
+            }
+            function removeValidation(input){
+                input.classList.add('is-valid');
+                input.classList.remove('is-invalid');
+            }
+             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const minLength=8;
+             if (!emailRegex.test(emailValue)) {
                  event.preventDefault();
                  event.stopPropagation();
-                 passwordInput.value='';
-                 const alertMessage='Password cannot be just spaces.';
+                 const alertMessage = 'Please enter a valid email address.';
                  showAlert(alertMessage);
+                 addValidation(emailInput)
+                 return;
              }
-             if (passwordValue.length < 8) {
-                 event.preventDefault();
-                 event.stopPropagation();
-                 const alertMessage='Password must be at least 8 characters.';
-                 showAlert(alertMessage);
-             }
+             removeValidation(emailInput)
+
+
+             if (/^\s*$/.test(passwordValue) || passwordValue.length < minLength) {
+                event.preventDefault();
+                event.stopPropagation();
+                const alertMessage = /^\s*$/.test(passwordValue)
+                    ? 'Password cannot be just spaces.'
+                    : `Password must be at least ${minLength} characters.`;
+
+                if(alertMessage==='Password cannot be just spaces.'){
+                    passwordInput.value='';
+                }
+                passwordInput.setCustomValidity(alertMessage);
+                passwordInput.classList.add('is-invalid');
+                showAlert(alertMessage);
+            } else {
+                passwordInput.setCustomValidity('');
+                passwordInput.classList.remove('is-invalid');
+            }
+            
              if (!form.checkValidity()) {
                  event.preventDefault();
                  event.stopPropagation();
              }
-             form.classList.add('was-validated');
          }, false);
          form.addEventListener('keydown', event => {
             if (event.key === 'Enter') {
@@ -31,36 +59,3 @@
         });
      });
  })();
-       
-        function showAlert(message) {
-        const alertDiv = document.createElement('div');
-        alertDiv.className = 'alert';
-        alertDiv.style.position = 'fixed';
-        alertDiv.style.right = '20px';
-        alertDiv.style.zIndex = '2000000000000000';
-        alertDiv.style.top = '60px';
-        alertDiv.style.opacity = '0';
-        alertDiv.style.transition = 'opacity 0.5s ease-in-out';
-        alertDiv.style.backgroundColor = '#D80032'; // Red
-        alertDiv.style.color = 'white';
-        alertDiv.style.padding = '15px';
-        alertDiv.style.marginBottom = '15px';
-        alertDiv.style.borderRadius = '4px';
-        alertDiv.style.boxShadow = '0 2px 15px 0 rgba(0,0,0,0.24), 0 5px 5px 0 rgba(0,0,0,0.19)';
-        alertDiv.setAttribute('role', 'alert');
-        alertDiv.innerHTML = `<strong>${message}</strong>`;
-        document.body.appendChild(alertDiv);
-
-        // Fade in
-        setTimeout(() => {
-        alertDiv.style.opacity = '1';
-        }, 50);
-
-        // Fade out and remove
-        setTimeout(() => {
-        alertDiv.style.opacity = '0';
-        setTimeout(() => {
-            alertDiv.remove();
-        }, 500);
-        }, 2000);
-}

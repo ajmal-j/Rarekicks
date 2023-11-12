@@ -7,55 +7,75 @@
                     const contactValue = contactInput.value;
                     const nameInput = form.querySelector('[name="name"]');
                     const nameValue = nameInput.value;
+                    const emailInput = form.querySelector('[name="email"]');
+                    const emailValue = emailInput.value;
                     const passwordInput = form.querySelector('[name="password"]');
                     const passwordValue = passwordInput.value;
-                 
-    
+                    const minLength=8;
+                    
+                    function addValidation(input){
+                        input.classList.add('is-invalid');
+                        input.classList.remove('is-valid');
+                    }
+                    function removeValidation(input){
+                        input.classList.add('is-valid');
+                        input.classList.remove('is-invalid');
+                    }
                     if (/^\s*$/.test(nameValue)) {
                         event.preventDefault();
                         event.stopPropagation();
                         nameInput.value="";
                         const alertMessage='Name cannot be just spaces.';
                         showAlert(alertMessage);
-                        form.classList.add('was-validated');
+                        addValidation(nameInput)
                         return;
                     }
+                    removeValidation(nameInput)
 
                     if (contactValue.length < 10) {
                         event.preventDefault();
                         event.stopPropagation();
                         const alertMessage='Contact number must be at least 10 digits.';
                         showAlert(alertMessage);
-                        form.classList.add('was-validated');
+                        addValidation(contactInput)
                         return
                       }
+                      removeValidation(contactInput)
 
-                    if (/^\s*$/.test(passwordValue)) {
+
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                    if (!emailRegex.test(emailValue)) {
                         event.preventDefault();
                         event.stopPropagation();
-                        passwordInput.value='';
-                        const alertMessage='Password cannot be just spaces.';
+                        const alertMessage = 'Please enter a valid email address.';
                         showAlert(alertMessage);
-                        form.classList.add('was-validated');
+                        addValidation(emailInput)
                         return;
                     }
+                    removeValidation(emailInput)
 
-        
-                    if (passwordValue.length < 8) {
+                    if (/^\s*$/.test(passwordValue) || passwordValue.length < minLength) {
                         event.preventDefault();
                         event.stopPropagation();
-                        const alertMessage='Password must be at least 8 characters.';
+                        const alertMessage = /^\s*$/.test(passwordValue)
+                            ? 'Password cannot be just spaces.'
+                            : `Password must be at least ${minLength} characters.`;
+                        if(alertMessage==='Password cannot be just spaces.'){
+                            passwordInput.value='';
+                        }
+                        passwordInput.setCustomValidity(alertMessage);
+                        passwordInput.classList.add('is-invalid');
                         showAlert(alertMessage);
-                        form.classList.add('was-validated');
-                        return;
+                    } else {
+                        passwordInput.setCustomValidity('');
+                        passwordInput.classList.remove('is-invalid');
                     }
-                    
                     if (!form.checkValidity()) {
                         event.preventDefault();
                         event.stopPropagation();
                     }
-    
-                    form.classList.add('was-validated');
+
                 }, false);
                 form.addEventListener('keydown', event => {
                     if (event.key === 'Enter') {
