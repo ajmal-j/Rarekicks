@@ -2,9 +2,9 @@ const jwt=require("jsonwebtoken");
 const userModel=require("../models/userModel")
 const checkJwt=async (req,res,next)=>{
     const token=await req.cookies.userToken;
-    const {isBlocked}=await userModel.findById(req.session._id);
+    const user=await userModel.findById(req.session._id);
     try {
-        if(isBlocked){
+        if(user&&user.isBlocked){
             res.clearCookie("userToken");
             res.render("userLogin",{email:"",message:"You'r Blocked By The Admin.!"});
         }
