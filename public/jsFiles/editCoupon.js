@@ -27,7 +27,7 @@
                 showAlert('Please enter a valid future date.');
                 return;
             }
-            if ((minimumValue < 0 || maximumValue < 0) || minimumValue >= maximumValue) {
+            if ((minimumValue < 0 || maximumValue < 0) || minimumValue > maximumValue) {
                 showAlert('Please enter a valid Amount.');
                 return;
             }

@@ -65,8 +65,22 @@ const insertProduct =async (req,res,next)=>{
 
 const getProductAdmin=async(req,res,next)=>{
     try {
-        const products=await Product.find().populate("category");
+        const page = parseInt(req.query.page) || 0;
+        if(page<0){
+            return res.redirect('/user/allProducts/')
+        }
+        const total = await Product.countDocuments({});
+        const totalDocuments = Math.ceil(total / 6); 
+        const products = await Product.find({ deleted: false })
+        .skip(page * 6)
+        .limit(6)
+        .populate({
+            path: 'category',
+        })
+        .exec();
         req.products=products;
+        req.page = page;
+        req.totalDocuments = totalDocuments;
         next()
         }   
     catch(err){
@@ -337,11 +351,6 @@ const sortByRating = async (req, res, next) => {
         })
         .exec();
         const allProducts = allProductsAll.sort((a, b) => b.rating.averageRating - a.rating.averageRating);
-
-            for (const product of allProducts) {
-            console.log(product.rating.averageRating);
-            }
-
         const filteredProducts = allProducts.filter(product => product.category !== null&&product.rating.averageRating>=1);
         const {wishlist}=await userModel.findById(req.session._id)
         let products=[];

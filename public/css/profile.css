@@ -145,8 +145,7 @@ fieldset {
 
 .referral-container {
     max-width: 800px;
-    min-width: 200px;
-    margin: 20px auto;
+    margin: 20px;
     text-align: center;
     font-family: 'Michroma', sans-serif;
 }

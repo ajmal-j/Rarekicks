@@ -307,8 +307,6 @@ const confirmOrderOnline=async (req,res,next)=>{
                 orderId:orderId,
             };
 
-            // const offer=checkOutOffer;
-
             const onlineOrder = new orderModel({
                 userId: userId,
                 payment: payment,
@@ -326,13 +324,15 @@ const confirmOrderOnline=async (req,res,next)=>{
             .then(async savedOrder => {
 
                 if(orderedByReferral===false){
-                    const {referralsApplied}=await userModel.findById(referredBy);
-                    if(referralsApplied<=3){
-                        const {email}=await userModel.findById(referredBy)
-                        await userModel.findByIdAndUpdate(referredBy,
-                            {$inc:{'wallet.balance':500,'wallet.total':500,referralsApplied:1}}
-                            )
-                        mail.sendReferralReward(email,name)
+                    const userReferred=await userModel.findById(referredBy);
+                    if(userReferred){
+                        if(referralsApplied&&referralsApplied<=3){
+                            const {email}=await userModel.findById(referredBy)
+                            await userModel.findByIdAndUpdate(referredBy,
+                                {$inc:{'wallet.balance':500,'wallet.total':500,referralsApplied:1}}
+                                )
+                            mail.sendReferralReward(email,name)
+                        }
                     }
                 }
 
@@ -412,8 +412,6 @@ const allOrders = async (req, res,next) => {
                 });
             })
         );
-
-        // res.json({ orders });
         const completeOrders=orders.reverse();
         res.render("allOrders",{allOrders:completeOrders ,moment})
     } catch (error) {

@@ -222,8 +222,12 @@ let descriptions = disc;
 const barColors = ["#00008b", "#000000", "brown", "#186F65", "purple"];
 
 
+// Check the initial screen width
+let initialChartType = window.innerWidth < 700 ? 'pie' : 'bar';
+
+// Create the initial chart
 let myChart = new Chart("myChart", {
-    type: "bar",
+    type: initialChartType,
     data: {
         labels: xValues,
         datasets: [{
@@ -232,45 +236,65 @@ let myChart = new Chart("myChart", {
         }],
     },
     options: {
-    legend: { display: false },
-    title: {
-        display: true,
-        text: "Orders By Payment Method",
-        fontSize: 18,
-        fontWeight: 'bold',
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+            display: false
+        },
+        title: {
+            display: true,
+            text: "Orders By Payment Method",
+            fontSize: 18,
+            fontWeight: 'bold',
+        },
+        scales: {
+            xAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: "Payment Method",
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                },
+                ticks: {
+                    fontSize: 17,
+                },
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: "Orders",
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                },
+                ticks: {
+                    fontSize: 17,
+                    precision: 0,
+                    suggestedMax: 10,
+                    suggestedMin: 0,
+                },
+            }],
+        },
+        animation: {
+            duration: 1500,
+        },
     },
-    scales: {
-        xAxes: [{
-            scaleLabel: {
-                display: true,
-                labelString: "Payment Method",
-                fontSize: 16,
-                fontWeight: 'bold',
-            },
-            ticks: {
-                fontSize: 17,
-            },
-        }], 
-        yAxes: [{
-            scaleLabel: {
-                display: true,
-                labelString: "Orders",
-                fontSize: 16,
-                fontWeight: 'bold',
-            },
-            ticks: {
-                fontSize: 17,
-                precision: 0,
-                suggestedMax: 10,
-                suggestedMin: 0,
-            },
-        }],
-    },
-    animation: {
-        duration: 1500,
-    },
-},
+});
 
+// Update the chart type on window resize
+window.addEventListener('resize', function () {
+    // Check the new screen width
+    let newChartType = window.innerWidth < 700 ? 'pie' : 'bar';
+
+    // Change the chart type if it's different from the initial type
+    if (newChartType !== initialChartType) {
+        myChart.destroy(); // Destroy the existing chart
+        initialChartType = newChartType; // Update the initial chart type
+        myChart = new Chart("myChart", {
+            type: newChartType,
+            data: myChart.config.data,
+            options: myChart.config.options
+        });
+    }
 });
 
 document.querySelectorAll('.dropdown-item').forEach(function(item) {

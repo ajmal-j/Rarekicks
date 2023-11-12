@@ -22,8 +22,10 @@ const home= async(req,res,next)=>{
 const homeList= async(req,res,next)=>{
     try {
       const products=await req.products;
+      const page=await req.page;
+      const totalDocuments=await req.totalDocuments;
       const messageS=req.query.messageS
-        res.render("productList",{products:products,search:false,messageS});
+        res.render("productList",{products:products,search:false,messageS,totalDocuments,page});
       } catch (error) {
         next(error)
       }
