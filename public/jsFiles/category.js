@@ -6,6 +6,8 @@
             event.preventDefault();
             const nameInput = form.querySelector('[name="name"]');
             const nameValue = nameInput.value;
+            const descriptionInput = form.querySelector('[name="description"]');
+            const descriptionValue = descriptionInput.value;
             const discountPercentageInput = form.querySelector('[name="discountPercentage"]');
             const discountPercentageValue = discountPercentageInput.value;
 
@@ -26,7 +28,7 @@
                   headers: {
                       'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify({ name: nameValue, discountPercentage: discountPercentageValue }),
+                  body: JSON.stringify({ name: nameValue, discountPercentage: discountPercentageValue ,description:descriptionValue }),
               }).then(response=>response.json()).then(data=>{
                 if(data.category==="exist"){
                   showAlert(data.message)

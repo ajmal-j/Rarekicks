@@ -1,6 +1,7 @@
 <%- include('../layout/headerHTML')-%>
 <link rel="stylesheet" type="text/css" href="../../public/css/adminHome.css">
 <link rel="stylesheet" type="text/css" href="../../public/css/card.css">
+<link rel="stylesheet" type="text/css" href="../../public/css/productList.css">
 </head>
 <body>
     <%- include('../layout/adminHeader')-%>
@@ -80,6 +81,29 @@
                     </div>
                 </div>
                   <%})%>
+                  <%if(locals?.totalDocuments){%>
+                    <div class="container mt-2 mainFontFamily">
+                        <nav aria-label="Page navigation example mainFontFamily" >
+                            <ul class="pagination justify-content-center dark-pagination">
+                                <li class="page-item <%= page === 0 ? 'disabled' : '' %>">
+                                    <a class="page-link" href="<%= page > 0 ? '/admin/productList?page=' + (page-1) : '#' %>" aria-label="Previous">
+                                        <span aria-hidden="true"><i class="fa-solid fa-angles-left"></i></span>
+                                    </a>
+                                </li>
+                                <% for (let i = 0; i < locals?.totalDocuments; i++) { %>
+                                    <li class="page-item <%= i === page ? 'active' : '' %>">
+                                        <a class="page-link" href="/admin/productList?page=<%= i %>"><%= i + 1 %></a>
+                                    </li>
+                                <% } %>
+                                <li class="page-item <%= page === totalDocuments - 1 ? 'disabled' : '' %>">
+                                    <a class="page-link" href="<%= page < totalDocuments - 1 ? '/admin/productList?page=' + (page+1) : '#' %>" aria-label="Next">
+                                        <span aria-hidden="true"><i class="fa-solid fa-angles-right"></i></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                <%}%>
               <% } else { %>
                 <h2 class="text-center" style="font-family: 'Michroma', sans-serif !important;">No Such Products</h2>
               <% } %>

@@ -18,7 +18,7 @@
             <thead class="" style="height: 60px;text-align: center; align-items: center;">
               <tr>
                 <th scope="col" class="text-center ">No :</th>
-                <th scope="col" class="text-center " style="width: 150px;">Items</th>
+                <th scope="col" class="text-center " id="imageTableRow" style="width: 150px;">Items</th>
                 <th scope="col" class="text-center ">Amount</th>
                 <th scope="col" class="text-center ">Order ID</th>
                 <th scope="col" class="text-center ">Ordered On</th>
@@ -35,7 +35,7 @@
                     <%var pros=order.products.items.length-1%>
                     <% order.products.items.forEach((item, index) => { %>
                         <% if (index === 0) { %>
-                          <td style="width: 100%; text-align: center; display: grid; ">
+                          <td style="width: 100%; text-align: center; display: grid; " id="hideTableRow">
                             <a href="/admin/orderDetailed?id=<%= order._id %>">
                               <img style="border-radius: 20px; max-width: 150px; margin-top: 10px;" src="<%= item.product.images[0] %>" alt="Product Image" class="card-img-top">
                             </a>

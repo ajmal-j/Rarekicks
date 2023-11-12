@@ -33,8 +33,9 @@
     width: 120px;
     height: 60px;
     color: rgb(255, 255, 255);
-    background-color: rgb(110, 110, 137);
+    background-color: rgba(0, 0, 0, 0.813);
     border: 2px solid rgb(125, 125, 125);
+    border-radius: 10px !important;
 }
 
 .inputField {
@@ -105,5 +106,7 @@ input::-webkit-inner-spin-button {
 .input-group,
 .form-control{
     width: 100%;
+    margin-left: 10px !important;
+    border-radius: 10px !important;
     min-width: 50vw;
 }

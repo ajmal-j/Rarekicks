@@ -1,0 +1,9 @@
+.dark-pagination .page-link {
+    background-color: #000000;
+    color: #fff;
+}
+.dark-pagination .page-item.active .page-link {
+    background-color: #ffffff;
+    border-color: #000000;
+    color: rgb(0, 0, 0) !important;
+}
