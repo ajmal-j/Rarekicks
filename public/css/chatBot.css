@@ -179,3 +179,14 @@ margin: 0;
   #messageInput{
     color: white !important;
   }
+
+  .messageCont::-webkit-scrollbar{
+    width: 5px;
+  }
+  .messageCont::-webkit-scrollbar-track{
+    background: #ffffff;
+  }
+  .messageCont::-webkit-scrollbar-thumb{
+    background: radial-gradient(circle, rgb(141, 141, 141) 0%, rgb(96, 96, 97) 100%);
+    border-radius: 10px;
+  }

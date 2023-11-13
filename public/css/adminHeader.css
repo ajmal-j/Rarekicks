@@ -1,7 +1,6 @@
 .header{
     position: sticky;
-    
-    background: linear-gradient(#2b2e2f,#414345) ;
+    background-color: #ededed;
     border-top: 0.7px solid black;
     /* border-bottom-left-radius:30px ;
     border-bottom-right-radius:30px ; */
@@ -46,6 +45,7 @@ h5 {
     font-size: 17px;
     text-wrap: nowrap;
     column-gap: 30px;
+    flex-wrap: wrap;
     row-gap: 15px;
     flex-direction: row;
     font-family: 'Michroma', sans-serif;
@@ -60,13 +60,9 @@ h5 {
     text-decoration: none;
 }
 @media(max-width:991px){
-    .bottomHeader{
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
+    
     .header{
-        height: 200px;
+        height: 180px;
     }
     .header2{
         height: 200px;
@@ -77,13 +73,9 @@ h5 {
    
   }
 @media(max-width:403px){
-    .bottomHeader{
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
+    
     .header,.header2{
-        height: 400px !important;
+        height: 300px !important;
     }
     .coverdiv{
         height: 20px;
@@ -92,7 +84,7 @@ h5 {
   }
 
 .RAREADMIN{
-    padding-right: 10px;
+    padding-right: -8px !important;
 }
  .dropdown-menu li a:hover{
     color: red;
@@ -159,7 +151,7 @@ h5 {
         padding-left: 30px;
     }
     .header,.header2{
-        height: 350px;
+        height: 260px;
     }
     .left, .right {
         padding-left: 0px;

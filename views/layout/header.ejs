@@ -10,7 +10,7 @@
 <div class="header">
     <div class="header2">
         <div class="topHeader">
-            <div><a class="left text-danger logOutButton"  title="logout" style="display:flex; justify-content: center;"><i class="bi bi-box-arrow-left"></i></a></div>
+            <div><a class="left text-danger logOutButton"  title="logout" style="display:flex; justify-content: center;"><i class="bi bi-escape"></i></a></div>
             <div class="center text-center RARE">
                 <a href="/user/home/" class="RAREHEAD">RARE KICK'S</a>
             </div>
@@ -22,17 +22,20 @@
                 <a href="/user/cart" class=""><i class="bi bi-bag-fill"></i></i></i</a>
                 <span class="cartCount" id="cartCount">0</span></div>
                 <span class="profileMan">
-                <a class="text-dark " data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop"><i class="profileIcon bi bi-person-circle " style="cursor: pointer;"></i></i</a></span>
+                <a class="text-dark profileIconCont" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
+                  <i class="profileIcon bi bi-list" style="cursor: pointer;"></i></i</a>
+                </span>
             </div>
         </div>
         <div class="bottomHeader container mb-3">
             <a class="btn btn-dark text-danger " href="/user/home">Home Page</a>
             <div class="d-flex" style="column-gap: 6px;">
-            <div class="btn-group dropdown">
+            <div class="btn-group dropdown ">
                 <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                     Product's
                 </button>
-                <ul class="dropdown-menu bg-dark text-center p-4 ">
+                <ul class="dropdown-menu bg-dark text-center p-4 dropdownHead">
+                  <i class="fa-solid fa-angle-up text-center mt-2 mb-3 text-light "></i>
                   <li class="text-center hover  pb-4 ps-3 pe-3"><a class="" href="/user/allProducts">ALL PRODUCTS</a></li>
                   <li class="text-center hover  pb-4 ps-3 pe-3"><a class="" href="/user/brandBased">All Brands</a></li>
                   <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=adidas">ADIDAS</a></li>

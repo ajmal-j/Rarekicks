@@ -67,11 +67,11 @@ const getProductAdmin=async(req,res,next)=>{
     try {
         const page = parseInt(req.query.page) || 0;
         if(page<0){
-            return res.redirect('/user/allProducts/')
+            return res.redirect('/admin/productList')
         }
         const total = await Product.countDocuments({});
         const totalDocuments = Math.ceil(total / 6); 
-        const products = await Product.find({})
+        const products = await Product.find()
         .skip(page * 6)
         .limit(6)
         .populate({
@@ -81,6 +81,7 @@ const getProductAdmin=async(req,res,next)=>{
         req.products=products;
         req.page = page;
         req.totalDocuments = totalDocuments;
+        req.total = total;
         next()
         }   
     catch(err){

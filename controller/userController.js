@@ -292,10 +292,10 @@ const blockUser=async (req,res,next)=>{
       const {isBlocked}=await userModel.findOne({_id:id});
       if(isBlocked===false){
         await userModel.findByIdAndUpdate(id,{isBlocked:true})
-        // res.redirect("/admin/viewUsers")
+        res.json({user:"blocked"});
       }else if(isBlocked===true){
         await userModel.findByIdAndUpdate(id,{isBlocked:false})
-        // res.redirect("/admin/viewUsers")
+        res.json({user:"show"});
       }
     } catch (error) {
       next(error)

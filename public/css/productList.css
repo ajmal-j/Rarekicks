@@ -7,3 +7,34 @@
     border-color: #000000;
     color: rgb(0, 0, 0) !important;
 }
+#searchInputAdmin{
+    border: 1px solid #000000;
+}
+#searchInputAdmin::placeholder{
+    color: #c9c9c9;
+    text-align: center;
+    font-family: 'Michroma', sans-serif;
+}
+.leftSpan{
+    border-bottom-left-radius: 20px !important;
+    border-top-left-radius: 20px !important;
+    border: 1px solid black !important;
+}
+.rightSpan{
+    border-bottom-right-radius: 20px !important;
+    border-top-right-radius: 20px !important;
+    border: 1px solid black !important;
+}
+
+@media(max-width:1430px){
+    .adminCenter{
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+@media(max-width:800px){
+    .adminCenter{
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+}
