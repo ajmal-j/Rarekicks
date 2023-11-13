@@ -177,6 +177,9 @@ h5 {
         flex-direction: column;
         text-align: center;
     }
+    .bottomHeader{
+      flex-wrap: wrap-reverse;
+    }
     .RARE {
         padding-left: 30px;
     }
@@ -460,5 +463,4 @@ h5 {
 }
 .clearSearchButtonHeader{
   font-size: larger;
-  color: white !important;
 }

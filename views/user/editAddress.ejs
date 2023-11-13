@@ -11,7 +11,7 @@
             <form class="row g-3 needs-validation" action="/user/redirect/" method="get" novalidate enctype="application/form-data">
                 <label for="countrySelect">Select Country:</label>
                 <div class="input-group col-md-12">
-                    <span class="input-group-text "><i class="fa-solid fa-earth-americas"></i></span>
+                    <span class="input-group-text inputGroupInlineText "><i class="fa-solid fa-earth-americas"></i></span>
                     <select class="form-control" id="countrySelect" required onchange="updateStates()">
                         <option value="" disabled>Select a country</option>
                         <option value="india" <%=address.country === 'india' ? 'selected' : '' %>>India</option>
@@ -23,7 +23,7 @@
                 </div>
                 <label for="stateSelect">Select State:</label>
                 <div class="input-group" id="stateFormGroup">
-                    <span class="input-group-text "><i class="fa-solid fa-flag-usa"></i></span>
+                    <span class="input-group-text inputGroupInlineText "><i class="fa-solid fa-flag-usa"></i></span>
                     <select class="form-control" id="stateSelect" required>
                         <option value="" disabled>Select a state</option>
                         <% countryToStates[address.country.toLowerCase()].forEach(function (state) { %>
@@ -35,7 +35,7 @@
                 </div>
                 <label for="validationCustom01" id="<%=address._id%>" class="form-label addressId1">Name</label>
                 <div class="col-md-12 input-group ">
-                    <span class="input-group-text "><i class="fa-solid fa-signature"></i></span>
+                    <span class="input-group-text inputGroupInlineText "><i class="fa-solid fa-signature"></i></span>
                     <input type="text" class="form-control formInputField" id="validationCustom01" name="name" pattern="[A-Za-z\s]+" required value="<%= address.name%>">
                     <%var addressId=address._id%>
                     <div class="valid-feedback">
@@ -44,7 +44,7 @@
                 </div>
                 <label for="validationCustom02" class="form-label">Contact</label>
                 <div class="col-md-12 input-group ">
-                    <span class="input-group-text "><i class="fa-solid fa-phone"></i></span>
+                    <span class="input-group-text inputGroupInlineText "><i class="fa-solid fa-phone"></i></span>
                     <input type="tel" class="form-control formInputField" id="validationCustom02" name="contact" pattern="[0-9]{10}" required value="<%= address.contact %>">
                     <div class="valid-feedback">
                         Looks good!
@@ -52,7 +52,7 @@
                 </div>
                 <label for="validationCustom02" class="form-label">Pin code</label>
                 <div class="col-md-12 input-group ">
-                    <span class="input-group-text "><i class="fa-solid fa-barcode"></i></i></span>
+                    <span class="input-group-text inputGroupInlineText "><i class="fa-solid fa-barcode"></i></i></span>
                     <input type="text" class="form-control formInputField" id="validationCustom02" name="pinCode" pattern="[0-9]{5,10}" title="Please enter a valid pin code (5-10 digits)" required value="<%= address.pinCode %>">
                     <div class="valid-feedback">
                         Looks good!
@@ -61,7 +61,7 @@
                 <label for="validationCustomUsername" class="form-label">Address</label>
                 <div class="col-md-12 ">
                     <div class="input-group has-validation">
-                        <span class="input-group-text "><i class="fa-solid fa-map-location"></i></span>
+                        <span class="input-group-text inputGroupInlineText "><i class="fa-solid fa-map-location"></i></span>
                         <input type="text" class="form-control formInputField" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="address" required value="<%= address.address %>">
                         <div class="invalid-feedback">
                             Enter A Valid Address!
@@ -71,7 +71,7 @@
                 <label for="validationCustomUsername" class="form-label">Landmark</label>
                 <div class="col-md-12 ">
                     <div class="input-group has-validation">
-                        <span class="input-group-text "><i class="fa-solid fa-landmark-flag"></i></span>
+                        <span class="input-group-text inputGroupInlineText "><i class="fa-solid fa-landmark-flag"></i></span>
                         <input type="text" class="form-control formInputField" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="landmark" required value="<%= address.landmark %>">
                         <div class="invalid-feedback">
                             Enter A Valid Address!
@@ -81,7 +81,7 @@
                 <label for="validationCustomUsername" class="form-label">Town/City</label>
                 <div class="col-md-12 ">
                     <div class="input-group has-validation">
-                        <span class="input-group-text "><i class="fa-solid fa-city"></i></span>
+                        <span class="input-group-text inputGroupInlineText "><i class="fa-solid fa-city"></i></span>
                         <input type="text" class="form-control formInputField" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="city" required value="<%= address.city %>">
                         <div class="invalid-feedback">
                             Enter A Valid Address!

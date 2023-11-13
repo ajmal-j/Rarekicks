@@ -11,7 +11,7 @@
     <div class="container  filterDropdown">
         <ul class="p-4 filterDropdownUl">
             <h3 class="text-center text-light mt-2 mb-3 mainFontFamily w-100">
-                <%= locals.brand ? brand : name ? name : 'All Products' %>
+                <%= locals.brand ? `${brand} (${products?.length} result${products?.length !== 1 ? 's' : ''})` : (name ? `${name} (${products?.length} result${products?.length !== 1 ? 's' : ''})` : 'All Products') %>
               </h3>
             <li class="dropdown">
                 <div class="btn-group dropdown">

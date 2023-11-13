@@ -26,7 +26,7 @@
                 <div class="col-md-12">
                   <label for="validationCustomUsername" class="form-label">Email</label>
                   <div class="input-group has-validation">
-                    <span class="input-group-text" id="inputGroupPrepend">@</span>
+                    <span class="input-group-text inputGroupInlineText" id="inputGroupPrepend">@</span>
                     <input type="email" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email" value="<%=user.email%>" required>
                     <div class="invalid-feedback">
                       Enter A Valid Email !
@@ -36,7 +36,7 @@
                 <div class="col-md-12">
                   <label for="validationPassword" class="form-label">Password</label>
                   <div class="input-group has-validation">
-                    <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-key"></i></span>
+                    <span class="input-group-text inputGroupInlineText" id="inputGroupPrepend"><i class="bi bi-key"></i></span>
                     <input type="password" class="form-control" id="validationPassword" aria-describedby="inputGroupPrepend" name="password"  required>
                     <span class="btn rounded-pill" onclick="togglePassword()" id="passKey" style="font-size: 20px;"><i class="bi bi-eye-slash-fill"></i></span>
                     <span class="error-span">&nbsp;</span>

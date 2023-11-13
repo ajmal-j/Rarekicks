@@ -186,13 +186,13 @@ width: 0; /* Change this value to adjust the "moving" effect */
     border-bottom-right-radius: 5px !important;
     border-top-right-radius: 5px !important;
 }
-.input-group-text {
+.inputGroupInlineText{
     background-color: rgba(0, 0, 0, 0.74) !important;
     color: white !important;
     width: 50px;
 }
 
-.input-group-text::after {
+.inputGroupInlineText::after {
     content: ':';
     margin-left: auto;
     font-weight: bolder;

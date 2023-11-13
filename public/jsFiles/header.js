@@ -34,16 +34,35 @@
             fetchData();
     });
 
-       document.addEventListener("DOMContentLoaded", function () {
-           const clearSearch = document.getElementById("searchInput");
-            clearSearch.value = currentSearchValue;
-    });
+    document.addEventListener("DOMContentLoaded", function () {
+      const clearSearch = document.getElementById("searchInput");
+      const clearSearchButtonHeader = document.querySelector(".clearSearchButtonHeader"); 
+      clearSearch.value = currentSearchValue;
+      if (clearSearch.value.trim() !== '') {
+          clearSearchButtonHeader.style.color = 'white';
+      } else {
+          clearSearchButtonHeader.style.color = '#212529';
+      }
+      clearSearch.addEventListener('keyup', () => {
+          if (clearSearch.value.trim() !== '') {
+              clearSearchButtonHeader.style.color = 'white';
+          } else {
+              clearSearchButtonHeader.style.color = '#212529';
+          }
+      });
+  });
+  
+  
 
     function clearSearchInput() {
         const form = document.querySelector(".searchForm");
+        const clearSearchButtonHeader = document.querySelector(".clearSearchButtonHeader"); 
         form.reset();
         clearSearch.value = '';
+        clearSearchButtonHeader.style.color='#212529';
+
     }
+
     logOutButton.forEach(Button => {
       Button.addEventListener('click', (e) => {
         e.preventDefault();
