@@ -71,7 +71,7 @@ const getProductAdmin=async(req,res,next)=>{
         }
         const total = await Product.countDocuments({});
         const totalDocuments = Math.ceil(total / 6); 
-        const products = await Product.find({ deleted: false })
+        const products = await Product.find({})
         .skip(page * 6)
         .limit(6)
         .populate({
