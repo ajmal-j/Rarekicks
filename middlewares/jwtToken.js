@@ -3,7 +3,7 @@ const userModel=require("../models/userModel")
 const checkJwt=async (req,res,next)=>{
     const token=await req.cookies.userToken;
     const id=req.session._id
-    const user=undefined;
+    let user=undefined;
     if(id){
         user=await userModel.findById(id);
     }
