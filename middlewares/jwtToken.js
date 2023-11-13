@@ -2,7 +2,11 @@ const jwt=require("jsonwebtoken");
 const userModel=require("../models/userModel")
 const checkJwt=async (req,res,next)=>{
     const token=await req.cookies.userToken;
-    const user=await userModel.findById(req.session._id);
+    const id=req.session._id
+    const user=undefined;
+    if(id){
+        user=await userModel.findById(id);
+    }
     try {
         if(user&&user.isBlocked){
             res.clearCookie("userToken");
@@ -17,6 +21,7 @@ const checkJwt=async (req,res,next)=>{
             res.render("userLogin",{email:"",message:"Authorization Required!"});
         }
     } catch (error) {
+        console.log(error)
         res.clearCookie("userToken");
         res.render("userLogin",{email:"",message:"Authorization Required!"});
     }
@@ -35,8 +40,5 @@ const checkJwtAdmin=async (req,res,next)=>{
     }
 }
 
-const checkBlocked=async (req,res)=>{
-    
-}
 
 module.exports={checkJwt,checkJwtAdmin};
