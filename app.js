@@ -4,6 +4,7 @@ require('dotenv').config();
 const bodyparser=require('body-parser');
 const {connect}=require("./config/dbConnect")
 const PORT=process.env.PORT||5000
+const path=require('path')
 const userRoutes=require('./routes/userRoutes')
 const onConnection=require('./socket/chat')
 const adminRoutes=require('./routes/adminRoutes')
@@ -80,5 +81,10 @@ app.get("*",(req,res)=>{
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
-    res.status(500).redirect('back');
+    res.status(500)
+    try {
+        res.sendFile(path.join(__dirname, '/views/user/errorPage.html'));
+    } catch (error) {
+        res.redirect('back');
+    }
 });
