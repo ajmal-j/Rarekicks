@@ -23,31 +23,32 @@
                     Looks good!
                   </div>
                 </div>
-                <div class="col-md-12">
-                  <label for="validationCustomUsername" class="form-label">Email</label>
-                  <div class="input-group has-validation">
-                    <span class="input-group-text inputGroupInlineText" id="inputGroupPrepend">@</span>
-                    <input type="email" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email" value="<%=user.email%>" required>
-                    <div class="invalid-feedback">
-                      Enter A Valid Email !
-                    </div>
-                  </div>
-                </div>
+               
                 <div class="col-md-12">
                   <label for="validationPassword" class="form-label">Password</label>
                   <div class="input-group has-validation">
                     <span class="input-group-text inputGroupInlineText" id="inputGroupPrepend"><i class="bi bi-key"></i></span>
                     <input type="password" class="form-control" id="validationPassword" aria-describedby="inputGroupPrepend" name="password"  required>
-                    <span class="btn rounded-pill" onclick="togglePassword()" id="passKey" style="font-size: 20px;"><i class="bi bi-eye-slash-fill"></i></span>
+                    <span class="btn btn-dark  input-group-text eyeButton" onclick="togglePassword()" id="passKey" style="font-size: 20px;"><i class="bi bi-eye-slash-fill"></i></span>
                     <span class="error-span">&nbsp;</span>
                     <div class="invalid-feedback">
                       Enter Your Password !
                     </div>
                   </div>
                 </div>
+                <div class="col-md-12">
+                  <label for="validationCustomUsername" class="form-label">Email</label>
+                  <div class="input-group has-validation">
+                    <span class="input-group-text inputGroupInlineText" id="inputGroupPrepend">@</span>
+                    <input type="email" class="form-control bg-success-subtle " id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email" value="<%=user.email%>" readonly>
+                    <div class="invalid-feedback">
+                      Enter A Valid Email !
+                    </div>
+                  </div>
+                </div>
                 <div class="save">
                     <div class="d-flex" style="justify-content: center;">
-                    <button class="btn btn-dark rounded-pill mt-2" id="startCountdownButton" type="submit">Save</button>
+                    <button class="btn btn-dark rounded-pill mt-2 px-5" id="startCountdownButton" type="submit">Save</button>
                     </div>
                 </div>
               </form>

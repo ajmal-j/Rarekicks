@@ -187,8 +187,8 @@ width: 0; /* Change this value to adjust the "moving" effect */
     border-top-right-radius: 5px !important;
 }
 .inputGroupInlineText{
-    background-color: rgba(0, 0, 0, 0.74) !important;
-    color: white !important;
+    background-color: rgba(0, 0, 0, 0.971) !important;
+    color: #c2c2c2 !important;
     width: 50px;
 }
 
@@ -197,6 +197,10 @@ width: 0; /* Change this value to adjust the "moving" effect */
     margin-left: auto;
     font-weight: bolder;
     padding-left: 7px;
-    color: #ffffff;
+    color: #c2c2c2;
 }
 
+.eyeButton{
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+}
