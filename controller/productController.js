@@ -863,7 +863,7 @@ const wishlist=async(req,res,next)=>{
 const wishlistShow=async(req,res,next)=>{
     try {
         req.session.orderConfirmed=false;
-        const id=await req.session._id;
+        // const id=await req.session._id;
         const user=await userModel.findOne({_id:id}).populate({
                         path: 'wishlist',
                         populate: {
