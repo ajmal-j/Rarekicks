@@ -45,15 +45,15 @@
                     <td class="align-middle" style="text-align: center;">
                       <a href="/user/orderDetailed?id=<%= order._id %>">
                         <% if (order.status === 'Processing') { %>
-                          <p > <span class="btn py-2 px-3 btn-warning rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+                          <p > <span class="btn py-2 px-3 btn-warning rounded-pill orderStatusButton" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
                       <% } else if (order.status === 'Shipped') { %>
-                          <p > <span class="btn py-2 px-3 btn-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+                          <p > <span class="btn py-2 px-3 btn-success rounded-pill orderStatusButton" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
                       <% } else if (order.status === 'Out of Delivery') { %>
-                          <p > <span class="btn py-2 px-3 btn-success rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+                          <p > <span class="btn py-2 px-3 btn-success rounded-pill orderStatusButton" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
                       <% } else if (order.status === 'Delivered') { %>
-                        <p > <span class="btn py-2 px-3 btn-light rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+                        <p > <span class="btn py-2 px-3 btn-light rounded-pill orderStatusButton" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
                     <% } else { %>
-                          <p><span  class="btn py-2 px-3 btn-danger rounded-pill" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
+                          <p><span  class="btn py-2 px-3 btn-danger rounded-pill  orderStatusButton"  style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
                       <% } %>
                           </a>
                 </td>
@@ -76,6 +76,25 @@
       jQuery(document).ready(function($) {
           $('#ordersTable').DataTable();
       });
+      const orderStatusButton = document.querySelectorAll('.orderStatusButton');
+
+        function removeClassOnSmallScreen() {
+            if (window.innerWidth <= 767) {
+                orderStatusButton.forEach(button=>{
+                  button.classList.remove('btn');
+                  button.classList.add('link','link-warning');
+                })
+            } else {
+                orderStatusButton.forEach(button=>{
+                  if (!button.classList.contains('btn')) {
+                    button.classList.add('btn');
+                    button.classList.remove('link','link-warning');
+                }
+                })
+            }
+        }
+        removeClassOnSmallScreen();
+        window.addEventListener('resize', removeClassOnSmallScreen);
     </script>
   
     <%- include('../layout/footer')-%>

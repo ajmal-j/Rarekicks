@@ -1030,17 +1030,17 @@ const cart = async (req, res,next) => {
                     item.product.toString() === productId && item.size === addSize
                 );
                 if (isProductInCart) {
-                    const updatedUser = await userModel.findOneAndUpdate(
-                        { _id: userId },
-                        {
-                            $pull: {
-                                'cart.items': {
-                                    product: productId
-                                }
-                            }
-                        },
-                        { new: true } 
-                    );
+                    // const updatedUser = await userModel.findOneAndUpdate(
+                    //     { _id: userId },
+                    //     {
+                    //         $pull: {
+                    //             'cart.items': {
+                    //                 product: productId
+                    //             }
+                    //         }
+                    //     },
+                    //     { new: true } 
+                    // );
                     return res.json({ added:"already" });
                 } else {
 
