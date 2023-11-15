@@ -4,21 +4,20 @@
 
 </head>
 <body>
+    <%- include('../layout/adminHeader')-%>
     <div class="backButton">
         <a href="/admin/productList">
             <button class="btn btn-dark">Back</button>
         </a>
     </div>
-    <div class="loading-screen">
-        <span class="loader"></span>
-    </div>
 <% if(product){%>
     <div class="container mainCont mb-5">
-        <h3 class="mb-3 w-100 text-center" style="font-family: 'Michroma', sans-serif;">Edit Product</h3>
+        <h3 class="mb-3 mt-3 w-100 text-center" style="font-family: 'Michroma', sans-serif;">Edit Product</h3>
 
         <form action="/admin/editProduct?id=<%=product._id%>" class="needs-validation" method="POST" enctype="multipart/form-data">
             
             <div class="form-group w-100">
+                <label for="images">Images :</label> <br>
                 <div class="d-flex" style="flex-wrap: wrap; justify-content: space-around; column-gap: 10px; row-gap: 10px; place-items: center;">
                     <% product.images.forEach(image => { %>
                         <div class="rounded" style="overflow: hidden; height: 250px; align-items: center; position: relative;">
@@ -92,7 +91,7 @@
                 </select>
             </div>
             <div class="form-control ">
-                <label for="description">Description <span class="ms-auto" style="font-weight: 700;">:</span></label> <br>
+                <label for="description" >Description <span class="ms-auto" style="font-weight: 700;">:</span></label> <br>
                 <textarea class="form-control" id="description" name="description" rows="4" required><%=product.description%></textarea>
             </div>
 
@@ -118,4 +117,5 @@
 
 <%- include('../layout/alert')-%>
 <script src="../../public/jsFiles/editProduct.js"></script>
+<%- include('../layout/footer')-%>
 <%- include('../layout/footerHTML')-%>

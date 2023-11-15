@@ -2,21 +2,22 @@
 <link rel="stylesheet" type="text/css" href="../../public/css/addProduct.css">
 </head>
 <body>
+    <%- include('../layout/adminHeader')-%>
     <div class="backButton">
         <a href="/admin/dashBoard">
             <button class="btn btn-dark">Back</button>
         </a>
     </div>
-    <div class="container mainCont mb-5">
+    <div class="container mainCont mb-5 mt-5">
         <h3 class="mb-5 mt-3 text-center" style="font-family: 'Michroma', sans-serif;">Banner Management</h3>
         <form action="/admin/updateBanner" class="needs-validation" method="POST" enctype="multipart/form-data">
             <div class="form-group">
-                <div class="d-grid" style="grid-template-columns: repeat(2, 1fr); column-gap: 10px; row-gap: 10px;">
-                  <label for="images">Images :</label> <br>
+                <label for="images">Images :</label> <br>
+                <div class="d-flex " style="flex-wrap: wrap; justify-content: space-around; column-gap: 10px; row-gap: 10px; place-items: center;">
                     <% images?.forEach(image => { %>
-                        <div class="rounded" style="overflow: hidden; height: 140px; align-items: center; position: relative;">
-                            <img src="<%= image %>" class="rounded img-thumbnail" style="width: 200px; height: 140px; object-fit: cover;" alt="...">
-                            <input type="checkbox" class="form-check-input bg-danger" name="selectedImages" value="<%= image %>" style="position: absolute; top: 5px; left: 5px; width: 25px; height: 25px;" id="flexCheckIndeterminate" onclick="confirmDelete(this)">
+                        <div class="rounded" style="overflow: hidden; height: 300px; align-items: center; position: relative;">
+                            <img src="<%= image %>" class=" img-thumbnail" style=" height: 220px; object-fit: cover; border-radius: 15px;" alt="...">
+                            <input type="checkbox" class="form-check-input bg-danger" name="selectedImages" value="<%= image %>" style="position: absolute; top: 10px; left: 10px; background-color: rgb(201, 30, 30); width: 40px; height: 40px; border-radius: 50%;" id="flexCheckIndeterminate" onclick="confirmDelete(this)">
                         </div>
                     <% }) %>
                     <script>
@@ -30,13 +31,13 @@
                         }
                     </script>
                 </div>
-                <label class="mt-3" for="images" >Select Images:</label> <br>
-                <small>Max 4 Images!</small> <br>
-                <input class="inputFieldImage" type="file" class="form-control-file" id="images" name="images" accept="image/*" multiple >
+                <label class="mt-3" for="images" >Select Images ( 4 ):</label> <br>
+                <input class="form-control inputFieldImage" type="file" id="images" name="images" accept="image/*" multiple >
             </div>
             <div class="submitButton">
             <button type="submit" class="btn btn-dark rounded-pill">Update Banner</button></div>
         </form>
     </div>
+    <%- include('../layout/footer')-%>
 <%- include('../layout/alert')-%>
 <%- include('../layout/footerHTML')-%>

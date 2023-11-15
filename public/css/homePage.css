@@ -58,34 +58,20 @@
   }
 
   .imageText {
-    font-family: 'Michroma', sans-serif;
     position: absolute;
     top: 80%;
     left: 50%;
-    padding: 10px 10px;
-    background-color: rgba(255, 255, 255, 0.634);
-    box-shadow: 0px 0px 17px rgba(0, 0, 0, 0.542);
     transform: translate(-50%, -50%);
-    border: 1px solid rgba(151, 149, 149, 0.621);
     border-radius: 20px;
-    color: rgb(0, 0, 0); /* Adjust text color */
-    text-align: center;
 }
 
-.imageText h1 {
-    font-size: 1.5rem; 
-}
-
-.imageText p {
-    font-size: 1rem;
-}
 
 .margineTop,.productContAll{
   margin-top: 20px;
 }
 
 @media (max-width: 991.98px) {
-    .imageText {
+    .imageText img {
       margin-top: -40px;
       margin-left: 15px;
       margin-right: 15px;
