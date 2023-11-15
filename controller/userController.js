@@ -496,9 +496,9 @@ const productDetailed = async (req, res,next) => {
       averageRating = product.rating.averageRating;
     }
     if (product) {
-      res.render("detailedProduct", { products: req.products.reverse(), product, wishlist: wish ,moment,averageRating});
+      res.render("detailedProduct", { products: req.products.reverse(), product, wishlist: wish ,moment,averageRating,userId});
     } else {
-      res.render("detailedProduct", { products: req.products.reverse(), product: null, wishlist: wish ,moment,averageRating});
+      res.render("detailedProduct", { products: req.products.reverse(), product: null, wishlist: wish ,moment,averageRating,userId});
     }
   } catch (error) {
     next(error)

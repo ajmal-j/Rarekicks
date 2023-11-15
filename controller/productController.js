@@ -1176,6 +1176,25 @@ const addReview=async (req,res,next)=>{
 }
 
 
+const deleteReview= async (req,res)=>{
+    try {
+        const reviewId=req.query.id;
+        const productId=req.query.productId;
+        const result=await productModel.updateOne(
+            { _id: productId },
+            { $pull: { reviews: { _id: reviewId } } }
+        );
+        console.log(result)
+        console.log(reviewId)
+        console.log(productId)
+        return res.json({deleted:'true'})
+    } catch (error) {
+        console.log(error)
+        return res.json({deleted:'false'})
+    }
+}
+
+
 const isProductExist = (productId, orders) => {
     for (const order of orders) {
         if (order.products && order.products.items) {
@@ -1270,5 +1289,6 @@ module.exports=
     priceLowToHigh,
     priceHighToLow,
     bestSeller,
-    sortByRating
+    sortByRating,
+    deleteReview
 }  

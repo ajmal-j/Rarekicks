@@ -82,3 +82,39 @@ document.getElementById('reviewForm').addEventListener('submit', function (event
         console.error('Error:', error);
     });
 });
+
+
+document.addEventListener('DOMContentLoaded',()=>{
+    const deleteReviewButton=document.querySelectorAll('.deleteReviewButton');
+        deleteReviewButton.forEach(button=>{
+            button.addEventListener('click',()=>{
+                Swal.fire({
+                    title: 'Delete Review?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: 'red',
+                    cancelButtonColor: 'green',
+                    confirmButtonText: 'Delete',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        
+                            const id=button.getAttribute('review_id');
+                            const productId=button.getAttribute('product_id');
+                            fetch(`/user/deleteReview?id=${id}&productId=${productId}`).then(response=>response.json())
+                            .then(data=>{
+                                if(data.deleted==="true"){
+                                    showSuccess("Deleting Review");
+                                    window.location.reload();
+                                }else{
+                                    showAlert('Not Deleted')
+                                }
+                            }).catch(error=>{
+                                showAlert("Error Occurred");
+                                console.log(error)
+                            })
+                    }
+                });
+        })
+    })
+})

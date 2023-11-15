@@ -22,6 +22,7 @@ const reviewSchema = new mongoose.Schema({
         type: Number,
     },
 });
+
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
