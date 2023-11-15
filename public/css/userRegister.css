@@ -150,3 +150,8 @@ input::-webkit-inner-spin-button {
     top: 10px;
     right: 20px;
 }
+
+.borderInput{
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius:0px !important;
+}

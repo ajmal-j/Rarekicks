@@ -11,15 +11,18 @@
                     const emailValue = emailInput.value;
                     const passwordInput = form.querySelector('[name="password"]');
                     const passwordValue = passwordInput.value;
+                    const passwordConfirmInput = form.querySelector('[name="validationPasswordConfirm"]');
+                    const passwordConfirmValue = passwordConfirmInput.value;
                     const minLength=8;
                     
                     function addValidation(input){
-                        input.classList.add('is-invalid');
+                        input.focus()
                         input.classList.remove('is-valid');
+                        input.classList.add('is-invalid');
                     }
                     function removeValidation(input){
-                        input.classList.add('is-valid');
                         input.classList.remove('is-invalid');
+                        input.classList.add('is-valid');
                     }
                     if (/^\s*$/.test(nameValue)) {
                         event.preventDefault();
@@ -32,10 +35,10 @@
                     }
                     removeValidation(nameInput)
 
-                    if (contactValue.length < 10) {
+                    if (contactValue.length < 10 ||contactValue.length >12) {
                         event.preventDefault();
                         event.stopPropagation();
-                        const alertMessage='Contact number must be at least 10 digits.';
+                        const alertMessage='Please enter a valid contact number with 10 to 12 digits.';
                         showAlert(alertMessage);
                         addValidation(contactInput)
                         return
@@ -64,13 +67,22 @@
                         if(alertMessage==='Password cannot be just spaces.'){
                             passwordInput.value='';
                         }
-                        passwordInput.setCustomValidity(alertMessage);
-                        passwordInput.classList.add('is-invalid');
+                        addValidation(passwordInput);
                         showAlert(alertMessage);
+                        return
                     } else {
-                        passwordInput.setCustomValidity('');
-                        passwordInput.classList.remove('is-invalid');
+                        removeValidation(passwordInput)
                     }
+
+                    if(passwordConfirmValue!==passwordValue){
+                        event.preventDefault();
+                        event.stopPropagation();
+                        addValidation(passwordConfirmInput)
+                        showAlert("Password does not match.");
+                        return;
+                    }
+                    removeValidation(passwordConfirmInput)
+
                     if (!form.checkValidity()) {
                         event.preventDefault();
                         event.stopPropagation();
@@ -85,9 +97,9 @@
             });
         })();
 
-        function togglePassword() {
-            let passwordField = document.getElementById("validationPassword");
-            let toggleSpan =document.getElementById("passKey");
+        function togglePassword(id,span) {
+            let passwordField = document.getElementById(id);
+            let toggleSpan =document.getElementById(span);
           
             if (passwordField.type === "password") {
                 passwordField.type = "text";

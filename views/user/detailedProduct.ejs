@@ -195,11 +195,12 @@ products?.forEach(productA => {
                         <% } %>
                     </div>
                     <div class="d-flex justify-content-end mt-auto w-100">
-                        <button review_id="<%=review._id%>" product_id="<%=product._id%>" class="btn text-dark  editReviewButton"><i class="fa-solid fa-paintbrush"></i>
-                        </button>
                     <% if(locals?.userId&&(review?.userId.toString()===userId?.toString())){%>
                             <button review_id="<%=review._id%>" product_id="<%=product._id%>" class="btn text-danger deleteReviewButton "><i class="fa-solid fa-trash-can"></i>
                             </button>
+                    <%}else {%>
+                        <button review_id="<%=review._id%>" product_id="<%=product._id%>" class="btn text-waring commentReviewButton "><i class="fa-solid fa-comment"></i>
+                        </button>
                     <%}%>
                     </div>
                 </div>
@@ -209,7 +210,7 @@ products?.forEach(productA => {
                     <div class="product-info ">
                         <h5 class="text-center" style="white-space: nowrap;">No review's</h5>
                     </div>
-                <%}%>
+            <%}%>
         </div>
 
     <button type="button" class="bookmarkBtn ms-auto my-auto me-2" data-toggle="modal" data-target="#reviewModal">

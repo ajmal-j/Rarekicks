@@ -1180,13 +1180,10 @@ const deleteReview= async (req,res)=>{
     try {
         const reviewId=req.query.id;
         const productId=req.query.productId;
-        const result=await productModel.updateOne(
+        await productModel.updateOne(
             { _id: productId },
             { $pull: { reviews: { _id: reviewId } } }
         );
-        console.log(result)
-        console.log(reviewId)
-        console.log(productId)
         return res.json({deleted:'true'})
     } catch (error) {
         console.log(error)

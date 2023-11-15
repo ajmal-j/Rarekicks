@@ -12,9 +12,7 @@
           <div class="input-group  has-validation">
             <span class="input-group-text" id="inputGroupPrepend"><i class="fa-solid fa-signature"></i></span>
             <input type="text" class="form-control" id="validationCustom01" name="name" required  placeholder="Enter your name.">
-          <div class="valid-feedback">
-            Looks good!
-          </div>
+      
           </div>
         </div>
         <input type="hidden" name="ref" value="<%= ref||'' %>">
@@ -23,9 +21,7 @@
           <div class="input-group  has-validation">
             <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-telephone"></i></span>
             <input type="number" class="form-control" id="validationCustom02" name="contact"  required  placeholder="Enter your contact.">
-              <div class="valid-feedback">
-                Looks good!
-              </div>
+              
           </div>
         </div>
         <div class="col-md-12">
@@ -33,21 +29,27 @@
           <div class="input-group has-validation">
             <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-envelope-open"></i></span>
             <input type="email" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email"  required  placeholder="Enter your email.">
-            <div class="invalid-feedback">
-              Enter A Valid Email !
-            </div>
+           
           </div>
         </div>
         <div class="col-md-12">
           <label for="validationPassword" class="form-label">Password</label>
           <div class="input-group has-validation">
             <span class="input-group-text" id="inputGroupPrepend"><i class="fa-solid fa-fingerprint"></i></span>
-            <input type="password" class="form-control" id="validationPassword" aria-describedby="inputGroupPrepend" name="password"  required    placeholder="Enter your password.">
-            <span class="input-group-text" onclick="togglePassword()" id="passKey" style="font-size: 20px; border-top-right-radius: 6px; border-bottom-right-radius: 6px;"><i class="bi bi-eye-slash-fill"></i>
+            <input type="password" class="form-control borderInput" id="validationPassword" aria-describedby="inputGroupPrepend" name="password"  required    placeholder="Enter your password.">
+            <span class="input-group-text" onclick="togglePassword('validationPassword','passKey')" id="passKey" style="font-size: 20px; border-top-right-radius: 6px; border-bottom-right-radius: 6px;"><i class="bi bi-eye-slash-fill"></i>
             </span>
-            <div class="invalid-feedback">
-              Enter A Valid Password !
-            </div>
+            
+          </div>
+        </div>
+        <div class="col-md-12">
+          <label for="validationPasswordConfirm" class="form-label">Confirm Password</label>
+          <div class="input-group has-validation">
+            <span class="input-group-text" id="inputGroupPrepend"><i class="fa-solid fa-fingerprint"></i></span>
+            <input type="password" class="form-control borderInput" id="validationPasswordConfirm" aria-describedby="inputGroupPrepend" name="validationPasswordConfirm"  required    placeholder="Please enter the password again.">
+            <span class="input-group-text" onclick="togglePassword('validationPasswordConfirm','passKeyConfirm')" id="passKeyConfirm" style="font-size: 20px; border-top-right-radius: 6px; border-bottom-right-radius: 6px;"><i class="bi bi-eye-slash-fill"></i>
+            </span>
+            
           </div>
         </div>
         <div class="save">

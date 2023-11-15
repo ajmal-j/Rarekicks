@@ -19,6 +19,7 @@
              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             const minLength=8;
              if (!emailRegex.test(emailValue)) {
+                emailInput.focus()
                  event.preventDefault();
                  event.stopPropagation();
                  const alertMessage = 'Please enter a valid email address.';
@@ -32,6 +33,7 @@
              if (/^\s*$/.test(passwordValue) || passwordValue.length < minLength) {
                 event.preventDefault();
                 event.stopPropagation();
+                passwordInput.focus()
                 const alertMessage = /^\s*$/.test(passwordValue)
                     ? 'Password cannot be just spaces.'
                     : `Password must be at least ${minLength} characters.`;
