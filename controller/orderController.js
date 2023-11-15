@@ -326,7 +326,7 @@ const confirmOrderOnline=async (req,res,next)=>{
                 if(orderedByReferral===false){
                     const userReferred=await userModel.findById(referredBy);
                     if(userReferred){
-                        if(referralsApplied&&referralsApplied<=3){
+                        if(userReferred.referralsApplied&&userReferred.referralsApplied<=3){
                             const {email}=await userModel.findById(referredBy)
                             await userModel.findByIdAndUpdate(referredBy,
                                 {$inc:{'wallet.balance':500,'wallet.total':500,referralsApplied:1}}
