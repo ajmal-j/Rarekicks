@@ -92,10 +92,22 @@
                 <span style="font-size: 10px;">  <%=product.reviews.length%> ratings</span>
             </div>
             <div class="container ">
-                <div class="sizeChart d-flex justify-content-end align-items-baseline">
-                    <div id="selectedSizes" class="me-auto" style="font-family: 'Michroma', sans-serif;"></div>
-                    <span class="me-2" style="font-size: 20px;"><u>Size Chart</u></span>
-                    <i class="bi bi-bar-chart-line" style="font-size: 30px;"></i>
+                <div class="sizeChart d-flex justify-content-between align-items-baseline">
+                    <% if (product.quantity <= 5) { %>
+                        <div id="selectedSizes" style="font-family: 'Michroma', sans-serif;">
+                            <span class="me-2 text-danger" style="font-size: 14px !important;"><b>only <%= product.quantity %> left!</b></span>
+                        </div>
+                        <div id="selectedSizes" class="" style="font-family: 'Michroma', sans-serif;">
+                            <span class="me-2" style="font-size: 14px !important;"><u>Size Chart</u></span>
+                            <i class="bi bi-bar-chart-line" style="font-size: 24px;"></i>
+                        </div>
+                    <% } else { %>
+                        <div id="selectedSizes" class="ms-auto" style="font-family: 'Michroma', sans-serif;">
+                            <span class="me-2" style="font-size: 14px !important;"><u>Size Chart</u></span>
+                            <i class="bi bi-bar-chart-line" style="font-size: 24px;"></i>
+                        </div>
+                    <% } %>
+                    
                 </div>
                 <div class="btn-group d-flex" style="justify-content: space-around;" role="group" aria-label="Sizes">
                     <% if (product?.sizes && product?.sizes.length > 0 && product?.quantity>0) { %>
@@ -170,6 +182,9 @@ products?.forEach(productA => {
     counter++;
 });
 %>
+</div>
+<div class="d-flex  justify-content-end ">
+    <a href="/user/allProducts" class="btn me-4 btn-outline-warning   rounded-pill px-4 mainFontFamily">Show All</a>
 </div>
 </div>
 
