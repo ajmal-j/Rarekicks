@@ -8,7 +8,7 @@
 <body>
     <%- include('../layout/header')-%>
     <div class="container" style="margin-top: 20px;">
-        <div class="row" style="border: 1px solid rgb(173, 173, 173); border-radius: 20px; ">
+        <div class="row" style="border-radius: 20px; ">
             <div class="col-12 col-xl-7 col-lg-12 p-2 d-flex align-items-center">
                 <div class="row g-2 w-100">
                     <% if (product?.images && product?.images.length === 1) { %>
@@ -20,10 +20,9 @@
                         
                     <% } else { %>
                         <% product?.images?.forEach((image, index) => { %>
-                            <div class="col-xl-6 col-lg-6 col-12">
-                                <div class="card" data-toggle="modal" data-target="#imageModal<%= index %>">
-                                    <!-- Add data-toggle and data-target attributes to the img element -->
-                                    <img src="<%= image %>" class="card-img-top productImageMain" alt="..." >
+                            <div class="col-6 pb-lg-0 pb-3 ">
+                                <div class="card" data-toggle="modal" data-target="#imageModal<%= index %>" style="padding: 0px !important; border: none !important;">
+                                    <img src="<%= image %>" class="card-img-top productImageMain border" alt="..." >
                                     <div class="overlay">
                                         <i class="fa-solid fa-eye"></i>
                                     </div>
@@ -95,7 +94,7 @@
                 <div class="sizeChart d-flex justify-content-between align-items-baseline">
                     <% if (product.quantity <= 5) { %>
                         <div id="selectedSizes" style="font-family: 'Michroma', sans-serif;">
-                            <span class="me-2 text-danger" style="font-size: 14px !important;"><b>only <%= product.quantity %> left!</b></span>
+                            <span class="me-2 text-danger" style="font-size: 14px !important;">only <%= product.quantity %> left!</span>
                         </div>
                         <div id="selectedSizes" class="" style="font-family: 'Michroma', sans-serif;">
                             <span class="me-2" style="font-size: 14px !important;"><u>Size Chart</u></span>
@@ -112,9 +111,9 @@
                 <div class="btn-group d-flex" style="justify-content: space-around;" role="group" aria-label="Sizes">
                     <% if (product?.sizes && product?.sizes.length > 0 && product?.quantity>0) { %>
                         <% product.sizes.forEach((size) => { %>
-                            <div class="btn btn-dark size-button rounded" data-size="<%= size %>" data-product-id="<%= product._id %>"><%= size %></div>
+                            <div class="btn btn-dark size-button rounded-pill" data-size="<%= size %>" data-product-id="<%= product._id %>"><%= size %></div>
                         <% }) %>
-                        <button class="btn btn-dark rounded clearSizesButton" data-product-id="<%= product._id %>">Clear</button>
+                        <button class="btn btn-dark rounded-pill clearSizesButton" data-product-id="<%= product._id %>">Clear</button>
                     <% } else { %>
                         <p class="text-danger btn rounded btn-dark pb-2" style="font-family: 'Michroma', sans-serif; font-size: 20px;">
                             <span class="fs-4">Out Of Stock!! </span>
@@ -122,9 +121,9 @@
                     <% } %>
                 </div>
                 <% if(product?.sizes.length>0 && product?.quantity>0 && !product.deleted){%>
-                    <a href="" id="<%=product?._id%>" class="addToCart btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Add To Cart</h3></a>
+                    <a href="" id="<%=product?._id%>" class="addToCart btn btn-dark rounded-pill  d-flex justify-content-center mt-3 pt-1 pb-1 mb-2" ><h3 style=" font-family: 'Michroma', sans-serif;">Add To Cart</h3></a>
                 <%} else {%>
-                    <a  class=" btn btn-dark d-flex justify-content-center mt-4 pt-1 pb-1 mb-2" ><h3 class="text-danger " style=" font-family: 'Michroma', sans-serif;">Not Available !</h3></a>
+                    <a  class=" btn btn-dark d-flex justify-content-center mt-3 pt-1 pb-1 mb-2" ><h3 class="text-danger " style=" font-family: 'Michroma', sans-serif;">Not Available !</h3></a>
                     <%}%>
                 <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-4">Brand : </span><%=product?.brand%></p>
                 <p class="" style="font-family: 'Michroma', sans-serif; font-size: 20px;" ><span class="fs-4">Category : </span><%=product?.category?.name%></p>
@@ -190,10 +189,10 @@ products?.forEach(productA => {
 
 <div class="container mt-3 mb-5" style=" padding: 20px; font-family: 'Michroma', sans-serif; " id="reviewCont">
     <h4 class="mb-2" style="font-family: 'Michroma', sans-serif;">Reviews : </h4>
-    <div class="reviewContainerMain">
+    <div class="reviewContainerMain"> 
         <%if(product.reviews&&product.reviews.length>0){%>
             <%product.reviews.forEach(review=>{%>
-                <div class="product-card">
+                <div class="product-card reviewCard" reviewId="<%=review._id%>" productId="<%=product._id%>">
                     <div class="product-info">
                         <h5><i class="bi bi-person-check me-2 fs-4 my-auto"></i> <%=review.userName.toUpperCase()%></h5>
                         <p><b>Posted On : </b><%=moment(review.postedOn).format('YYYY-MM-DD')%></p>
@@ -214,7 +213,7 @@ products?.forEach(productA => {
                             <button review_id="<%=review._id%>" product_id="<%=product._id%>" class="btn text-danger deleteReviewButton "><i class="fa-solid fa-trash-can"></i>
                             </button>
                     <%}else {%>
-                        <button review_id="<%=review._id%>" product_id="<%=product._id%>" class="btn text-waring commentReviewButton "><i class="fa-solid fa-comment"></i>
+                        <button reviewId="<%=review._id%>" productId="<%=product._id%>" class="btn text-waring commentReviewButton "><i class="fa-solid fa-comment"></i>
                         </button>
                     <%}%>
                     </div>
@@ -226,6 +225,9 @@ products?.forEach(productA => {
                         <h5 class="text-center" style="white-space: nowrap;">No review's</h5>
                     </div>
             <%}%>
+        </div>
+        <div class="container d-flex justify-content-center  align-content-center " style="transition: all 0.3s ease-in-out !important; ">
+            <div id="reviewOpenCont"></div>
         </div>
 
     <button type="button" class="bookmarkBtn ms-auto my-auto me-2" data-toggle="modal" data-target="#reviewModal">

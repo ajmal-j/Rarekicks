@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../public/css/chatBot.css">
+    <link rel="stylesheet" href="../../public/css/card.css">
+</head>
+<body>
+
+<div class="container mainFlex mb-5 mt-5">
+    <div class="container p-3 mainCont">
+      <h3 class="text-center" style="font-family: 'Michroma', sans-serif;">Reviews</h3>
+    <div class="product-card reviewCard mx-auto" reviewId="<%=id%>">
+        <div class="product-info">
+            <h5><i class="bi bi-person-check me-2 fs-4 my-auto"></i> <%=review.userName.toUpperCase()%></h5>
+            <p><b>Posted On : </b><%=moment(review.postedOn).format('YYYY-MM-DD')%></p>
+            <p class="productReview" style="margin-top: -10px;"><b>Review : <%=review.rating%>/5 </b><%=review.review%></p>
+        </div>
+        <div class="rating-container">
+            <% const rating = review.rating; %>
+            <% for (let i = 0; i < 5; i++) { %>
+                <% if (i < rating) { %>
+                    <i class="fa-solid fa-star fs-3" style="color: gold;"></i>
+                <% } else { %>
+                    <i class="fa-regular fa-star fs-3"></i>
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+        <div class="messageCont" id="messageCont">
+                <ul id="messages">
+                        <%if(locals?.replies?.length>0){%>
+                            <%replies.forEach(reply=>{%>
+                                <%if(reply.userId===userId){%>
+                                    <li class="text-end ms-auto messageRight">
+                                        <p class="message">
+                                            <%=reply.reply%>
+                                        </p>
+                                    </li>
+                                    <%}else{%>
+                                        <li class="text-start me-auto messageLeft">
+                                            <p class="message">
+                                                <%=reply.reply%>
+                                            </p>
+                                        </li>
+                                <%}%>
+                            <%})%>
+                        <%}else {%>
+                            <h4 class="text-center mainFontFamily">No Comments !</h4>
+                        <%}%>
+                </ul>
+        </div>
+        <form class="row gy-2 gx-3 mb-2 align-items-center " onsubmit="clickEvent(event)" id="messageForm">
+            <div class="col-auto">
+              <label class="visually-hidden" for="messageInput">Message</label>
+              <div class="inputbox">
+                <input type="text" required="required" id="messageInput" reviewId="<%=id%>" productId="<%=productId%>">
+                <span>Type here..!</span>
+                <i></i>
+            </div>
+              <input type="hidden" class="form-control" id="id" value="">
+            </div>
+            <div class="col-auto ">
+            <button type="submit" class="btn btn-warning mt-2" style="height: 45px;"><i class="fa-regular fa-paper-plane"></i>
+            </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

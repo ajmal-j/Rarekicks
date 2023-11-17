@@ -21,7 +21,29 @@ const reviewSchema = new mongoose.Schema({
     rating: {
         type: Number,
     },
-});
+    replies: [
+        {
+            userName: {
+                type: String,
+                required: true,
+            },
+            userId: {
+                type: mongoose.Types.ObjectId,
+                ref: "user",
+                required: true,
+            },
+            postedOn: {
+                type: Date,
+                immutable: true,
+                default: () => Date.now(),
+            },
+            reply: {
+                type: String,
+                required: true,
+            }
+        },
+    ],
+},{timestamps:true});
 
 const productSchema = new mongoose.Schema({
     name: {

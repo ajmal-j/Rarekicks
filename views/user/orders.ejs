@@ -11,7 +11,7 @@
         <h3>All Orders</h3>
     </div>
     <div class="table-responsive">
-        <table class="table table-dark table-striped" id="ordersTable" style=" font-family: 'Michroma', sans-serif;">
+        <table class="table table-dark table-striped w-100 " id="ordersTable" style=" font-family: 'Michroma', sans-serif;">
             <thead class="mt-2" style="height: 60px;text-align: center; align-items: center;">
               <tr>
                 <th scope="col" class="text-center ">No :</th>
@@ -43,7 +43,7 @@
                     <td class="align-middle" style="text-align: center;">&#x20B9  <%= order.payment.amount %></td>
                     <td class="align-middle" style="text-align: center;"><%= moment(order.createdAt).fromNow() %></td>
                     <td class="align-middle" style="text-align: center;">
-                      <a href="/user/orderDetailed?id=<%= order._id %>">
+                      <a href="/user/orderDetailed?id=<%= order._id %>" style="text-decoration: none !important;">
                         <% if (order.status === 'Processing') { %>
                           <p > <span class="btn py-2 px-3 btn-warning rounded-pill orderStatusButton" style="font-family: 'Michroma', sans-serif;" ><%= order.status %></span></p>
                       <% } else if (order.status === 'Shipped') { %>
@@ -82,13 +82,13 @@
             if (window.innerWidth <= 767) {
                 orderStatusButton.forEach(button=>{
                   button.classList.remove('btn');
-                  button.classList.add('link','link-warning');
+                  button.classList.add('link','link-light');
                 })
             } else {
                 orderStatusButton.forEach(button=>{
                   if (!button.classList.contains('btn')) {
                     button.classList.add('btn');
-                    button.classList.remove('link','link-warning');
+                    button.classList.remove('link','link-light');
                 }
                 })
             }

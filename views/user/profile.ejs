@@ -54,7 +54,7 @@
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" id="referralLink" value="https://rarekicks.shop/user/register?ref=<%=user.referralCode%>" readonly>
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="copyButton" onclick="copyReferralLink()"><i class="fa-regular fa-copy"></i></button>
+                            <button class="btn btn-outline-secondary" type="button" id="copyButton" onclick="copyReferralLink()"><i class="bi bi-link-45deg"></i></button>
                         </div>
                     </div>
                 </div>
@@ -113,7 +113,7 @@
             <% addresses?.forEach((address, index) => { %>
             <%var _id=address?._id%>
               <form class="addressForm card" style="padding: 30px !important; width: 400px !important; gap: 0px !important;" >
-                  <label class="form-check-label" for="flexSwitchCheck<%= index %>" style="font-family: 'Michroma', sans-serif;">Current</label>
+                  <label class="form-check-label" id="flexSwitchCheck<%= index %>" for="flexSwitchCheck<%= index %>" style="font-family: 'Michroma', sans-serif;">Current</label>
                   <div class="form-check form-switch">
                       <% if (length>1){%>
                         <%if(address.default){%>

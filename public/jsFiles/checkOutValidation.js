@@ -38,7 +38,6 @@ clearCouponButton.addEventListener("click", () => {
             return
         }
         Swal.fire({
-        html: '<i class="fa-solid fa-truck-fast" style="font-size: 60px;"></i>',
           title: 'Confirm  Order 😊',
           showCancelButton: true,
           confirmButtonColor: '#03C03C',

@@ -1,6 +1,7 @@
 const Product=require("../models/productModel")
 const path=require("path")
 const fs = require('fs');
+const ejs=require('ejs')
 const category=require("../models/categoryModel");
 const mongoose=require("mongoose");
 const { log } = require("console");
@@ -12,8 +13,11 @@ const bannerModel= require("../models/bannerModel");
 const { json } = require("express");
 const { type } = require("os");
 const orderModel = require("../models/orderModel");
+const moment=require('moment')
 const cloudinary = require('cloudinary').v2; 
 const cloudinaryConfig=require('../config/cloudinaryConfig')
+const {ObjectId}=require('mongoose').Types;
+
 
 const addProduct= async (req,res,next)=>{
     try{
@@ -1248,6 +1252,54 @@ const checkDiscount=async(req,res,next)=>{
 }
 
 
+
+const getReview=async (req,res)=>{
+    try {
+        const reviewId=req.query.reviewId;
+        const productId=req.query.productId;
+        const review = await productModel.findOne(
+            { _id: productId },
+            { reviews: { $elemMatch: { _id: reviewId } } }
+          );
+        const data=await ejs.renderFile('C:/Users/ajmal/Documents/GitHub/e-commerce/views/user/reviewOpen.ejs',{review:review.reviews[0],id:review._id,moment,userId:req.session._id,productId:review.id});
+        res.json({review:true,data})
+    } catch (error) {
+        res.json({review:false})
+        console.log(error);
+    }
+}
+
+
+const addComment=async (req,res)=>{
+    try {
+        const body=req.body;
+        const userId=req.session._id;
+        const {userName}=await userModel.findById(userId)
+        const {reply,reviewId,productId}=body;
+        console.log(reply,reviewId,productId);
+        const rvId=new ObjectId(reviewId);
+                const result = await productModel.updateOne(
+                    { _id: productId, 'reviews._id': rvId},
+                    {
+                        $push: {
+                            'reviews.$.replies': {
+                                reply: reply,
+                                userName: userName,
+                                userId: userId
+                            }
+                        }
+                    },
+                );
+
+                console.log(result);
+        res.json({added:'true'})
+    } catch (error) {
+        console.log(error);
+        res.json({added:'error'})
+    }
+}
+
+
 module.exports=
     {addProduct,
     insertProduct,
@@ -1287,5 +1339,7 @@ module.exports=
     priceHighToLow,
     bestSeller,
     sortByRating,
-    deleteReview
+    deleteReview,
+    getReview,
+    addComment
 }  

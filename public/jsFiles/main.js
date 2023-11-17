@@ -3,8 +3,8 @@ const socket = io();
 
 // const totalUsers=document.getElementById('totalUsers')
 const messageForm=document.getElementById('messageForm')
-const messageContainer=document.getElementById('messageCont')
 const messageInput=document.getElementById('messageInput')
+const messageContainer=document.getElementById('messageCont')
 const messages=document.getElementById('messages')
 const userId=document.getElementById('id')
 const adminId=document.getElementById('adminId')

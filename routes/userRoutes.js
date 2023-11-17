@@ -78,5 +78,7 @@ userRouter.get('/allCategories',JWT.checkJwt,productController.allCategories,use
 
 userRouter.post('/addReview',JWT.checkJwt,productController.addReview)
 userRouter.get('/deleteReview',JWT.checkJwt,productController.deleteReview)
+userRouter.get('/getReview',JWT.checkJwt,productController.getReview)
+userRouter.post('/addComment',JWT.checkJwt,productController.addComment)
 
 module.exports=userRouter

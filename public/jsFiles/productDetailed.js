@@ -98,7 +98,6 @@ document.addEventListener('DOMContentLoaded',()=>{
                     cancelButtonText: 'Cancel'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        
                             const id=button.getAttribute('review_id');
                             const productId=button.getAttribute('product_id');
                             fetch(`/user/deleteReview?id=${id}&productId=${productId}`).then(response=>response.json())
@@ -116,5 +115,42 @@ document.addEventListener('DOMContentLoaded',()=>{
                     }
                 });
         })
+    });
+
+    const reviewCard=document.querySelectorAll('.commentReviewButton');
+    reviewCard.forEach(card=>{
+        card.addEventListener('click',(e)=>{
+            const reviewId=card.getAttribute('reviewId');
+            const productId=card.getAttribute("productId");
+            if(reviewId){
+                fetch(`/user/getReview?reviewId=${reviewId}&productId=${productId}`)
+                .then(response=>response.json())
+                .then(data=>{
+                    if (data.review===true){
+                        const  cont=document.getElementById('reviewOpenCont');
+                        cont.innerHTML=data.data;
+                        cont.style.display='flex';
+                        loadScripts();
+                    }else{
+                        showAlert("Unable To Open.!");
+                        window.location.reload();
+                    }
+                }).catch(error=>{
+                    console.log(error);
+                    showAlert("Internal Server Error.!")
+                })
+            }
+        })
     })
+
 })
+
+
+
+function loadScripts() {
+    const scriptElement = document.createElement('script');
+    scriptElement.src = '/public/jsFiles/reviewHandler.js';
+    scriptElement.async = true;
+    document.head.appendChild(scriptElement);
+}
+  
