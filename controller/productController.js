@@ -1261,7 +1261,9 @@ const getReview=async (req,res)=>{
             { _id: productId },
             { reviews: { $elemMatch: { _id: reviewId } } }
           );
-        const data=await ejs.renderFile('C:/Users/ajmal/Documents/GitHub/e-commerce/views/user/reviewOpen.ejs',{review:review.reviews[0],id:review._id,moment,userId:req.session._id,productId:review.id});
+          const rootPath = path.resolve(process.cwd());
+          const currentPath= path.join(rootPath,'/views/user/reviewOpen.ejs')
+        const data=await ejs.renderFile(currentPath,{review:review.reviews[0],id:review._id,moment,userId:req.session._id,productId:review.id});
         res.json({review:true,data})
     } catch (error) {
         res.json({review:false})
@@ -1276,7 +1278,6 @@ const addComment=async (req,res)=>{
         const userId=req.session._id;
         const {userName}=await userModel.findById(userId)
         const {reply,reviewId,productId}=body;
-        console.log(reply,reviewId,productId);
         const rvId=new ObjectId(reviewId);
                 const result = await productModel.updateOne(
                     { _id: productId, 'reviews._id': rvId},
@@ -1291,7 +1292,6 @@ const addComment=async (req,res)=>{
                     },
                 );
 
-                console.log(result);
         res.json({added:'true'})
     } catch (error) {
         console.log(error);

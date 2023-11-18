@@ -7,7 +7,7 @@
 </head>
 <body>
     <%- include('../layout/header')-%>
-    <div class="container" style="margin-top: 20px;">
+    <div class="container" style="margin-top: 20px; border-radius: 20px; border: 2px solid rgb(224, 224, 224) ;">
         <div class="row" style="border-radius: 20px; ">
             <div class="col-12 col-xl-7 col-lg-12 p-2 d-flex align-items-center">
                 <div class="row g-2 w-100">
@@ -21,8 +21,8 @@
                     <% } else { %>
                         <% product?.images?.forEach((image, index) => { %>
                             <div class="col-6 pb-lg-0 pb-3 ">
-                                <div class="card" data-toggle="modal" data-target="#imageModal<%= index %>" style="padding: 0px !important; ">
-                                    <img src="<%= image %>" class="card-img-top productImageMain border" alt="..." >
+                                <div class="card" data-toggle="modal" data-target="#imageModal<%= index %>" style="padding: 0px !important;  border: none !important;">
+                                    <img src="<%= image %>" class="card-img-top productImageMainHover border" alt="..." >
                                     <div class="overlay">
                                         <i class="fa-solid fa-eye"></i>
                                     </div>

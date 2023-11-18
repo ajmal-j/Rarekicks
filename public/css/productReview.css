@@ -195,10 +195,10 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  border: 1px solid rgb(189, 189, 189);
+  /* border: 1px solid rgb(189, 189, 189); */
   border-radius: 20px;
   margin: 20px;
   padding: 15px;
-  background-color: rgba(244, 239, 250, 0.761);
+  /* background-color: rgba(244, 239, 250, 0.761); */
   width: 100% !important;
 }

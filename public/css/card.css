@@ -39,12 +39,16 @@
      transform: scale(1.08);
 
     }
+   .card:hover .productImageMainHover {
+     transform: scale(1.03);
+    }
    .card:hover .productImageMain2 {
        border-radius: 30px !important;
         transform: scale(1.08);
         opacity: 0;
     }
-    .productImageMain{
+    .productImageMain,
+    .productImageMainHover{
         border-radius: 30px !important;
         transition: transform 0.3s ease-in-out; 
     }
@@ -58,4 +62,11 @@
     opacity: 1;
    }
 
- 
+
+   .productImageMainHover{
+    padding: 5px !important;
+    overflow: hidden;
+   }
+   .card{
+    overflow: hidden;
+   }

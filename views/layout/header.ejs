@@ -27,7 +27,7 @@
                 </span>
             </div>
         </div>
-        <div class="bottomHeader container mb-3">
+        <div class="bottomHeader container mb-3" id="bottomHeaderOutside">
             <a class="btn btn-dark text-danger " href="/user/home">Home Page</a>
             <div class="d-flex" style="column-gap: 6px;">
             <div class="btn-group dropdown ">
@@ -47,7 +47,33 @@
                   <li class="text-center hover ps-3 pe-3"><a class=" " href="/user/brand?brand=converse">CONVERSE</a></li>
                 </ul>
               </div>
-              <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel" data-bs-scroll="false" style="background: #000 !important;" >
+              
+            </div>
+                  <form action="/user/searchProduct" method="get" class="searchForm" enctype="application/form-data">
+                     <div class="d-flex align-items-center">
+                        <% if (locals?.search) { %>
+                            <% var value = search?search:''; %>
+                            <div class="input-group">
+                                <input type="text" class="form-control searchInputField" name="search" placeholder="Search product's..." style="min-width: 100px;" id="searchInput">
+                                <button type="reset" class="btn" id="clearSearch" onclick="clearSearchInput()" style="background: #212529;">
+                                    <i class="bi bi-x-lg clearSearchButtonHeader"></i>
+                                </button>
+                                <button class="btn btn-dark text-center  input-group-text " type="submit" style="width: 50px;"><i class="fa-solid fa-magnifying-glass text-light  "></i></button>
+                            </div>
+                                    <% } else { %>
+                            <div class="input-group">
+                              <input type="text" class="form-control searchInputField" name="search" placeholder="Search product's..." style="min-width: 100px;" id="searchInput">
+                              <button type="reset" class="btn" id="clearSearch" onclick="clearSearchInput()" style="background: #212529;">
+                                  <i class="bi bi-x-lg clearSearchButtonHeader"></i>
+                              </button>
+                              <button class="btn btn-dark text-center  input-group-text " type="submit" style="width: 50px; "><i class="fa-solid fa-magnifying-glass text-light  "></i></button>
+                            </div>
+                        <% } %>
+                       
+                    </div>
+                </form>
+            </div>
+               <div class="offcanvas offcanvas-start mainFontFamily" data-bs-backdrop="static" tabindex="-1" id="staticBackdrop" aria-labelledby="staticBackdropLabel" data-bs-scroll="false" style="background: #000 !important;" >
                 <div class="offcanvas-header">
                 <h6 class="offcanvas-title text-center text-light capitalizeFirst mt-2" id="staticBackdropLabel" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">
                     <i class="fa-solid fa-circle-user me-2 fs-3 pt-2"></i>
@@ -80,6 +106,57 @@
                     <li class="text-center hover  ps-3 pe-3"><a style="text-decoration: none;" class=" " href="/user/brand?brand=converse">CONVERSE</a></li>
                 </ul>
               </div>
+
+
+              <div class="bottomHeader container mb-3" id="bottomHeaderInside">
+                <a class="btn btn-dark text-danger " href="/user/home">Home Page</a>
+                <div class="d-flex" style="column-gap: 6px;">
+                <div class="btn-group dropdown ">
+                    <button type="button" class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Product's
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-sm-start bg-dark text-center p-4 dropdownHead">
+                      <i class="fa-solid fa-angle-up text-center mt-2 mb-3 text-light "></i>
+                      <li class="text-center hover  pb-4 ps-3 pe-3"><a class="" href="/user/allProducts">ALL PRODUCTS</a></li>
+                      <li class="text-center hover  pb-4 ps-3 pe-3"><a class="" href="/user/brandBased">All Brands</a></li>
+                      <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=adidas">ADIDAS</a></li>
+                      <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=reebok">REEBOK</a></li>
+                      <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=nike">NIKE</a></li>
+                      <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=jordan">JORDAN</a></li>
+                      <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=asics">ASICS</a></li>
+                      <li class="text-center hover pb-4 ps-3 pe-3"><a class=" " href="/user/brand?brand=crocs">CROCS</a></li>
+                      <li class="text-center hover ps-3 pe-3"><a class=" " href="/user/brand?brand=converse">CONVERSE</a></li>
+                    </ul>
+                  </div>
+                  
+                </div>
+                      <form action="/user/searchProduct" method="get" class="searchForm" enctype="application/form-data">
+                         <div class="d-flex align-items-center">
+                            <% if (locals?.search) { %>
+                                <% var value = search?search:''; %>
+                                <div class="input-group">
+                                    <input type="text" class="form-control searchInputField" name="search" placeholder="Search product's..." style="min-width: 100px;" id="searchInput">
+                                    <button type="reset" class="btn" id="clearSearch" onclick="clearSearchInput()" style="background: #212529;">
+                                        <i class="bi bi-x-lg clearSearchButtonHeader" style="color: white !important;"></i>
+                                    </button>
+                                    <button class="btn btn-dark text-center  input-group-text " type="submit" style="width: 50px;"><i class="fa-solid fa-magnifying-glass text-light  "></i></button>
+                                </div>
+                                        <% } else { %>
+                                <div class="input-group">
+                                  <input type="text" class="form-control searchInputField" name="search" placeholder="Search product's..." style="min-width: 100px;" id="searchInput">
+                                  <button type="reset" class="btn" id="clearSearch" onclick="clearSearchInput()" style="background: #212529;">
+                                      <i class="bi bi-x-lg clearSearchButtonHeader"></i>
+                                  </button>
+                                  <button class="btn btn-dark text-center  input-group-text " type="submit" style="width: 50px; "><i class="fa-solid fa-magnifying-glass text-light  "></i></button>
+                                </div>
+                            <% } %>
+                           
+                        </div>
+                    </form>
+                </div>
+
+
+
               <div style="display:flex; justify-content: center;">
                 <a class="Btn logOutButton mt-5"  >
                     <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
@@ -89,31 +166,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-                  <form action="/user/searchProduct" method="get" class="searchForm" enctype="application/form-data">
-                     <div class="d-flex align-items-center">
-                        <% if (locals?.search) { %>
-                            <% var value = search?search:''; %>
-                            <div class="input-group">
-                                <input type="text" class="form-control searchInputField" name="search" placeholder="Search product's..." style="min-width: 100px;" id="searchInput">
-                                <button type="reset" class="btn" id="clearSearch" onclick="clearSearchInput()" style="background: #212529;">
-                                    <i class="bi bi-x-lg clearSearchButtonHeader"></i>
-                                </button>
-                                <button class="btn btn-dark text-center  input-group-text " type="submit" style="width: 50px;"><i class="fa-solid fa-magnifying-glass text-light  "></i></button>
-                            </div>
-                                    <% } else { %>
-                            <div class="input-group">
-                              <input type="text" class="form-control searchInputField" name="search" placeholder="Search product's..." style="min-width: 100px;" id="searchInput">
-                              <button type="reset" class="btn" id="clearSearch" onclick="clearSearchInput()" style="background: #212529;">
-                                  <i class="bi bi-x-lg clearSearchButtonHeader"></i>
-                              </button>
-                              <button class="btn btn-dark text-center  input-group-text " type="submit" style="width: 50px; "><i class="fa-solid fa-magnifying-glass text-light  "></i></button>
-                            </div>
-                        <% } %>
-                       
-                    </div>
-                </form>
-               </div>
             </div>
          </nav>
         </div>

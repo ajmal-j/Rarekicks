@@ -47,6 +47,10 @@ h5 {
     letter-spacing: 5px;
 }
 
+#bottomHeaderInside{
+  display: none;
+}
+
 .bottomHeader{
     display: flex;
     font-size: 17px;
@@ -67,13 +71,11 @@ h5 {
     text-decoration: none;
 }
 @media(max-width:991px){
-    
     .header{
-        height: 300px;
-        padding-bottom: 240px;
+        height: 120px;
     }
     .header2{
-        height: 300px;
+        height: 120px;
     }
     .coverdiv{
         height: 30px;
@@ -81,11 +83,17 @@ h5 {
     .bottomCover{
         height: 100px;
     }
+    #bottomHeaderOutside{
+      display: none;
+    }
+    #bottomHeaderInside{
+      display: flex;
+    }
+   
   }
 @media(max-width:443px){
-    
     .header,.header2{
-        height: 360px !important;
+        height: 270px !important;
     }
     .coverdiv{
         height: 20px;
@@ -93,11 +101,14 @@ h5 {
     .bottomCover{
         height: 130px;
     }
+    .right{
+      padding-left: 35px !important;
+    }
   }
 @media(max-width:330px){
     
     .header,.header2{
-        height: 400px !important;
+        height: 270px !important;
     }
     .coverdiv{
         height: 20px;
@@ -187,7 +198,7 @@ h5 {
         padding-left: 30px;
     }
     .header,.header2{
-        height: 330px;
+        height: 220px;
     }
     .left, .right {
         padding-left: 0px;
@@ -204,6 +215,7 @@ h5 {
     .Thenga{
         padding-right: 40px;
     }
+    
 }
 
 
