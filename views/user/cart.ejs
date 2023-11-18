@@ -5,9 +5,9 @@
 </head>
 <body>
     <%- include('../layout/header')-%>
-    <div class="container d-flex mb-4 mt-2 mainContainer">
-        <h2 class="text mainFontFamily"><u>Cart!</u></h2>
-        <a href="/user/wishlist" class="btn btn-dark rounded"><h4 class="mainFontFamily" style="margin-top: 5px;">Go To Wishlist</h4></a>
+    <div class="container d-flex mb-3 mt-3 mainContainer">
+        <h3 class="text mainFontFamily"><u>Cart!</u></h3>
+        <!-- <a href="/user/wishlist" class="btn btn-dark rounded"><h4 class="mainFontFamily" style="margin-top: 5px;">Go To Wishlist</h4></a> -->
     </div>
     <script>let checkProductAvailability=true;</script>
     <div class="container productCont productContInCart">
@@ -42,8 +42,8 @@
                                     <%= (product?.price).toFixed(2)%>
                                 <%}%></a>
                                 <div class="d-flex pe-1" style="justify-content: flex-end; margin-top: 10px;">
-                                    <a href="" id="<%=_id%>" class="removeFromCart btn btn-dark rounded-pill  d-flex justify-content-center pt-2 pb-2 ">
-                                        <h3 class="text-danger" style="font-family: 'Michroma', sans-serif;">remove</h3>
+                                    <a href="" id="<%=_id%>" class="removeFromCart btn  d-flex justify-content-center pt-2 pb-2 ">
+                                        <h3 class="text-danger" style="font-family: 'Michroma', sans-serif;"><i class="bi bi-trash"></i></h3>
                                     </a>
                                 </div>
                             </div>

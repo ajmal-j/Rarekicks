@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 showSuccess("Added To Cart");
                                 button.firstElementChild.textContent = 'added';
                             } else {
-                                button.firstElementChild.textContent = 'removed';
+                                // button.firstElementChild.textContent = 'removed';
                                 showAlert("Removed from Cart");
                                 totalButton.innerText=data.total;
                                 let cartCountValue=parseInt(cartCount.textContent);

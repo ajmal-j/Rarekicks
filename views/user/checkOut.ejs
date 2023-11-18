@@ -16,7 +16,7 @@
     </div>
     <div class="container mb-2 mainFontFamily">
         <div class="row d-flex" style="justify-content: center;">
-            <div class="p-3 col-lg-6 col-12 mainContainer addressMainContainer">
+            <div class="p-3 m-4 col-lg-6 col-12 mainContainer addressMainContainer">
                 <div class="row">
                     <h5 class="text-center pt-1 pb-3"><u><i class="fa-solid fa-location-dot me-2" style="font-size: 30px;"></i>Address</u></h3>
                     <script>let addressLength=undefined; let productAvailability=true;</script>
@@ -59,7 +59,7 @@
 </script>
     <div class="container productCont">
         <h3 class="text-center pt-1 pb-3 mainFontFamily">Products</h3>
-        <div class="row row-cols-1 row-cols-lg-3  g-4 d-flex" style="justify-content: center;">
+        <div class="row row-cols-1 row-cols-lg-3  g-4 d-flex" style="justify-content: center; flex-wrap: wrap !important;">
         <% if (locals?.products) { %>
             <% products?.forEach(item => { %>
                 <%var size=item.size%>

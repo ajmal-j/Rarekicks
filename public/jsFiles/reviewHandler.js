@@ -18,12 +18,12 @@ function clickEvent(event) {
             }).then(response=>response.json())
             .then(data=>{
                 if(data.added==="true"){
-                    showSuccess("yes")
+                    showSuccess("posted")
                 }else{
-                    showAlert('No')
+                    showAlert('Not Posted')
                 }
             }).catch(error=>{
-                showAlert("Error")
+                showAlert("Oppps Internal Server Error!")
                 console.log(error);
             })
         }else{
