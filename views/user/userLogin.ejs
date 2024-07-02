@@ -11,7 +11,7 @@
           <label for="validationCustomUsername" class="form-label">Email</label>
           <div class="input-group has-validation">
             <span class="input-group-text" id="inputGroupPrepend"><i class="bi bi-envelope-open"></i></span>
-            <input type="email" class="form-control" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email" value="<%= locals?.email?email:''%>" required  placeholder="Enter your email.">
+            <input type="email" class="form-control emailInput" id="validationCustomUsername" aria-describedby="inputGroupPrepend" name="email" value="<%= locals?.email?email:''%>" required  placeholder="Enter your email.">
             <div class="invalid-feedback">
               Enter A Valid Email !
             </div>
@@ -21,7 +21,7 @@
           <label for="validationPassword" class="form-label">Password</label>
           <div class="input-group has-validation">
             <span class="input-group-text" id="inputGroupPrepend"><i class="fa-solid fa-fingerprint"></i></span>
-            <input type="password" class="form-control" id="validationPassword" aria-describedby="inputGroupPrepend" name="password"  required  placeholder="Enter your password.">
+            <input type="password" class="form-control passwordInput" id="validationPassword" aria-describedby="inputGroupPrepend" name="password"  required  placeholder="Enter your password.">
             <div class="invalid-feedback">
               Enter A Valid Password !
             </div>
@@ -32,9 +32,15 @@
             <button class="btn btn-dark rounded-pill mt-2 fw-bolder" type="submit">Login</button>
             </div>
         </div>
-        <div class="text-center mt-5 d-flex mx-auto justify-content-center " style="font-size: 15px;">
+        <div class="text-center mt-5 d-flex mx-auto justify-content-center" style="font-size: 15px;">
           Don’t you have an account?&nbsp;
           <a href="/user/register/" style="color: rgb(255, 0, 195); font-weight: 700;"> Sign-Up</a>
+        </div>
+        <div class="w-min d-flex mx-auto justify-content-center" style="font-size: 15px;">
+          <input type="checkbox" id="reviewLogin" style="margin-right: 5px;">
+          <label for="reviewLogin" style="font-weight: 700; color: rgba(255, 255, 255, 0.672);">
+            For review purposes login&nbsp;
+          </label>
         </div>
         <div class="d-flex justify-content-end"> 
           <a href="/user/loginWithOtp" class="btn text-center text-warning  btn-dark mt-2 mb-2 rounded-pill" style="width: 100px;">Otp Login
